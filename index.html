@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jimzz Store</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',Arial,sans-serif; }
+body { background: #0a0a0f; color: #e6e6e6; line-height: 1.6; padding-bottom: 40px; }
+header { text-align: center; padding: 50px 20px 30px; background: linear-gradient(135deg, #1a0033, #0a0a0f); border-bottom: 2px solid #ff2b2b; }
+.badge { display: inline-block; background: #ff2b2b; color: #fff; padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: bold; margin-bottom: 15px; letter-spacing: 1px; }
+header h1 { font-size: 42px; color: #ff2b2b; text-shadow: 0 0 20px rgba(255,43,43,0.6); }
+header p { color: #b0b0b0; margin-top: 10px; font-size: 15px; }
+.kategori { padding: 40px 20px; max-width: 1100px; margin: auto; }
+.kategori h2 { text-align: center; font-size: 26px; color: #ff2b2b; margin-bottom: 8px; }
+.sub { text-align: center; color: #888; margin-bottom: 25px; font-size: 14px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; }
+.card { background: linear-gradient(145deg, #14141f, #0d0d15); border: 1px solid #2a2a3a; border-radius: 14px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.25s ease; }
+.card:hover { border-color: #ff2b2b; transform: translateY(-5px); box-shadow: 0 0 25px rgba(255,43,43,0.4); }
+.card h3 { font-size: 14px; color: #ccc; margin-bottom: 10px; text-transform: uppercase; }
+.card .harga { font-size: 20px; font-weight: bold; color: #ff2b2b; }
+.checkout { max-width: 500px; margin: 40px auto; padding: 30px 20px; background: linear-gradient(145deg, #14141f, #0d0d15); border: 1px solid #2a2a3a; border-radius: 16px; text-align: center; }
+.checkout h2 { color: #ff2b2b; margin-bottom: 20px; }
+.box { background: #0a0a0f; border: 1px solid #2a2a3a; border-radius: 10px; padding: 15px; margin-bottom: 20px; text-align: left; }
+.box p { margin: 5px 0; font-size: 15px; }
+.box span { color: #ff2b2b; font-weight: bold; }
+.qris { width: 220px; background: #fff; padding: 10px; border-radius: 10px; margin: 10px auto; display: block; }
+.note { font-size: 13px; color: #999; margin: 6px 0; }
+.wa { display: inline-block; margin-top: 20px; background: #25D366; color: #fff; padding: 12px 24px; border-radius: 10px; text-decoration: none; font-weight: bold; transition: 0.25s; }
+.wa:hover { background: #1da851; transform: scale(1.05); }
+footer { text-align: center; padding: 25px; color: #555; font-size: 13px; border-top: 1px solid #222; margin-top: 30px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge">🔥 NOT FAMOUS BUT TRUSTED 🔥</div>
+  <h1>Jimzz Store</h1>
+  <p>Layanan joki kontak, suntik sosmed, dan desain logo dengan tampilan modern.</p>
+</header>
+
+<section class="kategori">
+  <h2>👥 Paket Joki Kontak</h2>
+  <p class="sub">Pilih paket sesuai kebutuhanmu</p>
+  <div class="grid" id="joki"></div>
+</section>
+
+<section class="kategori">
+  <h2>📱 Suntik Sosmed</h2>
+  <p class="sub">Pilih jumlah pengikut</p>
+  <div class="grid" id="sosmed"></div>
+</section>
+
+<section class="kategori">
+  <h2>🎨 Layanan Logo</h2>
+  <p class="sub">Pilih desain yang kamu butuhkan</p>
+  <div class="grid" id="logo"></div>
+</section>
+
+<section class="checkout">
+  <h2>Checkout & Pembayaran</h2>
+  <div class="box">
+    <p>Paket: <span id="pilihPaket">-</span></p>
+    <p>Total: <span id="totalHarga">-</span></p>
+  </div>
+  <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=QRIS-JIMZZ-STORE" alt="QRIS" class="qris">
+  <p class="note">Scan QRIS di atas untuk melakukan pembayaran.</p>
+  <p class="note">Metode pembayaran: QRIS. Setelah pembayaran, konfirmasi pesanan melalui WhatsApp admin.</p>
+  <a id="waBtn" class="wa" href="#" target="_blank">📲 Konfirmasi via WhatsApp</a>
+</section>
+
+<footer>
+  <p>© 2025 Jimzz Store — All Rights Reserved 😈</p>
+</footer>
+
+<script>
+const paketJoki = [
+  { nama: "15 JAM TEBAR 25GB WARJOK+SW", harga: 500 },
+  { nama: "2 HARI TEBAR 25GB WARJOK+SW", harga: 1000 },
+  { nama: "3 HARI TEBAR 25GB WARJOK+SW", harga: 2000 },
+  { nama: "4 HARI TEBAR 25GB WARJOK+SW", harga: 3000 },
+  { nama: "5 HARI TEBAR 25GB WARJOK+SW", harga: 4000 },
+  { nama: "6 HARI TEBAR 25GB WARJOK+SW", harga: 5000 },
+  { nama: "7 HARI TEBAR 25GB WARJOK+SW", harga: 6000 },
+  { nama: "8 HARI TEBAR 25GB WARJOK+SW", harga: 7000 },
+  { nama: "9 HARI TEBAR 25GB WARJOK+SW", harga: 8000 },
+  { nama: "PERMANEN TEBAR 25GB WARJOK+SW SETIAP HARI", harga: 10000 }
+];
+const paketSosmed = [
+  { nama: "100 PENGIKUT", harga: 1000 },
+  { nama: "200 PENGIKUT", harga: 2000 },
+  { nama: "300 PENGIKUT", harga: 3000 },
+  { nama: "400 PENGIKUT", harga: 4000 },
+  { nama: "500 PENGIKUT", harga: 5000 },
+  { nama: "600 PENGIKUT", harga: 6000 },
+  { nama: "700 PENGIKUT", harga: 7000 },
+  { nama: "800 PENGIKUT", harga: 8000 }
+];
+const paketLogo = [
+  { nama: "LOGO JB", harga: 1000 },
+  { nama: "LOGO FT", harga: 2000 },
+  { nama: "LOGO QR", harga: 2000 },
+  { nama: "LOGO MUKA", harga: 3000 }
+];
+const WA_ADMIN = "6281234567890";
+
+function render(target, data) {
+  document.getElementById(target).innerHTML = data.map(p => `
+    <div class="card" onclick="pilih('${p.nama}', ${p.harga})">
+      <h3>${p.nama}</h3>
+      <div class="harga">Rp ${p.harga.toLocaleString('id-ID')}</div>
+    </div>
+  `).join('');
+}
+function pilih(nama, harga) {
+  document.getElementById('pilihPaket').innerText = nama;
+  document.getElementById('totalHarga').innerText = "Rp " + harga.toLocaleString('id-ID');
+  const pesan = encodeURIComponent(`Halo Admin, saya mau order:\n\nPaket: ${nama}\nTotal: Rp ${harga.toLocaleString('id-ID')}\n\nMohon diproses ya 🙏`);
+  document.getElementById('waBtn').href = `https://wa.me/${WA_ADMIN}?text=${pesan}`;
+}
+render('joki', paketJoki);
+render('sosmed', paketSosmed);
+render('logo', paketLogo);
+</script>
+</body>
+</html>
