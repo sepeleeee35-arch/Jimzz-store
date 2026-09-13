@@ -6,7 +6,7 @@
 <title>Jimzz Store</title>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',Arial,sans-serif; }
-body { background: #0a0a0f; color: #e6e6e6; line-height: 1.6; padding-bottom: 120px; }
+body { background: #0a0a0f; color: #e6e6e6; line-height: 1.6; padding-bottom: 40px; }
 header { text-align: center; padding: 50px 20px 30px; background: linear-gradient(135deg, #1a0033, #0a0a0f); border-bottom: 2px solid #ff2b2b; }
 .badge { display: inline-block; background: #ff2b2b; color: #fff; padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: bold; margin-bottom: 15px; letter-spacing: 1px; }
 header h1 { font-size: 42px; color: #ff2b2b; text-shadow: 0 0 20px rgba(255,43,43,0.6); }
@@ -21,52 +21,67 @@ header p { color: #b0b0b0; margin-top: 10px; font-size: 15px; }
 .card h3 { font-size: 11px; color: #ccc; margin-bottom: 8px; text-transform: uppercase; line-height: 1.3; }
 .card .harga { font-size: 16px; font-weight: bold; color: #ff2b2b; }
 
-/* CHECKOUT UPGRADE */
-.checkout-wrap { max-width: 550px; margin: 50px auto 40px; padding: 0 20px; }
-.checkout { background: linear-gradient(145deg, #14141f, #0d0d15); border: 1px solid #2a2a3a; border-radius: 20px; padding: 28px 22px; position: relative; overflow: hidden; }
-.checkout::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #ff2b2b, #ff6b6b, #ff2b2b); }
-.checkout h2 { color: #ff2b2b; text-align: center; font-size: 22px; margin-bottom: 22px; letter-spacing: 1px; }
+footer { text-align: center; padding: 25px; color: #555; font-size: 13px; border-top: 1px solid #222; margin-top: 30px; }
 
-.summary-box { background: #0a0a0f; border: 1px dashed #2a2a3a; border-radius: 12px; padding: 15px; margin-bottom: 20px; }
-.summary-row { display: flex; justify-content: space-between; padding: 6px 0; font-size: 14px; }
-.summary-row .label { color: #888; }
-.summary-row .value { color: #fff; font-weight: 500; text-align: right; max-width: 60%; }
-.summary-row.total { border-top: 1px solid #2a2a3a; margin-top: 8px; padding-top: 12px; }
-.summary-row.total .label { color: #ff2b2b; font-weight: bold; font-size: 15px; }
-.summary-row.total .value { color: #ff2b2b; font-weight: bold; font-size: 20px; }
-.btn-hapus { background: transparent; border: 1px solid #ff2b2b; color: #ff2b2b; padding: 5px 12px; border-radius: 8px; font-size: 11px; cursor: pointer; margin-top: 8px; }
-
-.form-box { margin-bottom: 20px; }
-.form-box label { display: block; font-size: 12px; color: #888; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px; }
-.form-box input { width: 100%; background: #0a0a0f; border: 1px solid #2a2a3a; color: #fff; padding: 11px 14px; border-radius: 10px; font-size: 14px; margin-bottom: 12px; outline: none; transition: 0.25s; }
-.form-box input:focus { border-color: #ff2b2b; box-shadow: 0 0 12px rgba(255,43,43,0.3); }
-
-.step-title { color: #fff; font-size: 14px; font-weight: bold; margin-bottom: 12px; padding-left: 8px; border-left: 3px solid #ff2b2b; }
-
-.qris-frame { text-align: center; margin: 15px 0 20px; }
-.qris-frame img { width: 240px; max-width: 100%; background: #fff; padding: 12px; border-radius: 14px; box-shadow: 0 0 25px rgba(255,43,43,0.4); border: 2px solid #ff2b2b; }
-.qris-frame p { font-size: 12px; color: #888; margin-top: 8px; }
-.btn-qris { display: inline-block; margin-top: 10px; background: transparent; border: 1px solid #ff2b2b; color: #ff2b2b; padding: 8px 18px; border-radius: 8px; font-size: 12px; text-decoration: none; }
-
-.steps { background: #0a0a0f; border-radius: 12px; padding: 15px; margin-bottom: 20px; }
-.steps .step-title { margin-bottom: 10px; }
-.steps ol { padding-left: 20px; color: #ccc; font-size: 13px; }
-.steps ol li { margin-bottom: 6px; }
-.steps ol li b { color: #ff2b2b; }
-
-.btn-wa { display: block; text-align: center; background: linear-gradient(135deg, #25D366, #1da851); color: #fff; padding: 15px; border-radius: 12px; text-decoration: none; font-weight: bold; font-size: 15px; margin-top: 10px; box-shadow: 0 5px 20px rgba(37,211,102,0.4); transition: 0.25s; }
-.btn-wa:hover { transform: scale(1.02); box-shadow: 0 5px 30px rgba(37,211,102,0.6); }
-.btn-wa small { display: block; font-size: 11px; opacity: 0.85; font-weight: normal; margin-top: 2px; }
-
-.info-box { background: #0a0a0f; border-radius: 10px; padding: 12px; margin-top: 18px; font-size: 12px; color: #888; text-align: center; line-height: 1.7; }
-.info-box b { color: #ff2b2b; }
-
-/* STICKY BUTTON */
+/* STICKY ORDER BUTTON */
 .sticky-order { position: fixed; bottom: 0; left: 0; right: 0; background: linear-gradient(180deg, transparent, #0a0a0f 30%); padding: 15px 20px 20px; z-index: 100; display: none; }
 .sticky-order.show { display: block; }
-.sticky-order a { display: block; text-align: center; background: linear-gradient(135deg, #25D366, #1da851); color: #fff; padding: 14px; border-radius: 14px; text-decoration: none; font-weight: bold; font-size: 14px; box-shadow: 0 5px 25px rgba(37,211,102,0.5); }
+.sticky-order button { width: 100%; background: linear-gradient(135deg, #ff2b2b, #c41e1e); color: #fff; padding: 15px; border: none; border-radius: 14px; font-weight: bold; font-size: 15px; cursor: pointer; box-shadow: 0 5px 25px rgba(255,43,43,0.5); }
+.sticky-order button small { display: block; font-size: 11px; opacity: 0.85; font-weight: normal; margin-top: 2px; }
 
-footer { text-align: center; padding: 25px; color: #555; font-size: 13px; border-top: 1px solid #222; margin-top: 30px; }
+/* MODAL */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 200; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; }
+.modal-overlay.show { display: flex; }
+.modal { background: linear-gradient(145deg, #14141f, #0d0d15); border: 1px solid #2a2a3a; border-radius: 20px; padding: 28px 22px; width: 100%; max-width: 480px; position: relative; animation: slideUp 0.3s ease; max-height: 90vh; overflow-y: auto; }
+@keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+.modal::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #ff2b2b, #ff6b6b, #ff2b2b); border-radius: 20px 20px 0 0; }
+.modal-close { position: absolute; top: 15px; right: 18px; background: transparent; border: none; color: #888; font-size: 24px; cursor: pointer; }
+.modal-close:hover { color: #ff2b2b; }
+
+/* PROGRESS STEP */
+.steps-indicator { display: flex; justify-content: space-between; margin-bottom: 25px; position: relative; }
+.steps-indicator::before { content: ""; position: absolute; top: 15px; left: 15%; right: 15%; height: 2px; background: #2a2a3a; z-index: 1; }
+.steps-indicator .step-dot { width: 32px; height: 32px; border-radius: 50%; background: #0a0a0f; border: 2px solid #2a2a3a; color: #666; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 13px; position: relative; z-index: 2; transition: 0.3s; }
+.steps-indicator .step-dot.active { background: #ff2b2b; border-color: #ff2b2b; color: #fff; box-shadow: 0 0 15px rgba(255,43,43,0.6); }
+.steps-indicator .step-dot.done { background: #25D366; border-color: #25D366; color: #fff; }
+
+.step-content { display: none; animation: fadeIn 0.3s ease; }
+.step-content.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.step-content h3 { color: #ff2b2b; font-size: 18px; margin-bottom: 5px; text-align: center; }
+.step-content .step-sub { color: #888; font-size: 13px; text-align: center; margin-bottom: 20px; }
+
+.form-box { margin-bottom: 15px; }
+.form-box label { display: block; font-size: 12px; color: #888; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px; }
+.form-box input { width: 100%; background: #0a0a0f; border: 1px solid #2a2a3a; color: #fff; padding: 12px 14px; border-radius: 10px; font-size: 14px; outline: none; transition: 0.25s; }
+.form-box input:focus { border-color: #ff2b2b; box-shadow: 0 0 12px rgba(255,43,43,0.3); }
+
+.summary-modal { background: #0a0a0f; border: 1px dashed #2a2a3a; border-radius: 12px; padding: 14px; margin-bottom: 18px; }
+.summary-modal .row { display: flex; justify-content: space-between; padding: 5px 0; font-size: 13px; }
+.summary-modal .row .label { color: #888; }
+.summary-modal .row.total { border-top: 1px solid #2a2a3a; margin-top: 6px; padding-top: 10px; }
+.summary-modal .row.total .value { color: #ff2b2b; font-weight: bold; font-size: 18px; }
+
+.qris-modal { text-align: center; margin: 15px 0; }
+.qris-modal img { width: 220px; max-width: 100%; background: #fff; padding: 10px; border-radius: 14px; box-shadow: 0 0 25px rgba(255,43,43,0.4); border: 2px solid #ff2b2b; }
+.qris-modal .nominal-info { background: rgba(255,43,43,0.1); border: 1px solid #ff2b2b; border-radius: 10px; padding: 10px; margin-top: 12px; font-size: 13px; color: #ff2b2b; font-weight: bold; }
+
+.btn-next { display: block; width: 100%; background: linear-gradient(135deg, #ff2b2b, #c41e1e); color: #fff; padding: 14px; border: none; border-radius: 12px; font-weight: bold; font-size: 15px; cursor: pointer; margin-top: 15px; box-shadow: 0 5px 20px rgba(255,43,43,0.4); transition: 0.25s; }
+.btn-next:hover { transform: scale(1.02); }
+.btn-next:disabled { background: #333; cursor: not-allowed; box-shadow: none; }
+
+.btn-wa-modal { display: block; width: 100%; text-align: center; background: linear-gradient(135deg, #25D366, #1da851); color: #fff; padding: 15px; border-radius: 12px; text-decoration: none; font-weight: bold; font-size: 15px; margin-top: 10px; box-shadow: 0 5px 20px rgba(37,211,102,0.4); transition: 0.25s; }
+.btn-wa-modal:hover { transform: scale(1.02); }
+
+.waiting-box { background: #0a0a0f; border: 1px solid #25D366; border-radius: 12px; padding: 20px; text-align: center; margin-top: 15px; }
+.waiting-box .loading-spinner { width: 40px; height: 40px; border: 3px solid #2a2a3a; border-top-color: #25D366; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 12px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.waiting-box p { color: #25D366; font-size: 14px; font-weight: bold; }
+.waiting-box .sub-wait { color: #888; font-size: 12px; margin-top: 6px; font-weight: normal; }
+
+.step-content .info-note { background: rgba(255,43,43,0.08); border-left: 3px solid #ff2b2b; padding: 10px 12px; border-radius: 8px; font-size: 12px; color: #bbb; margin-top: 15px; line-height: 1.6; }
+.step-content .info-note b { color: #ff2b2b; }
 </style>
 </head>
 <body>
@@ -95,68 +110,108 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 13px; border
   <div class="grid" id="logo"></div>
 </section>
 
-<div class="checkout-wrap">
-  <div class="checkout">
-    <h2>🛒 Checkout & Pembayaran</h2>
-
-    <div class="summary-box">
-      <div class="summary-row">
-        <span class="label">📦 Paket:</span>
-        <span class="value" id="pilihPaket">Belum dipilih</span>
-      </div>
-      <div class="summary-row total">
-        <span class="label">💰 Total:</span>
-        <span class="value" id="totalHarga">Rp 0</span>
-      </div>
-      <button class="btn-hapus" id="btnHapus" onclick="hapusPilihan()">🗑️ Hapus Pilihan</button>
-    </div>
-
-    <div class="form-box">
-      <label>👤 Nama Pemesan</label>
-      <input type="text" id="namaPembeli" placeholder="Masukkan nama lu">
-      
-      <label>📱 No WhatsApp Aktif</label>
-      <input type="tel" id="hpPembeli" placeholder="08xxxxxxxxxx">
-    </div>
-
-    <div class="qris-frame">
-      <p class="step-title" style="text-align:left; padding-left:8px;">💳 Scan QRIS di bawah</p>
-      <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=QRIS-JIMZZ-STORE" alt="QRIS">
-      <p>Semua bank & e-wallet bisa bayar di sini</p>
-      <a href="https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=QRIS-JIMZZ-STORE" download="qris-jimzz.png" class="btn-qris">⬇️ Download QRIS</a>
-    </div>
-
-    <div class="steps">
-      <div class="step-title">📌 Cara Order</div>
-      <ol>
-        <li>Pilih paket di atas</li>
-        <li>Isi <b>nama</b> & <b>no WhatsApp</b></li>
-        <li>Scan QRIS & bayar sesuai total</li>
-        <li>Screenshot bukti bayar</li>
-        <li>Klik tombol WhatsApp di bawah</li>
-      </ol>
-    </div>
-
-    <a id="waBtn" class="btn-wa" href="#" target="_blank">
-      💬 ORDER VIA WHATSAPP
-      <small id="waInfo">Pilih paket & isi nama dulu</small>
-    </a>
-
-    <div class="info-box">
-      💳 Metode: <b>QRIS</b> (semua bank & e-wallet)<br>
-      ⏰ Admin online: <b>08.00 - 22.00 WIB</b><br>
-      📞 Konfirmasi setelah bayar via WhatsApp
-    </div>
-  </div>
-</div>
-
-<div class="sticky-order" id="stickyOrder">
-  <a id="stickyWa" href="#" target="_blank">💬 Order Sekarang — <span id="stickyHarga">Rp 0</span></a>
-</div>
-
 <footer>
   <p>© 2025 Jimzz Store — All Rights Reserved 😈</p>
 </footer>
+
+<!-- STICKY ORDER BUTTON -->
+<div class="sticky-order" id="stickyOrder">
+  <button onclick="bukaModal()">
+    🛒 ORDER SEKARANG — <span id="stickyHarga">Rp 0</span>
+    <small id="stickyNama">Paket belum dipilih</small>
+  </button>
+</div>
+
+<!-- MODAL STEP BY STEP -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <button class="modal-close" onclick="tutupModal()">×</button>
+
+    <div class="steps-indicator">
+      <div class="step-dot active" id="dot1">1</div>
+      <div class="step-dot" id="dot2">2</div>
+      <div class="step-dot" id="dot3">3</div>
+    </div>
+
+    <!-- STEP 1 — ISI DATA -->
+    <div class="step-content active" id="step1">
+      <h3>📝 Langkah 1 dari 3</h3>
+      <p class="step-sub">Isi data pemesan dulu ya</p>
+
+      <div class="summary-modal">
+        <div class="row"><span class="label">📦 Paket:</span><span class="value" id="mPaket">-</span></div>
+        <div class="row total"><span class="label">💰 Total:</span><span class="value" id="mHarga">Rp 0</span></div>
+      </div>
+
+      <div class="form-box">
+        <label>👤 Nama Lengkap</label>
+        <input type="text" id="mNama" placeholder="Contoh: Bilzz" required>
+      </div>
+      <div class="form-box">
+        <label>📱 No WhatsApp Aktif</label>
+        <input type="tel" id="mHp" placeholder="Contoh: 08xxxxxxxxxx" required>
+      </div>
+
+      <button class="btn-next" onclick="keStep2()">Lanjut ke Pembayaran →</button>
+
+      <div class="info-note">
+        ⚠️ Pastikan nama & no HP <b>benar</b>, biar admin gak salah kirim produk.
+      </div>
+    </div>
+
+    <!-- STEP 2 — BAYAR -->
+    <div class="step-content" id="step2">
+      <h3>💳 Langkah 2 dari 3</h3>
+      <p class="step-sub">Scan QRIS & bayar sesuai nominal</p>
+
+      <div class="summary-modal">
+        <div class="row"><span class="label">📦 Paket:</span><span class="value" id="s2Paket">-</span></div>
+        <div class="row total"><span class="label">💰 Total:</span><span class="value" id="s2Harga">Rp 0</span></div>
+      </div>
+
+      <div class="qris-modal">
+        <img src="qris.png" alt="QRIS">
+        <div class="nominal-info" id="s2Nominal">
+          ⚠️ MASUKKAN NOMINAL: Rp 0
+        </div>
+      </div>
+
+      <button class="btn-next" onclick="keStep3()">✅ Sudah Bayar, Lanjut →</button>
+
+      <div class="info-note">
+        💡 Tips: Screenshot bukti bayar dulu sebelum lanjut ke step 3.
+      </div>
+    </div>
+
+    <!-- STEP 3 — KONFIRMASI -->
+    <div class="step-content" id="step3">
+      <h3>✅ Langkah 3 dari 3</h3>
+      <p class="step-sub">Kirim bukti bayar & tunggu verifikasi</p>
+
+      <div class="summary-modal">
+        <div class="row"><span class="label">👤 Nama:</span><span class="value" id="s3Nama">-</span></div>
+        <div class="row"><span class="label">📱 No HP:</span><span class="value" id="s3Hp">-</span></div>
+        <div class="row"><span class="label">📦 Paket:</span><span class="value" id="s3Paket">-</span></div>
+        <div class="row total"><span class="label">💰 Total:</span><span class="value" id="s3Harga">Rp 0</span></div>
+      </div>
+
+      <a id="s3WaBtn" class="btn-wa-modal" href="#" target="_blank">
+        💬 KIRIM BUKTI BAYAR VIA WHATSAPP
+      </a>
+
+      <div class="waiting-box" id="waitingBox" style="display:none;">
+        <div class="loading-spinner"></div>
+        <p>⏳ Menunggu Verifikasi Admin</p>
+        <p class="sub-wait">Admin akan cek pembayaran & proses order lu dalam 1-5 menit.</p>
+      </div>
+
+      <div class="info-note">
+        📌 Setelah bukti dikirim, admin akan verifikasi manual. Kalau valid, order lu langsung diproses. <b>Mohon tunggu ya!</b>
+      </div>
+    </div>
+
+  </div>
+</div>
 
 <script>
 const paketJoki = [
@@ -190,6 +245,7 @@ const paketLogo = [
 const WA_ADMIN = "6283898669427"; //
 
 let pilihanSekarang = null;
+let dataPemesan = { nama: "", hp: "" };
 
 function render(target, data) {
   document.getElementById(target).innerHTML = data.map(p => `
@@ -204,53 +260,82 @@ function pilih(nama, harga, el) {
   document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
   el.classList.add('active');
   pilihanSekarang = { nama, harga };
-  document.getElementById('pilihPaket').innerText = nama;
-  document.getElementById('totalHarga').innerText = "Rp " + harga.toLocaleString('id-ID');
   document.getElementById('stickyHarga').innerText = "Rp " + harga.toLocaleString('id-ID');
+  document.getElementById('stickyNama').innerText = nama;
   document.getElementById('stickyOrder').classList.add('show');
-  updateWA();
+
+  document.getElementById('mPaket').innerText = nama;
+  document.getElementById('mHarga').innerText = "Rp " + harga.toLocaleString('id-ID');
+  document.getElementById('s2Paket').innerText = nama;
+  document.getElementById('s2Harga').innerText = "Rp " + harga.toLocaleString('id-ID');
+  document.getElementById('s2Nominal').innerText = "⚠️ MASUKKAN NOMINAL: Rp " + harga.toLocaleString('id-ID');
 }
 
-function hapusPilihan() {
-  pilihanSekarang = null;
-  document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
-  document.getElementById('pilihPaket').innerText = "Belum dipilih";
-  document.getElementById('totalHarga').innerText = "Rp 0";
-  document.getElementById('stickyOrder').classList.remove('show');
-  updateWA();
+function bukaModal() {
+  if (!pilihanSekarang) { alert('Pilih paket dulu ya 😊'); return; }
+  document.getElementById('modalOverlay').classList.add('show');
+  document.body.style.overflow = 'hidden';
 }
 
-function updateWA() {
-  const nama = document.getElementById('namaPembeli').value.trim();
-  const hp = document.getElementById('hpPembeli').value.trim();
-  const waBtn = document.getElementById('waBtn');
-  const waInfo = document.getElementById('waInfo');
-  const stickyWa = document.getElementById('stickyWa');
+function tutupModal() {
+  document.getElementById('modalOverlay').classList.remove('show');
+  document.body.style.overflow = 'auto';
+}
 
-  if (!pilihanSekarang) {
-    waBtn.href = "#";
-    waInfo.innerText = "Pilih paket dulu";
-    stickyWa.href = "#";
-    return;
+function setStep(num) {
+  document.querySelectorAll('.step-content').forEach(s => s.classList.remove('active'));
+  document.getElementById('step' + num).classList.add('active');
+  document.querySelectorAll('.step-dot').forEach(d => d.classList.remove('active','done'));
+  for (let i = 1; i <= 3; i++) {
+    const dot = document.getElementById('dot' + i);
+    if (i < num) dot.classList.add('done');
+    else if (i === num) dot.classList.add('active');
   }
+}
+
+function keStep2() {
+  const nama = document.getElementById('mNama').value.trim();
+  const hp = document.getElementById('mHp').value.trim();
+  if (!nama) { alert('Isi nama dulu ya'); return; }
+  if (!hp) { alert('Isi no WhatsApp dulu ya'); return; }
+  dataPemesan = { nama, hp };
+  setStep(2);
+}
+
+function keStep3() {
+  if (!dataPemesan.nama || !dataPemesan.hp) { setStep(1); return; }
+  document.getElementById('s3Nama').innerText = dataPemesan.nama;
+  document.getElementById('s3Hp').innerText = dataPemesan.hp;
+  document.getElementById('s3Paket').innerText = pilihanSekarang.nama;
+  document.getElementById('s3Harga').innerText = "Rp " + pilihanSekarang.harga.toLocaleString('id-ID');
 
   const pesan = `Halo Admin Jimzz Store 👋
 
 📦 *Paket:* ${pilihanSekarang.nama}
 💰 *Total:* Rp ${pilihanSekarang.harga.toLocaleString('id-ID')}
-👤 *Nama:* ${nama || "(belum diisi)"}
-📱 *No HP:* ${hp || "(belum diisi)"}
+👤 *Nama:* ${dataPemesan.nama}
+📱 *No HP:* ${dataPemesan.hp}
 
-Saya mau order paket ini, mohon diproses ya 🙏`;
+Saya sudah bayar via QRIS. Berikut bukti transfernya ⬇️
+_(screenshot bukti bayar dilampirkan di bawah)_
+
+Mohon diverifikasi & diproses ya 🙏`;
 
   const link = `https://wa.me/${WA_ADMIN}?text=${encodeURIComponent(pesan)}`;
-  waBtn.href = link;
-  waInfo.innerText = `Total Rp ${pilihanSekarang.harga.toLocaleString('id-ID')} • Klik untuk order`;
-  stickyWa.href = link;
+  document.getElementById('s3WaBtn').href = link;
+
+  setStep(3);
 }
 
-document.getElementById('namaPembeli').addEventListener('input', updateWA);
-document.getElementById('hpPembeli').addEventListener('input', updateWA);
+document.getElementById('s3WaBtn').addEventListener('click', function() {
+  setTimeout(() => {
+    document.getElementById('waitingBox').style.display = 'block';
+  }, 800);
+});
+
+document.getElementById('modalOverlay').addEventListener('click', function(e) {
+  if (e.target === this) tutupModal();
+});
 
 render('joki', paketJoki);
 render('sosmed', paketSosmed);
