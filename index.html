@@ -84,7 +84,8 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 13px; border
 /* ============ MUSIC PLAYER — SUPER MINI ============ */
 .music-player { position: fixed; bottom: 12px; right: 12px; left: auto; width: 220px; max-width: calc(100% - 24px); background: #181820; border: 1px solid #2a2a3a; border-radius: 10px; box-shadow: 0 6px 18px rgba(0,0,0,0.7); z-index: 300; overflow: hidden; }
 .music-mini { display: flex; align-items: center; gap: 7px; padding: 7px 9px; cursor: pointer; }
-.music-cover { width: 30px; height: 30px; border-radius: 6px; background: linear-gradient(135deg, #ff2b2b, #8b0000); display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
+.music-cover { width: 30px; height: 30px; border-radius: 6px; background: #1a1a24; display: flex; align-items: center; justify-content: center; flex-shrink: 0; position: relative; }
+.music-cover::before { content: ""; width: 2px; height: 4px; background: #ff2b2b; border-radius: 1px; box-shadow: 4px 0 0 #ff2b2b, 8px 0 0 #ff2b2b, 12px 0 0 #ff2b2b, -4px 0 0 #ff2b2b, -8px 0 0 #ff2b2b; }
 .music-mini-info { flex: 1; min-width: 0; }
 .music-mini-title { font-size: 11px; font-weight: 600; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .music-mini-artist { font-size: 9px; color: #999; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px; }
@@ -210,7 +211,7 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 13px; border
 
 <div class="music-player" id="musicPlayer">
   <div class="music-mini" onclick="toggleExpand()">
-    <div class="music-cover" id="musicCover">🎵</div>
+    <div class="music-cover"></div>
     <div class="music-mini-info">
       <div class="music-mini-title" id="miniTitle">Pilih Lagu</div>
       <div class="music-mini-artist" id="miniArtist">Klik untuk buka playlist</div>
@@ -349,7 +350,6 @@ const audio = document.getElementById('audioPlayer');
 const musicPlayer = document.getElementById('musicPlayer');
 const miniTitle = document.getElementById('miniTitle');
 const miniArtist = document.getElementById('miniArtist');
-const musicCover = document.getElementById('musicCover');
 const playMainBtn = document.getElementById('playMainBtn');
 const progressFill = document.getElementById('progressFill');
 
@@ -378,7 +378,6 @@ function updateUI() {
   const s = playlist[currentSong];
   miniTitle.innerText = s.judul;
   miniArtist.innerText = s.artis;
-  musicCover.innerText = s.cover;
   if (!audio.paused) {
     playMainBtn.innerText = '⏸';
   } else {
