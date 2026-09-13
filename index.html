@@ -93,21 +93,9 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 13px; border
 </header>
 
 <section class="kategori">
-  <h2>👥 Paket Joki Kontak</h2>
-  <p class="sub">Pilih paket sesuai kebutuhanmu</p>
-  <div class="grid" id="joki"></div>
-</section>
-
-<section class="kategori">
   <h2>📱 Suntik Sosmed</h2>
   <p class="sub">Pilih jumlah pengikut</p>
   <div class="grid" id="sosmed"></div>
-</section>
-
-<section class="kategori">
-  <h2>🎨 Layanan Logo</h2>
-  <p class="sub">Pilih desain yang kamu butuhkan</p>
-  <div class="grid" id="logo"></div>
 </section>
 
 <footer>
@@ -214,18 +202,6 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 13px; border
 </div>
 
 <script>
-const paketJoki = [
-  { nama: "15 JAM TEBAR 25GB WARJOK+SW", harga: 500 },
-  { nama: "2 HARI TEBAR 25GB WARJOK+SW", harga: 1000 },
-  { nama: "3 HARI TEBAR 25GB WARJOK+SW", harga: 2000 },
-  { nama: "4 HARI TEBAR 25GB WARJOK+SW", harga: 3000 },
-  { nama: "5 HARI TEBAR 25GB WARJOK+SW", harga: 4000 },
-  { nama: "6 HARI TEBAR 25GB WARJOK+SW", harga: 5000 },
-  { nama: "7 HARI TEBAR 25GB WARJOK+SW", harga: 6000 },
-  { nama: "8 HARI TEBAR 25GB WARJOK+SW", harga: 7000 },
-  { nama: "9 HARI TEBAR 25GB WARJOK+SW", harga: 8000 },
-  { nama: "PERMANEN TEBAR 25GB WARJOK+SW SETIAP HARI", harga: 10000 }
-];
 const paketSosmed = [
   { nama: "100 PENGIKUT", harga: 1000 },
   { nama: "200 PENGIKUT", harga: 2000 },
@@ -235,12 +211,6 @@ const paketSosmed = [
   { nama: "600 PENGIKUT", harga: 6000 },
   { nama: "700 PENGIKUT", harga: 7000 },
   { nama: "800 PENGIKUT", harga: 8000 }
-];
-const paketLogo = [
-  { nama: "LOGO JB", harga: 1000 },
-  { nama: "LOGO FT", harga: 2000 },
-  { nama: "LOGO QR", harga: 2000 },
-  { nama: "LOGO MUKA", harga: 3000 }
 ];
 const WA_ADMIN = "6283898669427"; //
 
@@ -336,9 +306,7 @@ document.getElementById('modalOverlay').addEventListener('click', function(e) {
   if (e.target === this) tutupModal();
 });
 
-render('joki', paketJoki);
 render('sosmed', paketSosmed);
-render('logo', paketLogo);
 </script>
 </body>
 </html>
