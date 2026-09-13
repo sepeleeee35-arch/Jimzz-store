@@ -23,11 +23,13 @@ header p { color: #b0b0b0; margin-top: 10px; font-size: 15px; }
 
 footer { text-align: center; padding: 25px; color: #555; font-size: 13px; border-top: 1px solid #222; margin-top: 30px; }
 
+/* STICKY ORDER BUTTON */
 .sticky-order { position: fixed; bottom: 0; left: 0; right: 0; background: linear-gradient(180deg, transparent, #0a0a0f 30%); padding: 15px 20px 20px; z-index: 100; display: none; }
 .sticky-order.show { display: block; }
 .sticky-order button { width: 100%; background: linear-gradient(135deg, #ff2b2b, #c41e1e); color: #fff; padding: 15px; border: none; border-radius: 14px; font-weight: bold; font-size: 15px; cursor: pointer; box-shadow: 0 5px 25px rgba(255,43,43,0.5); }
 .sticky-order button small { display: block; font-size: 11px; opacity: 0.85; font-weight: normal; margin-top: 2px; }
 
+/* MODAL */
 .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 200; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; }
 .modal-overlay.show { display: flex; }
 .modal { background: linear-gradient(145deg, #14141f, #0d0d15); border: 1px solid #2a2a3a; border-radius: 20px; padding: 28px 22px; width: 100%; max-width: 480px; position: relative; animation: slideUp 0.3s ease; max-height: 90vh; overflow-y: auto; }
@@ -338,8 +340,16 @@ render('sosmed', paketSosmed);
 
 // ========== MUSIC PLAYER ==========
 const playlist = [
-  { judul: "Brazilian Phonk", artis: "MondaMusic", cover: "🔥", src: "lagu1.mp3" },
-  { judul: "Atmospheric Phonk", artis: "Evgeny Bardyuzha", cover: "💀", src: "lagu2.mp3" }
+  { judul: "Faded", artis: "Alan Walker", cover: "🎧", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
+  { judul: "Alone", artis: "Marshmello", cover: "🎵", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
+  { judul: "Sicko Mode", artis: "Travis Scott", cover: "🔥", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" },
+  { judul: "Goosebumps", artis: "Travis Scott", cover: "👻", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" },
+  { judul: "Phonk Killer", artis: "DJ Phantom", cover: "💀", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3" },
+  { judul: "Tokyo Drift", artis: "Teriyaki Boyz", cover: "🚗", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3" },
+  { judul: "Astronaut in the Ocean", artis: "Masked Wolf", cover: "🌊", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3" },
+  { judul: "Rap God", artis: "Eminem", cover: "🎤", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" },
+  { judul: "Lose Yourself", artis: "Eminem", cover: "🎤", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3" },
+  { judul: "Believer", artis: "Imagine Dragons", cover: "⚡", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3" }
 ];
 
 let currentSong = 0;
