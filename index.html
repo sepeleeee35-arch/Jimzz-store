@@ -505,6 +505,24 @@ const produkSosmed = [
     inputPlaceholder: "Contoh: https://www.tiktok.com/@user/video/xxx",
     inputValidasi: "tiktok.com",
     inputError: "Link harus link video TikTok (tiktok.com)"
+  },
+  { 
+    icon: "😀", nama: "Suntik Random Emoji Reaction", 
+    desc: "Tambah reaction emoji random ke postingan kamu. Aman & cepat.", 
+    hargaPerUnit: 1, unit: "reaction", min: 250, max: 50000, hot: true,
+    inputLabel: "🔗 Link Postingan",
+    inputPlaceholder: "Contoh: https://www.tiktok.com/@user/video/xxx",
+    inputValidasi: "tiktok.com",
+    inputError: "Link harus link postingan TikTok (tiktok.com)"
+  },
+  { 
+    icon: "📊", nama: "Suntik Polling Vote", 
+    desc: "Tambah vote ke polling kamu secara aman & cepat.", 
+    hargaPerUnit: 20, unit: "vote", min: 50, max: 10000, hot: true,
+    inputLabel: "🔗 Link Polling",
+    inputPlaceholder: "Contoh: link polling",
+    inputValidasi: "",
+    inputError: ""
   }
 ];
 
@@ -587,7 +605,6 @@ function bukaOrder(kategoriId, index) {
     jumlahInput.max = produkAktif.max;
   }
 
-  // Set label & placeholder dinamis di Step 2
   if (isApk) {
     document.getElementById('inputLabel').innerText = '👤 Nama Lengkap';
     document.getElementById('linkSaluran').placeholder = 'Contoh: Bilzz';
@@ -707,7 +724,6 @@ function keStep3() {
   
   clearError();
   
-  // Validasi link kosong
   if (!link) {
     inputEl.classList.add('error');
     errorEl.innerText = produkAktif.isApk ? '❌ Isi nama dulu ya!' : '❌ Isi ' + (produkAktif.inputLabel || 'link') + ' dulu ya!';
@@ -715,7 +731,6 @@ function keStep3() {
     return;
   }
   
-  // Validasi link harus sesuai (khusus non-APK)
   if (!produkAktif.isApk && produkAktif.inputValidasi) {
     if (!link.toLowerCase().includes(produkAktif.inputValidasi)) {
       inputEl.classList.add('error');
@@ -725,7 +740,6 @@ function keStep3() {
     }
   }
   
-  // Validasi No WA — harus angka valid
   if (!hp) {
     hpEl.classList.add('error');
     hpErrorEl.innerText = '❌ Isi no WhatsApp dulu ya!';
@@ -733,7 +747,6 @@ function keStep3() {
     return;
   }
   
-  // Format: 08xxx atau 62xxx, 10-15 digit
   const hpClean = hp.replace(/[\s\-\+]/g, '');
   const hpValid = /^(62|0)8[0-9]{8,13}$/.test(hpClean);
   if (!hpValid) {
