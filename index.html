@@ -18,7 +18,24 @@ body {
   color: #e6e6e6; 
   line-height: 1.6; 
   padding-bottom: 40px; 
+  overflow-x: hidden;
 }
+
+/* ============ PARTICLE BACKGROUND ============ */
+#particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+.particle { position: absolute; width: 3px; height: 3px; background: #00ff88; border-radius: 50%; box-shadow: 0 0 6px #00ff88; opacity: 0.6; animation: floatUp linear infinite; }
+@keyframes floatUp {
+  0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
+  10% { opacity: 0.6; }
+  90% { opacity: 0.6; }
+  100% { transform: translateY(-100px) scale(1); opacity: 0; }
+}
+
+/* ============ BANNER PROMO ============ */
+.promo-banner { position: relative; z-index: 5; background: linear-gradient(90deg, #00ff88, #00cc6a, #00ff88); background-size: 200% 100%; animation: bannerSlide 3s linear infinite; color: #000; text-align: center; padding: 10px 15px; font-size: 12px; font-weight: bold; letter-spacing: 0.5px; }
+@keyframes bannerSlide { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
+.promo-banner b { background: #000; color: #00ff88; padding: 2px 8px; border-radius: 4px; margin: 0 4px; }
+
 header { 
   text-align: center; 
   padding: 60px 20px 40px; 
@@ -27,23 +44,46 @@ header {
     linear-gradient(135deg, #001a0d, #0a0a0f); 
   border-bottom: 2px solid #00ff88; 
   position: relative;
+  z-index: 5;
 }
 header h1 { 
   font-size: 42px; 
   color: #00ff88; 
   text-shadow: 0 0 20px rgba(0,255,136,0.8), 0 0 40px rgba(0,255,136,0.4); 
 }
-.kategori { padding: 40px 20px; max-width: 1100px; margin: auto; }
+header .counter { display: inline-block; margin-top: 15px; background: rgba(0,255,136,0.1); border: 1px solid rgba(0,255,136,0.3); color: #00ff88; padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+header .counter .dot { display: inline-block; width: 8px; height: 8px; background: #00ff88; border-radius: 50%; margin-right: 6px; animation: blink 1.5s infinite; }
+@keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+.kategori { padding: 40px 20px; max-width: 1100px; margin: auto; position: relative; z-index: 5; }
 .kategori h2 { text-align: center; font-size: 26px; color: #00ff88; margin-bottom: 8px; }
 .sub { text-align: center; color: #888; margin-bottom: 25px; font-size: 14px; }
 .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.card { background: linear-gradient(145deg, #0d1a14, #0d0d15); border: 1px solid #2a3a32; border-radius: 14px; padding: 15px 10px; text-align: center; cursor: pointer; transition: all 0.25s ease; position: relative; }
-.card:hover, .card.active { border-color: #00ff88; transform: translateY(-3px); box-shadow: 0 0 20px rgba(0,255,136,0.5); }
-.card.active::after { content: "✓"; position: absolute; top: 5px; right: 8px; color: #00ff88; font-weight: bold; }
+.card { position: relative; background: linear-gradient(145deg, #0d1a14, #0d0d15); border: 1px solid #2a3a32; border-radius: 14px; padding: 18px 10px 15px; text-align: center; cursor: pointer; transition: all 0.3s ease; animation: cardPulse 3s ease-in-out infinite; }
+@keyframes cardPulse {
+  0%, 100% { box-shadow: 0 0 0 rgba(0,255,136,0); }
+  50% { box-shadow: 0 0 15px rgba(0,255,136,0.15); }
+}
+.card:hover { 
+  border-color: #00ff88; 
+  transform: translateY(-5px) scale(1.03); 
+  box-shadow: 0 0 30px rgba(0,255,136,0.6), 0 10px 20px rgba(0,0,0,0.5); 
+  animation: none;
+}
+.card.active { border-color: #00ff88; background: linear-gradient(145deg, #0d2a1c, #0d0d15); box-shadow: 0 0 25px rgba(0,255,136,0.7); animation: none; }
+.card.active::after { content: "✓"; position: absolute; top: 5px; right: 8px; color: #00ff88; font-weight: bold; font-size: 16px; }
 .card h3 { font-size: 11px; color: #ccc; margin-bottom: 8px; text-transform: uppercase; line-height: 1.3; }
 .card .harga { font-size: 16px; font-weight: bold; color: #00ff88; }
 
-footer { text-align: center; padding: 25px; color: #555; font-size: 13px; border-top: 1px solid #222; margin-top: 30px; }
+.badge-hot { position: absolute; top: -8px; right: -8px; background: linear-gradient(135deg, #ff2b2b, #ff6b6b); color: #fff; font-size: 9px; font-weight: bold; padding: 3px 8px; border-radius: 10px; letter-spacing: 0.5px; box-shadow: 0 0 10px rgba(255,43,43,0.6); animation: hotPulse 1.5s infinite; z-index: 2; }
+@keyframes hotPulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+
+footer { text-align: center; padding: 25px; color: #555; font-size: 13px; border-top: 1px solid #222; margin-top: 30px; position: relative; z-index: 5; }
+
+/* ============ WA FLOATING ============ */
+.wa-float { position: fixed; top: 15px; right: 15px; width: 50px; height: 50px; background: linear-gradient(135deg, #25D366, #1da851); border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 24px; color: #fff; box-shadow: 0 5px 20px rgba(37,211,102,0.6); z-index: 500; animation: waPulse 2s infinite; transition: 0.3s; }
+.wa-float:hover { transform: scale(1.1); }
+@keyframes waPulse { 0%,100% { box-shadow: 0 5px 20px rgba(37,211,102,0.6); } 50% { box-shadow: 0 5px 30px rgba(37,211,102,0.9), 0 0 0 10px rgba(37,211,102,0.1); } }
 
 .sticky-order { position: fixed; bottom: 0; left: 0; right: 0; background: linear-gradient(180deg, transparent, #0a0a0f 30%); padding: 15px 20px 20px; z-index: 100; display: none; }
 .sticky-order.show { display: block; }
@@ -138,13 +178,24 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 13px; border
 
 @media (max-width: 480px) {
   .music-player { bottom: 10px; right: 10px; left: auto; width: 200px; }
+  .wa-float { width: 44px; height: 44px; font-size: 20px; top: 12px; right: 12px; }
+  header h1 { font-size: 34px; }
 }
 </style>
 </head>
 <body>
 
+<div id="particles"></div>
+
+<div class="promo-banner">
+  🎉 BONUS <b>+5 MEMBER</b> untuk order <b>Rp 4.000</b> ke atas! 🎉
+</div>
+
+<a href="https://wa.me/6283898669427" target="_blank" class="wa-float">💬</a>
+
 <header>
   <h1>Jimzz Store</h1>
+  <div class="counter"><span class="dot"></span>🔥 <span id="viewCount">1.234</span> orang sudah order</div>
 </header>
 
 <section class="kategori">
@@ -264,30 +315,51 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 13px; border
 </div>
 
 <script>
+// ============ PARTICLE BACKGROUND ============
+const particlesContainer = document.getElementById('particles');
+for (let i = 0; i < 25; i++) {
+  const p = document.createElement('div');
+  p.className = 'particle';
+  p.style.left = Math.random() * 100 + '%';
+  p.style.animationDuration = (Math.random() * 15 + 10) + 's';
+  p.style.animationDelay = (Math.random() * 10) + 's';
+  p.style.width = p.style.height = (Math.random() * 3 + 2) + 'px';
+  particlesContainer.appendChild(p);
+}
+
+// ============ COUNTER ============
+let viewCount = 1234;
+const viewEl = document.getElementById('viewCount');
+setInterval(() => {
+  viewCount += Math.floor(Math.random() * 3) + 1;
+  viewEl.innerText = viewCount.toLocaleString('id-ID');
+}, 5000);
+
+// ============ PAKET DATA ============
 const paketSosmed = [
   { nama: "100 PENGIKUT", harga: 1000 },
   { nama: "200 PENGIKUT", harga: 2000 },
   { nama: "300 PENGIKUT", harga: 3000 },
   { nama: "400 PENGIKUT", harga: 4000 },
-  { nama: "500 PENGIKUT", harga: 5000 },
+  { nama: "500 PENGIKUT", harga: 5000, hot: true },
   { nama: "600 PENGIKUT", harga: 6000 },
   { nama: "700 PENGIKUT", harga: 7000 },
   { nama: "800 PENGIKUT", harga: 8000 },
   { nama: "900 PENGIKUT", harga: 9000 },
-  { nama: "1000 PENGIKUT", harga: 10000 }
+  { nama: "1000 PENGIKUT", harga: 10000, hot: true }
 ];
 
 const paketJpm = [
   { nama: "5 MEMBER", harga: 1000 },
   { nama: "10 MEMBER", harga: 2000 },
   { nama: "15 MEMBER", harga: 3000 },
-  { nama: "25 MEMBER (BONUS +5)", harga: 4000 },
+  { nama: "25 MEMBER (BONUS +5)", harga: 4000, hot: true },
   { nama: "30 MEMBER (BONUS +5)", harga: 5000 },
   { nama: "35 MEMBER (BONUS +5)", harga: 6000 },
   { nama: "40 MEMBER (BONUS +5)", harga: 7000 },
   { nama: "45 MEMBER (BONUS +5)", harga: 8000 },
   { nama: "50 MEMBER (BONUS +5)", harga: 9000 },
-  { nama: "55 MEMBER (BONUS +5)", harga: 10000 }
+  { nama: "55 MEMBER (BONUS +5)", harga: 10000, hot: true }
 ];
 
 const WA_ADMIN = "6283898669427";
@@ -298,6 +370,7 @@ let dataPemesan = { nama: "", hp: "" };
 function render(target, data) {
   document.getElementById(target).innerHTML = data.map(p => `
     <div class="card" onclick="pilih('${p.nama}', ${p.harga}, this)">
+      ${p.hot ? '<div class="badge-hot">🔥 TERLARIS</div>' : ''}
       <h3>${p.nama}</h3>
       <div class="harga">Rp ${p.harga.toLocaleString('id-ID')}</div>
     </div>
