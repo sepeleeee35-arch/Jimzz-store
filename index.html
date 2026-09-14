@@ -79,7 +79,7 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 13px; border
 .step-content .info-note { background: rgba(255,43,43,0.08); border-left: 3px solid #ff2b2b; padding: 10px 12px; border-radius: 8px; font-size: 12px; color: #bbb; margin-top: 15px; line-height: 1.6; }
 .step-content .info-note b { color: #ff2b2b; }
 
-/* ============ MUSIC PLAYER ============ */
+/* MUSIC PLAYER */
 .music-player { position: fixed; bottom: 12px; right: 12px; left: auto; width: 220px; max-width: calc(100% - 24px); background: #181820; border: 1px solid #2a2a3a; border-radius: 10px; box-shadow: 0 6px 18px rgba(0,0,0,0.7); z-index: 300; overflow: hidden; }
 .music-mini { display: flex; align-items: center; gap: 7px; padding: 7px 9px; cursor: pointer; }
 .music-cover { width: 30px; height: 30px; border-radius: 6px; background: #1a1a24; display: flex; align-items: center; justify-content: center; flex-shrink: 0; position: relative; overflow: hidden; }
@@ -134,9 +134,15 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 13px; border
 </header>
 
 <section class="kategori">
-  <h2>📱 Suntik Sosmed</h2>
+  <h2>📱 Suntik Saluran</h2>
   <p class="sub">Pilih jumlah pengikut</p>
   <div class="grid" id="sosmed"></div>
+</section>
+
+<section class="kategori">
+  <h2>🚀 JPM (Jasa Push Member)</h2>
+  <p class="sub">Pilih jumlah member</p>
+  <div class="grid" id="jpm"></div>
 </section>
 
 <footer>
@@ -252,8 +258,24 @@ const paketSosmed = [
   { nama: "500 PENGIKUT", harga: 5000 },
   { nama: "600 PENGIKUT", harga: 6000 },
   { nama: "700 PENGIKUT", harga: 7000 },
-  { nama: "800 PENGIKUT", harga: 8000 }
+  { nama: "800 PENGIKUT", harga: 8000 },
+  { nama: "900 PENGIKUT", harga: 9000 },
+  { nama: "1000 PENGIKUT", harga: 10000 }
 ];
+
+const paketJpm = [
+  { nama: "5 MEMBER", harga: 1000 },
+  { nama: "10 MEMBER", harga: 2000 },
+  { nama: "15 MEMBER", harga: 3000 },
+  { nama: "25 MEMBER (BONUS +5)", harga: 4000 },
+  { nama: "30 MEMBER (BONUS +5)", harga: 5000 },
+  { nama: "35 MEMBER (BONUS +5)", harga: 6000 },
+  { nama: "40 MEMBER (BONUS +5)", harga: 7000 },
+  { nama: "45 MEMBER (BONUS +5)", harga: 8000 },
+  { nama: "50 MEMBER (BONUS +5)", harga: 9000 },
+  { nama: "55 MEMBER (BONUS +5)", harga: 10000 }
+];
+
 const WA_ADMIN = "6283898669427";
 
 let pilihanSekarang = null;
@@ -343,6 +365,7 @@ document.getElementById('modalOverlay').addEventListener('click', function(e) {
 });
 
 render('sosmed', paketSosmed);
+render('jpm', paketJpm);
 
 // ========== MUSIC PLAYER ==========
 const playlist = [
