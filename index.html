@@ -129,8 +129,21 @@ header .counter .dot { display: inline-block; width: 8px; height: 8px; backgroun
 .pengumuman.refund .pengumuman-text b {
   color: #00c8ff;
 }
-.pengumuman.refund .pengumuman-icon {
-  animation: pengumumanIcon 1.5s ease-in-out infinite;
+
+/* PENGUMUMAN SPAM (MERAH) */
+.pengumuman.spam {
+  background: linear-gradient(145deg, rgba(255, 50, 50, 0.08), rgba(255, 30, 30, 0.05));
+  border: 1px solid rgba(255, 50, 50, 0.3);
+  border-left: 4px solid #ff3232;
+}
+.pengumuman.spam .pengumuman-title {
+  color: #ff3232;
+}
+.pengumuman.spam .pengumuman-text b {
+  color: #ff3232;
+}
+.pengumuman.spam .pengumuman-text {
+  margin-bottom: 6px;
 }
 
 .produk-list { display: flex; flex-direction: column; gap: 14px; }
@@ -324,7 +337,7 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
     <div style="background:linear-gradient(145deg,#0d1a14,#0d0d15);border:1px solid #2a3a32;border-radius:14px;padding:20px;margin-bottom:14px;">
       <div style="font-size:36px;margin-bottom:8px;">🚀</div>
       <div style="color:#fff;font-weight:bold;font-size:15px;margin-bottom:4px;">Layanan Lainnya</div>
-      <div style="color:#888;font-size:12px;">JPM, Nokos WA Indo, dll</div>
+      <div style="color:#888;font-size:12px;">JPM, Nokos WA Indo, Jasa Spam</div>
     </div>
     <div style="background:linear-gradient(145deg,#0d1a14,#0d0d15);border:1px solid #2a3a32;border-radius:14px;padding:20px;margin-bottom:14px;">
       <div style="font-size:36px;margin-bottom:8px;">📱</div>
@@ -393,7 +406,7 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
         Instagram, TikTok, dan platform lainnya <b>rutin melakukan pembersihan akun bot/fake secara otomatis</b>. Ini bukan karena layanan kami gagal, tapi karena sistem keamanan platform tersebut.
       </p>
       <p class="pengumuman-text">
-        💡 Saran: Order jumlah lebih dari yang dibutuhkan untuk mengantisipasi penurunan.
+        💡 Saran: Order jumlah <b>sedikit</b> terlebih dahulu untuk mengetes layanan kami.
       </p>
     </div>
 
@@ -640,6 +653,16 @@ const produkJpm = [
     inputPlaceholder: "Contoh: Bilzz",
     inputValidasi: "",
     inputError: ""
+  },
+  { 
+    icon: "🗣️", nama: "Jasa Spam", 
+    desc: "Spam OTP 30+ layanan, Spam SMS ke no SIM, Spam Call ke no SIM, dan Spam Pairing ke nomor WA. Bikin target pusing! 😈", 
+    harga: 2000, hot: true,
+    isSpam: true,
+    inputLabel: "📱 Nomor Target",
+    inputPlaceholder: "Contoh: 08xxxxxxxxxx",
+    inputValidasi: "",
+    inputError: ""
   }
 ];
 
@@ -679,12 +702,12 @@ function renderProduk(target, data, kategori) {
 }
 
 function bukaOrder(kategoriId, index) {
-  let data, kategori, isApk;
-  if (kategoriId === 'sosmed') { data = produkSosmed; kategori = 'SUNTIK ALL'; isApk = false; }
-  else if (kategoriId === 'jpm') { data = produkJpm; kategori = 'LAYANAN LAINNYA'; isApk = false; }
-  else { data = produkApk; kategori = 'JUAL APK'; isApk = true; }
+  let data, kategori, isApk, isSpam;
+  if (kategoriId === 'sosmed') { data = produkSosmed; kategori = 'SUNTIK ALL'; isApk = false; isSpam = false; }
+  else if (kategoriId === 'jpm') { data = produkJpm; kategori = 'LAYANAN LAINNYA'; isApk = false; isSpam = data[index].isSpam || false; }
+  else { data = produkApk; kategori = 'JUAL APK'; isApk = true; isSpam = false; }
   
-  produkAktif = { ...data[index], kategori, isApk };
+  produkAktif = { ...data[index], kategori, isApk, isSpam };
 
   document.getElementById('modalLabel').innerText = kategori;
   document.getElementById('modalTitle').innerText = produkAktif.nama;
@@ -693,13 +716,13 @@ function bukaOrder(kategoriId, index) {
   const jumlahInput = document.getElementById('jumlahInput');
   const minmaxText = document.getElementById('minmaxText');
 
-  if (isApk) {
+  if (isApk || isSpam) {
     jumlahInput.value = 1;
     jumlahInput.min = 1;
     jumlahInput.max = 1;
     jumlahInput.disabled = true;
     minmaxText.innerText = '(otomatis 1)';
-    document.getElementById('hargaSatuan').innerText = `Rp ${produkAktif.harga.toLocaleString('id-ID')}`;
+    document.getElementById('hargaSatuan').innerText = `Rp ${(produkAktif.harga || produkAktif.hargaPerUnit).toLocaleString('id-ID')}`;
   } else {
     jumlahInput.disabled = false;
     minmaxText.innerText = `Min: ${produkAktif.min.toLocaleString('id-ID')} - Max: ${produkAktif.max.toLocaleString('id-ID')}`;
@@ -755,11 +778,11 @@ function clearError() {
 function hitungTotal() {
   if (!produkAktif) return;
   const jumlah = parseInt(document.getElementById('jumlahInput').value) || 0;
-  const hargaPerUnit = produkAktif.isApk ? produkAktif.harga : produkAktif.hargaPerUnit;
+  const hargaPerUnit = (produkAktif.isApk || produkAktif.isSpam) ? produkAktif.harga : produkAktif.hargaPerUnit;
   const total = jumlah * hargaPerUnit;
   
   let bonus = 0;
-  if (!produkAktif.isApk && produkAktif.bonusMinTotal && total >= produkAktif.bonusMinTotal) {
+  if (!produkAktif.isApk && !produkAktif.isSpam && produkAktif.bonusMinTotal && total >= produkAktif.bonusMinTotal) {
     bonus = produkAktif.bonusUnit || 0;
   }
 
@@ -796,6 +819,9 @@ function hitungTotal() {
   } else if (produkAktif.isApk) {
     hintEl.innerText = '✅ Order APK — otomatis 1 unit.';
     hintEl.style.color = '#00ff88';
+  } else if (produkAktif.isSpam) {
+    hintEl.innerText = '✅ Jasa Spam — otomatis 1x order.';
+    hintEl.style.color = '#00ff88';
   } else {
     hintEl.innerText = '✅ Jumlah valid, klik "Lanjut ke Pembayaran".';
     hintEl.style.color = '#00ff88';
@@ -804,11 +830,11 @@ function hitungTotal() {
 
 function keStep2() {
   const jumlah = parseInt(document.getElementById('jumlahInput').value) || 0;
-  const hargaPerUnit = produkAktif.isApk ? produkAktif.harga : produkAktif.hargaPerUnit;
+  const hargaPerUnit = (produkAktif.isApk || produkAktif.isSpam) ? produkAktif.harga : produkAktif.hargaPerUnit;
   const total = jumlah * hargaPerUnit;
   
   let bonus = 0;
-  if (!produkAktif.isApk && produkAktif.bonusMinTotal && total >= produkAktif.bonusMinTotal) {
+  if (!produkAktif.isApk && !produkAktif.isSpam && produkAktif.bonusMinTotal && total >= produkAktif.bonusMinTotal) {
     bonus = produkAktif.bonusUnit || 0;
   }
   
@@ -835,7 +861,7 @@ function keStep3() {
     return;
   }
   
-  if (!produkAktif.isApk && produkAktif.inputValidasi) {
+  if (!produkAktif.isApk && !produkAktif.isSpam && produkAktif.inputValidasi) {
     if (!link.toLowerCase().includes(produkAktif.inputValidasi)) {
       inputEl.classList.add('error');
       errorEl.innerText = '❌ ' + (produkAktif.inputError || 'Link tidak valid!');
@@ -867,13 +893,15 @@ function keStep3() {
 
   const totalDiterima = dataPemesan.jumlah + dataPemesan.bonus;
   const bonusText = dataPemesan.bonus > 0 ? `+${dataPemesan.bonus} ${produkAktif.unit} 🎁` : 'Tidak ada';
-  const hargaPerUnit = produkAktif.isApk ? produkAktif.harga : produkAktif.hargaPerUnit;
+  const hargaPerUnit = (produkAktif.isApk || produkAktif.isSpam) ? produkAktif.harga : produkAktif.hargaPerUnit;
 
   let pesan = `Halo Admin Jimzz Store 👋\n\n📦 *Produk:* ${produkAktif.nama}\n📊 *Jumlah:* ${dataPemesan.jumlah.toLocaleString('id-ID')} ${produkAktif.unit || 'pcs'}\n`;
   if (dataPemesan.bonus > 0) pesan += `🎁 *Bonus:* ${bonusText}\n📊 *Total Diterima:* ${totalDiterima.toLocaleString('id-ID')} ${produkAktif.unit}\n`;
   pesan += `💰 *Harga Satuan:* Rp ${hargaPerUnit.toLocaleString('id-ID')}\n💵 *Total Bayar:* Rp ${dataPemesan.total.toLocaleString('id-ID')}\n\n`;
   if (produkAktif.isApk) {
     pesan += `👤 *Nama:* ${dataPemesan.link}\n`;
+  } else if (produkAktif.isSpam) {
+    pesan += `📱 *Nomor Target:* ${dataPemesan.link}\n`;
   } else {
     pesan += `🔗 *Link:* ${dataPemesan.link}\n`;
   }
