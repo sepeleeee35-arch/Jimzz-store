@@ -26,7 +26,59 @@ body {
   line-height: 1.6; 
   padding-bottom: 100px; 
   overflow-x: hidden;
-  transition: background 0.4s ease, color 0.4s ease;
+  transition: all 0.5s ease;
+}
+
+/* ================================================================
+   MODE 2: ANIMATED NEON BACKGROUND
+   ================================================================ */
+body.mode-2 {
+  background: linear-gradient(-45deg, #0a0a0f, #001a0d, #0d1a14, #0a0a0f);
+  background-size: 400% 400%;
+  animation: neonShift 15s ease infinite;
+  position: relative;
+}
+body.mode-2::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(0,255,136,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,255,136,0.06) 1px, transparent 1px);
+  background-size: 40px 40px;
+  animation: gridMove 8s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+body.mode-2::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, transparent 30%, rgba(0,255,136,0.05) 100%);
+  pointer-events: none;
+  z-index: 2;
+  animation: glowPulse 4s ease-in-out infinite;
+}
+@keyframes neonShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+@keyframes gridMove {
+  0% { background-position: 0 0, 0 0; }
+  100% { background-position: 40px 40px, 40px 40px; }
+}
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
+
+/* Partikel lebih banyak & lebih cepat di Mode 2 */
+body.mode-2 .particle {
+  width: 4px;
+  height: 4px;
+  box-shadow: 0 0 12px #00ff88, 0 0 24px #00ff88;
+  opacity: 0.9;
 }
 
 #particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
@@ -282,8 +334,6 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
 .wa-float:hover { transform: scale(1.1); }
 @keyframes waPulse { 0%,100% { box-shadow: 0 5px 20px rgba(37,211,102,0.6); } 50% { box-shadow: 0 5px 30px rgba(37,211,102,0.9), 0 0 0 10px rgba(37,211,102,0.1); } }
 
-/* ============ HAPUS TOMBOL INSTALL — GA ADA DI SINI ============ */
-
 .music-player { position: fixed; bottom: 80px; right: 12px; left: auto; width: 220px; max-width: calc(100% - 24px); background: #0d1a14; border: 1px solid #2a3a32; border-radius: 10px; box-shadow: 0 6px 18px rgba(0,0,0,0.7); z-index: 300; overflow: hidden; transition: background 0.4s ease; }
 .music-mini { display: flex; align-items: center; gap: 7px; padding: 7px 9px; cursor: pointer; }
 .music-cover { width: 30px; height: 30px; border-radius: 6px; background: #0a0a0f; display: flex; align-items: center; justify-content: center; flex-shrink: 0; position: relative; overflow: hidden; }
@@ -319,127 +369,6 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
 .music-list::-webkit-scrollbar { width: 3px; }
 .music-list::-webkit-scrollbar-thumb { background: #00ff88; border-radius: 2px; }
 
-/* ================================================================
-   LIGHT MODE — HIJAU TEGAS (BUKAN PUTIH!)
-   ================================================================ */
-body.light-mode {
-  background: #7fb894;  /* ← HIJAU SAGE TEGAS */
-  background-image: 
-    radial-gradient(circle at 20% 20%, rgba(0, 120, 60, 0.25) 0%, transparent 40%),
-    radial-gradient(circle at 80% 80%, rgba(0, 120, 60, 0.20) 0%, transparent 40%),
-    linear-gradient(rgba(0, 100, 50, 0.10) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 100, 50, 0.10) 1px, transparent 1px);
-  background-size: 100% 100%, 100% 100%, 30px 30px, 30px 30px;
-  background-attachment: fixed;
-  color: #0a2e18;
-}
-
-body.light-mode header {
-  background: radial-gradient(circle at 50% 100%, rgba(0, 140, 70, 0.4), transparent 70%),
-              linear-gradient(135deg, #5a9b75, #7fb894);
-  border-bottom-color: #006b30;
-}
-body.light-mode header h1 { color: #003d1a; text-shadow: 0 0 20px rgba(0,80,40,0.4); }
-body.light-mode .header-top .logo-text { color: #003d1a; }
-body.light-mode .theme-toggle { background: rgba(0,80,40,0.25); border-color: #006b30; color: #003d1a; }
-body.light-mode header .counter { background: rgba(0,80,40,0.2); border-color: rgba(0,80,40,0.5); color: #003d1a; }
-body.light-mode header .counter .dot { background: #006b30; }
-
-body.light-mode .kategori h2 { color: #003d1a; }
-body.light-mode .sub { color: #1a4a2e; }
-
-body.light-mode .menu-home,
-body.light-mode .produk-card,
-body.light-mode .testi-card {
-  background: linear-gradient(145deg, #a8d4b8, #8fc4a2);
-  border-color: #4a8b62;
-}
-body.light-mode .menu-home:hover,
-body.light-mode .produk-card:hover,
-body.light-mode .testi-card:hover {
-  border-color: #003d1a;
-  box-shadow: 0 0 25px rgba(0,80,40,0.4);
-}
-body.light-mode .menu-home-title,
-body.light-mode .produk-nama { color: #0a2e18; }
-body.light-mode .menu-home-desc,
-body.light-mode .produk-desc { color: #1a4a2e; }
-body.light-mode .menu-home::after { color: #003d1a; }
-body.light-mode .testi-text { color: #0a2e18; }
-body.light-mode .testi-name { color: #003d1a; }
-body.light-mode .produk-label { color: #003d1a; }
-body.light-mode .produk-harga { color: #003d1a; }
-body.light-mode .produk-harga-label,
-body.light-mode .produk-harga span { color: #1a4a2e; }
-
-body.light-mode footer { color: #1a4a2e; border-color: #4a8b62; }
-body.light-mode .bottom-nav { background: #7fb894; border-color: #4a8b62; }
-body.light-mode .nav-item { color: #1a4a2e; }
-body.light-mode .nav-item.active { color: #003d1a; }
-
-body.light-mode .wa-channel-info { color: #1a4a2e; }
-
-body.light-mode .pengumuman {
-  background: linear-gradient(145deg, rgba(180, 130, 0, 0.3), rgba(150, 100, 0, 0.2));
-  border-color: rgba(150, 100, 0, 0.6);
-  border-left-color: #a07000;
-}
-body.light-mode .pengumuman-text { color: #2d2a1a; }
-body.light-mode .pengumuman.refund {
-  background: linear-gradient(145deg, rgba(0, 110, 180, 0.25), rgba(0, 90, 150, 0.18));
-  border-color: rgba(0, 110, 180, 0.6);
-  border-left-color: #0070b8;
-}
-
-body.light-mode .music-player { background: #8fc4a2; border-color: #4a8b62; }
-body.light-mode .music-cover { background: #a8d4b8; }
-body.light-mode .music-cover::before { background: #003d1a; box-shadow: 4px 0 0 #003d1a, 8px 0 0 #003d1a, 12px 0 0 #003d1a, -4px 0 0 #003d1a, -8px 0 0 #003d1a; }
-body.light-mode .music-mini-title { color: #0a2e18; }
-body.light-mode .music-mini-artist { color: #1a4a2e; }
-body.light-mode .music-mini-controls button { color: #0a2e18; }
-body.light-mode .music-progress { background: #4a8b62; }
-body.light-mode .music-expanded { background: #8fc4a2; }
-body.light-mode .music-list-header { color: #1a4a2e; border-color: #4a8b62; }
-body.light-mode .music-item { color: #0a2e18; }
-body.light-mode .music-item:hover { background: rgba(0,80,40,0.15); }
-body.light-mode .music-item-title { color: #0a2e18; }
-body.light-mode .music-item-artist { color: #1a4a2e; }
-body.light-mode .music-item-thumb { background: linear-gradient(135deg, #4a8b62, #3a7b52); }
-
-body.light-mode .modal-box { background: linear-gradient(145deg, #a8d4b8, #8fc4a2); border-color: #4a8b62; }
-body.light-mode .modal-title { color: #0a2e18; }
-body.light-mode .modal-subtitle { color: #1a4a2e; }
-body.light-mode .modal-label { color: #003d1a; }
-body.light-mode .jumlah-input,
-body.light-mode .form-box input { background: #c8e5d2; border-color: #4a8b62; color: #0a2e18; }
-body.light-mode .form-box label { color: #1a4a2e; }
-body.light-mode .form-note { color: #1a4a2e; }
-body.light-mode .jumlah-label { color: #0a2e18; }
-body.light-mode .jumlah-hint { color: #1a4a2e; }
-
-body.light-mode .total-box { background: #c8e5d2; border-color: #4a8b62; }
-body.light-mode .total-row .label { color: #1a4a2e; }
-body.light-mode .total-row .value { color: #0a2e18; }
-body.light-mode .total-row.big .label,
-body.light-mode .total-row.big .value { color: #003d1a; }
-body.light-mode .total-row.bonus { background: rgba(0,80,40,0.15); }
-body.light-mode .total-row.bonus .label,
-body.light-mode .total-row.bonus .value { color: #003d1a; }
-
-body.light-mode .steps-indicator::before { background: #4a8b62; }
-body.light-mode .step-dot { background: #7fb894; border-color: #4a8b62; color: #1a4a2e; }
-body.light-mode .step-dot.active { background: #003d1a; border-color: #003d1a; color: #a8d4b8; }
-body.light-mode .step-dot.done { background: #006b30; border-color: #006b30; }
-
-body.light-mode .qris-nominal { background: rgba(0,80,40,0.2); border-color: #003d1a; color: #003d1a; }
-body.light-mode .waiting-box { background: #c8e5d2; }
-body.light-mode .waiting-box p { color: #003d1a; }
-body.light-mode .waiting-box .sub-wait { color: #1a4a2e; }
-body.light-mode .info-note { background: rgba(0,80,40,0.15); color: #1a4a2e; }
-body.light-mode .info-note b { color: #003d1a; }
-body.light-mode .term-text { color: #1a4a2e; }
-body.light-mode .term-text a { color: #003d1a; }
-
 @media (max-width: 480px) {
   .music-player { bottom: 75px; right: 10px; left: auto; width: 200px; }
   .wa-float { width: 44px; height: 44px; font-size: 20px; top: 12px; right: 12px; }
@@ -461,14 +390,12 @@ body.light-mode .term-text a { color: #003d1a; }
 
 <a href="https://wa.me/6283898669427" target="_blank" class="wa-float">💬</a>
 
-<!-- TOMBOL INSTALL SUDAH DIHAPUS -->
-
 <!-- HOME -->
 <div class="tab-page active" id="page-home">
   <header>
     <div class="header-top">
       <span class="logo-text">💚 JIMZZ STORE</span>
-      <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn" title="Ganti Tema">🌙</button>
+      <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn" title="Ganti Background Mode">🎨</button>
     </div>
     <h1>Jimzz Store</h1>
     <div class="counter"><span class="dot"></span>🔥 <span id="viewCount">1.234</span> orang sudah order</div>
@@ -702,26 +629,30 @@ body.light-mode .term-text a { color: #003d1a; }
 </div>
 
 <script>
-// ============ THEME TOGGLE ============
+// ============ THEME TOGGLE (MODE 1 / MODE 2) ============
 function toggleTheme() {
   const body = document.body;
   const btn = document.getElementById('themeBtn');
-  body.classList.toggle('light-mode');
-  const isLight = body.classList.contains('light-mode');
-  btn.innerText = isLight ? '☀️' : '🌙';
-  localStorage.setItem('jimzzTheme', isLight ? 'light' : 'dark');
+  body.classList.toggle('mode-2');
+  const isMode2 = body.classList.contains('mode-2');
+  btn.innerText = isMode2 ? '✨' : '🎨';
+  localStorage.setItem('jimzzBgMode', isMode2 ? 'mode-2' : 'mode-1');
+  
+  // Update meta theme-color
+  document.querySelector('meta[name="theme-color"]').setAttribute('content', isMode2 ? '#00cc6a' : '#00ff88');
 }
 
-(function loadTheme() {
-  const savedTheme = localStorage.getItem('jimzzTheme');
-  if (savedTheme === 'light') {
-    document.body.classList.add('light-mode');
+(function loadBgMode() {
+  const savedMode = localStorage.getItem('jimzzBgMode');
+  if (savedMode === 'mode-2') {
+    document.body.classList.add('mode-2');
     const btn = document.getElementById('themeBtn');
-    if (btn) btn.innerText = '☀️';
+    if (btn) btn.innerText = '✨';
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#00cc6a');
   }
 })();
 
-// ============ SERVICE WORKER (TANPA TOMBOL INSTALL) ============
+// ============ SERVICE WORKER ============
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('sw.js').catch(err => console.log('SW error:', err));
@@ -739,15 +670,30 @@ function switchTab(tab) {
 
 // ============ PARTICLE ============
 const particlesContainer = document.getElementById('particles');
-for (let i = 0; i < 25; i++) {
-  const p = document.createElement('div');
-  p.className = 'particle';
-  p.style.left = Math.random() * 100 + '%';
-  p.style.animationDuration = (Math.random() * 15 + 10) + 's';
-  p.style.animationDelay = (Math.random() * 10) + 's';
-  p.style.width = p.style.height = (Math.random() * 3 + 2) + 'px';
-  particlesContainer.appendChild(p);
+
+function createParticles(count) {
+  particlesContainer.innerHTML = '';
+  for (let i = 0; i < count; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.animationDuration = (Math.random() * 15 + 10) + 's';
+    p.style.animationDelay = (Math.random() * 10) + 's';
+    p.style.width = p.style.height = (Math.random() * 3 + 2) + 'px';
+    particlesContainer.appendChild(p);
+  }
 }
+createParticles(25);
+
+// Regenerate particles kalau pindah ke Mode 2
+const observer = new MutationObserver(() => {
+  if (document.body.classList.contains('mode-2')) {
+    createParticles(50);
+  } else {
+    createParticles(25);
+  }
+});
+observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
 
 // ============ COUNTER ============
 let viewCount = 1234;
