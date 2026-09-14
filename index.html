@@ -2,14 +2,15 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Jimzz Store</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#00ff88">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Jimzz Store">
-<link rel="apple-touch-icon" href="https://api.qrserver.com/v1/create-qr-code/?size=192x192&data=Jimzz-Store">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
 <style>
 * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',Arial,sans-serif; }
 body { 
@@ -346,92 +347,93 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
 .music-list::-webkit-scrollbar { width: 3px; }
 .music-list::-webkit-scrollbar-thumb { background: #00ff88; border-radius: 2px; }
 
-/* ============ LIGHT MODE (SOFT) ============ */
+/* ============ LIGHT MODE (FIXED - HIJAU TEGAS) ============ */
 body.light-mode {
-  background: #d8e5dc;
+  background: #c8ddd0;
   background-image: 
-    radial-gradient(circle at 20% 20%, rgba(0, 200, 100, 0.06) 0%, transparent 40%),
-    radial-gradient(circle at 80% 80%, rgba(0, 200, 100, 0.05) 0%, transparent 40%),
-    linear-gradient(rgba(0, 200, 100, 0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 200, 100, 0.025) 1px, transparent 1px);
+    radial-gradient(circle at 20% 20%, rgba(0, 180, 90, 0.10) 0%, transparent 40%),
+    radial-gradient(circle at 80% 80%, rgba(0, 180, 90, 0.08) 0%, transparent 40%),
+    linear-gradient(rgba(0, 180, 90, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 180, 90, 0.04) 1px, transparent 1px);
   background-size: 100% 100%, 100% 100%, 30px 30px, 30px 30px;
-  color: #1a1a1a;
+  color: #0d2b18;
 }
 body.light-mode header {
-  background: radial-gradient(circle at 50% 100%, rgba(0, 200, 100, 0.15), transparent 70%),
-              linear-gradient(135deg, #c4e5d0, #d8e5dc);
+  background: radial-gradient(circle at 50% 100%, rgba(0, 180, 90, 0.25), transparent 70%),
+              linear-gradient(135deg, #9fc7ae, #c8ddd0);
+  border-bottom-color: #00a855;
 }
-body.light-mode header h1 { color: #00a855; text-shadow: 0 0 20px rgba(0,200,100,0.4); }
-body.light-mode .header-top .logo-text { color: #00a855; }
-body.light-mode .theme-toggle { background: rgba(0,168,85,0.1); border-color: #00a855; color: #00a855; }
-body.light-mode header .counter { background: rgba(0,168,85,0.1); border-color: rgba(0,168,85,0.3); color: #00a855; }
+body.light-mode header h1 { color: #007a3d; text-shadow: 0 0 20px rgba(0,168,85,0.3); }
+body.light-mode .header-top .logo-text { color: #007a3d; }
+body.light-mode .theme-toggle { background: rgba(0,120,60,0.15); border-color: #00a855; color: #00a855; }
+body.light-mode header .counter { background: rgba(0,120,60,0.15); border-color: rgba(0,120,60,0.4); color: #007a3d; }
 body.light-mode header .counter .dot { background: #00a855; }
-body.light-mode .kategori h2 { color: #00a855; }
-body.light-mode .sub { color: #555; }
+body.light-mode .kategori h2 { color: #007a3d; }
+body.light-mode .sub { color: #2d4a38; }
 body.light-mode .menu-home,
 body.light-mode .produk-card,
 body.light-mode .testi-card {
-  background: #eaf3ed;
-  border-color: #b8d4c5;
+  background: #d9ebe0;
+  border-color: #7fb894;
 }
 body.light-mode .menu-home:hover,
 body.light-mode .produk-card:hover,
 body.light-mode .testi-card:hover {
-  border-color: #00a855;
-  box-shadow: 0 0 25px rgba(0,168,85,0.3);
+  border-color: #007a3d;
+  box-shadow: 0 0 25px rgba(0,120,60,0.35);
 }
 body.light-mode .menu-home-title,
-body.light-mode .produk-nama { color: #1a1a1a; }
+body.light-mode .produk-nama { color: #0d2b18; }
 body.light-mode .menu-home-desc,
-body.light-mode .produk-desc { color: #555; }
-body.light-mode .testi-text { color: #333; }
-body.light-mode .testi-name { color: #00a855; }
-body.light-mode .produk-label { color: #00a855; }
-body.light-mode .produk-harga { color: #00a855; }
+body.light-mode .produk-desc { color: #2d4a38; }
+body.light-mode .testi-text { color: #1a3d28; }
+body.light-mode .testi-name { color: #007a3d; }
+body.light-mode .produk-label { color: #007a3d; }
+body.light-mode .produk-harga { color: #007a3d; }
 body.light-mode .produk-harga-label,
-body.light-mode .produk-harga span { color: #888; }
-body.light-mode footer { color: #888; border-color: #b8d4c5; }
-body.light-mode .bottom-nav { background: #eaf3ed; border-color: #b8d4c5; }
-body.light-mode .nav-item { color: #777; }
-body.light-mode .nav-item.active { color: #00a855; }
-body.light-mode .wa-channel-info { color: #555; }
+body.light-mode .produk-harga span { color: #4a6b58; }
+body.light-mode footer { color: #2d4a38; border-color: #7fb894; }
+body.light-mode .bottom-nav { background: #c8ddd0; border-color: #7fb894; }
+body.light-mode .nav-item { color: #4a6b58; }
+body.light-mode .nav-item.active { color: #007a3d; }
+body.light-mode .wa-channel-info { color: #2d4a38; }
 body.light-mode .pengumuman {
-  background: linear-gradient(145deg, rgba(255, 200, 0, 0.15), rgba(255, 150, 0, 0.08));
-  border-color: rgba(200, 150, 0, 0.4);
+  background: linear-gradient(145deg, rgba(200, 150, 0, 0.18), rgba(200, 120, 0, 0.12));
+  border-color: rgba(180, 130, 0, 0.5);
 }
-body.light-mode .pengumuman-text { color: #333; }
+body.light-mode .pengumuman-text { color: #2d2a1a; }
 body.light-mode .pengumuman.refund {
-  background: linear-gradient(145deg, rgba(0, 150, 255, 0.12), rgba(0, 100, 200, 0.08));
-  border-color: rgba(0, 150, 255, 0.4);
+  background: linear-gradient(145deg, rgba(0, 130, 200, 0.15), rgba(0, 100, 180, 0.10));
+  border-color: rgba(0, 130, 200, 0.5);
 }
-body.light-mode .music-player { background: #eaf3ed; border-color: #b8d4c5; }
-body.light-mode .music-mini-title { color: #1a1a1a; }
-body.light-mode .music-mini-artist { color: #777; }
-body.light-mode .music-mini-controls button { color: #333; }
-body.light-mode .music-progress { background: #c5d5cb; }
-body.light-mode .music-expanded { background: #eaf3ed; }
-body.light-mode .music-list-header { color: #555; border-color: #b8d4c5; }
-body.light-mode .music-item { color: #333; }
-body.light-mode .music-item:hover { background: rgba(0,168,85,0.1); }
-body.light-mode .music-item-title { color: #1a1a1a; }
-body.light-mode .music-item-artist { color: #777; }
-body.light-mode .modal-box { background: #eaf3ed; border-color: #b8d4c5; }
-body.light-mode .modal-title { color: #1a1a1a; }
-body.light-mode .modal-subtitle { color: #555; }
+body.light-mode .music-player { background: #d9ebe0; border-color: #7fb894; }
+body.light-mode .music-mini-title { color: #0d2b18; }
+body.light-mode .music-mini-artist { color: #4a6b58; }
+body.light-mode .music-mini-controls button { color: #0d2b18; }
+body.light-mode .music-progress { background: #a8c4b5; }
+body.light-mode .music-expanded { background: #d9ebe0; }
+body.light-mode .music-list-header { color: #2d4a38; border-color: #7fb894; }
+body.light-mode .music-item { color: #0d2b18; }
+body.light-mode .music-item:hover { background: rgba(0,120,60,0.1); }
+body.light-mode .music-item-title { color: #0d2b18; }
+body.light-mode .music-item-artist { color: #4a6b58; }
+body.light-mode .modal-box { background: #d9ebe0; border-color: #7fb894; }
+body.light-mode .modal-title { color: #0d2b18; }
+body.light-mode .modal-subtitle { color: #2d4a38; }
 body.light-mode .jumlah-input,
-body.light-mode .form-box input { background: #f5faf7; border-color: #b8d4c5; color: #1a1a1a; }
-body.light-mode .total-box { background: #f5faf7; border-color: #b8d4c5; }
-body.light-mode .total-row .label { color: #666; }
-body.light-mode .total-row .value { color: #1a1a1a; }
+body.light-mode .form-box input { background: #eef7f1; border-color: #7fb894; color: #0d2b18; }
+body.light-mode .total-box { background: #eef7f1; border-color: #7fb894; }
+body.light-mode .total-row .label { color: #4a6b58; }
+body.light-mode .total-row .value { color: #0d2b18; }
 body.light-mode .total-row.big .label,
-body.light-mode .total-row.big .value { color: #00a855; }
-body.light-mode .qris-nominal { background: rgba(0,168,85,0.1); border-color: #00a855; color: #00a855; }
-body.light-mode .waiting-box { background: #f5faf7; }
-body.light-mode .term-text { color: #888; }
-body.light-mode .form-note { color: #555; }
-body.light-mode .form-box label { color: #555; }
-body.light-mode .jumlah-label { color: #333; }
-body.light-mode .info-note { background: rgba(0,168,85,0.08); color: #555; }
+body.light-mode .total-row.big .value { color: #007a3d; }
+body.light-mode .qris-nominal { background: rgba(0,120,60,0.1); border-color: #00a855; color: #007a3d; }
+body.light-mode .waiting-box { background: #eef7f1; }
+body.light-mode .term-text { color: #4a6b58; }
+body.light-mode .form-note { color: #2d4a38; }
+body.light-mode .form-box label { color: #2d4a38; }
+body.light-mode .jumlah-label { color: #1a3d28; }
+body.light-mode .info-note { background: rgba(0,120,60,0.08); color: #2d4a38; }
 
 @media (max-width: 480px) {
   .music-player { bottom: 75px; right: 10px; left: auto; width: 200px; }
@@ -735,26 +737,48 @@ window.addEventListener('beforeinstallprompt', (e) => {
 });
 
 function installPWA() {
-  if (!deferredPrompt) {
-    alert('Install gak tersedia. Pastikan lu buka di Chrome Android atau Safari iOS ya 🙏');
-    return;
-  }
-  deferredPrompt.prompt();
-  deferredPrompt.userChoice.then((choiceResult) => {
-    if (choiceResult.outcome === 'accepted') {
-      console.log('User accepted install');
-      const installBtn = document.getElementById('installBtn');
-      if (installBtn) installBtn.style.display = 'none';
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then((choiceResult) => {
+      if (choiceResult.outcome === 'accepted') {
+        const installBtn = document.getElementById('installBtn');
+        if (installBtn) installBtn.style.display = 'none';
+      }
+      deferredPrompt = null;
+    });
+  } else {
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    const isAndroid = /Android/.test(navigator.userAgent);
+    
+    let pesan = '📲 Cara Install Jimzz Store:\n\n';
+    if (isIOS) {
+      pesan += '1. Buka di Safari\n2. Tap tombol Share (⬆️)\n3. Pilih "Add to Home Screen"\n4. Tap "Add"';
+    } else if (isAndroid) {
+      pesan += '1. Buka di Chrome\n2. Tap menu titik tiga (⋮) kanan atas\n3. Pilih "Install app" atau "Add to Home screen"\n4. Tap "Install"';
+    } else {
+      pesan += '1. Buka di Chrome/Edge\n2. Klik icon install di address bar\n3. Atau menu (⋮) → "Install Jimzz Store"';
     }
-    deferredPrompt = null;
-  });
+    alert(pesan);
+  }
 }
 
 window.addEventListener('appinstalled', () => {
-  console.log('PWA installed');
   const installBtn = document.getElementById('installBtn');
   if (installBtn) installBtn.style.display = 'none';
 });
+
+// Fallback: kalau 5 detik belum muncul & browser support PWA, tampilkan tombol manual
+setTimeout(() => {
+  const installBtn = document.getElementById('installBtn');
+  if (installBtn && installBtn.style.display === 'none') {
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+    const isInstalled = window.navigator.standalone === true;
+    
+    if (!isStandalone && !isInstalled && /Chrome|Edge/.test(navigator.userAgent)) {
+      installBtn.style.display = 'flex';
+    }
+  }
+}, 5000);
 
 // ============ TAB SWITCH ============
 function switchTab(tab) {
@@ -863,7 +887,7 @@ const produkApk = [
 ];
 
 const WA_ADMIN = "6283898669427";
-const MIN_PEMBELIAN = 500;
+const MIN_PEMBELIAN = 200;
 
 let produkAktif = null;
 let dataPemesan = { link: "", hp: "", jumlah: 0, total: 0, bonus: 0 };
@@ -1097,9 +1121,10 @@ function keStep3() {
   setStep(3);
 }
 
-document.getElementById('waBtn').addEventListener('click', function() {
+const waBtnEl = document.getElementById('waBtn');
+waBtnEl.onclick = function() {
   setTimeout(() => { document.getElementById('waitingBox').style.display = 'block'; }, 800);
-});
+};
 
 renderProduk('sosmed', produkSosmed, 'SUNTIK ALL');
 renderProduk('jpm', produkJpm, 'LAYANAN LAINNYA');
