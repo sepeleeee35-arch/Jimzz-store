@@ -281,7 +281,6 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 13px; border
       <div class="step-dot" id="dot3">3</div>
     </div>
 
-    <!-- STEP 1 -->
     <div class="step-content active" id="step1">
       <div class="modal-title-block">
         <div class="modal-label" id="modalLabel">SUNTIK SALURAN</div>
@@ -322,7 +321,6 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 13px; border
       <div class="term-text">Dengan memesan, Anda menyetujui <a href="#">Syarat & Ketentuan</a> kami.</div>
     </div>
 
-    <!-- STEP 2 -->
     <div class="step-content" id="step2">
       <div class="modal-title-block">
         <div class="modal-label">LANGKAH 2 DARI 3</div>
@@ -346,7 +344,6 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 13px; border
       <div class="info-note">⚠️ Pastikan <b>link saluran</b> & <b>no WA</b> benar, biar admin gak salah kirim produk.</div>
     </div>
 
-    <!-- STEP 3 -->
     <div class="step-content" id="step3">
       <div class="modal-title-block">
         <div class="modal-label">LANGKAH 3 DARI 3</div>
@@ -421,7 +418,9 @@ setInterval(() => {
 
 // ============ DATA PRODUK ============
 const produkSosmed = [
-  { icon: "📱", nama: "Suntik Saluran WA", desc: "Tambah pengikut saluran WhatsApp kamu secara aman & cepat.", hargaPerUnit: 10, unit: "pengikut", min: 100, max: 20000, hot: true }
+  { icon: "📱", nama: "Suntik Saluran WA", desc: "Tambah pengikut saluran WhatsApp kamu secara aman & cepat.", hargaPerUnit: 10, unit: "pengikut", min: 100, max: 20000, hot: true },
+  { icon: "❤️", nama: "Suntik Like TikTok", desc: "Tambah like video TikTok kamu secara aman & cepat.", hargaPerUnit: 10, unit: "like", min: 100, max: 10000, hot: true },
+  { icon: "👁️", nama: "Suntik Views TikTok", desc: "Tambah views video TikTok kamu secara aman & cepat.", hargaPerUnit: 1, unit: "views", min: 500, max: 50000, hot: false }
 ];
 
 const produkJpm = [
@@ -440,7 +439,7 @@ const produkJpm = [
 ];
 
 const WA_ADMIN = "6283898669427";
-const MIN_PEMBELIAN = 1000;
+const MIN_PEMBELIAN = 500; // ← Turun jadi Rp 500 biar Views TikTok bisa order
 
 let produkAktif = null;
 let dataPemesan = { link: "", hp: "", jumlah: 0, total: 0, bonus: 0 };
