@@ -21,7 +21,6 @@ body {
   overflow-x: hidden;
 }
 
-/* ============ PARTICLE BACKGROUND ============ */
 #particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
 .particle { position: absolute; width: 3px; height: 3px; background: #00ff88; border-radius: 50%; box-shadow: 0 0 6px #00ff88; opacity: 0.6; animation: floatUp linear infinite; }
 @keyframes floatUp {
@@ -31,7 +30,6 @@ body {
   100% { transform: translateY(-100px) scale(1); opacity: 0; }
 }
 
-/* ============ BANNER PROMO ============ */
 .promo-banner { position: relative; z-index: 5; background: linear-gradient(90deg, #00ff88, #00cc6a, #00ff88); background-size: 200% 100%; animation: bannerSlide 3s linear infinite; color: #000; text-align: center; padding: 10px 15px; font-size: 12px; font-weight: bold; letter-spacing: 0.5px; }
 @keyframes bannerSlide { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
 .promo-banner b { background: #000; color: #00ff88; padding: 2px 8px; border-radius: 4px; margin: 0 4px; }
@@ -78,9 +76,30 @@ header .counter .dot { display: inline-block; width: 8px; height: 8px; backgroun
 .badge-hot { position: absolute; top: -8px; right: -8px; background: linear-gradient(135deg, #ff2b2b, #ff6b6b); color: #fff; font-size: 9px; font-weight: bold; padding: 3px 8px; border-radius: 10px; letter-spacing: 0.5px; box-shadow: 0 0 10px rgba(255,43,43,0.6); animation: hotPulse 1.5s infinite; z-index: 2; }
 @keyframes hotPulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.1); } }
 
+/* ============ SECTION TESTIMONI ============ */
+.testimoni-section { padding: 50px 20px; max-width: 1100px; margin: auto; position: relative; z-index: 5; }
+.testimoni-section h2 { text-align: center; font-size: 26px; color: #00ff88; margin-bottom: 8px; }
+.testi-cards { display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 30px; }
+.testi-card { background: linear-gradient(145deg, #0d1a14, #0d0d15); border: 1px solid #2a3a32; border-radius: 14px; padding: 18px; transition: 0.25s; }
+.testi-card:hover { border-color: #00ff88; box-shadow: 0 0 20px rgba(0,255,136,0.3); transform: translateY(-3px); }
+.testi-stars { color: #ffd700; font-size: 14px; margin-bottom: 8px; letter-spacing: 2px; }
+.testi-text { color: #ccc; font-size: 13px; line-height: 1.6; font-style: italic; margin-bottom: 10px; }
+.testi-name { color: #00ff88; font-size: 12px; font-weight: bold; text-align: right; }
+
+.wa-channel-btn { display: block; width: 100%; max-width: 500px; margin: 0 auto; text-align: center; background: linear-gradient(135deg, #25D366, #1da851); color: #fff; padding: 15px 20px; border-radius: 14px; text-decoration: none; font-weight: bold; font-size: 14px; box-shadow: 0 5px 25px rgba(37,211,102,0.5); transition: 0.25s; animation: waChannelPulse 2s infinite; }
+.wa-channel-btn:hover { transform: scale(1.03); box-shadow: 0 5px 35px rgba(37,211,102,0.8); }
+@keyframes waChannelPulse {
+  0%, 100% { box-shadow: 0 5px 25px rgba(37,211,102,0.5); }
+  50% { box-shadow: 0 5px 35px rgba(37,211,102,0.9), 0 0 0 8px rgba(37,211,102,0.08); }
+}
+.wa-channel-info { text-align: center; margin-top: 12px; font-size: 12px; color: #888; }
+
+@media (min-width: 600px) {
+  .testi-cards { grid-template-columns: 1fr 1fr 1fr; }
+}
+
 footer { text-align: center; padding: 25px; color: #555; font-size: 13px; border-top: 1px solid #222; margin-top: 30px; position: relative; z-index: 5; }
 
-/* ============ WA FLOATING ============ */
 .wa-float { position: fixed; top: 15px; right: 15px; width: 50px; height: 50px; background: linear-gradient(135deg, #25D366, #1da851); border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 24px; color: #fff; box-shadow: 0 5px 20px rgba(37,211,102,0.6); z-index: 500; animation: waPulse 2s infinite; transition: 0.3s; }
 .wa-float:hover { transform: scale(1.1); }
 @keyframes waPulse { 0%,100% { box-shadow: 0 5px 20px rgba(37,211,102,0.6); } 50% { box-shadow: 0 5px 30px rgba(37,211,102,0.9), 0 0 0 10px rgba(37,211,102,0.1); } }
@@ -188,7 +207,7 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 13px; border
 <div id="particles"></div>
 
 <div class="promo-banner">
-  🎉 BONUS <b>+5 MEMBER</b> untuk order <b>Rp 4.000</b> ke atas! 🎉
+  🎁 KHUSUS JPM: BONUS <b>+5 MEMBER</b> untuk order <b>Rp 4.000</b> ke atas! 🎁
 </div>
 
 <a href="https://wa.me/6283898669427" target="_blank" class="wa-float">💬</a>
@@ -208,6 +227,38 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 13px; border
   <h2>🚀 JPM (Jasa Push Member)</h2>
   <p class="sub">Pilih jumlah member</p>
   <div class="grid" id="jpm"></div>
+</section>
+
+<!-- SECTION TESTIMONI & SALURAN WA -->
+<section class="testimoni-section">
+  <h2>⭐ Testimoni & Saluran Resmi</h2>
+  <p class="sub">Bukti nyata dari pelanggan setia Jimzz Store</p>
+
+  <div class="testi-cards">
+    <div class="testi-card">
+      <div class="testi-stars">⭐⭐⭐⭐⭐</div>
+      <p class="testi-text">"Cepet banget prosesnya, baru 5 menit langsung masuk. Recommended!"</p>
+      <p class="testi-name">— Andi, Jakarta</p>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars">⭐⭐⭐⭐⭐</div>
+      <p class="testi-text">"Harga termurah dibanding yang lain, aman gak ada banned. Mantap!"</p>
+      <p class="testi-name">— Bilzz, Surabaya</p>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars">⭐⭐⭐⭐⭐</div>
+      <p class="testi-text">"Adminnya ramah, fast respon, ordernya cepat selesai. Lanjut order lagi!"</p>
+      <p class="testi-name">— Rani, Bandung</p>
+    </div>
+  </div>
+
+  <a href="https://whatsapp.com/channel/0029VbCXMVy1HspwJTjh2P2P" target="_blank" class="wa-channel-btn">
+    📢 Ikuti Saluran Testimoni Jimzz di WhatsApp
+  </a>
+
+  <div class="wa-channel-info">
+    <span>🔔 Update testimoni & promo terbaru di saluran WA</span>
+  </div>
 </section>
 
 <footer>
