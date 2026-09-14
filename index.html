@@ -120,6 +120,9 @@ header .counter .dot { display: inline-block; width: 8px; height: 8px; backgroun
 .total-row.big { border-top: 1px solid #2a3a32; margin-top: 6px; padding-top: 10px; }
 .total-row.big .label { color: #00ff88; font-weight: bold; font-size: 13px; }
 .total-row.big .value { color: #00ff88; font-size: 20px; font-weight: bold; }
+.total-row.bonus { background: rgba(0,255,136,0.08); border-radius: 6px; padding: 6px 8px; margin-top: 4px; }
+.total-row.bonus .label { color: #00ff88; font-weight: bold; }
+.total-row.bonus .value { color: #00ff88; }
 
 .btn-next { width: 100%; background: linear-gradient(135deg, #00ff88, #00cc6a); color: #000; border: none; padding: 15px; border-radius: 12px; font-weight: bold; font-size: 15px; cursor: pointer; box-shadow: 0 5px 20px rgba(0,255,136,0.4); transition: 0.25s; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 8px; }
 .btn-next:hover { transform: scale(1.02); box-shadow: 0 5px 30px rgba(0,255,136,0.7); }
@@ -296,8 +299,16 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 13px; border
           <span class="value" id="hargaSatuan">Rp 0</span>
         </div>
         <div class="total-row">
-          <span class="label">Jumlah</span>
+          <span class="label">Jumlah Order</span>
           <span class="value" id="jumlahDisplay">0</span>
+        </div>
+        <div class="total-row bonus" id="bonusRow" style="display:none;">
+          <span class="label">🎁 Bonus</span>
+          <span class="value" id="bonusValue">+0</span>
+        </div>
+        <div class="total-row bonus" id="totalDapatRow" style="display:none;">
+          <span class="label">📊 Total Diterima</span>
+          <span class="value" id="totalDapat">0</span>
         </div>
         <div class="total-row big">
           <span class="label">Total Harga</span>
@@ -311,7 +322,7 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 13px; border
       <div class="term-text">Dengan memesan, Anda menyetujui <a href="#">Syarat & Ketentuan</a> kami.</div>
     </div>
 
-    <!-- STEP 2 — DATA PEMESAN -->
+    <!-- STEP 2 -->
     <div class="step-content" id="step2">
       <div class="modal-title-block">
         <div class="modal-label">LANGKAH 2 DARI 3</div>
@@ -335,7 +346,7 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 13px; border
       <div class="info-note">⚠️ Pastikan <b>link saluran</b> & <b>no WA</b> benar, biar admin gak salah kirim produk.</div>
     </div>
 
-    <!-- STEP 3 — QRIS -->
+    <!-- STEP 3 -->
     <div class="step-content" id="step3">
       <div class="modal-title-block">
         <div class="modal-label">LANGKAH 3 DARI 3</div>
@@ -414,14 +425,25 @@ const produkSosmed = [
 ];
 
 const produkJpm = [
-  { icon: "🚀", nama: "JPM (Jasa Push Member)", desc: "Push member ke grup / channel kamu dengan cepat & aman.", hargaPerUnit: 200, unit: "member", min: 5, max: 100, hot: true }
+  { 
+    icon: "🚀", 
+    nama: "JPM (Jasa Push Member)", 
+    desc: "Push member ke grup / channel kamu dengan cepat & aman.", 
+    hargaPerUnit: 200, 
+    unit: "member", 
+    min: 5, 
+    max: 100, 
+    hot: true,
+    bonusMinTotal: 4000,
+    bonusUnit: 5
+  }
 ];
 
 const WA_ADMIN = "6283898669427";
 const MIN_PEMBELIAN = 1000;
 
 let produkAktif = null;
-let dataPemesan = { link: "", hp: "", jumlah: 0, total: 0 };
+let dataPemesan = { link: "", hp: "", jumlah: 0, total: 0, bonus: 0 };
 
 function renderProduk(target, data, kategori) {
   document.getElementById(target).innerHTML = data.map((p, i) => `
@@ -435,6 +457,7 @@ function renderProduk(target, data, kategori) {
         </div>
       </div>
       <div class="produk-desc">${p.desc}</div>
+      ${p.bonusMinTotal ? `<div style="background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.3);border-radius:8px;padding:8px 10px;font-size:11px;color:#00ff88;margin-bottom:12px;">🎁 <b>BONUS +${p.bonusUnit} ${p.unit}</b> untuk order Rp ${p.bonusMinTotal.toLocaleString('id-ID')} ke atas!</div>` : ''}
       <div class="produk-bottom">
         <div class="produk-harga-info">
           <div class="produk-harga-label">Harga per ${p.unit}</div>
@@ -490,8 +513,30 @@ function hitungTotal() {
   if (!produkAktif) return;
   const jumlah = parseInt(document.getElementById('jumlahInput').value) || 0;
   const total = jumlah * produkAktif.hargaPerUnit;
+  
+  let bonus = 0;
+  if (produkAktif.bonusMinTotal && total >= produkAktif.bonusMinTotal) {
+    bonus = produkAktif.bonusUnit || 0;
+  }
+
   document.getElementById('jumlahDisplay').innerText = jumlah.toLocaleString('id-ID') + ' ' + produkAktif.unit;
   document.getElementById('totalHarga').innerText = "Rp " + total.toLocaleString('id-ID');
+
+  const bonusRow = document.getElementById('bonusRow');
+  const totalDapatRow = document.getElementById('totalDapatRow');
+  
+  if (bonus > 0) {
+    bonusRow.style.display = 'flex';
+    totalDapatRow.style.display = 'flex';
+    document.getElementById('bonusValue').innerText = '+' + bonus + ' ' + produkAktif.unit;
+    document.getElementById('totalDapat').innerText = (jumlah + bonus).toLocaleString('id-ID') + ' ' + produkAktif.unit;
+  } else if (produkAktif.bonusMinTotal && total > 0) {
+    bonusRow.style.display = 'none';
+    totalDapatRow.style.display = 'none';
+  } else {
+    bonusRow.style.display = 'none';
+    totalDapatRow.style.display = 'none';
+  }
 
   const validJumlah = jumlah >= produkAktif.min && jumlah <= produkAktif.max;
   const validTotal = total >= MIN_PEMBELIAN;
@@ -506,6 +551,13 @@ function hitungTotal() {
     const tambahUnit = Math.ceil(kurang / produkAktif.hargaPerUnit);
     hintEl.innerHTML = `⚠️ Minimal pembelian <b style="color:#ff6b6b">Rp ${MIN_PEMBELIAN.toLocaleString('id-ID')}</b>. Tambah <b style="color:#00ff88">${tambahUnit} ${produkAktif.unit}</b> lagi ya.`;
     hintEl.style.color = '#ff6b6b';
+  } else if (bonus > 0) {
+    hintEl.innerHTML = `🎁 <b style="color:#00ff88">BONUS +${bonus} ${produkAktif.unit}</b> aktif! Total dapat <b style="color:#00ff88">${(jumlah + bonus).toLocaleString('id-ID')} ${produkAktif.unit}</b>.`;
+    hintEl.style.color = '#00ff88';
+  } else if (produkAktif.bonusMinTotal) {
+    const kurang = produkAktif.bonusMinTotal - total;
+    hintEl.innerHTML = `💡 Tambah <b style="color:#ffd700">Rp ${kurang.toLocaleString('id-ID')}</b> lagi untuk dapat <b style="color:#ffd700">BONUS +${produkAktif.bonusUnit} ${produkAktif.unit}</b>!`;
+    hintEl.style.color = '#ffd700';
   } else {
     hintEl.innerText = '✅ Jumlah valid, klik "Lanjut ke Pembayaran".';
     hintEl.style.color = '#00ff88';
@@ -517,8 +569,15 @@ function keStep2() {
   const total = jumlah * produkAktif.hargaPerUnit;
   if (jumlah < produkAktif.min || jumlah > produkAktif.max) { alert('Jumlah tidak valid'); return; }
   if (total < MIN_PEMBELIAN) { alert(`Minimal pembelian Rp ${MIN_PEMBELIAN.toLocaleString('id-ID')}`); return; }
+  
+  let bonus = 0;
+  if (produkAktif.bonusMinTotal && total >= produkAktif.bonusMinTotal) {
+    bonus = produkAktif.bonusUnit || 0;
+  }
+  
   dataPemesan.jumlah = jumlah;
   dataPemesan.total = total;
+  dataPemesan.bonus = bonus;
   setStep(2);
 }
 
@@ -532,7 +591,10 @@ function keStep3() {
 
   document.getElementById('qrisNominal').innerText = `⚠️ MASUKKAN NOMINAL: Rp ${dataPemesan.total.toLocaleString('id-ID')}`;
 
-  const pesan = `Halo Admin Jimzz Store 👋\n\n📦 *Produk:* ${produkAktif.nama}\n📊 *Jumlah:* ${dataPemesan.jumlah.toLocaleString('id-ID')} ${produkAktif.unit}\n💰 *Harga Satuan:* Rp ${produkAktif.hargaPerUnit.toLocaleString('id-ID')} / ${produkAktif.unit}\n💵 *Total:* Rp ${dataPemesan.total.toLocaleString('id-ID')}\n\n🔗 *Link Saluran:* ${dataPemesan.link}\n📱 *No WA (Konfirmasi):* ${dataPemesan.hp}\n\nIni foto pembayaran yang sudah saya bayar ⬇️\n\nMohon diverifikasi & diproses ya 🙏`;
+  const totalDiterima = dataPemesan.jumlah + dataPemesan.bonus;
+  const bonusText = dataPemesan.bonus > 0 ? `+${dataPemesan.bonus} ${produkAktif.unit} 🎁` : 'Tidak ada';
+
+  const pesan = `Halo Admin Jimzz Store 👋\n\n📦 *Produk:* ${produkAktif.nama}\n📊 *Jumlah Order:* ${dataPemesan.jumlah.toLocaleString('id-ID')} ${produkAktif.unit}\n🎁 *Bonus:* ${bonusText}\n📊 *Total Diterima:* ${totalDiterima.toLocaleString('id-ID')} ${produkAktif.unit}\n💰 *Harga Satuan:* Rp ${produkAktif.hargaPerUnit.toLocaleString('id-ID')} / ${produkAktif.unit}\n💵 *Total Bayar:* Rp ${dataPemesan.total.toLocaleString('id-ID')}\n\n🔗 *Link Saluran:* ${dataPemesan.link}\n📱 *No WA (Konfirmasi):* ${dataPemesan.hp}\n\nIni foto pembayaran yang sudah saya bayar ⬇️\n\nMohon diverifikasi & diproses ya 🙏`;
 
   document.getElementById('waBtn').href = `https://wa.me/${WA_ADMIN}?text=${encodeURIComponent(pesan)}`;
   setStep(3);
