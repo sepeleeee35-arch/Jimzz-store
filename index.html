@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="UTF-8">
@@ -258,8 +258,8 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
     <p class="sub">Pilih menu di bawah untuk mulai order</p>
     <div style="background:linear-gradient(145deg,#0d1a14,#0d0d15);border:1px solid #2a3a32;border-radius:14px;padding:20px;margin-bottom:14px;">
       <div style="font-size:36px;margin-bottom:8px;">🚀</div>
-      <div style="color:#fff;font-weight:bold;font-size:15px;margin-bottom:4px;">Layanan</div>
-      <div style="color:#888;font-size:12px;">JPM, Suntik All Sosmed, dll</div>
+      <div style="color:#fff;font-weight:bold;font-size:15px;margin-bottom:4px;">Layanan Lainnya</div>
+      <div style="color:#888;font-size:12px;">JPM, Nokos WA Indo, dll</div>
     </div>
     <div style="background:linear-gradient(145deg,#0d1a14,#0d0d15);border:1px solid #2a3a32;border-radius:14px;padding:20px;margin-bottom:14px;">
       <div style="font-size:36px;margin-bottom:8px;">📱</div>
@@ -300,10 +300,10 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
   <footer><p>© 2025 Jimzz Store — All Rights Reserved 😈</p></footer>
 </div>
 
-<!-- LAYANAN -->
+<!-- LAYANAN LAINNYA -->
 <div class="tab-page" id="page-jpm">
   <section class="kategori">
-    <h2>🚀 Layanan</h2>
+    <h2>🚀 Layanan Lainnya</h2>
     <p class="sub">Pilih layanan yang kamu butuhkan</p>
     <div class="produk-list" id="jpm"></div>
   </section>
@@ -338,7 +338,7 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
   </button>
   <button class="nav-item" data-tab="jpm" onclick="switchTab('jpm')">
     <span class="nav-icon">🚀</span>
-    <span class="nav-label">Layanan</span>
+    <span class="nav-label">Lainnya</span>
   </button>
   <button class="nav-item" data-tab="suntik" onclick="switchTab('suntik')">
     <span class="nav-icon">📱</span>
@@ -489,24 +489,6 @@ const produkSosmed = [
     inputError: "Link harus link SALURAN WhatsApp (whatsapp.com/channel). Link grup gak valid!"
   },
   { 
-    icon: "❤️", nama: "Suntik Like TikTok", 
-    desc: "Tambah like video TikTok kamu secara aman & cepat.", 
-    hargaPerUnit: 10, unit: "like", min: 100, max: 10000, hot: true,
-    inputLabel: "🔗 Link Video TikTok",
-    inputPlaceholder: "Contoh: https://www.tiktok.com/@user/video/xxx",
-    inputValidasi: "tiktok.com",
-    inputError: "Link harus link video TikTok (tiktok.com)"
-  },
-  { 
-    icon: "👁️", nama: "Suntik Views TikTok", 
-    desc: "Tambah views video TikTok kamu secara aman & cepat.", 
-    hargaPerUnit: 1, unit: "views", min: 500, max: 50000, hot: false,
-    inputLabel: "🔗 Link Video TikTok",
-    inputPlaceholder: "Contoh: https://www.tiktok.com/@user/video/xxx",
-    inputValidasi: "tiktok.com",
-    inputError: "Link harus link video TikTok (tiktok.com)"
-  },
-  { 
     icon: "😀", nama: "Suntik Random Emoji Reaction", 
     desc: "Tambah reaction emoji random ke postingan kamu. Aman & cepat.", 
     hargaPerUnit: 1, unit: "reaction", min: 250, max: 50000, hot: true,
@@ -523,6 +505,24 @@ const produkSosmed = [
     inputPlaceholder: "Contoh: link polling",
     inputValidasi: "",
     inputError: ""
+  },
+  { 
+    icon: "❤️", nama: "Suntik Like TikTok", 
+    desc: "Tambah like video TikTok kamu secara aman & cepat.", 
+    hargaPerUnit: 10, unit: "like", min: 100, max: 10000, hot: true,
+    inputLabel: "🔗 Link Video TikTok",
+    inputPlaceholder: "Contoh: https://www.tiktok.com/@user/video/xxx",
+    inputValidasi: "tiktok.com",
+    inputError: "Link harus link video TikTok (tiktok.com)"
+  },
+  { 
+    icon: "👁️", nama: "Suntik Views TikTok", 
+    desc: "Tambah views video TikTok kamu secara aman & cepat.", 
+    hargaPerUnit: 1, unit: "views", min: 500, max: 50000, hot: false,
+    inputLabel: "🔗 Link Video TikTok",
+    inputPlaceholder: "Contoh: https://www.tiktok.com/@user/video/xxx",
+    inputValidasi: "tiktok.com",
+    inputError: "Link harus link video TikTok (tiktok.com)"
   }
 ];
 
@@ -536,6 +536,15 @@ const produkJpm = [
     inputPlaceholder: "Contoh: https://chat.whatsapp.com/xxxxx",
     inputValidasi: "chat.whatsapp.com",
     inputError: "Link harus link GRUP WhatsApp (chat.whatsapp.com)"
+  },
+  { 
+    icon: "📱", nama: "Nokos WA Indo", 
+    desc: "Nomor kosong WhatsApp Indonesia siap pakai. Aman & terpercaya.", 
+    hargaPerUnit: 5000, unit: "nomor", min: 1, max: 5, hot: true,
+    inputLabel: "👤 Nama Pemesan",
+    inputPlaceholder: "Contoh: Bilzz",
+    inputValidasi: "",
+    inputError: ""
   }
 ];
 
@@ -577,7 +586,7 @@ function renderProduk(target, data, kategori) {
 function bukaOrder(kategoriId, index) {
   let data, kategori, isApk;
   if (kategoriId === 'sosmed') { data = produkSosmed; kategori = 'SUNTIK ALL'; isApk = false; }
-  else if (kategoriId === 'jpm') { data = produkJpm; kategori = 'LAYANAN'; isApk = false; }
+  else if (kategoriId === 'jpm') { data = produkJpm; kategori = 'LAYANAN LAINNYA'; isApk = false; }
   else { data = produkApk; kategori = 'JUAL APK'; isApk = true; }
   
   produkAktif = { ...data[index], kategori, isApk };
@@ -784,7 +793,7 @@ document.getElementById('waBtn').addEventListener('click', function() {
 });
 
 renderProduk('sosmed', produkSosmed, 'SUNTIK ALL');
-renderProduk('jpm', produkJpm, 'LAYANAN');
+renderProduk('jpm', produkJpm, 'LAYANAN LAINNYA');
 renderProduk('apkList', produkApk, 'JUAL APK');
 
 // ========== MUSIC PLAYER ==========
