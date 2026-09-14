@@ -77,7 +77,6 @@ header .counter .dot { display: inline-block; width: 8px; height: 8px; backgroun
 .badge-hot { position: absolute; top: -8px; right: 12px; background: linear-gradient(135deg, #ff2b2b, #ff6b6b); color: #fff; font-size: 9px; font-weight: bold; padding: 3px 8px; border-radius: 10px; letter-spacing: 0.5px; box-shadow: 0 0 10px rgba(255,43,43,0.6); animation: hotPulse 1.5s infinite; }
 @keyframes hotPulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.1); } }
 
-/* ============ MODAL ============ */
 .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 400; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; }
 .modal-overlay.show { display: flex; }
 .modal-box { background: linear-gradient(145deg, #0d1a14, #0d0d15); border: 1px solid #2a3a32; border-radius: 20px; padding: 26px 22px; width: 100%; max-width: 440px; position: relative; animation: slideUp 0.3s ease; max-height: 90vh; overflow-y: auto; }
@@ -86,7 +85,6 @@ header .counter .dot { display: inline-block; width: 8px; height: 8px; backgroun
 .modal-close { position: absolute; top: 14px; right: 16px; background: transparent; border: none; color: #888; font-size: 24px; cursor: pointer; width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: 0.2s; z-index: 10; }
 .modal-close:hover { color: #ff2b2b; background: rgba(255,43,43,0.1); }
 
-/* STEP INDICATOR */
 .steps-indicator { display: flex; justify-content: space-between; margin-bottom: 22px; position: relative; }
 .steps-indicator::before { content: ""; position: absolute; top: 14px; left: 15%; right: 15%; height: 2px; background: #2a3a32; z-index: 1; }
 .step-dot { width: 30px; height: 30px; border-radius: 50%; background: #0a0a0f; border: 2px solid #2a3a32; color: #666; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 12px; position: relative; z-index: 2; transition: 0.3s; }
@@ -106,6 +104,8 @@ header .counter .dot { display: inline-block; width: 8px; height: 8px; backgroun
 .form-box label { color: #888; font-size: 11px; font-weight: bold; margin-bottom: 5px; display: block; text-transform: uppercase; letter-spacing: 0.5px; }
 .form-box input { width: 100%; background: #0a0a0f; border: 1px solid #2a3a32; color: #fff; padding: 13px 15px; border-radius: 10px; font-size: 14px; outline: none; transition: 0.25s; }
 .form-box input:focus { border-color: #00ff88; box-shadow: 0 0 12px rgba(0,255,136,0.3); }
+.form-note { color: #888; font-size: 11px; margin-top: -8px; margin-bottom: 14px; line-height: 1.5; }
+.form-note b { color: #00ff88; }
 
 .jumlah-label { color: #ccc; font-size: 13px; font-weight: bold; margin-bottom: 6px; display: block; }
 .jumlah-label .minmax { color: #888; font-weight: normal; font-size: 11px; margin-left: 4px; }
@@ -144,7 +144,6 @@ header .counter .dot { display: inline-block; width: 8px; height: 8px; backgroun
 .term-text { color: #666; font-size: 11px; text-align: center; margin-top: 12px; line-height: 1.5; }
 .term-text a { color: #00ff88; text-decoration: none; }
 
-/* TESTIMONI */
 .testimoni-section { padding: 50px 20px; max-width: 1100px; margin: auto; position: relative; z-index: 5; }
 .testimoni-section h2 { text-align: center; font-size: 26px; color: #00ff88; margin-bottom: 8px; }
 .testi-cards { display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 30px; }
@@ -279,7 +278,7 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 13px; border
       <div class="step-dot" id="dot3">3</div>
     </div>
 
-    <!-- STEP 1 — ISI DATA -->
+    <!-- STEP 1 -->
     <div class="step-content active" id="step1">
       <div class="modal-title-block">
         <div class="modal-label" id="modalLabel">SUNTIK SALURAN</div>
@@ -312,28 +311,31 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 13px; border
       <div class="term-text">Dengan memesan, Anda menyetujui <a href="#">Syarat & Ketentuan</a> kami.</div>
     </div>
 
-    <!-- STEP 2 — ISI DATA PEMESAN -->
+    <!-- STEP 2 — DATA PEMESAN -->
     <div class="step-content" id="step2">
       <div class="modal-title-block">
         <div class="modal-label">LANGKAH 2 DARI 3</div>
         <div class="modal-title">📝 Data Pemesan</div>
-        <div class="modal-subtitle">Isi nama & no WhatsApp aktif kamu</div>
+        <div class="modal-subtitle">Isi link saluran & no WhatsApp aktif kamu</div>
       </div>
 
       <div class="form-box">
-        <label>👤 Nama Lengkap</label>
-        <input type="text" id="namaPemesan" placeholder="Contoh: Bilzz" required>
+        <label>🔗 Link Saluran</label>
+        <input type="text" id="linkSaluran" placeholder="Contoh: https://whatsapp.com/channel/xxxxx" required>
       </div>
       <div class="form-box">
         <label>📱 No WhatsApp Aktif</label>
         <input type="tel" id="hpPemesan" placeholder="Contoh: 08xxxxxxxxxx" required>
       </div>
+      <div class="form-note">
+        📌 Nomor konfirmasi pesanan. Jika pesanan selesai, admin akan menginformasikan ke nomor tersebut.
+      </div>
 
       <button class="btn-next" onclick="keStep3()">Lanjut ke QRIS →</button>
-      <div class="info-note">⚠️ Pastikan nama & no HP <b>benar</b>, biar admin gak salah kirim produk.</div>
+      <div class="info-note">⚠️ Pastikan <b>link saluran</b> & <b>no WA</b> benar, biar admin gak salah kirim produk.</div>
     </div>
 
-    <!-- STEP 3 — BAYAR QRIS -->
+    <!-- STEP 3 — QRIS -->
     <div class="step-content" id="step3">
       <div class="modal-title-block">
         <div class="modal-label">LANGKAH 3 DARI 3</div>
@@ -419,7 +421,7 @@ const WA_ADMIN = "6283898669427";
 const MIN_PEMBELIAN = 1000;
 
 let produkAktif = null;
-let dataPemesan = { nama: "", hp: "", jumlah: 0, total: 0 };
+let dataPemesan = { link: "", hp: "", jumlah: 0, total: 0 };
 
 function renderProduk(target, data, kategori) {
   document.getElementById(target).innerHTML = data.map((p, i) => `
@@ -457,7 +459,7 @@ function bukaOrder(kategoriId, index) {
   document.getElementById('jumlahInput').min = produkAktif.min;
   document.getElementById('jumlahInput').max = produkAktif.max;
 
-  document.getElementById('namaPemesan').value = '';
+  document.getElementById('linkSaluran').value = '';
   document.getElementById('hpPemesan').value = '';
   document.getElementById('waitingBox').style.display = 'none';
 
@@ -521,16 +523,16 @@ function keStep2() {
 }
 
 function keStep3() {
-  const nama = document.getElementById('namaPemesan').value.trim();
+  const link = document.getElementById('linkSaluran').value.trim();
   const hp = document.getElementById('hpPemesan').value.trim();
-  if (!nama) { alert('Isi nama dulu ya'); return; }
+  if (!link) { alert('Isi link saluran dulu ya'); return; }
   if (!hp) { alert('Isi no WhatsApp dulu ya'); return; }
-  dataPemesan.nama = nama;
+  dataPemesan.link = link;
   dataPemesan.hp = hp;
 
   document.getElementById('qrisNominal').innerText = `⚠️ MASUKKAN NOMINAL: Rp ${dataPemesan.total.toLocaleString('id-ID')}`;
 
-  const pesan = `Halo Admin Jimzz Store 👋\n\n📦 *Produk:* ${produkAktif.nama}\n📊 *Jumlah:* ${dataPemesan.jumlah.toLocaleString('id-ID')} ${produkAktif.unit}\n💰 *Harga Satuan:* Rp ${produkAktif.hargaPerUnit.toLocaleString('id-ID')} / ${produkAktif.unit}\n💵 *Total:* Rp ${dataPemesan.total.toLocaleString('id-ID')}\n\n👤 *Nama:* ${dataPemesan.nama}\n📱 *No HP:* ${dataPemesan.hp}\n\nIni foto pembayaran yang sudah saya bayar ⬇️\n\nMohon diverifikasi & diproses ya 🙏`;
+  const pesan = `Halo Admin Jimzz Store 👋\n\n📦 *Produk:* ${produkAktif.nama}\n📊 *Jumlah:* ${dataPemesan.jumlah.toLocaleString('id-ID')} ${produkAktif.unit}\n💰 *Harga Satuan:* Rp ${produkAktif.hargaPerUnit.toLocaleString('id-ID')} / ${produkAktif.unit}\n💵 *Total:* Rp ${dataPemesan.total.toLocaleString('id-ID')}\n\n🔗 *Link Saluran:* ${dataPemesan.link}\n📱 *No WA (Konfirmasi):* ${dataPemesan.hp}\n\nIni foto pembayaran yang sudah saya bayar ⬇️\n\nMohon diverifikasi & diproses ya 🙏`;
 
   document.getElementById('waBtn').href = `https://wa.me/${WA_ADMIN}?text=${encodeURIComponent(pesan)}`;
   setStep(3);
