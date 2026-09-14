@@ -53,7 +53,6 @@ header {
   transition: background 0.4s ease;
 }
 
-/* ============ HEADER TOP + THEME TOGGLE ============ */
 .header-top { display: flex; justify-content: space-between; align-items: center; max-width: 1100px; margin: 0 auto 15px; padding: 0 5px; }
 .logo-text { color: #00ff88; font-weight: bold; font-size: 16px; letter-spacing: 1px; }
 .theme-toggle {
@@ -282,6 +281,36 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
 .wa-float:hover { transform: scale(1.1); }
 @keyframes waPulse { 0%,100% { box-shadow: 0 5px 20px rgba(37,211,102,0.6); } 50% { box-shadow: 0 5px 30px rgba(37,211,102,0.9), 0 0 0 10px rgba(37,211,102,0.1); } }
 
+/* ============ TOMBOL INSTALL PWA (KIRI ATAS) ============ */
+.install-btn {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  background: linear-gradient(135deg, #00ff88, #00cc6a);
+  color: #000;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 25px;
+  font-weight: bold;
+  font-size: 13px;
+  cursor: pointer;
+  z-index: 500;
+  box-shadow: 0 5px 20px rgba(0,255,136,0.6);
+  animation: installPulse 2s infinite;
+  transition: 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.install-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 5px 30px rgba(0,255,136,0.9);
+}
+@keyframes installPulse {
+  0%, 100% { box-shadow: 0 5px 20px rgba(0,255,136,0.6); }
+  50% { box-shadow: 0 5px 30px rgba(0,255,136,0.9), 0 0 0 8px rgba(0,255,136,0.15); }
+}
+
 .music-player { position: fixed; bottom: 80px; right: 12px; left: auto; width: 220px; max-width: calc(100% - 24px); background: #0d1a14; border: 1px solid #2a3a32; border-radius: 10px; box-shadow: 0 6px 18px rgba(0,0,0,0.7); z-index: 300; overflow: hidden; transition: background 0.4s ease; }
 .music-mini { display: flex; align-items: center; gap: 7px; padding: 7px 9px; cursor: pointer; }
 .music-cover { width: 30px; height: 30px; border-radius: 6px; background: #0a0a0f; display: flex; align-items: center; justify-content: center; flex-shrink: 0; position: relative; overflow: hidden; }
@@ -317,20 +346,20 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
 .music-list::-webkit-scrollbar { width: 3px; }
 .music-list::-webkit-scrollbar-thumb { background: #00ff88; border-radius: 2px; }
 
-/* ============ LIGHT MODE ============ */
+/* ============ LIGHT MODE (SOFT) ============ */
 body.light-mode {
-  background: #f0f4f2;
+  background: #d8e5dc;
   background-image: 
-    radial-gradient(circle at 20% 20%, rgba(0, 200, 100, 0.08) 0%, transparent 40%),
-    radial-gradient(circle at 80% 80%, rgba(0, 200, 100, 0.06) 0%, transparent 40%),
-    linear-gradient(rgba(0, 200, 100, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 200, 100, 0.03) 1px, transparent 1px);
+    radial-gradient(circle at 20% 20%, rgba(0, 200, 100, 0.06) 0%, transparent 40%),
+    radial-gradient(circle at 80% 80%, rgba(0, 200, 100, 0.05) 0%, transparent 40%),
+    linear-gradient(rgba(0, 200, 100, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 200, 100, 0.025) 1px, transparent 1px);
   background-size: 100% 100%, 100% 100%, 30px 30px, 30px 30px;
   color: #1a1a1a;
 }
 body.light-mode header {
   background: radial-gradient(circle at 50% 100%, rgba(0, 200, 100, 0.15), transparent 70%),
-              linear-gradient(135deg, #d4f5e0, #f0f4f2);
+              linear-gradient(135deg, #c4e5d0, #d8e5dc);
 }
 body.light-mode header h1 { color: #00a855; text-shadow: 0 0 20px rgba(0,200,100,0.4); }
 body.light-mode .header-top .logo-text { color: #00a855; }
@@ -338,12 +367,12 @@ body.light-mode .theme-toggle { background: rgba(0,168,85,0.1); border-color: #0
 body.light-mode header .counter { background: rgba(0,168,85,0.1); border-color: rgba(0,168,85,0.3); color: #00a855; }
 body.light-mode header .counter .dot { background: #00a855; }
 body.light-mode .kategori h2 { color: #00a855; }
-body.light-mode .sub { color: #666; }
+body.light-mode .sub { color: #555; }
 body.light-mode .menu-home,
 body.light-mode .produk-card,
 body.light-mode .testi-card {
-  background: #ffffff;
-  border-color: #c5e0d0;
+  background: #eaf3ed;
+  border-color: #b8d4c5;
 }
 body.light-mode .menu-home:hover,
 body.light-mode .produk-card:hover,
@@ -352,20 +381,20 @@ body.light-mode .testi-card:hover {
   box-shadow: 0 0 25px rgba(0,168,85,0.3);
 }
 body.light-mode .menu-home-title,
-body.light-mode .produk-nama,
-body.light-mode .testi-text { color: #1a1a1a; }
+body.light-mode .produk-nama { color: #1a1a1a; }
 body.light-mode .menu-home-desc,
-body.light-mode .produk-desc { color: #666; }
+body.light-mode .produk-desc { color: #555; }
+body.light-mode .testi-text { color: #333; }
 body.light-mode .testi-name { color: #00a855; }
 body.light-mode .produk-label { color: #00a855; }
 body.light-mode .produk-harga { color: #00a855; }
 body.light-mode .produk-harga-label,
-body.light-mode .produk-harga span { color: #999; }
-body.light-mode footer { color: #999; border-color: #ddd; }
-body.light-mode .bottom-nav { background: #ffffff; border-color: #c5e0d0; }
-body.light-mode .nav-item { color: #888; }
+body.light-mode .produk-harga span { color: #888; }
+body.light-mode footer { color: #888; border-color: #b8d4c5; }
+body.light-mode .bottom-nav { background: #eaf3ed; border-color: #b8d4c5; }
+body.light-mode .nav-item { color: #777; }
 body.light-mode .nav-item.active { color: #00a855; }
-body.light-mode .wa-channel-info { color: #666; }
+body.light-mode .wa-channel-info { color: #555; }
 body.light-mode .pengumuman {
   background: linear-gradient(145deg, rgba(255, 200, 0, 0.15), rgba(255, 150, 0, 0.08));
   border-color: rgba(200, 150, 0, 0.4);
@@ -375,36 +404,39 @@ body.light-mode .pengumuman.refund {
   background: linear-gradient(145deg, rgba(0, 150, 255, 0.12), rgba(0, 100, 200, 0.08));
   border-color: rgba(0, 150, 255, 0.4);
 }
-body.light-mode .music-player { background: #ffffff; border-color: #c5e0d0; }
+body.light-mode .music-player { background: #eaf3ed; border-color: #b8d4c5; }
 body.light-mode .music-mini-title { color: #1a1a1a; }
-body.light-mode .music-mini-artist { color: #888; }
+body.light-mode .music-mini-artist { color: #777; }
 body.light-mode .music-mini-controls button { color: #333; }
-body.light-mode .music-progress { background: #d5d5d5; }
-body.light-mode .music-expanded { background: #f5f9f7; }
-body.light-mode .music-list-header { color: #666; border-color: #ddd; }
+body.light-mode .music-progress { background: #c5d5cb; }
+body.light-mode .music-expanded { background: #eaf3ed; }
+body.light-mode .music-list-header { color: #555; border-color: #b8d4c5; }
 body.light-mode .music-item { color: #333; }
 body.light-mode .music-item:hover { background: rgba(0,168,85,0.1); }
 body.light-mode .music-item-title { color: #1a1a1a; }
-body.light-mode .music-item-artist { color: #888; }
-body.light-mode .modal-box { background: #ffffff; border-color: #c5e0d0; }
+body.light-mode .music-item-artist { color: #777; }
+body.light-mode .modal-box { background: #eaf3ed; border-color: #b8d4c5; }
 body.light-mode .modal-title { color: #1a1a1a; }
-body.light-mode .modal-subtitle { color: #666; }
+body.light-mode .modal-subtitle { color: #555; }
 body.light-mode .jumlah-input,
-body.light-mode .form-box input { background: #f5f9f7; border-color: #c5e0d0; color: #1a1a1a; }
-body.light-mode .total-box { background: #f5f9f7; border-color: #c5e0d0; }
+body.light-mode .form-box input { background: #f5faf7; border-color: #b8d4c5; color: #1a1a1a; }
+body.light-mode .total-box { background: #f5faf7; border-color: #b8d4c5; }
 body.light-mode .total-row .label { color: #666; }
 body.light-mode .total-row .value { color: #1a1a1a; }
 body.light-mode .total-row.big .label,
 body.light-mode .total-row.big .value { color: #00a855; }
 body.light-mode .qris-nominal { background: rgba(0,168,85,0.1); border-color: #00a855; color: #00a855; }
-body.light-mode .waiting-box { background: #f5f9f7; }
-body.light-mode .term-text { color: #999; }
-body.light-mode .form-note { color: #666; }
-body.light-mode .form-box label { color: #666; }
+body.light-mode .waiting-box { background: #f5faf7; }
+body.light-mode .term-text { color: #888; }
+body.light-mode .form-note { color: #555; }
+body.light-mode .form-box label { color: #555; }
+body.light-mode .jumlah-label { color: #333; }
+body.light-mode .info-note { background: rgba(0,168,85,0.08); color: #555; }
 
 @media (max-width: 480px) {
   .music-player { bottom: 75px; right: 10px; left: auto; width: 200px; }
   .wa-float { width: 44px; height: 44px; font-size: 20px; top: 12px; right: 12px; }
+  .install-btn { padding: 8px 12px; font-size: 11px; top: 12px; left: 12px; }
   header h1 { font-size: 30px; }
   .produk-header { gap: 10px; }
   .produk-icon { font-size: 26px; }
@@ -422,6 +454,11 @@ body.light-mode .form-box label { color: #666; }
 </div>
 
 <a href="https://wa.me/6283898669427" target="_blank" class="wa-float">💬</a>
+
+<!-- TOMBOL INSTALL PWA (KIRI ATAS) -->
+<button class="install-btn" id="installBtn" onclick="installPWA()" style="display:none;">
+  📲 Install
+</button>
 
 <!-- HOME -->
 <div class="tab-page active" id="page-home">
@@ -672,7 +709,6 @@ function toggleTheme() {
   localStorage.setItem('jimzzTheme', isLight ? 'light' : 'dark');
 }
 
-// Load theme dari localStorage
 (function loadTheme() {
   const savedTheme = localStorage.getItem('jimzzTheme');
   if (savedTheme === 'light') {
@@ -682,12 +718,43 @@ function toggleTheme() {
   }
 })();
 
-// ============ PWA SERVICE WORKER ============
+// ============ PWA SERVICE WORKER + INSTALL ============
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('sw.js').catch(err => console.log('SW error:', err));
   });
 }
+
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  const installBtn = document.getElementById('installBtn');
+  if (installBtn) installBtn.style.display = 'flex';
+});
+
+function installPWA() {
+  if (!deferredPrompt) {
+    alert('Install gak tersedia. Pastikan lu buka di Chrome Android atau Safari iOS ya 🙏');
+    return;
+  }
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then((choiceResult) => {
+    if (choiceResult.outcome === 'accepted') {
+      console.log('User accepted install');
+      const installBtn = document.getElementById('installBtn');
+      if (installBtn) installBtn.style.display = 'none';
+    }
+    deferredPrompt = null;
+  });
+}
+
+window.addEventListener('appinstalled', () => {
+  console.log('PWA installed');
+  const installBtn = document.getElementById('installBtn');
+  if (installBtn) installBtn.style.display = 'none';
+});
 
 // ============ TAB SWITCH ============
 function switchTab(tab) {
