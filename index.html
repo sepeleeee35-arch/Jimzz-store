@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="UTF-8">
@@ -67,6 +67,71 @@ header .counter .dot { display: inline-block; width: 8px; height: 8px; backgroun
 .kategori { padding: 30px 20px; max-width: 1100px; margin: auto; position: relative; z-index: 5; }
 .kategori h2 { text-align: center; font-size: 24px; color: #00ff88; margin-bottom: 8px; }
 .sub { text-align: center; color: #888; margin-bottom: 25px; font-size: 13px; }
+
+/* ============ PENGUMUMAN ============ */
+.pengumuman {
+  background: linear-gradient(145deg, rgba(255, 200, 0, 0.08), rgba(255, 150, 0, 0.05));
+  border: 1px solid rgba(255, 200, 0, 0.3);
+  border-left: 4px solid #ffc800;
+  border-radius: 12px;
+  padding: 16px 18px;
+  margin-bottom: 22px;
+  position: relative;
+  animation: pengumumanPulse 3s ease-in-out infinite;
+}
+@keyframes pengumumanPulse {
+  0%, 100% { box-shadow: 0 0 0 rgba(255, 200, 0, 0); }
+  50% { box-shadow: 0 0 20px rgba(255, 200, 0, 0.2); }
+}
+.pengumuman-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.pengumuman-icon {
+  font-size: 20px;
+  animation: pengumumanIcon 1.5s ease-in-out infinite;
+}
+@keyframes pengumumanIcon {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+.pengumuman-title {
+  color: #ffc800;
+  font-size: 13px;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+.pengumuman-text {
+  color: #ddd;
+  font-size: 12px;
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+.pengumuman-text:last-child {
+  margin-bottom: 0;
+}
+.pengumuman-text b {
+  color: #ffc800;
+  font-weight: bold;
+}
+
+/* PENGUMUMAN REFUND (BIRU) */
+.pengumuman.refund {
+  background: linear-gradient(145deg, rgba(0, 200, 255, 0.08), rgba(0, 150, 255, 0.05));
+  border: 1px solid rgba(0, 200, 255, 0.3);
+  border-left: 4px solid #00c8ff;
+}
+.pengumuman.refund .pengumuman-title {
+  color: #00c8ff;
+}
+.pengumuman.refund .pengumuman-text b {
+  color: #00c8ff;
+}
+.pengumuman.refund .pengumuman-icon {
+  animation: pengumumanIcon 1.5s ease-in-out infinite;
+}
 
 .produk-list { display: flex; flex-direction: column; gap: 14px; }
 .produk-card { background: linear-gradient(145deg, #0d1a14, #0d0d15); border: 1px solid #2a3a32; border-radius: 14px; padding: 20px 18px; transition: 0.3s; position: relative; }
@@ -315,6 +380,36 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
   <section class="kategori">
     <h2>📱 Suntik All Sosmed</h2>
     <p class="sub">Pilih layanan yang kamu butuhkan</p>
+    
+    <div class="pengumuman">
+      <div class="pengumuman-header">
+        <span class="pengumuman-icon">📢</span>
+        <span class="pengumuman-title">PENGUMUMAN PENTING</span>
+      </div>
+      <p class="pengumuman-text">
+        Jika jumlah <b>like</b> atau <b>followers</b> Instagram, TikTok, dan sosial media lainnya <b>tiba-tiba menurun</b> — itu adalah hal <b>NORMAL</b>.
+      </p>
+      <p class="pengumuman-text">
+        Instagram, TikTok, dan platform lainnya <b>rutin melakukan pembersihan akun bot/fake secara otomatis</b>. Ini bukan karena layanan kami gagal, tapi karena sistem keamanan platform tersebut.
+      </p>
+      <p class="pengumuman-text">
+        💡 Saran: Order jumlah lebih dari yang dibutuhkan untuk mengantisipasi penurunan.
+      </p>
+    </div>
+
+    <div class="pengumuman refund">
+      <div class="pengumuman-header">
+        <span class="pengumuman-icon">💰</span>
+        <span class="pengumuman-title">JAMINAN REFUND</span>
+      </div>
+      <p class="pengumuman-text">
+        Jika kalian membeli <b>suntik sosmed apapun</b> dan pesanan <b>tidak masuk sama sekali</b>, kalian berhak mendapatkan <b>REFUND 100%</b>.
+      </p>
+      <p class="pengumuman-text">
+        Silakan hubungi <b>chat admin</b> untuk proses refund. Kami akan memprosesnya secepat mungkin. 🙏
+      </p>
+    </div>
+    
     <div class="produk-list" id="sosmed"></div>
   </section>
   <footer><p>© 2025 Jimzz Store — All Rights Reserved 😈</p></footer>
