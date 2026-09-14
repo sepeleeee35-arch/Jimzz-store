@@ -115,6 +115,9 @@ header .counter .dot { display: inline-block; width: 8px; height: 8px; backgroun
 .form-box label { color: #888; font-size: 11px; font-weight: bold; margin-bottom: 5px; display: block; text-transform: uppercase; letter-spacing: 0.5px; }
 .form-box input { width: 100%; background: #0a0a0f; border: 1px solid #2a3a32; color: #fff; padding: 13px 15px; border-radius: 10px; font-size: 14px; outline: none; transition: 0.25s; }
 .form-box input:focus { border-color: #00ff88; box-shadow: 0 0 12px rgba(0,255,136,0.3); }
+.form-box input.error { border-color: #ff2b2b; box-shadow: 0 0 12px rgba(255,43,43,0.4); }
+.form-error { color: #ff6b6b; font-size: 11px; margin-top: 6px; display: none; line-height: 1.4; }
+.form-error.show { display: block; }
 .form-note { color: #888; font-size: 11px; margin-top: -8px; margin-bottom: 14px; line-height: 1.5; }
 .form-note b { color: #00ff88; }
 
@@ -386,8 +389,9 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
         <div class="modal-subtitle">Isi data kamu dengan benar</div>
       </div>
       <div class="form-box">
-        <label>🔗 Link / Username</label>
-        <input type="text" id="linkSaluran" placeholder="Contoh: @username atau link" required>
+        <label id="inputLabel">🔗 Link</label>
+        <input type="text" id="linkSaluran" placeholder="Contoh: link" oninput="clearError()" required>
+        <div class="form-error" id="inputError">Link tidak valid</div>
       </div>
       <div class="form-box">
         <label>📱 No WhatsApp Aktif</label>
@@ -474,9 +478,33 @@ setInterval(() => {
 
 // ============ DATA PRODUK ============
 const produkSosmed = [
-  { icon: "📱", nama: "Suntik Saluran WA", desc: "Tambah pengikut saluran WhatsApp kamu secara aman & cepat.", hargaPerUnit: 10, unit: "pengikut", min: 100, max: 20000, hot: true },
-  { icon: "❤️", nama: "Suntik Like TikTok", desc: "Tambah like video TikTok kamu secara aman & cepat.", hargaPerUnit: 10, unit: "like", min: 100, max: 10000, hot: true },
-  { icon: "👁️", nama: "Suntik Views TikTok", desc: "Tambah views video TikTok kamu secara aman & cepat.", hargaPerUnit: 1, unit: "views", min: 500, max: 50000, hot: false }
+  { 
+    icon: "📱", nama: "Suntik Saluran WA", 
+    desc: "Tambah pengikut saluran WhatsApp kamu secara aman & cepat.", 
+    hargaPerUnit: 10, unit: "pengikut", min: 100, max: 20000, hot: true,
+    inputLabel: "🔗 Link Saluran WA",
+    inputPlaceholder: "Contoh: https://whatsapp.com/channel/xxxxx",
+    inputValidasi: "whatsapp.com",
+    inputError: "Link harus link saluran WhatsApp (whatsapp.com)"
+  },
+  { 
+    icon: "❤️", nama: "Suntik Like TikTok", 
+    desc: "Tambah like video TikTok kamu secara aman & cepat.", 
+    hargaPerUnit: 10, unit: "like", min: 100, max: 10000, hot: true,
+    inputLabel: "🔗 Link Video TikTok",
+    inputPlaceholder: "Contoh: https://www.tiktok.com/@user/video/xxx",
+    inputValidasi: "tiktok.com",
+    inputError: "Link harus link video TikTok (tiktok.com)"
+  },
+  { 
+    icon: "👁️", nama: "Suntik Views TikTok", 
+    desc: "Tambah views video TikTok kamu secara aman & cepat.", 
+    hargaPerUnit: 1, unit: "views", min: 500, max: 50000, hot: false,
+    inputLabel: "🔗 Link Video TikTok",
+    inputPlaceholder: "Contoh: https://www.tiktok.com/@user/video/xxx",
+    inputValidasi: "tiktok.com",
+    inputError: "Link harus link video TikTok (tiktok.com)"
+  }
 ];
 
 const produkJpm = [
@@ -484,11 +512,14 @@ const produkJpm = [
     icon: "🚀", nama: "JPM (Jasa Push Member)", 
     desc: "Push member ke grup / channel kamu dengan cepat & aman.", 
     hargaPerUnit: 200, unit: "member", min: 5, max: 100, hot: true,
-    bonusMinTotal: 4000, bonusUnit: 5
+    bonusMinTotal: 4000, bonusUnit: 5,
+    inputLabel: "🔗 Link Grup / Saluran WA",
+    inputPlaceholder: "Contoh: https://chat.whatsapp.com/xxxxx",
+    inputValidasi: "whatsapp.com",
+    inputError: "Link harus link grup / saluran WhatsApp (whatsapp.com)"
   }
 ];
 
-// ⚠️ APK — HANYA BISA BELI 1 PER ORDER
 const produkApk = [
   { icon: "💾", nama: "Auto Save Kontak", desc: "Aplikasi auto save kontak WhatsApp secara otomatis. Aman & gampang dipake.", harga: 5000, hot: true },
   { icon: "🎨", nama: "APK Bikin Logo", desc: "Aplikasi bikin logo profesional langsung dari HP. Banyak template & icon.", harga: 5000, hot: true }
@@ -555,9 +586,19 @@ function bukaOrder(kategoriId, index) {
     jumlahInput.max = produkAktif.max;
   }
 
+  // Set label & placeholder dinamis di Step 2
+  if (isApk) {
+    document.getElementById('inputLabel').innerText = '👤 Nama Lengkap';
+    document.getElementById('linkSaluran').placeholder = 'Contoh: Bilzz';
+  } else {
+    document.getElementById('inputLabel').innerText = produkAktif.inputLabel || '🔗 Link';
+    document.getElementById('linkSaluran').placeholder = produkAktif.inputPlaceholder || 'Contoh: link';
+  }
+
   document.getElementById('linkSaluran').value = '';
   document.getElementById('hpPemesan').value = '';
   document.getElementById('waitingBox').style.display = 'none';
+  clearError();
 
   hitungTotal();
   setStep(1);
@@ -580,6 +621,11 @@ function setStep(num) {
     if (i < num) dot.classList.add('done');
     else if (i === num) dot.classList.add('active');
   }
+}
+
+function clearError() {
+  document.getElementById('linkSaluran').classList.remove('error');
+  document.getElementById('inputError').classList.remove('show');
 }
 
 function hitungTotal() {
@@ -651,8 +697,35 @@ function keStep2() {
 function keStep3() {
   const link = document.getElementById('linkSaluran').value.trim();
   const hp = document.getElementById('hpPemesan').value.trim();
-  if (!link) { alert('Isi link / username dulu ya'); return; }
-  if (!hp) { alert('Isi no WhatsApp dulu ya'); return; }
+  const inputEl = document.getElementById('linkSaluran');
+  const errorEl = document.getElementById('inputError');
+  
+  clearError();
+  
+  // Validasi link kosong
+  if (!link) {
+    inputEl.classList.add('error');
+    errorEl.innerText = produkAktif.isApk ? '❌ Isi nama dulu ya!' : '❌ Isi ' + (produkAktif.inputLabel || 'link') + ' dulu ya!';
+    errorEl.classList.add('show');
+    return;
+  }
+  
+  // Validasi link harus sesuai (khusus non-APK)
+  if (!produkAktif.isApk && produkAktif.inputValidasi) {
+    if (!link.toLowerCase().includes(produkAktif.inputValidasi)) {
+      inputEl.classList.add('error');
+      errorEl.innerText = '❌ ' + (produkAktif.inputError || 'Link tidak valid!');
+      errorEl.classList.add('show');
+      return;
+    }
+  }
+  
+  // Validasi No WA
+  if (!hp) {
+    alert('❌ Isi no WhatsApp dulu ya');
+    return;
+  }
+  
   dataPemesan.link = link;
   dataPemesan.hp = hp;
 
@@ -664,7 +737,13 @@ function keStep3() {
 
   let pesan = `Halo Admin Jimzz Store 👋\n\n📦 *Produk:* ${produkAktif.nama}\n📊 *Jumlah:* ${dataPemesan.jumlah.toLocaleString('id-ID')} ${produkAktif.unit || 'pcs'}\n`;
   if (dataPemesan.bonus > 0) pesan += `🎁 *Bonus:* ${bonusText}\n📊 *Total Diterima:* ${totalDiterima.toLocaleString('id-ID')} ${produkAktif.unit}\n`;
-  pesan += `💰 *Harga Satuan:* Rp ${hargaPerUnit.toLocaleString('id-ID')}\n💵 *Total Bayar:* Rp ${dataPemesan.total.toLocaleString('id-ID')}\n\n🔗 *Link / Username:* ${dataPemesan.link}\n📱 *No WA (Konfirmasi):* ${dataPemesan.hp}\n\nIni foto pembayaran yang sudah saya bayar ⬇️\n\nMohon diverifikasi & diproses ya 🙏`;
+  pesan += `💰 *Harga Satuan:* Rp ${hargaPerUnit.toLocaleString('id-ID')}\n💵 *Total Bayar:* Rp ${dataPemesan.total.toLocaleString('id-ID')}\n\n`;
+  if (produkAktif.isApk) {
+    pesan += `👤 *Nama:* ${dataPemesan.link}\n`;
+  } else {
+    pesan += `🔗 *Link:* ${dataPemesan.link}\n`;
+  }
+  pesan += `📱 *No WA (Konfirmasi):* ${dataPemesan.hp}\n\nIni foto pembayaran yang sudah saya bayar ⬇️\n\nMohon diverifikasi & diproses ya 🙏`;
 
   document.getElementById('waBtn').href = `https://wa.me/${WA_ADMIN}?text=${encodeURIComponent(pesan)}`;
   setStep(3);
