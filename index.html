@@ -13,83 +13,62 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 <style>
 * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',Arial,sans-serif; }
+
+/* ================================================================
+   BODY + CANVAS BACKGROUND
+   ================================================================ */
 body { 
   background: #0a0a0f; 
-  background-image: 
-    radial-gradient(circle at 20% 20%, rgba(0,255,136,0.08) 0%, transparent 40%),
-    radial-gradient(circle at 80% 80%, rgba(0,255,136,0.06) 0%, transparent 40%),
-    linear-gradient(rgba(0,255,136,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,255,136,0.03) 1px, transparent 1px);
-  background-size: 100% 100%, 100% 100%, 30px 30px, 30px 30px;
-  background-attachment: fixed;
   color: #e6e6e6; 
   line-height: 1.6; 
   padding-bottom: 100px; 
   overflow-x: hidden;
-  transition: all 0.5s ease;
+  transition: background 0.5s ease, color 0.5s ease;
+}
+
+#jimzz-neon-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  pointer-events: none;
+  background: 
+    radial-gradient(circle at 20% 20%, rgba(0,255,136,0.05) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(0,255,136,0.04) 0%, transparent 50%),
+    #0a0a0f;
 }
 
 /* ================================================================
-   MODE 2: ANIMATED NEON BACKGROUND
+   MODE 2: TAMBAHAN GLOW DI CANVAS (efek beda dari Mode 1)
    ================================================================ */
+body.mode-2 #jimzz-neon-bg {
+  filter: brightness(1.3) saturate(1.4);
+}
+
 body.mode-2 {
-  background: linear-gradient(-45deg, #0a0a0f, #001a0d, #0d1a14, #0a0a0f);
-  background-size: 400% 400%;
-  animation: neonShift 15s ease infinite;
-  position: relative;
+  background: #0a0a0f;
 }
-body.mode-2::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background-image: 
-    linear-gradient(rgba(0,255,136,0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,255,136,0.06) 1px, transparent 1px);
-  background-size: 40px 40px;
-  animation: gridMove 8s linear infinite;
-  pointer-events: none;
-  z-index: 1;
-}
+
+/* Overlay tambahan buat Mode 2 */
 body.mode-2::after {
   content: "";
   position: fixed;
   inset: 0;
-  background: radial-gradient(circle at 50% 50%, transparent 30%, rgba(0,255,136,0.05) 100%);
+  background: radial-gradient(circle at 50% 50%, transparent 30%, rgba(0,255,136,0.06) 100%);
   pointer-events: none;
-  z-index: 2;
+  z-index: -1;
   animation: glowPulse 4s ease-in-out infinite;
-}
-@keyframes neonShift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-@keyframes gridMove {
-  0% { background-position: 0 0, 0 0; }
-  100% { background-position: 40px 40px, 40px 40px; }
 }
 @keyframes glowPulse {
   0%, 100% { opacity: 0.4; }
-  50% { opacity: 0.8; }
+  50% { opacity: 0.9; }
 }
 
-/* Partikel lebih banyak & lebih cepat di Mode 2 */
-body.mode-2 .particle {
-  width: 4px;
-  height: 4px;
-  box-shadow: 0 0 12px #00ff88, 0 0 24px #00ff88;
-  opacity: 0.9;
-}
-
-#particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
-.particle { position: absolute; width: 3px; height: 3px; background: #00ff88; border-radius: 50%; box-shadow: 0 0 6px #00ff88; opacity: 0.6; animation: floatUp linear infinite; }
-@keyframes floatUp {
-  0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
-  10% { opacity: 0.6; }
-  90% { opacity: 0.6; }
-  100% { transform: translateY(-100px) scale(1); opacity: 0; }
-}
-
+/* ================================================================
+   SISA STYLING JIMZZ STORE
+   ================================================================ */
 .promo-banner { position: relative; z-index: 5; background: linear-gradient(90deg, #00ff88, #00cc6a, #00ff88); background-size: 200% 100%; animation: bannerSlide 3s linear infinite; color: #000; text-align: center; padding: 10px 15px; font-size: 12px; font-weight: bold; letter-spacing: 0.5px; }
 @keyframes bannerSlide { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
 .promo-banner b { background: #000; color: #00ff88; padding: 2px 8px; border-radius: 4px; margin: 0 4px; }
@@ -99,7 +78,7 @@ header {
   padding: 40px 20px 30px; 
   background: 
     radial-gradient(circle at 50% 100%, rgba(0,255,136,0.15), transparent 70%),
-    linear-gradient(135deg, #001a0d, #0a0a0f); 
+    linear-gradient(135deg, #001a0d, rgba(10,10,15,0.7)); 
   border-bottom: 2px solid #00ff88; 
   position: relative;
   z-index: 5;
@@ -151,7 +130,7 @@ header .counter .dot { display: inline-block; width: 8px; height: 8px; backgroun
 .sub { text-align: center; color: #888; margin-bottom: 25px; font-size: 13px; }
 
 .menu-home {
-  background: linear-gradient(145deg, #0d1a14, #0d0d15);
+  background: linear-gradient(145deg, rgba(13,26,20,0.85), rgba(13,13,21,0.85));
   border: 1px solid #2a3a32;
   border-radius: 14px;
   padding: 20px;
@@ -160,6 +139,8 @@ header .counter .dot { display: inline-block; width: 8px; height: 8px; backgroun
   cursor: pointer;
   transition: all 0.3s ease;
   position: relative;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 .menu-home:hover {
   border-color: #00ff88;
@@ -216,7 +197,7 @@ header .counter .dot { display: inline-block; width: 8px; height: 8px; backgroun
 .pengumuman.refund .pengumuman-text b { color: #00c8ff; }
 
 .produk-list { display: flex; flex-direction: column; gap: 14px; }
-.produk-card { background: linear-gradient(145deg, #0d1a14, #0d0d15); border: 1px solid #2a3a32; border-radius: 14px; padding: 20px 18px; transition: 0.3s; position: relative; }
+.produk-card { background: linear-gradient(145deg, rgba(13,26,20,0.85), rgba(13,13,21,0.85)); border: 1px solid #2a3a32; border-radius: 14px; padding: 20px 18px; transition: 0.3s; position: relative; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
 .produk-card:hover { border-color: #00ff88; box-shadow: 0 0 25px rgba(0,255,136,0.3); transform: translateY(-2px); }
 .produk-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
 .produk-icon { font-size: 32px; flex-shrink: 0; }
@@ -315,7 +296,7 @@ header .counter .dot { display: inline-block; width: 8px; height: 8px; backgroun
 .testimoni-section { padding: 30px 20px; max-width: 1100px; margin: auto; position: relative; z-index: 5; }
 .testimoni-section h2 { text-align: center; font-size: 24px; color: #00ff88; margin-bottom: 8px; }
 .testi-cards { display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 30px; }
-.testi-card { background: linear-gradient(145deg, #0d1a14, #0d0d15); border: 1px solid #2a3a32; border-radius: 14px; padding: 18px; transition: 0.25s; }
+.testi-card { background: linear-gradient(145deg, rgba(13,26,20,0.85), rgba(13,13,21,0.85)); border: 1px solid #2a3a32; border-radius: 14px; padding: 18px; transition: 0.25s; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
 .testi-card:hover { border-color: #00ff88; box-shadow: 0 0 20px rgba(0,255,136,0.3); transform: translateY(-3px); }
 .testi-stars { color: #ffd700; font-size: 14px; margin-bottom: 8px; letter-spacing: 2px; }
 .testi-text { color: #ccc; font-size: 13px; line-height: 1.6; font-style: italic; margin-bottom: 10px; }
@@ -382,7 +363,10 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
 </head>
 <body>
 
-<div id="particles"></div>
+<!-- ================================================================
+     CANVAS PARTICLE BACKGROUND
+     ================================================================ -->
+<canvas id="jimzz-neon-bg"></canvas>
 
 <div class="promo-banner">
   🎁 KHUSUS JPM: BONUS <b>+5 MEMBER</b> untuk order <b>Rp 4.000</b> ke atas! 🎁
@@ -395,7 +379,7 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
   <header>
     <div class="header-top">
       <span class="logo-text">💚 JIMZZ STORE</span>
-      <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn" title="Ganti Background Mode">🎨</button>
+      <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn" title="Ganti Efek Background">🎨</button>
     </div>
     <h1>Jimzz Store</h1>
     <div class="counter"><span class="dot"></span>🔥 <span id="viewCount">1.234</span> orang sudah order</div>
@@ -629,7 +613,165 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
 </div>
 
 <script>
-// ============ THEME TOGGLE (MODE 1 / MODE 2) ============
+/* ================================================================
+   1. CANVAS NEON PARTICLE ANIMATION
+   ================================================================ */
+(function() {
+  const canvas = document.getElementById("jimzz-neon-bg");
+  if (!canvas) return;
+  
+  const ctx = canvas.getContext("2d");
+  
+  let W, H;
+  let particles = [];
+  let animationId;
+  let isMobile = window.innerWidth < 600;
+  let isLowEnd = (navigator.hardwareConcurrency || 4) <= 4;
+  let mouse = { x: -1000, y: -1000 };
+  let isPaused = false;
+  let glowMode = false; // Mode 2 toggle
+  
+  function resizeJimzz() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+    isMobile = window.innerWidth < 600;
+  }
+  
+  resizeJimzz();
+  window.addEventListener('resize', resizeJimzz);
+  
+  const particleCount = isMobile ? 45 : 90;
+  const connectionDistance = isMobile ? 100 : 140;
+  
+  for (let i = 0; i < particleCount; i++) {
+    particles.push({
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * window.innerHeight,
+      size: Math.random() * 2 + 0.5,
+      speedX: (Math.random() - 0.5) * 0.35,
+      speedY: (Math.random() - 0.5) * 0.35,
+      alpha: Math.random() * 0.7 + 0.2
+    });
+  }
+  
+  // Mouse tracking (desktop)
+  if (!isMobile) {
+    document.addEventListener('mousemove', (e) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    });
+    document.addEventListener('mouseleave', () => {
+      mouse.x = -1000;
+      mouse.y = -1000;
+    });
+  }
+  
+  // Pause kalau tab gak aktif
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      isPaused = true;
+      cancelAnimationFrame(animationId);
+    } else {
+      isPaused = false;
+      animateJimzz();
+    }
+  });
+  
+  // Expose toggle buat Mode 2
+  window.jimzzSetGlowMode = function(enabled) {
+    glowMode = enabled;
+  };
+  
+  function animateJimzz() {
+    if (isPaused) return;
+    
+    ctx.clearRect(0, 0, W, H);
+    
+    // Garis koneksi antar partikel (skip di low-end biar gak lag)
+    if (!isLowEnd) {
+      ctx.shadowBlur = 0;
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          
+          if (dist < connectionDistance) {
+            const opacity = (1 - dist / connectionDistance) * (glowMode ? 0.3 : 0.15);
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.strokeStyle = `rgba(0, 255, 100, ${opacity})`;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
+        }
+      }
+    }
+    
+    // Partikel hijau
+    particles.forEach(p => {
+      p.x += p.speedX;
+      p.y += p.speedY;
+      
+      if (p.x < -10) p.x = W + 10;
+      if (p.x > W + 10) p.x = -10;
+      if (p.y < -10) p.y = H + 10;
+      if (p.y > H + 10) p.y = -10;
+      
+      // Mouse repel (desktop only)
+      if (!isMobile && mouse.x > 0) {
+        const dx = p.x - mouse.x;
+        const dy = p.y - mouse.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 100 && dist > 0) {
+          const force = (100 - dist) / 100;
+          p.x += (dx / dist) * force * 2;
+          p.y += (dy / dist) * force * 2;
+        }
+      }
+      
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(0, 255, 100, ${p.alpha})`;
+      ctx.shadowBlur = isLowEnd ? 0 : (glowMode ? 20 : 12);
+      ctx.shadowColor = "#00ff66";
+      ctx.fill();
+    });
+    
+    ctx.shadowBlur = 0;
+    
+    // Garis gelombang neon
+    const time = performance.now() * 0.001;
+    
+    for (let i = 0; i < 3; i++) {
+      ctx.beginPath();
+      
+      for (let x = 0; x <= W; x += 10) {
+        const y = H * (0.30 + i * 0.22) + 
+                  Math.sin(x * 0.006 + time * (0.7 + i * 0.15)) * 35;
+        
+        if (x === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      
+      ctx.strokeStyle = `rgba(0, 255, 90, ${(0.08 + i * 0.025) * (glowMode ? 1.5 : 1)})`;
+      ctx.lineWidth = 1.5;
+      ctx.shadowBlur = isLowEnd ? 0 : 18;
+      ctx.shadowColor = "#00ff66";
+      ctx.stroke();
+    }
+    
+    ctx.shadowBlur = 0;
+    animationId = requestAnimationFrame(animateJimzz);
+  }
+  
+  animateJimzz();
+})();
+
+/* ================================================================
+   2. THEME TOGGLE (MODE 1 / MODE 2)
+   ================================================================ */
 function toggleTheme() {
   const body = document.body;
   const btn = document.getElementById('themeBtn');
@@ -638,8 +780,12 @@ function toggleTheme() {
   btn.innerText = isMode2 ? '✨' : '🎨';
   localStorage.setItem('jimzzBgMode', isMode2 ? 'mode-2' : 'mode-1');
   
-  // Update meta theme-color
-  document.querySelector('meta[name="theme-color"]').setAttribute('content', isMode2 ? '#00cc6a' : '#00ff88');
+  if (window.jimzzSetGlowMode) {
+    window.jimzzSetGlowMode(isMode2);
+  }
+  
+  document.querySelector('meta[name="theme-color"]')
+    .setAttribute('content', isMode2 ? '#00cc6a' : '#00ff88');
 }
 
 (function loadBgMode() {
@@ -648,18 +794,23 @@ function toggleTheme() {
     document.body.classList.add('mode-2');
     const btn = document.getElementById('themeBtn');
     if (btn) btn.innerText = '✨';
+    if (window.jimzzSetGlowMode) window.jimzzSetGlowMode(true);
     document.querySelector('meta[name="theme-color"]').setAttribute('content', '#00cc6a');
   }
 })();
 
-// ============ SERVICE WORKER ============
+/* ================================================================
+   3. SERVICE WORKER
+   ================================================================ */
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('sw.js').catch(err => console.log('SW error:', err));
   });
 }
 
-// ============ TAB SWITCH ============
+/* ================================================================
+   4. TAB SWITCH
+   ================================================================ */
 function switchTab(tab) {
   document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-' + tab).classList.add('active');
@@ -668,34 +819,9 @@ function switchTab(tab) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// ============ PARTICLE ============
-const particlesContainer = document.getElementById('particles');
-
-function createParticles(count) {
-  particlesContainer.innerHTML = '';
-  for (let i = 0; i < count; i++) {
-    const p = document.createElement('div');
-    p.className = 'particle';
-    p.style.left = Math.random() * 100 + '%';
-    p.style.animationDuration = (Math.random() * 15 + 10) + 's';
-    p.style.animationDelay = (Math.random() * 10) + 's';
-    p.style.width = p.style.height = (Math.random() * 3 + 2) + 'px';
-    particlesContainer.appendChild(p);
-  }
-}
-createParticles(25);
-
-// Regenerate particles kalau pindah ke Mode 2
-const observer = new MutationObserver(() => {
-  if (document.body.classList.contains('mode-2')) {
-    createParticles(50);
-  } else {
-    createParticles(25);
-  }
-});
-observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
-
-// ============ COUNTER ============
+/* ================================================================
+   5. COUNTER
+   ================================================================ */
 let viewCount = 1234;
 const viewEl = document.getElementById('viewCount');
 setInterval(() => {
@@ -703,7 +829,9 @@ setInterval(() => {
   viewEl.innerText = viewCount.toLocaleString('id-ID');
 }, 5000);
 
-// ============ DATA PRODUK ============
+/* ================================================================
+   6. DATA PRODUK
+   ================================================================ */
 const produkSosmed = [
   { 
     icon: "📱", nama: "Suntik Saluran WA", 
@@ -1024,7 +1152,9 @@ renderProduk('sosmed', produkSosmed, 'SUNTIK ALL');
 renderProduk('jpm', produkJpm, 'LAYANAN LAINNYA');
 renderProduk('apkList', produkApk, 'JUAL APK');
 
-// ========== MUSIC PLAYER ==========
+/* ================================================================
+   7. MUSIC PLAYER
+   ================================================================ */
 const playlist = [
   { judul: "Brazilian Phonk", artis: "MondaMusic", cover: "🔥", src: "lagu1.mp3" },
   { judul: "Atmospheric Phonk", artis: "Evgeny Bardyuzha", cover: "💀", src: "lagu2.mp3" },
