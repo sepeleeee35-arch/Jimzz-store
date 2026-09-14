@@ -14,9 +14,6 @@
 <style>
 * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',Arial,sans-serif; }
 
-/* ================================================================
-   BODY + CANVAS BACKGROUND
-   ================================================================ */
 body { 
   background: #0a0a0f; 
   color: #e6e6e6; 
@@ -40,18 +37,10 @@ body {
     #0a0a0f;
 }
 
-/* ================================================================
-   MODE 2: TAMBAHAN GLOW DI CANVAS (efek beda dari Mode 1)
-   ================================================================ */
 body.mode-2 #jimzz-neon-bg {
   filter: brightness(1.3) saturate(1.4);
 }
-
-body.mode-2 {
-  background: #0a0a0f;
-}
-
-/* Overlay tambahan buat Mode 2 */
+body.mode-2 { background: #0a0a0f; }
 body.mode-2::after {
   content: "";
   position: fixed;
@@ -66,9 +55,6 @@ body.mode-2::after {
   50% { opacity: 0.9; }
 }
 
-/* ================================================================
-   SISA STYLING JIMZZ STORE
-   ================================================================ */
 .promo-banner { position: relative; z-index: 5; background: linear-gradient(90deg, #00ff88, #00cc6a, #00ff88); background-size: 200% 100%; animation: bannerSlide 3s linear infinite; color: #000; text-align: center; padding: 10px 15px; font-size: 12px; font-weight: bold; letter-spacing: 0.5px; }
 @keyframes bannerSlide { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
 .promo-banner b { background: #000; color: #00ff88; padding: 2px 8px; border-radius: 4px; margin: 0 4px; }
@@ -363,9 +349,6 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
 </head>
 <body>
 
-<!-- ================================================================
-     CANVAS PARTICLE BACKGROUND
-     ================================================================ -->
 <canvas id="jimzz-neon-bg"></canvas>
 
 <div class="promo-banner">
@@ -629,7 +612,7 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
   let isLowEnd = (navigator.hardwareConcurrency || 4) <= 4;
   let mouse = { x: -1000, y: -1000 };
   let isPaused = false;
-  let glowMode = false; // Mode 2 toggle
+  let glowMode = false;
   
   function resizeJimzz() {
     W = canvas.width = window.innerWidth;
@@ -654,7 +637,6 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
     });
   }
   
-  // Mouse tracking (desktop)
   if (!isMobile) {
     document.addEventListener('mousemove', (e) => {
       mouse.x = e.clientX;
@@ -666,7 +648,6 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
     });
   }
   
-  // Pause kalau tab gak aktif
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
       isPaused = true;
@@ -677,7 +658,6 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
     }
   });
   
-  // Expose toggle buat Mode 2
   window.jimzzSetGlowMode = function(enabled) {
     glowMode = enabled;
   };
@@ -687,7 +667,6 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
     
     ctx.clearRect(0, 0, W, H);
     
-    // Garis koneksi antar partikel (skip di low-end biar gak lag)
     if (!isLowEnd) {
       ctx.shadowBlur = 0;
       for (let i = 0; i < particles.length; i++) {
@@ -709,7 +688,6 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
       }
     }
     
-    // Partikel hijau
     particles.forEach(p => {
       p.x += p.speedX;
       p.y += p.speedY;
@@ -719,7 +697,6 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
       if (p.y < -10) p.y = H + 10;
       if (p.y > H + 10) p.y = -10;
       
-      // Mouse repel (desktop only)
       if (!isMobile && mouse.x > 0) {
         const dx = p.x - mouse.x;
         const dy = p.y - mouse.y;
@@ -741,7 +718,6 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
     
     ctx.shadowBlur = 0;
     
-    // Garis gelombang neon
     const time = performance.now() * 0.001;
     
     for (let i = 0; i < 3; i++) {
@@ -830,13 +806,13 @@ setInterval(() => {
 }, 5000);
 
 /* ================================================================
-   6. DATA PRODUK
+   6. DATA PRODUK — MAX DIPERBESAR
    ================================================================ */
 const produkSosmed = [
   { 
     icon: "📱", nama: "Suntik Saluran WA", 
     desc: "Tambah pengikut saluran WhatsApp kamu secara aman & cepat.", 
-    hargaPerUnit: 10, unit: "pengikut", min: 100, max: 20000, hot: true,
+    hargaPerUnit: 10, unit: "pengikut", min: 100, max: 1000000, hot: true,
     inputLabel: "🔗 Link Saluran WA",
     inputPlaceholder: "Contoh: https://whatsapp.com/channel/xxxxx",
     inputValidasi: "whatsapp.com/channel",
@@ -845,7 +821,7 @@ const produkSosmed = [
   { 
     icon: "😀", nama: "Suntik Random Emoji Reaction", 
     desc: "Tambah reaction emoji random ke postingan kamu. Aman & cepat.", 
-    hargaPerUnit: 1, unit: "reaction", min: 250, max: 50000, hot: true,
+    hargaPerUnit: 1, unit: "reaction", min: 250, max: 1000000, hot: true,
     inputLabel: "🔗 Link Postingan",
     inputPlaceholder: "Contoh: https://www.tiktok.com/@user/video/xxx",
     inputValidasi: "tiktok.com",
@@ -854,7 +830,7 @@ const produkSosmed = [
   { 
     icon: "📊", nama: "Suntik Polling Vote", 
     desc: "Tambah vote ke polling kamu secara aman & cepat.", 
-    hargaPerUnit: 20, unit: "vote", min: 50, max: 10000, hot: true,
+    hargaPerUnit: 20, unit: "vote", min: 50, max: 1000000, hot: true,
     inputLabel: "🔗 Link Polling",
     inputPlaceholder: "Contoh: link polling",
     inputValidasi: "",
@@ -863,7 +839,7 @@ const produkSosmed = [
   { 
     icon: "❤️", nama: "Suntik Like TikTok", 
     desc: "Tambah like video TikTok kamu secara aman & cepat.", 
-    hargaPerUnit: 10, unit: "like", min: 100, max: 10000, hot: true,
+    hargaPerUnit: 10, unit: "like", min: 100, max: 1000000, hot: true,
     inputLabel: "🔗 Link Video TikTok",
     inputPlaceholder: "Contoh: https://www.tiktok.com/@user/video/xxx",
     inputValidasi: "tiktok.com",
@@ -872,7 +848,7 @@ const produkSosmed = [
   { 
     icon: "👁️", nama: "Suntik Views TikTok", 
     desc: "Tambah views video TikTok kamu secara aman & cepat.", 
-    hargaPerUnit: 1, unit: "views", min: 500, max: 50000, hot: false,
+    hargaPerUnit: 1, unit: "views", min: 500, max: 1000000, hot: false,
     inputLabel: "🔗 Link Video TikTok",
     inputPlaceholder: "Contoh: https://www.tiktok.com/@user/video/xxx",
     inputValidasi: "tiktok.com",
@@ -884,7 +860,7 @@ const produkJpm = [
   { 
     icon: "🚀", nama: "JPM (Jasa Push Member)", 
     desc: "Push member ke grup / channel kamu dengan cepat & aman.", 
-    hargaPerUnit: 200, unit: "member", min: 5, max: 100, hot: true,
+    hargaPerUnit: 200, unit: "member", min: 5, max: 1000000, hot: true,
     bonusMinTotal: 4000, bonusUnit: 5,
     inputLabel: "🔗 Link Grup WA",
     inputPlaceholder: "Contoh: https://chat.whatsapp.com/xxxxx",
@@ -894,7 +870,7 @@ const produkJpm = [
   { 
     icon: "📱", nama: "Nokos WA Indo", 
     desc: "Nomor kosong WhatsApp Indonesia siap pakai. Aman & terpercaya.", 
-    hargaPerUnit: 5000, unit: "nomor", min: 1, max: 5, hot: true,
+    hargaPerUnit: 5000, unit: "nomor", min: 1, max: 100, hot: true,
     inputLabel: "👤 Nama Pemesan",
     inputPlaceholder: "Contoh: Bilzz",
     inputValidasi: "",
@@ -910,6 +886,7 @@ const produkApk = [
 
 const WA_ADMIN = "6283898669427";
 const MIN_PEMBELIAN = 200;
+const MAX_TOTAL_TRANSAKSI = 1000000; // Rp 1 juta per order (biar gak ada order 200 juta)
 
 let produkAktif = null;
 let dataPemesan = { link: "", hp: "", jumlah: 0, total: 0, bonus: 0 };
@@ -1041,14 +1018,18 @@ function hitungTotal() {
 
   const validJumlah = jumlah >= parseInt(document.getElementById('jumlahInput').min) && jumlah <= parseInt(document.getElementById('jumlahInput').max);
   const validTotal = total >= MIN_PEMBELIAN;
-  document.getElementById('btnPesan').disabled = !(validJumlah && validTotal);
+  const validTotalMax = total <= MAX_TOTAL_TRANSAKSI;
+  document.getElementById('btnPesan').disabled = !(validJumlah && validTotal && validTotalMax);
 
   const hintEl = document.getElementById('jumlahHint');
   if (!validJumlah) {
-    hintEl.innerHTML = `⚠️ Jumlah tidak valid.`;
+    hintEl.innerHTML = `⚠️ Jumlah tidak valid. Minimal ${parseInt(document.getElementById('jumlahInput').min).toLocaleString('id-ID')} & maksimal ${parseInt(document.getElementById('jumlahInput').max).toLocaleString('id-ID')}.`;
     hintEl.style.color = '#ff6b6b';
   } else if (!validTotal) {
     hintEl.innerHTML = `⚠️ Minimal pembelian <b style="color:#ff6b6b">Rp ${MIN_PEMBELIAN.toLocaleString('id-ID')}</b>.`;
+    hintEl.style.color = '#ff6b6b';
+  } else if (!validTotalMax) {
+    hintEl.innerHTML = `⚠️ Maksimal transaksi <b style="color:#ff6b6b">Rp ${MAX_TOTAL_TRANSAKSI.toLocaleString('id-ID')}</b>. Kurangi jumlah order.`;
     hintEl.style.color = '#ff6b6b';
   } else if (bonus > 0) {
     hintEl.innerHTML = `🎁 <b style="color:#00ff88">BONUS +${bonus} ${produkAktif.unit}</b> aktif!`;
