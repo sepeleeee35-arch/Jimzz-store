@@ -122,6 +122,7 @@ header .counter .dot { display: inline-block; width: 8px; height: 8px; backgroun
 .jumlah-label .minmax { color: #888; font-weight: normal; font-size: 11px; margin-left: 4px; }
 .jumlah-input { width: 100%; background: #0a0a0f; border: 1px solid #2a3a32; color: #fff; padding: 14px 16px; border-radius: 12px; font-size: 16px; font-weight: bold; outline: none; transition: 0.25s; letter-spacing: 0.5px; }
 .jumlah-input:focus { border-color: #00ff88; box-shadow: 0 0 15px rgba(0,255,136,0.3); }
+.jumlah-input:disabled { background: #1a1a24; color: #666; cursor: not-allowed; }
 .jumlah-hint { color: #666; font-size: 11px; margin-top: 6px; line-height: 1.5; }
 
 .total-box { background: #0a0a0f; border: 1px dashed #2a3a32; border-radius: 12px; padding: 14px; margin: 16px 0; }
@@ -239,7 +240,7 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
 
 <a href="https://wa.me/6283898669427" target="_blank" class="wa-float">💬</a>
 
-<!-- ==================== HOME ==================== -->
+<!-- HOME -->
 <div class="tab-page active" id="page-home">
   <header>
     <div class="header-top">
@@ -254,8 +255,8 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
     <p class="sub">Pilih menu di bawah untuk mulai order</p>
     <div style="background:linear-gradient(145deg,#0d1a14,#0d0d15);border:1px solid #2a3a32;border-radius:14px;padding:20px;margin-bottom:14px;">
       <div style="font-size:36px;margin-bottom:8px;">🚀</div>
-      <div style="color:#fff;font-weight:bold;font-size:15px;margin-bottom:4px;">Jasa Push Member</div>
-      <div style="color:#888;font-size:12px;">Push member ke grup / channel kamu</div>
+      <div style="color:#fff;font-weight:bold;font-size:15px;margin-bottom:4px;">Layanan</div>
+      <div style="color:#888;font-size:12px;">JPM, Suntik All Sosmed, dll</div>
     </div>
     <div style="background:linear-gradient(145deg,#0d1a14,#0d0d15);border:1px solid #2a3a32;border-radius:14px;padding:20px;margin-bottom:14px;">
       <div style="font-size:36px;margin-bottom:8px;">📱</div>
@@ -264,7 +265,7 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
     </div>
     <div style="background:linear-gradient(145deg,#0d1a14,#0d0d15);border:1px solid #2a3a32;border-radius:14px;padding:20px;">
       <div style="font-size:36px;margin-bottom:8px;">📦</div>
-      <div style="color:#fff;font-weight:bold;font-size:15px;margin-bottom:4px;">Jual APK Premium</div>
+      <div style="color:#fff;font-weight:bold;font-size:15px;margin-bottom:4px;">Jual APK</div>
       <div style="color:#888;font-size:12px;">Aplikasi premium murah & aman</div>
     </div>
   </section>
@@ -293,22 +294,20 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
     <div class="wa-channel-info"><span>🔔 Update testimoni & promo terbaru di saluran WA</span></div>
   </section>
 
-  <footer>
-    <p>© 2025 Jimzz Store — All Rights Reserved 😈</p>
-  </footer>
+  <footer><p>© 2025 Jimzz Store — All Rights Reserved 😈</p></footer>
 </div>
 
-<!-- ==================== JPM ==================== -->
+<!-- LAYANAN -->
 <div class="tab-page" id="page-jpm">
   <section class="kategori">
-    <h2>🚀 JPM (Jasa Push Member)</h2>
-    <p class="sub">Klik "Order" untuk input jumlah member</p>
+    <h2>🚀 Layanan</h2>
+    <p class="sub">Pilih layanan yang kamu butuhkan</p>
     <div class="produk-list" id="jpm"></div>
   </section>
   <footer><p>© 2025 Jimzz Store — All Rights Reserved 😈</p></footer>
 </div>
 
-<!-- ==================== SUNTIK ALL ==================== -->
+<!-- SUNTIK ALL -->
 <div class="tab-page" id="page-suntik">
   <section class="kategori">
     <h2>📱 Suntik All Sosmed</h2>
@@ -318,10 +317,10 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
   <footer><p>© 2025 Jimzz Store — All Rights Reserved 😈</p></footer>
 </div>
 
-<!-- ==================== JUAL APK ==================== -->
+<!-- JUAL APK -->
 <div class="tab-page" id="page-apk">
   <section class="kategori">
-    <h2>📦 Jual APK Premium</h2>
+    <h2>📦 Jual APK</h2>
     <p class="sub">Aplikasi premium murah & aman</p>
     <div class="produk-list" id="apkList"></div>
   </section>
@@ -336,7 +335,7 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
   </button>
   <button class="nav-item" data-tab="jpm" onclick="switchTab('jpm')">
     <span class="nav-icon">🚀</span>
-    <span class="nav-label">JPM</span>
+    <span class="nav-label">Layanan</span>
   </button>
   <button class="nav-item" data-tab="suntik" onclick="switchTab('suntik')">
     <span class="nav-icon">📱</span>
@@ -360,7 +359,7 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
 
     <div class="step-content active" id="step1">
       <div class="modal-title-block">
-        <div class="modal-label" id="modalLabel">SUNTIK SALURAN</div>
+        <div class="modal-label" id="modalLabel">LAYANAN</div>
         <div class="modal-title" id="modalTitle">-</div>
         <div class="modal-subtitle" id="modalSubtitle">-</div>
       </div>
@@ -489,11 +488,10 @@ const produkJpm = [
   }
 ];
 
-// ⚠️ LIST APK — GANTI SENDIRI
+// ⚠️ APK — HANYA BISA BELI 1 PER ORDER
 const produkApk = [
-  { icon: "📦", nama: "APK Premium 1", desc: "Deskripsi APK — nanti lu isi sendiri.", harga: 5000, hot: false },
-  { icon: "🎬", nama: "APK Premium 2", desc: "Deskripsi APK — nanti lu isi sendiri.", harga: 10000, hot: true },
-  { icon: "🎵", nama: "APK Premium 3", desc: "Deskripsi APK — nanti lu isi sendiri.", harga: 15000, hot: false }
+  { icon: "💾", nama: "Auto Save Kontak", desc: "Aplikasi auto save kontak WhatsApp secara otomatis. Aman & gampang dipake.", harga: 5000, hot: true },
+  { icon: "🎨", nama: "APK Bikin Logo", desc: "Aplikasi bikin logo profesional langsung dari HP. Banyak template & icon.", harga: 5000, hot: true }
 ];
 
 const WA_ADMIN = "6283898669427";
@@ -527,29 +525,34 @@ function renderProduk(target, data, kategori) {
 }
 
 function bukaOrder(kategoriId, index) {
-  let data, kategori;
-  if (kategoriId === 'sosmed') { data = produkSosmed; kategori = 'SUNTIK ALL'; }
-  else if (kategoriId === 'jpm') { data = produkJpm; kategori = 'JPM'; }
-  else { data = produkApk; kategori = 'JUAL APK'; }
+  let data, kategori, isApk;
+  if (kategoriId === 'sosmed') { data = produkSosmed; kategori = 'SUNTIK ALL'; isApk = false; }
+  else if (kategoriId === 'jpm') { data = produkJpm; kategori = 'LAYANAN'; isApk = false; }
+  else { data = produkApk; kategori = 'JUAL APK'; isApk = true; }
   
-  produkAktif = { ...data[index], kategori, isApk: kategoriId === 'apkList' || kategoriId === 'apk' };
+  produkAktif = { ...data[index], kategori, isApk };
 
   document.getElementById('modalLabel').innerText = kategori;
   document.getElementById('modalTitle').innerText = produkAktif.nama;
   document.getElementById('modalSubtitle').innerText = produkAktif.desc;
 
-  if (produkAktif.isApk) {
-    document.getElementById('jumlahInput').value = 1;
-    document.getElementById('jumlahInput').min = 1;
-    document.getElementById('jumlahInput').max = 10;
-    document.getElementById('minmaxText').innerText = 'Min: 1 - Max: 10';
+  const jumlahInput = document.getElementById('jumlahInput');
+  const minmaxText = document.getElementById('minmaxText');
+
+  if (isApk) {
+    jumlahInput.value = 1;
+    jumlahInput.min = 1;
+    jumlahInput.max = 1;
+    jumlahInput.disabled = true;
+    minmaxText.innerText = '(otomatis 1)';
     document.getElementById('hargaSatuan').innerText = `Rp ${produkAktif.harga.toLocaleString('id-ID')}`;
   } else {
-    document.getElementById('minmaxText').innerText = `Min: ${produkAktif.min.toLocaleString('id-ID')} - Max: ${produkAktif.max.toLocaleString('id-ID')}`;
+    jumlahInput.disabled = false;
+    minmaxText.innerText = `Min: ${produkAktif.min.toLocaleString('id-ID')} - Max: ${produkAktif.max.toLocaleString('id-ID')}`;
     document.getElementById('hargaSatuan').innerText = `Rp ${produkAktif.hargaPerUnit.toLocaleString('id-ID')}`;
-    document.getElementById('jumlahInput').value = produkAktif.min;
-    document.getElementById('jumlahInput').min = produkAktif.min;
-    document.getElementById('jumlahInput').max = produkAktif.max;
+    jumlahInput.value = produkAktif.min;
+    jumlahInput.min = produkAktif.min;
+    jumlahInput.max = produkAktif.max;
   }
 
   document.getElementById('linkSaluran').value = '';
@@ -620,6 +623,9 @@ function hitungTotal() {
   } else if (bonus > 0) {
     hintEl.innerHTML = `🎁 <b style="color:#00ff88">BONUS +${bonus} ${produkAktif.unit}</b> aktif!`;
     hintEl.style.color = '#00ff88';
+  } else if (produkAktif.isApk) {
+    hintEl.innerText = '✅ Order APK — otomatis 1 unit.';
+    hintEl.style.color = '#00ff88';
   } else {
     hintEl.innerText = '✅ Jumlah valid, klik "Lanjut ke Pembayaran".';
     hintEl.style.color = '#00ff88';
@@ -669,7 +675,7 @@ document.getElementById('waBtn').addEventListener('click', function() {
 });
 
 renderProduk('sosmed', produkSosmed, 'SUNTIK ALL');
-renderProduk('jpm', produkJpm, 'JPM');
+renderProduk('jpm', produkJpm, 'LAYANAN');
 renderProduk('apkList', produkApk, 'JUAL APK');
 
 // ========== MUSIC PLAYER ==========
