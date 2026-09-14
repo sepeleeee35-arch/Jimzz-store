@@ -4,6 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Jimzz Store</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#00ff88">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Jimzz Store">
+<link rel="apple-touch-icon" href="https://api.qrserver.com/v1/create-qr-code/?size=192x192&data=Jimzz-Store">
 <style>
 * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',Arial,sans-serif; }
 body { 
@@ -19,6 +25,7 @@ body {
   line-height: 1.6; 
   padding-bottom: 100px; 
   overflow-x: hidden;
+  transition: background 0.4s ease, color 0.4s ease;
 }
 
 #particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
@@ -43,9 +50,32 @@ header {
   border-bottom: 2px solid #00ff88; 
   position: relative;
   z-index: 5;
+  transition: background 0.4s ease;
 }
-.header-top { display: flex; justify-content: center; align-items: center; max-width: 1100px; margin: 0 auto 15px; }
+
+/* ============ HEADER TOP + THEME TOGGLE ============ */
+.header-top { display: flex; justify-content: space-between; align-items: center; max-width: 1100px; margin: 0 auto 15px; padding: 0 5px; }
 .logo-text { color: #00ff88; font-weight: bold; font-size: 16px; letter-spacing: 1px; }
+.theme-toggle {
+  background: rgba(0,255,136,0.1);
+  border: 1px solid rgba(0,255,136,0.3);
+  color: #00ff88;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.3s;
+  flex-shrink: 0;
+}
+.theme-toggle:hover {
+  background: rgba(0,255,136,0.2);
+  transform: rotate(20deg) scale(1.1);
+  box-shadow: 0 0 15px rgba(0,255,136,0.5);
+}
 
 header h1 { font-size: 38px; color: #00ff88; text-shadow: 0 0 20px rgba(0,255,136,0.8), 0 0 40px rgba(0,255,136,0.4); }
 header .counter { display: inline-block; margin-top: 12px; background: rgba(0,255,136,0.1); border: 1px solid rgba(0,255,136,0.3); color: #00ff88; padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: bold; }
@@ -56,7 +86,7 @@ header .counter .dot { display: inline-block; width: 8px; height: 8px; backgroun
 .tab-page.active { display: block; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-.bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #0d0d15; border-top: 1px solid #2a3a32; display: flex; justify-content: space-around; align-items: center; z-index: 600; box-shadow: 0 -5px 20px rgba(0,0,0,0.5); padding: 6px 0; padding-bottom: max(6px, env(safe-area-inset-bottom)); }
+.bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #0d0d15; border-top: 1px solid #2a3a32; display: flex; justify-content: space-around; align-items: center; z-index: 600; box-shadow: 0 -5px 20px rgba(0,0,0,0.5); padding: 6px 0; padding-bottom: max(6px, env(safe-area-inset-bottom)); transition: background 0.4s ease; }
 .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 8px 4px; cursor: pointer; transition: 0.25s; background: transparent; border: none; color: #666; font-family: inherit; }
 .nav-item .nav-icon { font-size: 20px; line-height: 1; transition: 0.25s; }
 .nav-item .nav-label { font-size: 9px; font-weight: bold; letter-spacing: 0.3px; text-transform: uppercase; }
@@ -68,7 +98,6 @@ header .counter .dot { display: inline-block; width: 8px; height: 8px; backgroun
 .kategori h2 { text-align: center; font-size: 24px; color: #00ff88; margin-bottom: 8px; }
 .sub { text-align: center; color: #888; margin-bottom: 25px; font-size: 13px; }
 
-/* ============ MENU HOME (KLIKABLE) ============ */
 .menu-home {
   background: linear-gradient(145deg, #0d1a14, #0d0d15);
   border: 1px solid #2a3a32;
@@ -85,9 +114,7 @@ header .counter .dot { display: inline-block; width: 8px; height: 8px; backgroun
   box-shadow: 0 0 25px rgba(0,255,136,0.4);
   transform: translateY(-3px) scale(1.02);
 }
-.menu-home:active {
-  transform: translateY(-1px) scale(0.99);
-}
+.menu-home:active { transform: translateY(-1px) scale(0.99); }
 .menu-home::after {
   content: "›";
   position: absolute;
@@ -100,28 +127,11 @@ header .counter .dot { display: inline-block; width: 8px; height: 8px; backgroun
   opacity: 0.5;
   transition: 0.25s;
 }
-.menu-home:hover::after {
-  opacity: 1;
-  right: 15px;
-}
-.menu-home-icon {
-  font-size: 36px;
-  margin-bottom: 8px;
-  transition: 0.3s;
-}
-.menu-home:hover .menu-home-icon {
-  transform: scale(1.15);
-}
-.menu-home-title {
-  color: #fff;
-  font-weight: bold;
-  font-size: 15px;
-  margin-bottom: 4px;
-}
-.menu-home-desc {
-  color: #888;
-  font-size: 12px;
-}
+.menu-home:hover::after { opacity: 1; right: 15px; }
+.menu-home-icon { font-size: 36px; margin-bottom: 8px; transition: 0.3s; }
+.menu-home:hover .menu-home-icon { transform: scale(1.15); }
+.menu-home-title { color: #fff; font-weight: bold; font-size: 15px; margin-bottom: 4px; }
+.menu-home-desc { color: #888; font-size: 12px; }
 
 .pengumuman {
   background: linear-gradient(145deg, rgba(255, 200, 0, 0.08), rgba(255, 150, 0, 0.05));
@@ -137,51 +147,21 @@ header .counter .dot { display: inline-block; width: 8px; height: 8px; backgroun
   0%, 100% { box-shadow: 0 0 0 rgba(255, 200, 0, 0); }
   50% { box-shadow: 0 0 20px rgba(255, 200, 0, 0.2); }
 }
-.pengumuman-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 10px;
-}
-.pengumuman-icon {
-  font-size: 20px;
-  animation: pengumumanIcon 1.5s ease-in-out infinite;
-}
-@keyframes pengumumanIcon {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.2); }
-}
-.pengumuman-title {
-  color: #ffc800;
-  font-size: 13px;
-  font-weight: bold;
-  letter-spacing: 1px;
-}
-.pengumuman-text {
-  color: #ddd;
-  font-size: 12px;
-  line-height: 1.6;
-  margin-bottom: 8px;
-}
-.pengumuman-text:last-child {
-  margin-bottom: 0;
-}
-.pengumuman-text b {
-  color: #ffc800;
-  font-weight: bold;
-}
+.pengumuman-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.pengumuman-icon { font-size: 20px; animation: pengumumanIcon 1.5s ease-in-out infinite; }
+@keyframes pengumumanIcon { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
+.pengumuman-title { color: #ffc800; font-size: 13px; font-weight: bold; letter-spacing: 1px; }
+.pengumuman-text { color: #ddd; font-size: 12px; line-height: 1.6; margin-bottom: 8px; }
+.pengumuman-text:last-child { margin-bottom: 0; }
+.pengumuman-text b { color: #ffc800; font-weight: bold; }
 
 .pengumuman.refund {
   background: linear-gradient(145deg, rgba(0, 200, 255, 0.08), rgba(0, 150, 255, 0.05));
   border: 1px solid rgba(0, 200, 255, 0.3);
   border-left: 4px solid #00c8ff;
 }
-.pengumuman.refund .pengumuman-title {
-  color: #00c8ff;
-}
-.pengumuman.refund .pengumuman-text b {
-  color: #00c8ff;
-}
+.pengumuman.refund .pengumuman-title { color: #00c8ff; }
+.pengumuman.refund .pengumuman-text b { color: #00c8ff; }
 
 .produk-list { display: flex; flex-direction: column; gap: 14px; }
 .produk-card { background: linear-gradient(145deg, #0d1a14, #0d0d15); border: 1px solid #2a3a32; border-radius: 14px; padding: 20px 18px; transition: 0.3s; position: relative; }
@@ -302,7 +282,7 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
 .wa-float:hover { transform: scale(1.1); }
 @keyframes waPulse { 0%,100% { box-shadow: 0 5px 20px rgba(37,211,102,0.6); } 50% { box-shadow: 0 5px 30px rgba(37,211,102,0.9), 0 0 0 10px rgba(37,211,102,0.1); } }
 
-.music-player { position: fixed; bottom: 80px; right: 12px; left: auto; width: 220px; max-width: calc(100% - 24px); background: #0d1a14; border: 1px solid #2a3a32; border-radius: 10px; box-shadow: 0 6px 18px rgba(0,0,0,0.7); z-index: 300; overflow: hidden; }
+.music-player { position: fixed; bottom: 80px; right: 12px; left: auto; width: 220px; max-width: calc(100% - 24px); background: #0d1a14; border: 1px solid #2a3a32; border-radius: 10px; box-shadow: 0 6px 18px rgba(0,0,0,0.7); z-index: 300; overflow: hidden; transition: background 0.4s ease; }
 .music-mini { display: flex; align-items: center; gap: 7px; padding: 7px 9px; cursor: pointer; }
 .music-cover { width: 30px; height: 30px; border-radius: 6px; background: #0a0a0f; display: flex; align-items: center; justify-content: center; flex-shrink: 0; position: relative; overflow: hidden; }
 .music-cover::before { content: ""; width: 2px; height: 4px; background: #00ff88; border-radius: 1px; box-shadow: 4px 0 0 #00ff88, 8px 0 0 #00ff88, 12px 0 0 #00ff88, -4px 0 0 #00ff88, -8px 0 0 #00ff88; animation: eqBar 0.8s ease-in-out infinite; }
@@ -337,6 +317,91 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
 .music-list::-webkit-scrollbar { width: 3px; }
 .music-list::-webkit-scrollbar-thumb { background: #00ff88; border-radius: 2px; }
 
+/* ============ LIGHT MODE ============ */
+body.light-mode {
+  background: #f0f4f2;
+  background-image: 
+    radial-gradient(circle at 20% 20%, rgba(0, 200, 100, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 80% 80%, rgba(0, 200, 100, 0.06) 0%, transparent 40%),
+    linear-gradient(rgba(0, 200, 100, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 200, 100, 0.03) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 30px 30px, 30px 30px;
+  color: #1a1a1a;
+}
+body.light-mode header {
+  background: radial-gradient(circle at 50% 100%, rgba(0, 200, 100, 0.15), transparent 70%),
+              linear-gradient(135deg, #d4f5e0, #f0f4f2);
+}
+body.light-mode header h1 { color: #00a855; text-shadow: 0 0 20px rgba(0,200,100,0.4); }
+body.light-mode .header-top .logo-text { color: #00a855; }
+body.light-mode .theme-toggle { background: rgba(0,168,85,0.1); border-color: #00a855; color: #00a855; }
+body.light-mode header .counter { background: rgba(0,168,85,0.1); border-color: rgba(0,168,85,0.3); color: #00a855; }
+body.light-mode header .counter .dot { background: #00a855; }
+body.light-mode .kategori h2 { color: #00a855; }
+body.light-mode .sub { color: #666; }
+body.light-mode .menu-home,
+body.light-mode .produk-card,
+body.light-mode .testi-card {
+  background: #ffffff;
+  border-color: #c5e0d0;
+}
+body.light-mode .menu-home:hover,
+body.light-mode .produk-card:hover,
+body.light-mode .testi-card:hover {
+  border-color: #00a855;
+  box-shadow: 0 0 25px rgba(0,168,85,0.3);
+}
+body.light-mode .menu-home-title,
+body.light-mode .produk-nama,
+body.light-mode .testi-text { color: #1a1a1a; }
+body.light-mode .menu-home-desc,
+body.light-mode .produk-desc { color: #666; }
+body.light-mode .testi-name { color: #00a855; }
+body.light-mode .produk-label { color: #00a855; }
+body.light-mode .produk-harga { color: #00a855; }
+body.light-mode .produk-harga-label,
+body.light-mode .produk-harga span { color: #999; }
+body.light-mode footer { color: #999; border-color: #ddd; }
+body.light-mode .bottom-nav { background: #ffffff; border-color: #c5e0d0; }
+body.light-mode .nav-item { color: #888; }
+body.light-mode .nav-item.active { color: #00a855; }
+body.light-mode .wa-channel-info { color: #666; }
+body.light-mode .pengumuman {
+  background: linear-gradient(145deg, rgba(255, 200, 0, 0.15), rgba(255, 150, 0, 0.08));
+  border-color: rgba(200, 150, 0, 0.4);
+}
+body.light-mode .pengumuman-text { color: #333; }
+body.light-mode .pengumuman.refund {
+  background: linear-gradient(145deg, rgba(0, 150, 255, 0.12), rgba(0, 100, 200, 0.08));
+  border-color: rgba(0, 150, 255, 0.4);
+}
+body.light-mode .music-player { background: #ffffff; border-color: #c5e0d0; }
+body.light-mode .music-mini-title { color: #1a1a1a; }
+body.light-mode .music-mini-artist { color: #888; }
+body.light-mode .music-mini-controls button { color: #333; }
+body.light-mode .music-progress { background: #d5d5d5; }
+body.light-mode .music-expanded { background: #f5f9f7; }
+body.light-mode .music-list-header { color: #666; border-color: #ddd; }
+body.light-mode .music-item { color: #333; }
+body.light-mode .music-item:hover { background: rgba(0,168,85,0.1); }
+body.light-mode .music-item-title { color: #1a1a1a; }
+body.light-mode .music-item-artist { color: #888; }
+body.light-mode .modal-box { background: #ffffff; border-color: #c5e0d0; }
+body.light-mode .modal-title { color: #1a1a1a; }
+body.light-mode .modal-subtitle { color: #666; }
+body.light-mode .jumlah-input,
+body.light-mode .form-box input { background: #f5f9f7; border-color: #c5e0d0; color: #1a1a1a; }
+body.light-mode .total-box { background: #f5f9f7; border-color: #c5e0d0; }
+body.light-mode .total-row .label { color: #666; }
+body.light-mode .total-row .value { color: #1a1a1a; }
+body.light-mode .total-row.big .label,
+body.light-mode .total-row.big .value { color: #00a855; }
+body.light-mode .qris-nominal { background: rgba(0,168,85,0.1); border-color: #00a855; color: #00a855; }
+body.light-mode .waiting-box { background: #f5f9f7; }
+body.light-mode .term-text { color: #999; }
+body.light-mode .form-note { color: #666; }
+body.light-mode .form-box label { color: #666; }
+
 @media (max-width: 480px) {
   .music-player { bottom: 75px; right: 10px; left: auto; width: 200px; }
   .wa-float { width: 44px; height: 44px; font-size: 20px; top: 12px; right: 12px; }
@@ -363,6 +428,7 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
   <header>
     <div class="header-top">
       <span class="logo-text">💚 JIMZZ STORE</span>
+      <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn" title="Ganti Tema">🌙</button>
     </div>
     <h1>Jimzz Store</h1>
     <div class="counter"><span class="dot"></span>🔥 <span id="viewCount">1.234</span> orang sudah order</div>
@@ -596,6 +662,33 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
 </div>
 
 <script>
+// ============ THEME TOGGLE ============
+function toggleTheme() {
+  const body = document.body;
+  const btn = document.getElementById('themeBtn');
+  body.classList.toggle('light-mode');
+  const isLight = body.classList.contains('light-mode');
+  btn.innerText = isLight ? '☀️' : '🌙';
+  localStorage.setItem('jimzzTheme', isLight ? 'light' : 'dark');
+}
+
+// Load theme dari localStorage
+(function loadTheme() {
+  const savedTheme = localStorage.getItem('jimzzTheme');
+  if (savedTheme === 'light') {
+    document.body.classList.add('light-mode');
+    const btn = document.getElementById('themeBtn');
+    if (btn) btn.innerText = '☀️';
+  }
+})();
+
+// ============ PWA SERVICE WORKER ============
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(err => console.log('SW error:', err));
+  });
+}
+
 // ============ TAB SWITCH ============
 function switchTab(tab) {
   document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
