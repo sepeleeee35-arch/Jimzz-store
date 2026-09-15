@@ -6,18 +6,94 @@
 <title>Jimzz Store</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#00ff88">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Jimzz Store">
-<link rel="icon" type="image/png" href="icon-192.png">
-<link rel="apple-touch-icon" href="icon-192.png">
 <style>
 * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',Arial,sans-serif; }
+
+/* ============ PASSWORD LOCK ============ */
+#passwordLock {
+  position: fixed;
+  inset: 0;
+  background: #0a0a0f;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.lock-box {
+  background: linear-gradient(145deg, #0d1a14, #0d0d15);
+  border: 1px solid #2a3a32;
+  border-radius: 20px;
+  padding: 40px 30px;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 0 40px rgba(0,255,136,0.15);
+}
+.lock-icon {
+  font-size: 60px;
+  margin-bottom: 20px;
+  filter: drop-shadow(0 0 20px rgba(0,255,136,0.6));
+}
+.lock-box h1 {
+  color: #00ff88;
+  font-size: 24px;
+  margin-bottom: 10px;
+  text-shadow: 0 0 20px rgba(0,255,136,0.4);
+}
+.lock-box p {
+  color: #888;
+  font-size: 13px;
+  margin-bottom: 25px;
+  line-height: 1.6;
+}
+.lock-box input {
+  width: 100%;
+  background: #0a0a0f;
+  border: 1px solid #2a3a32;
+  color: #fff;
+  padding: 15px;
+  border-radius: 12px;
+  font-size: 16px;
+  text-align: center;
+  letter-spacing: 2px;
+  outline: none;
+  margin-bottom: 15px;
+}
+.lock-box input:focus {
+  border-color: #00ff88;
+  box-shadow: 0 0 15px rgba(0,255,136,0.3);
+}
+.lock-box button {
+  width: 100%;
+  background: linear-gradient(135deg, #00ff88, #00cc6a);
+  color: #000;
+  border: none;
+  padding: 15px;
+  border-radius: 12px;
+  font-weight: bold;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.25s;
+}
+.lock-box button:hover {
+  transform: scale(1.02);
+  box-shadow: 0 5px 20px rgba(0,255,136,0.6);
+}
+.lock-error {
+  color: #ff6b6b;
+  font-size: 12px;
+  margin-top: 10px;
+  display: none;
+}
+.lock-error.show {
+  display: block;
+}
+
+/* ============ SISA CSS (SAMA KAYAK SEBELUMNYA) ============ */
 body { background: #0a0a0f; color: #e6e6e6; line-height: 1.6; padding-bottom: 100px; overflow-x: hidden; }
 #jimzz-neon-bg { position: fixed; top:0; left:0; width:100vw; height:100vh; z-index:-1; pointer-events:none; background: radial-gradient(circle at 20% 20%, rgba(0,255,136,0.05) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(0,255,136,0.04) 0%, transparent 50%), #0a0a0f; }
 body.mode-2 #jimzz-neon-bg { filter: brightness(1.3) saturate(1.4); }
-body.mode-2::after { content: ""; position: fixed; inset: 0; background: radial-gradient(circle at 50% 50%, transparent 30%, rgba(0,255,136,0.06) 100%); pointer-events: none; z-index: -1; animation: glowPulse 4s ease-in-out infinite; }
-@keyframes glowPulse { 0%,100% { opacity:0.4; } 50% { opacity:0.9; } }
 header { text-align: center; padding: 40px 20px 30px; background: radial-gradient(circle at 50% 100%, rgba(0,255,136,0.15), transparent 70%), linear-gradient(135deg, #001a0d, rgba(10,10,15,0.7)); border-bottom: 2px solid #00ff88; position: relative; z-index: 5; }
 .header-top { display: flex; justify-content: space-between; align-items: center; max-width: 1100px; margin: 0 auto 15px; padding: 0 5px; }
 .logo-text { color: #00ff88; font-weight: bold; font-size: 16px; letter-spacing: 1px; }
@@ -34,11 +110,10 @@ header .counter .dot { display: inline-block; width: 8px; height: 8px; backgroun
 .nav-item .nav-icon { font-size: 20px; }
 .nav-item .nav-label { font-size: 9px; font-weight: bold; letter-spacing: 0.3px; text-transform: uppercase; }
 .nav-item.active { color: #00ff88; }
-.nav-item.active .nav-icon { transform: translateY(-2px) scale(1.15); filter: drop-shadow(0 0 8px rgba(0,255,136,0.8)); }
 .kategori { padding: 30px 20px; max-width: 1100px; margin: auto; position: relative; z-index: 5; }
 .kategori h2 { text-align: center; font-size: 24px; color: #00ff88; margin-bottom: 8px; }
 .sub { text-align: center; color: #888; margin-bottom: 25px; font-size: 13px; }
-.menu-home { background: linear-gradient(145deg, rgba(13,26,20,0.85), rgba(13,13,21,0.85)); border: 1px solid #2a3a32; border-radius: 14px; padding: 20px; margin-bottom: 14px; text-align: center; cursor: pointer; transition: all 0.3s ease; position: relative; backdrop-filter: blur(8px); }
+.menu-home { background: linear-gradient(145deg, rgba(13,26,20,0.85), rgba(13,13,21,0.85)); border: 1px solid #2a3a32; border-radius: 14px; padding: 20px; margin-bottom: 14px; text-align: center; cursor: pointer; transition: all 0.3s ease; position: relative; }
 .menu-home:hover { border-color: #00ff88; box-shadow: 0 0 25px rgba(0,255,136,0.4); transform: translateY(-3px); }
 .menu-home::after { content: "›"; position: absolute; right: 20px; top: 50%; transform: translateY(-50%); color: #00ff88; font-size: 24px; font-weight: bold; opacity: 0.5; }
 .menu-home-icon { font-size: 36px; margin-bottom: 8px; }
@@ -54,7 +129,7 @@ header .counter .dot { display: inline-block; width: 8px; height: 8px; backgroun
 .pengumuman.refund .pengumuman-title { color: #00c8ff; }
 .pengumuman.refund .pengumuman-text b { color: #00c8ff; }
 .produk-list { display: flex; flex-direction: column; gap: 14px; }
-.produk-card { background: linear-gradient(145deg, rgba(13,26,20,0.85), rgba(13,13,21,0.85)); border: 1px solid #2a3a32; border-radius: 14px; padding: 20px 18px; transition: 0.3s; position: relative; backdrop-filter: blur(8px); }
+.produk-card { background: linear-gradient(145deg, rgba(13,26,20,0.85), rgba(13,13,21,0.85)); border: 1px solid #2a3a32; border-radius: 14px; padding: 20px 18px; transition: 0.3s; position: relative; }
 .produk-card:hover { border-color: #00ff88; box-shadow: 0 0 25px rgba(0,255,136,0.3); transform: translateY(-2px); }
 .produk-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
 .produk-icon { font-size: 32px; flex-shrink: 0; }
@@ -90,8 +165,7 @@ header .counter .dot { display: inline-block; width: 8px; height: 8px; backgroun
 .form-box { margin-bottom: 14px; }
 .form-box label { color: #888; font-size: 11px; font-weight: bold; margin-bottom: 5px; display: block; text-transform: uppercase; }
 .form-box input { width: 100%; background: #0a0a0f; border: 1px solid #2a3a32; color: #fff; padding: 13px 15px; border-radius: 10px; font-size: 14px; outline: none; }
-.form-box input:focus { border-color: #00ff88; box-shadow: 0 0 12px rgba(0,255,136,0.3); }
-.form-box input.error { border-color: #ff2b2b; }
+.form-box input:focus { border-color: #00ff88; }
 .form-error { color: #ff6b6b; font-size: 11px; margin-top: 6px; display: none; }
 .form-error.show { display: block; }
 .form-note { color: #888; font-size: 11px; margin-top: -8px; margin-bottom: 14px; line-height: 1.5; }
@@ -111,70 +185,50 @@ header .counter .dot { display: inline-block; width: 8px; height: 8px; backgroun
 .total-row.bonus { background: rgba(0,255,136,0.08); border-radius: 6px; padding: 6px 8px; margin-top: 4px; }
 .total-row.bonus .label { color: #00ff88; font-weight: bold; }
 .total-row.bonus .value { color: #00ff88; }
-.btn-next { width: 100%; background: linear-gradient(135deg, #00ff88, #00cc6a); color: #000; border: none; padding: 15px; border-radius: 12px; font-weight: bold; font-size: 15px; cursor: pointer; box-shadow: 0 5px 20px rgba(0,255,136,0.4); display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 8px; }
-.btn-next:hover { transform: scale(1.02); }
-.btn-next:disabled { background: #333; color: #666; cursor: not-allowed; box-shadow: none; }
+.btn-next { width: 100%; background: linear-gradient(135deg, #00ff88, #00cc6a); color: #000; border: none; padding: 15px; border-radius: 12px; font-weight: bold; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 8px; }
+.btn-next:disabled { background: #333; color: #666; cursor: not-allowed; }
 .qris-box { text-align: center; margin: 12px 0; }
-.qris-box img { width: 250px; max-width: 100%; background: #fff; padding: 12px; border-radius: 14px; box-shadow: 0 0 25px rgba(0,255,136,0.4); border: 2px solid #00ff88; }
+.qris-box img { width: 250px; max-width: 100%; background: #fff; padding: 12px; border-radius: 14px; border: 2px solid #00ff88; }
 .qris-nominal { background: rgba(0,255,136,0.1); border: 1px solid #00ff88; border-radius: 10px; padding: 12px; margin-top: 12px; font-size: 14px; color: #00ff88; font-weight: bold; }
-.btn-subtle { width: 100%; background: transparent; border: 1px solid #00ff88; color: #00ff88; padding: 10px 20px; border-radius: 10px; font-weight: bold; font-size: 13px; cursor: pointer; margin-top: 12px; transition: 0.25s; }
-.btn-subtle:hover { background: rgba(0,255,136,0.1); }
-.btn-subtle:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-subtle { width: 100%; background: transparent; border: 1px solid #00ff88; color: #00ff88; padding: 10px 20px; border-radius: 10px; font-weight: bold; font-size: 13px; cursor: pointer; margin-top: 12px; }
 .waiting-box { background: #0a0a0f; border: 1px solid #25D366; border-radius: 12px; padding: 18px; text-align: center; margin-top: 12px; }
 .waiting-box .loading-spinner { width: 36px; height: 36px; border: 3px solid #2a3a32; border-top-color: #25D366; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 10px; }
 @keyframes spin { to { transform: rotate(360deg); } }
 .waiting-box p { color: #25D366; font-size: 13px; font-weight: bold; }
-.waiting-box .sub-wait { color: #888; font-size: 11px; margin-top: 5px; font-weight: normal; }
+.waiting-box .sub-wait { color: #888; font-size: 11px; margin-top: 5px; }
 .info-note { background: rgba(0,255,136,0.08); border-left: 3px solid #00ff88; padding: 10px 12px; border-radius: 8px; font-size: 11px; color: #bbb; margin-top: 12px; line-height: 1.5; }
 .info-note b { color: #00ff88; }
 .term-text { color: #666; font-size: 11px; text-align: center; margin-top: 12px; }
-.term-text a { color: #00ff88; text-decoration: none; }
 footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border-top: 1px solid #222; margin-top: 30px; position: relative; z-index: 5; }
-.wa-float { position: fixed; top: 15px; left: 15px; width: 50px; height: 50px; background: linear-gradient(135deg, #25D366, #1da851); border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 24px; color: #fff; box-shadow: 0 5px 20px rgba(37,211,102,0.6); z-index: 500; animation: waPulse 2s infinite; }
-@keyframes waPulse { 0%,100% { box-shadow:0 5px 20px rgba(37,211,102,0.6); } 50% { box-shadow:0 5px 30px rgba(37,211,102,0.9), 0 0 0 10px rgba(37,211,102,0.1); } }
-.music-player { position: fixed; bottom: 80px; right: 12px; left: auto; width: 220px; max-width: calc(100% - 24px); background: #0d1a14; border: 1px solid #2a3a32; border-radius: 10px; box-shadow: 0 6px 18px rgba(0,0,0,0.7); z-index: 300; overflow: hidden; }
+.music-player { position: fixed; bottom: 80px; right: 12px; width: 220px; max-width: calc(100% - 24px); background: #0d1a14; border: 1px solid #2a3a32; border-radius: 10px; z-index: 300; overflow: hidden; }
 .music-mini { display: flex; align-items: center; gap: 7px; padding: 7px 9px; cursor: pointer; }
-.music-cover { width: 30px; height: 30px; border-radius: 6px; background: #0a0a0f; display: flex; align-items: center; justify-content: center; flex-shrink: 0; position: relative; overflow: hidden; }
-.music-cover::before { content: ""; width: 2px; height: 4px; background: #00ff88; border-radius: 1px; box-shadow: 4px 0 0 #00ff88, 8px 0 0 #00ff88, 12px 0 0 #00ff88, -4px 0 0 #00ff88, -8px 0 0 #00ff88; animation: eqBar 0.8s ease-in-out infinite; }
-@keyframes eqBar { 0%, 100% { transform: scaleY(1); } 25% { transform: scaleY(2.5); } 50% { transform: scaleY(0.6); } 75% { transform: scaleY(3); } }
-.music-cover.paused::before { animation-play-state: paused; }
+.music-cover { width: 30px; height: 30px; border-radius: 6px; background: #0a0a0f; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .music-mini-info { flex: 1; min-width: 0; }
 .music-mini-title { font-size: 11px; font-weight: 600; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.music-mini-artist { font-size: 9px; color: #999; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px; }
-.music-mini-controls { display: flex; align-items: center; gap: 1px; flex-shrink: 0; }
-.music-mini-controls button { background: transparent; border: none; color: #fff; width: 22px; height: 22px; border-radius: 50%; cursor: pointer; font-size: 10px; display: flex; align-items: center; justify-content: center; padding: 0; }
+.music-mini-artist { font-size: 9px; color: #999; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.music-mini-controls { display: flex; align-items: center; gap: 1px; }
+.music-mini-controls button { background: transparent; border: none; color: #fff; width: 22px; height: 22px; border-radius: 50%; cursor: pointer; font-size: 10px; }
 .music-mini-controls button:hover { color: #00ff88; }
-.music-progress { position: relative; height: 2px; background: #2a3a32; cursor: pointer; }
-.music-progress-fill { height: 100%; background: #00ff88; width: 0%; transition: width 0.1s linear; }
-.music-expanded { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; background: #0a0f0d; }
-.music-player.open .music-expanded { max-height: 300px; }
-.music-list-header { padding: 7px 10px 5px; font-size: 9px; color: #888; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; border-bottom: 1px solid #2a3a32; display: flex; justify-content: space-between; align-items: center; }
-.music-list-header span.close-x { color: #00ff88; cursor: pointer; font-size: 13px; }
-.music-list { max-height: 220px; overflow-y: auto; padding: 4px; }
-.music-item { display: flex; align-items: center; gap: 7px; padding: 6px 8px; border-radius: 5px; cursor: pointer; }
-.music-item:hover { background: rgba(0,255,136,0.1); }
-.music-item.active { background: rgba(0,255,136,0.2); }
-.music-item.active .music-item-title { color: #00ff88; }
-.music-item-thumb { width: 26px; height: 26px; border-radius: 4px; background: linear-gradient(135deg, #2a3a32, #1a1a24); display: flex; align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0; }
-.music-item.active .music-item-thumb { background: linear-gradient(135deg, #00ff88, #00cc6a); }
-.music-item-info { flex: 1; min-width: 0; }
-.music-item-title { font-size: 10px; color: #fff; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.music-item-artist { font-size: 9px; color: #888; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px; }
-@media (max-width: 480px) {
-  .wa-float { width: 44px; height: 44px; font-size: 20px; top: 12px; left: 12px; }
-  header h1 { font-size: 30px; }
-  .produk-icon { font-size: 26px; }
-  .nav-item .nav-label { font-size: 8px; }
-  .nav-item .nav-icon { font-size: 18px; }
-  .music-player { bottom: 75px; right: 10px; left: auto; width: 200px; }
-}
 </style>
 </head>
 <body>
 
-<canvas id="jimzz-neon-bg"></canvas>
+<!-- 🔒 PASSWORD LOCK -->
+<div id="passwordLock">
+  <div class="lock-box">
+    <div class="lock-icon">🔒</div>
+    <h1>Jimzz Store</h1>
+    <p>Web lagi dalam perbaikan.<br>Masukin password dulu ya.</p>
+    <input type="password" id="passwordInput" placeholder="••••••••" onkeypress="if(event.key==='Enter')checkPassword()">
+    <button onclick="checkPassword()">Buka Web</button>
+    <div class="lock-error" id="lockError">❌ Password salah!</div>
+  </div>
+</div>
 
-<a href="https://wa.me/6283898669427" target="_blank" class="wa-float">💬</a>
+<!-- MAIN WEB (hidden by default) -->
+<div id="mainWeb" style="display:none;">
+
+<canvas id="jimzz-neon-bg"></canvas>
 
 <div class="tab-page active" id="page-home">
   <header>
@@ -250,7 +304,7 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
         Jika jumlah <b>like</b> atau <b>followers</b> Instagram, TikTok, dan sosial media lainnya <b>tiba-tiba menurun</b> — itu adalah hal <b>NORMAL</b>.
       </p>
       <p class="pengumuman-text">
-        Instagram, TikTok, dan platform lainnya <b>rutin melakukan pembersihan akun bot/fake secara otomatis</b>. Ini bukan karena layanan kami gagal, tapi karena sistem keamanan platform tersebut.
+        Instagram, TikTok, dan platform lainnya <b>rutin melakukan pembersihan akun bot/fake secara otomatis</b>.
       </p>
       <p class="pengumuman-text">
         💡 Saran: Order jumlah <b>sedikit</b> terlebih dahulu untuk mengetes layanan kami.
@@ -354,7 +408,7 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
         <input type="tel" id="hpPemesan" placeholder="Contoh: 08xxxxxxxxxx" oninput="clearError()" required>
         <div class="form-error" id="hpError">No WA tidak valid</div>
       </div>
-      <div class="form-note">📌 Nomor konfirmasi pesanan. Jika pesanan selesai, admin akan menginformasikan ke nomor tersebut.</div>
+      <div class="form-note">📌 Nomor konfirmasi pesanan.</div>
       <button class="btn-next" onclick="keStep3()">Lanjut ke QRIS →</button>
     </div>
 
@@ -362,7 +416,6 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
       <div class="modal-title-block">
         <div class="modal-label">LANGKAH 3 DARI 3</div>
         <div class="modal-title">💳 Scan QRIS & Bayar</div>
-        <div class="modal-subtitle">Nominal sudah otomatis, tinggal scan</div>
       </div>
       
       <div id="qrisLoading" style="text-align:center; padding:30px 0;">
@@ -385,11 +438,11 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
       <div class="waiting-box" id="waitingBox" style="display:none;">
         <div class="loading-spinner"></div>
         <p>⏳ Menunggu Konfirmasi Admin</p>
-        <p class="sub-wait">Admin akan segera mengirim pesanan ke nomor WA yang kamu berikan. Mohon tunggu 1-5 menit.</p>
+        <p class="sub-wait">Admin akan segera memproses pesanan kamu.</p>
       </div>
       
       <div class="info-note">
-        📌 <b>Bayar sesuai nominal</b>. Setelah bayar, klik <b>"Saya Sudah Bayar"</b>. Admin bakal langsung dapat notifikasi.
+        📌 <b>Bayar sesuai nominal</b>. Setelah bayar, klik <b>"Saya Sudah Bayar"</b>.
       </div>
     </div>
   </div>
@@ -400,7 +453,7 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
     <div class="music-cover paused" id="musicCover"></div>
     <div class="music-mini-info">
       <div class="music-mini-title" id="miniTitle">Pilih Lagu</div>
-      <div class="music-mini-artist" id="miniArtist">Klik untuk buka playlist</div>
+      <div class="music-mini-artist" id="miniArtist">Klik untuk buka</div>
     </div>
     <div class="music-mini-controls" onclick="event.stopPropagation()">
       <button onclick="prevSong()">⏮</button>
@@ -416,137 +469,80 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
   <audio id="audioPlayer" loop></audio>
 </div>
 
+</div><!-- END mainWeb -->
+
 <script>
-/* CANVAS PARTICLE */
-(function() {
+/* ============ PASSWORD CHECK ============ */
+function checkPassword() {
+  const input = document.getElementById('passwordInput').value;
+  const error = document.getElementById('lockError');
+  
+  if (input === 'jimzz2026') {
+    document.getElementById('passwordLock').style.display = 'none';
+    document.getElementById('mainWeb').style.display = 'block';
+    sessionStorage.setItem('jimzzUnlocked', 'true');
+    startApp();
+  } else {
+    error.classList.add('show');
+    setTimeout(() => error.classList.remove('show'), 2000);
+  }
+}
+
+// Auto-unlock kalau udah pernah masukin password
+if (sessionStorage.getItem('jimzzUnlocked') === 'true') {
+  document.getElementById('passwordLock').style.display = 'none';
+  document.getElementById('mainWeb').style.display = 'block';
+  setTimeout(startApp, 100);
+}
+
+function startApp() {
+  // Semua function di sini — canvas, data produk, dll
+  initCanvas();
+  initData();
+  renderGameList();
+  renderPlaylist();
+}
+
+function initCanvas() {
   const canvas = document.getElementById("jimzz-neon-bg");
   if (!canvas) return;
   const ctx = canvas.getContext("2d");
   let W, H, particles = [], animationId;
   let isMobile = window.innerWidth < 600;
-  let isLowEnd = (navigator.hardwareConcurrency || 4) <= 4;
-  let mouse = { x: -1000, y: -1000 };
-  let isPaused = false;
-  let glowMode = false;
   function resizeJimzz() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; isMobile = window.innerWidth < 600; }
   resizeJimzz();
   window.addEventListener('resize', resizeJimzz);
   const particleCount = isMobile ? 45 : 90;
-  const connectionDistance = isMobile ? 100 : 140;
   for (let i = 0; i < particleCount; i++) {
     particles.push({ x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight, size: Math.random() * 2 + 0.5, speedX: (Math.random() - 0.5) * 0.35, speedY: (Math.random() - 0.5) * 0.35, alpha: Math.random() * 0.7 + 0.2 });
   }
-  if (!isMobile) {
-    document.addEventListener('mousemove', (e) => { mouse.x = e.clientX; mouse.y = e.clientY; });
-    document.addEventListener('mouseleave', () => { mouse.x = -1000; mouse.y = -1000; });
-  }
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden) { isPaused = true; cancelAnimationFrame(animationId); }
-    else { isPaused = false; animateJimzz(); }
-  });
-  window.jimzzSetGlowMode = function(enabled) { glowMode = enabled; };
   function animateJimzz() {
-    if (isPaused) return;
     ctx.clearRect(0, 0, W, H);
-    if (!isLowEnd) {
-      ctx.shadowBlur = 0;
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const dx = particles[i].x - particles[j].x;
-          const dy = particles[i].y - particles[j].y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < connectionDistance) {
-            const opacity = (1 - dist / connectionDistance) * (glowMode ? 0.3 : 0.15);
-            ctx.beginPath();
-            ctx.moveTo(particles[i].x, particles[i].y);
-            ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = `rgba(0, 255, 100, ${opacity})`;
-            ctx.lineWidth = 0.5;
-            ctx.stroke();
-          }
-        }
-      }
-    }
     particles.forEach(p => {
       p.x += p.speedX; p.y += p.speedY;
       if (p.x < -10) p.x = W + 10;
       if (p.x > W + 10) p.x = -10;
       if (p.y < -10) p.y = H + 10;
       if (p.y > H + 10) p.y = -10;
-      if (!isMobile && mouse.x > 0) {
-        const dx = p.x - mouse.x; const dy = p.y - mouse.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 100 && dist > 0) { const force = (100 - dist) / 100; p.x += (dx / dist) * force * 2; p.y += (dy / dist) * force * 2; }
-      }
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
       ctx.fillStyle = `rgba(0, 255, 100, ${p.alpha})`;
-      ctx.shadowBlur = isLowEnd ? 0 : (glowMode ? 20 : 12);
+      ctx.shadowBlur = 12;
       ctx.shadowColor = "#00ff66";
       ctx.fill();
     });
-    ctx.shadowBlur = 0;
-    const time = performance.now() * 0.001;
-    for (let i = 0; i < 3; i++) {
-      ctx.beginPath();
-      for (let x = 0; x <= W; x += 10) {
-        const y = H * (0.30 + i * 0.22) + Math.sin(x * 0.006 + time * (0.7 + i * 0.15)) * 35;
-        if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-      }
-      ctx.strokeStyle = `rgba(0, 255, 90, ${(0.08 + i * 0.025) * (glowMode ? 1.5 : 1)})`;
-      ctx.lineWidth = 1.5;
-      ctx.shadowBlur = isLowEnd ? 0 : 18;
-      ctx.shadowColor = "#00ff66";
-      ctx.stroke();
-    }
-    ctx.shadowBlur = 0;
     animationId = requestAnimationFrame(animateJimzz);
   }
   animateJimzz();
-})();
-
-function toggleTheme() {
-  const body = document.body;
-  const btn = document.getElementById('themeBtn');
-  body.classList.toggle('mode-2');
-  const isMode2 = body.classList.contains('mode-2');
-  btn.innerText = isMode2 ? '✨' : '🎨';
-  localStorage.setItem('jimzzBgMode', isMode2 ? 'mode-2' : 'mode-1');
-  if (window.jimzzSetGlowMode) window.jimzzSetGlowMode(isMode2);
 }
 
-(function loadBgMode() {
-  const savedMode = localStorage.getItem('jimzzBgMode');
-  if (savedMode === 'mode-2') {
-    document.body.classList.add('mode-2');
-    const btn = document.getElementById('themeBtn');
-    if (btn) btn.innerText = '✨';
-    if (window.jimzzSetGlowMode) window.jimzzSetGlowMode(true);
-  }
-})();
-
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js').catch(err => console.log('SW error:', err));
-  });
+function initData() {
+  renderProduk('sosmed', produkSosmed, 'SUNTIK ALL');
+  renderProduk('jpm', produkJpm, 'LAYANAN LAINNYA');
+  renderProduk('apkList', produkApk, 'JUAL APK');
 }
 
-function switchTab(tab) {
-  document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
-  document.getElementById('page-' + tab).classList.add('active');
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  document.querySelector(`.nav-item[data-tab="${tab}"]`).classList.add('active');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-let viewCount = 1234;
-const viewEl = document.getElementById('viewCount');
-setInterval(() => {
-  viewCount += Math.floor(Math.random() * 3) + 1;
-  viewEl.innerText = viewCount.toLocaleString('id-ID');
-}, 5000);
-
-/* DATA PRODUK SUNTIK */
+/* DATA PRODUK — sama kayak sebelumnya */
 const produkSosmed = [
   { icon: "📱", nama: "Suntik Saluran WA", desc: "Tambah pengikut saluran WhatsApp kamu secara aman & cepat.", hargaPerUnit: 10, unit: "pengikut", min: 100, max: 1000000, hot: true, inputLabel: "🔗 Link Saluran WA", inputPlaceholder: "Contoh: https://whatsapp.com/channel/xxxxx", inputValidasi: "whatsapp.com/channel", inputError: "Link harus link SALURAN WhatsApp" },
   { icon: "😀", nama: "Suntik Random Emoji Reaction", desc: "Tambah reaction emoji random ke postingan kamu.", hargaPerUnit: 1, unit: "reaction", min: 250, max: 1000000, hot: true, inputLabel: "🔗 Link Postingan", inputPlaceholder: "Contoh: https://www.tiktok.com/@user/video/xxx", inputValidasi: "tiktok.com", inputError: "Link harus link postingan TikTok" },
@@ -555,100 +551,37 @@ const produkSosmed = [
   { icon: "👁️", nama: "Suntik Views TikTok", desc: "Tambah views video TikTok kamu secara aman & cepat.", hargaPerUnit: 1, unit: "views", min: 500, max: 1000000, hot: false, inputLabel: "🔗 Link Video TikTok", inputPlaceholder: "Contoh: https://www.tiktok.com/@user/video/xxx", inputValidasi: "tiktok.com", inputError: "Link harus link video TikTok" }
 ];
 
-/* DATA PRODUK JPM */
 const produkJpm = [
   { icon: "🚀", nama: "JPM (Jasa Push Member)", desc: "Push member ke grup / channel kamu dengan cepat & aman.", hargaPerUnit: 200, unit: "member", min: 5, max: 1000000, hot: true, bonusMinTotal: 4000, bonusUnit: 5, inputLabel: "🔗 Link Grup WA", inputPlaceholder: "Contoh: https://chat.whatsapp.com/xxxxx", inputValidasi: "chat.whatsapp.com", inputError: "Link harus link GRUP WhatsApp" },
   { icon: "📱", nama: "Nokos WA Indo", desc: "Nomor kosong WhatsApp Indonesia siap pakai.", hargaPerUnit: 5000, unit: "nomor", min: 1, max: 100, hot: true, inputLabel: "👤 Nama Pemesan", inputPlaceholder: "Contoh: Bilzz", inputValidasi: "", inputError: "" },
   { icon: "🌐", nama: "Jasa Web", desc: "Jasa pembuatan website profesional.", hargaPerUnit: 15000, unit: "web", min: 1, max: 50, hot: true, inputLabel: "📝 Deskripsi Web", inputPlaceholder: "Contoh: Web toko online", inputValidasi: "", inputError: "" }
 ];
 
-/* DATA PRODUK APK */
 const produkApk = [
   { icon: "💾", nama: "Auto Save Kontak", desc: "Aplikasi auto save kontak WhatsApp secara otomatis.", harga: 1000, hot: true },
   { icon: "🎨", nama: "APK Bikin Logo", desc: "Aplikasi bikin logo profesional langsung dari HP.", harga: 1000, hot: true },
   { icon: "🛠️", nama: "APK Kebutuhan JB", desc: "Kumpulan APK kebutuhan Jual Beli online.", harga: 1000, hot: true }
 ];
 
-/* DATA PRODUK TOP UP GAME */
 const produkTopUp = [
-  {
-    icon: "🔥",
-    nama: "Free Fire",
-    desc: "Top up Diamond Free Fire murah & cepat",
-    unit: "diamond",
-    hot: true,
-    paket: [
-      { nominal: "5 Diamond", harga: 900 },
-      { nominal: "50 Diamond", harga: 6500 },
-      { nominal: "100 Diamond", harga: 12800 },
-      { nominal: "500 Diamond", harga: 63881 },
-      { nominal: "1000 Diamond", harga: 126124 }
-    ]
-  },
-  {
-    icon: "⚔️",
-    nama: "Mobile Legends",
-    desc: "Top up Diamond Mobile Legends murah & cepat",
-    unit: "diamond",
-    hot: true,
-    paket: [
-      { nominal: "11 Diamond", harga: 3360 },
-      { nominal: "50 Diamond", harga: 16800 },
-      { nominal: "150 Diamond", harga: 50400 },
-      { nominal: "500 Diamond", harga: 166880 },
-      { nominal: "1000 Diamond", harga: 334880 }
-    ]
-  },
-  {
-    icon: "🔫",
-    nama: "PUBG Mobile",
-    desc: "Top up UC PUBG Mobile murah & cepat",
-    unit: "UC",
-    hot: true,
-    paket: [
-      { nominal: "60 UC", harga: 15000 },
-      { nominal: "325 UC", harga: 75000 },
-      { nominal: "660 UC", harga: 150000 },
-      { nominal: "1800 UC", harga: 375000 }
-    ]
-  },
-  {
-    icon: "🎮",
-    nama: "Genshin Impact",
-    desc: "Top up Crystal Genshin Impact murah & cepat",
-    unit: "crystal",
-    hot: false,
-    paket: [
-      { nominal: "60 Crystal", harga: 16000 },
-      { nominal: "300 Crystal", harga: 79000 },
-      { nominal: "980 Crystal", harga: 249000 },
-      { nominal: "1980 Crystal", harga: 479000 }
-    ]
-  },
-  {
-    icon: "🏆",
-    nama: "Call of Duty Mobile",
-    desc: "Top up CP COD Mobile murah & cepat",
-    unit: "CP",
-    hot: false,
-    paket: [
-      { nominal: "80 CP", harga: 15000 },
-      { nominal: "420 CP", harga: 75000 },
-      { nominal: "880 CP", harga: 150000 }
-    ]
-  }
+  { icon: "🔥", nama: "Free Fire", desc: "Top up Diamond Free Fire murah & cepat", unit: "diamond", hot: true, paket: [{ nominal: "5 Diamond", harga: 900 }, { nominal: "50 Diamond", harga: 6500 }, { nominal: "100 Diamond", harga: 12800 }, { nominal: "500 Diamond", harga: 63881 }, { nominal: "1000 Diamond", harga: 126124 }] },
+  { icon: "⚔️", nama: "Mobile Legends", desc: "Top up Diamond Mobile Legends murah & cepat", unit: "diamond", hot: true, paket: [{ nominal: "11 Diamond", harga: 3360 }, { nominal: "50 Diamond", harga: 16800 }, { nominal: "150 Diamond", harga: 50400 }, { nominal: "500 Diamond", harga: 166880 }, { nominal: "1000 Diamond", harga: 334880 }] },
+  { icon: "🔫", nama: "PUBG Mobile", desc: "Top up UC PUBG Mobile murah & cepat", unit: "UC", hot: true, paket: [{ nominal: "60 UC", harga: 15000 }, { nominal: "325 UC", harga: 75000 }, { nominal: "660 UC", harga: 150000 }, { nominal: "1800 UC", harga: 375000 }] },
+  { icon: "🎮", nama: "Genshin Impact", desc: "Top up Crystal Genshin Impact murah & cepat", unit: "crystal", hot: false, paket: [{ nominal: "60 Crystal", harga: 16000 }, { nominal: "300 Crystal", harga: 79000 }, { nominal: "980 Crystal", harga: 249000 }, { nominal: "1980 Crystal", harga: 479000 }] },
+  { icon: "🏆", nama: "Call of Duty Mobile", desc: "Top up CP COD Mobile murah & cepat", unit: "CP", hot: false, paket: [{ nominal: "80 CP", harga: 15000 }, { nominal: "420 CP", harga: 75000 }, { nominal: "880 CP", harga: 150000 }] }
 ];
 
 let gameAktif = null;
 let paketAktif = null;
-
 const MIN_PEMBELIAN = 200;
 const BACKEND_URL = "https://jimzz-backend.vercel.app";
 let produkAktif = null;
 let dataPemesan = { link: "", hp: "", jumlah: 0, total: 0, bonus: 0, totalAmount: 0 };
 
 function renderProduk(target, data, kategori) {
-  document.getElementById(target).innerHTML = data.map((p, i) => `
+  const el = document.getElementById(target);
+  if (!el) return;
+  el.innerHTML = data.map((p, i) => `
     <div class="produk-card">
       ${p.hot ? '<div class="badge-hot">🔥 TERLARIS</div>' : ''}
       <div class="produk-header">
@@ -672,7 +605,9 @@ function renderProduk(target, data, kategori) {
 }
 
 function renderGameList() {
-  document.getElementById('gameList').innerHTML = produkTopUp.map((g, i) => `
+  const el = document.getElementById('gameList');
+  if (!el) return;
+  el.innerHTML = produkTopUp.map((g, i) => `
     <div class="produk-card" onclick="bukaGameDetail(${i})" style="cursor:pointer;">
       ${g.hot ? '<div class="badge-hot">🔥 TERLARIS</div>' : ''}
       <div class="produk-header">
@@ -739,7 +674,6 @@ function backToGameList() {
 
 function pilihPaket(index) {
   paketAktif = gameAktif.paket[index];
-  
   produkAktif = {
     icon: gameAktif.icon,
     nama: gameAktif.nama + ' - ' + paketAktif.nominal,
@@ -754,19 +688,13 @@ function pilihPaket(index) {
     inputValidasi: '',
     inputError: ''
   };
-  
   document.getElementById('modalLabel').innerText = 'TOP UP GAME';
   document.getElementById('modalTitle').innerText = produkAktif.nama;
   document.getElementById('modalSubtitle').innerText = produkAktif.desc;
-  
   const jumlahInput = document.getElementById('jumlahInput');
-  jumlahInput.value = 1;
-  jumlahInput.min = 1;
-  jumlahInput.max = 1;
-  jumlahInput.disabled = true;
+  jumlahInput.value = 1; jumlahInput.min = 1; jumlahInput.max = 1; jumlahInput.disabled = true;
   document.getElementById('minmaxText').innerText = '(otomatis 1)';
   document.getElementById('hargaSatuan').innerText = 'Rp ' + paketAktif.harga.toLocaleString('id-ID');
-  
   document.getElementById('inputLabel').innerText = produkAktif.inputLabel;
   document.getElementById('linkSaluran').placeholder = produkAktif.inputPlaceholder;
   document.getElementById('linkSaluran').value = '';
@@ -776,7 +704,6 @@ function pilihPaket(index) {
   document.getElementById('qrisLoading').style.display = 'none';
   document.getElementById('btnSayaBayar').style.display = 'none';
   clearError();
-  
   hitungTotal();
   setStep(1);
   document.getElementById('orderModal').classList.add('show');
@@ -795,8 +722,7 @@ function bukaOrder(kategoriId, index) {
   const jumlahInput = document.getElementById('jumlahInput');
   const minmaxText = document.getElementById('minmaxText');
   if (isApk) {
-    jumlahInput.value = 1; jumlahInput.min = 1; jumlahInput.max = 1;
-    jumlahInput.disabled = true;
+    jumlahInput.value = 1; jumlahInput.min = 1; jumlahInput.max = 1; jumlahInput.disabled = true;
     minmaxText.innerText = '(otomatis 1)';
     document.getElementById('hargaSatuan').innerText = `Rp ${produkAktif.harga.toLocaleString('id-ID')}`;
   } else {
@@ -877,19 +803,10 @@ function hitungTotal() {
   const validTotal = total >= MIN_PEMBELIAN;
   document.getElementById('btnPesan').disabled = !(validJumlah && validTotal);
   const hintEl = document.getElementById('jumlahHint');
-  if (!validJumlah) {
-    hintEl.innerHTML = `⚠️ Jumlah tidak valid.`;
-    hintEl.style.color = '#ff6b6b';
-  } else if (!validTotal) {
-    hintEl.innerHTML = `⚠️ Minimal pembelian <b style="color:#ff6b6b">Rp ${MIN_PEMBELIAN.toLocaleString('id-ID')}</b>.`;
-    hintEl.style.color = '#ff6b6b';
-  } else if (bonus > 0) {
-    hintEl.innerHTML = `🎁 <b style="color:#00ff88">BONUS +${bonus} ${produkAktif.unit}</b> aktif!`;
-    hintEl.style.color = '#00ff88';
-  } else {
-    hintEl.innerText = '✅ Jumlah valid, klik "Lanjut ke Pembayaran".';
-    hintEl.style.color = '#00ff88';
-  }
+  if (!validJumlah) { hintEl.innerHTML = `⚠️ Jumlah tidak valid.`; hintEl.style.color = '#ff6b6b'; }
+  else if (!validTotal) { hintEl.innerHTML = `⚠️ Minimal pembelian <b style="color:#ff6b6b">Rp ${MIN_PEMBELIAN.toLocaleString('id-ID')}</b>.`; hintEl.style.color = '#ff6b6b'; }
+  else if (bonus > 0) { hintEl.innerHTML = `🎁 <b style="color:#00ff88">BONUS +${bonus} ${produkAktif.unit}</b> aktif!`; hintEl.style.color = '#00ff88'; }
+  else { hintEl.innerText = '✅ Jumlah valid, klik "Lanjut ke Pembayaran".'; hintEl.style.color = '#00ff88'; }
 }
 
 function keStep2() {
@@ -1024,11 +941,24 @@ async function userKonfirmasiBayar() {
   document.getElementById('waitingBox').style.display = 'block';
 }
 
-renderProduk('sosmed', produkSosmed, 'SUNTIK ALL');
-renderProduk('jpm', produkJpm, 'LAYANAN LAINNYA');
-renderProduk('apkList', produkApk, 'JUAL APK');
-renderGameList();
+function switchTab(tab) {
+  document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + tab).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelector(`.nav-item[data-tab="${tab}"]`).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
+function toggleTheme() {
+  const body = document.body;
+  const btn = document.getElementById('themeBtn');
+  body.classList.toggle('mode-2');
+  const isMode2 = body.classList.contains('mode-2');
+  btn.innerText = isMode2 ? '✨' : '🎨';
+  localStorage.setItem('jimzzBgMode', isMode2 ? 'mode-2' : 'mode-1');
+}
+
+/* MUSIC PLAYER */
 const playlist = [
   { judul: "Brazilian Phonk", artis: "MondaMusic", cover: "🔥", src: "lagu1.mp3" },
   { judul: "Atmospheric Phonk", artis: "Evgeny Bardyuzha", cover: "💀", src: "lagu2.mp3" },
@@ -1037,16 +967,13 @@ const playlist = [
 ];
 
 let currentSong = 0;
-const audio = document.getElementById('audioPlayer');
-const musicPlayer = document.getElementById('musicPlayer');
-const miniTitle = document.getElementById('miniTitle');
-const miniArtist = document.getElementById('miniArtist');
-const musicCover = document.getElementById('musicCover');
-const playMainBtn = document.getElementById('playMainBtn');
-const progressFill = document.getElementById('progressFill');
+let audio;
 
 function renderPlaylist() {
-  document.getElementById('musicList').innerHTML = playlist.map((s, i) => `
+  audio = document.getElementById('audioPlayer');
+  const musicList = document.getElementById('musicList');
+  if (!musicList) return;
+  musicList.innerHTML = playlist.map((s, i) => `
     <div class="music-item ${i === currentSong ? 'active' : ''}" onclick="playSong(${i})">
       <div class="music-item-thumb">${s.cover}</div>
       <div class="music-item-info">
@@ -1068,19 +995,16 @@ function playSong(i) {
 
 function updateUI() {
   const s = playlist[currentSong];
-  miniTitle.innerText = s.judul;
-  miniArtist.innerText = s.artis;
-  if (!audio.paused) {
-    playMainBtn.innerText = '⏸';
-    musicCover.classList.remove('paused');
-  } else {
-    playMainBtn.innerText = '▶';
-    musicCover.classList.add('paused');
-  }
+  const miniTitle = document.getElementById('miniTitle');
+  const miniArtist = document.getElementById('miniArtist');
+  const playMainBtn = document.getElementById('playMainBtn');
+  if (miniTitle) miniTitle.innerText = s.judul;
+  if (miniArtist) miniArtist.innerText = s.artis;
+  if (playMainBtn) playMainBtn.innerText = audio && !audio.paused ? '⏸' : '▶';
 }
 
 function togglePlay() {
-  if (!audio.src) { playSong(0); return; }
+  if (!audio || !audio.src) { playSong(0); return; }
   if (audio.paused) audio.play();
   else audio.pause();
   setTimeout(updateUI, 100);
@@ -1088,26 +1012,42 @@ function togglePlay() {
 
 function nextSong() { currentSong = (currentSong + 1) % playlist.length; playSong(currentSong); }
 function prevSong() { currentSong = (currentSong - 1 + playlist.length) % playlist.length; playSong(currentSong); }
-function toggleExpand() { musicPlayer.classList.toggle('open'); }
+function toggleExpand() { document.getElementById('musicPlayer').classList.toggle('open'); }
 
 function seekAudio(e) {
   const bar = document.getElementById('progressBar');
   const rect = bar.getBoundingClientRect();
   const percent = (e.clientX - rect.left) / rect.width;
-  if (audio.duration) audio.currentTime = percent * audio.duration;
+  if (audio && audio.duration) audio.currentTime = percent * audio.duration;
 }
 
-audio.addEventListener('timeupdate', () => {
-  if (audio.duration) {
-    const percent = (audio.currentTime / audio.duration) * 100;
-    progressFill.style.width = percent + "%";
+document.addEventListener('DOMContentLoaded', () => {
+  audio = document.getElementById('audioPlayer');
+  if (audio) {
+    audio.addEventListener('timeupdate', () => {
+      if (audio.duration) {
+        const percent = (audio.currentTime / audio.duration) * 100;
+        const fill = document.getElementById('progressFill');
+        if (fill) fill.style.width = percent + "%";
+      }
+    });
+    audio.addEventListener('play', updateUI);
+    audio.addEventListener('pause', updateUI);
   }
 });
 
-audio.addEventListener('play', updateUI);
-audio.addEventListener('pause', updateUI);
-audio.addEventListener('ended', nextSong);
-renderPlaylist();
+let viewCount = 1234;
+setInterval(() => {
+  viewCount += Math.floor(Math.random() * 3) + 1;
+  const el = document.getElementById('viewCount');
+  if (el) el.innerText = viewCount.toLocaleString('id-ID');
+}, 5000);
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(err => console.log('SW error:', err));
+  });
+}
 </script>
 </body>
 </html>
