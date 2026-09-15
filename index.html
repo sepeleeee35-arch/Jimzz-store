@@ -23,29 +23,14 @@ body {
 }
 
 #jimzz-neon-bg {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: -1;
-  pointer-events: none;
-  background: 
-    radial-gradient(circle at 20% 20%, rgba(0,255,136,0.05) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(0,255,136,0.04) 0%, transparent 50%),
-    #0a0a0f;
+  position: fixed; top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  z-index: -1; pointer-events: none;
+  background: radial-gradient(circle at 20% 20%, rgba(0,255,136,0.05) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(0,255,136,0.04) 0%, transparent 50%), #0a0a0f;
 }
 
 body.mode-2 #jimzz-neon-bg { filter: brightness(1.3) saturate(1.4); }
-body.mode-2::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background: radial-gradient(circle at 50% 50%, transparent 30%, rgba(0,255,136,0.06) 100%);
-  pointer-events: none;
-  z-index: -1;
-  animation: glowPulse 4s ease-in-out infinite;
-}
+body.mode-2::after { content: ""; position: fixed; inset: 0; background: radial-gradient(circle at 50% 50%, transparent 30%, rgba(0,255,136,0.06) 100%); pointer-events: none; z-index: -1; animation: glowPulse 4s ease-in-out infinite; }
 @keyframes glowPulse { 0%,100% { opacity:0.4; } 50% { opacity:0.9; } }
 
 .promo-banner { position: relative; z-index: 5; background: linear-gradient(90deg, #00ff88, #00cc6a, #00ff88); background-size: 200% 100%; animation: bannerSlide 3s linear infinite; color: #000; text-align: center; padding: 10px 15px; font-size: 12px; font-weight: bold; }
@@ -53,11 +38,9 @@ body.mode-2::after {
 .promo-banner b { background: #000; color: #00ff88; padding: 2px 8px; border-radius: 4px; margin: 0 4px; }
 
 header { text-align: center; padding: 40px 20px 30px; background: radial-gradient(circle at 50% 100%, rgba(0,255,136,0.15), transparent 70%), linear-gradient(135deg, #001a0d, rgba(10,10,15,0.7)); border-bottom: 2px solid #00ff88; position: relative; z-index: 5; }
-
 .header-top { display: flex; justify-content: space-between; align-items: center; max-width: 1100px; margin: 0 auto 15px; padding: 0 5px; }
 .logo-text { color: #00ff88; font-weight: bold; font-size: 16px; letter-spacing: 1px; }
 .theme-toggle { background: rgba(0,255,136,0.1); border: 1px solid rgba(0,255,136,0.3); color: #00ff88; width: 42px; height: 42px; border-radius: 50%; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center; }
-
 header h1 { font-size: 38px; color: #00ff88; text-shadow: 0 0 20px rgba(0,255,136,0.8); }
 header .counter { display: inline-block; margin-top: 12px; background: rgba(0,255,136,0.1); border: 1px solid rgba(0,255,136,0.3); color: #00ff88; padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: bold; }
 header .counter .dot { display: inline-block; width: 8px; height: 8px; background: #00ff88; border-radius: 50%; margin-right: 6px; animation: blink 1.5s infinite; }
@@ -91,7 +74,6 @@ header .counter .dot { display: inline-block; width: 8px; height: 8px; backgroun
 .pengumuman-text { color: #ddd; font-size: 12px; line-height: 1.6; margin-bottom: 8px; }
 .pengumuman-text:last-child { margin-bottom: 0; }
 .pengumuman-text b { color: #ffc800; font-weight: bold; }
-
 .pengumuman.refund { background: linear-gradient(145deg, rgba(0,200,255,0.08), rgba(0,150,255,0.05)); border: 1px solid rgba(0,200,255,0.3); border-left: 4px solid #00c8ff; }
 .pengumuman.refund .pengumuman-title { color: #00c8ff; }
 .pengumuman.refund .pengumuman-text b { color: #00c8ff; }
@@ -149,7 +131,7 @@ header .counter .dot { display: inline-block; width: 8px; height: 8px; backgroun
 .jumlah-label { color: #ccc; font-size: 13px; font-weight: bold; margin-bottom: 6px; display: block; }
 .jumlah-label .minmax { color: #888; font-weight: normal; font-size: 11px; margin-left: 4px; }
 .jumlah-input { width: 100%; background: #0a0a0f; border: 1px solid #2a3a32; color: #fff; padding: 14px 16px; border-radius: 12px; font-size: 16px; font-weight: bold; outline: none; }
-.jumlah-input:focus { border-color: #00ff88; box-shadow: 0 0 15px rgba(0,255,136,0.3); }
+.jumlah-input:focus { border-color: #00ff88; }
 .jumlah-input:disabled { background: #1a1a24; color: #666; }
 .jumlah-hint { color: #666; font-size: 11px; margin-top: 6px; line-height: 1.5; }
 
@@ -172,6 +154,10 @@ header .counter .dot { display: inline-block; width: 8px; height: 8px; backgroun
 .qris-box img { width: 250px; max-width: 100%; background: #fff; padding: 12px; border-radius: 14px; box-shadow: 0 0 25px rgba(0,255,136,0.4); border: 2px solid #00ff88; }
 .qris-nominal { background: rgba(0,255,136,0.1); border: 1px solid #00ff88; border-radius: 10px; padding: 12px; margin-top: 12px; font-size: 14px; color: #00ff88; font-weight: bold; }
 
+.btn-subtle { width: 100%; background: transparent; border: 1px solid #00ff88; color: #00ff88; padding: 10px 20px; border-radius: 10px; font-weight: bold; font-size: 13px; cursor: pointer; margin-top: 12px; transition: 0.25s; }
+.btn-subtle:hover { background: rgba(0,255,136,0.1); }
+.btn-subtle:disabled { opacity: 0.5; cursor: not-allowed; }
+
 .waiting-box { background: #0a0a0f; border: 1px solid #25D366; border-radius: 12px; padding: 18px; text-align: center; margin-top: 12px; }
 .waiting-box .loading-spinner { width: 36px; height: 36px; border: 3px solid #2a3a32; border-top-color: #25D366; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 10px; }
 @keyframes spin { to { transform: rotate(360deg); } }
@@ -188,7 +174,7 @@ header .counter .dot { display: inline-block; width: 8px; height: 8px; backgroun
 .testimoni-section h2 { text-align: center; font-size: 24px; color: #00ff88; margin-bottom: 8px; }
 .testi-cards { display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 30px; }
 .testi-card { background: linear-gradient(145deg, rgba(13,26,20,0.85), rgba(13,13,21,0.85)); border: 1px solid #2a3a32; border-radius: 14px; padding: 18px; }
-.testi-card:hover { border-color: #00ff88; box-shadow: 0 0 20px rgba(0,255,136,0.3); }
+.testi-card:hover { border-color: #00ff88; }
 .testi-stars { color: #ffd700; font-size: 14px; margin-bottom: 8px; letter-spacing: 2px; }
 .testi-text { color: #ccc; font-size: 13px; line-height: 1.6; font-style: italic; margin-bottom: 10px; }
 .testi-name { color: #00ff88; font-size: 12px; font-weight: bold; text-align: right; }
@@ -200,14 +186,47 @@ header .counter .dot { display: inline-block; width: 8px; height: 8px; backgroun
 
 footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border-top: 1px solid #222; margin-top: 30px; position: relative; z-index: 5; }
 
-.wa-float { position: fixed; top: 15px; right: 15px; width: 50px; height: 50px; background: linear-gradient(135deg, #25D366, #1da851); border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 24px; color: #fff; box-shadow: 0 5px 20px rgba(37,211,102,0.6); z-index: 500; }
+/* WA FLOAT - PINDAH KE KIRI ATAS */
+.wa-float { position: fixed; top: 15px; left: 15px; width: 50px; height: 50px; background: linear-gradient(135deg, #25D366, #1da851); border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 24px; color: #fff; box-shadow: 0 5px 20px rgba(37,211,102,0.6); z-index: 500; animation: waPulse 2s infinite; }
+@keyframes waPulse { 0%,100% { box-shadow:0 5px 20px rgba(37,211,102,0.6); } 50% { box-shadow:0 5px 30px rgba(37,211,102,0.9), 0 0 0 10px rgba(37,211,102,0.1); } }
+
+/* MUSIC PLAYER */
+.music-player { position: fixed; bottom: 80px; right: 12px; left: auto; width: 220px; max-width: calc(100% - 24px); background: #0d1a14; border: 1px solid #2a3a32; border-radius: 10px; box-shadow: 0 6px 18px rgba(0,0,0,0.7); z-index: 300; overflow: hidden; }
+.music-mini { display: flex; align-items: center; gap: 7px; padding: 7px 9px; cursor: pointer; }
+.music-cover { width: 30px; height: 30px; border-radius: 6px; background: #0a0a0f; display: flex; align-items: center; justify-content: center; flex-shrink: 0; position: relative; overflow: hidden; }
+.music-cover::before { content: ""; width: 2px; height: 4px; background: #00ff88; border-radius: 1px; box-shadow: 4px 0 0 #00ff88, 8px 0 0 #00ff88, 12px 0 0 #00ff88, -4px 0 0 #00ff88, -8px 0 0 #00ff88; animation: eqBar 0.8s ease-in-out infinite; }
+@keyframes eqBar { 0%, 100% { transform: scaleY(1); } 25% { transform: scaleY(2.5); } 50% { transform: scaleY(0.6); } 75% { transform: scaleY(3); } }
+.music-cover.paused::before { animation-play-state: paused; }
+.music-mini-info { flex: 1; min-width: 0; }
+.music-mini-title { font-size: 11px; font-weight: 600; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.music-mini-artist { font-size: 9px; color: #999; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px; }
+.music-mini-controls { display: flex; align-items: center; gap: 1px; flex-shrink: 0; }
+.music-mini-controls button { background: transparent; border: none; color: #fff; width: 22px; height: 22px; border-radius: 50%; cursor: pointer; font-size: 10px; display: flex; align-items: center; justify-content: center; padding: 0; }
+.music-mini-controls button:hover { color: #00ff88; }
+.music-progress { position: relative; height: 2px; background: #2a3a32; cursor: pointer; }
+.music-progress-fill { height: 100%; background: #00ff88; width: 0%; transition: width 0.1s linear; }
+.music-expanded { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; background: #0a0f0d; }
+.music-player.open .music-expanded { max-height: 300px; }
+.music-list-header { padding: 7px 10px 5px; font-size: 9px; color: #888; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; border-bottom: 1px solid #2a3a32; display: flex; justify-content: space-between; align-items: center; }
+.music-list-header span.close-x { color: #00ff88; cursor: pointer; font-size: 13px; }
+.music-list { max-height: 220px; overflow-y: auto; padding: 4px; }
+.music-item { display: flex; align-items: center; gap: 7px; padding: 6px 8px; border-radius: 5px; cursor: pointer; }
+.music-item:hover { background: rgba(0,255,136,0.1); }
+.music-item.active { background: rgba(0,255,136,0.2); }
+.music-item.active .music-item-title { color: #00ff88; }
+.music-item-thumb { width: 26px; height: 26px; border-radius: 4px; background: linear-gradient(135deg, #2a3a32, #1a1a24); display: flex; align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0; }
+.music-item.active .music-item-thumb { background: linear-gradient(135deg, #00ff88, #00cc6a); }
+.music-item-info { flex: 1; min-width: 0; }
+.music-item-title { font-size: 10px; color: #fff; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.music-item-artist { font-size: 9px; color: #888; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px; }
 
 @media (max-width: 480px) {
-  .wa-float { width: 44px; height: 44px; font-size: 20px; top: 12px; right: 12px; }
+  .wa-float { width: 44px; height: 44px; font-size: 20px; top: 12px; left: 12px; }
   header h1 { font-size: 30px; }
   .produk-icon { font-size: 26px; }
   .nav-item .nav-label { font-size: 8px; }
   .nav-item .nav-icon { font-size: 18px; }
+  .music-player { bottom: 75px; right: 10px; left: auto; width: 200px; }
 }
 </style>
 </head>
@@ -410,20 +429,20 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
       
       <div class="qris-box" id="qrisBox" style="display:none;">
         <img id="qrisImage" src="" alt="QRIS">
-        <a id="qrisDownload" href="" download="QRIS-JimzzStore.png" class="btn-download-qris" style="display:inline-flex; align-items:center; justify-content:center; gap:6px; margin:12px auto 0; background:transparent; border:2px solid #00ff88; color:#00ff88; padding:10px 20px; border-radius:10px; font-weight:bold; font-size:13px; text-decoration:none;">
+        <a id="qrisDownload" href="" download="QRIS-JimzzStore.png" style="display:inline-flex; align-items:center; justify-content:center; gap:6px; margin:12px auto 0; background:transparent; border:2px solid #00ff88; color:#00ff88; padding:10px 20px; border-radius:10px; font-weight:bold; font-size:13px; text-decoration:none;">
           ⬇️ Download QRIS
         </a>
         <div class="qris-nominal" id="qrisNominal">⚠️ BAYAR TEPAT: Rp 0</div>
       </div>
       
-      <button class="btn-next" id="btnSayaBayar" onclick="userKonfirmasiBayar()" style="display:none; margin-top:15px;">
+      <button class="btn-subtle" id="btnSayaBayar" onclick="userKonfirmasiBayar()" style="display:none;">
         ✅ Saya Sudah Bayar
       </button>
       
       <div class="waiting-box" id="waitingBox" style="display:none;">
         <div class="loading-spinner"></div>
         <p>⏳ Menunggu Konfirmasi Admin</p>
-        <p class="sub-wait">Admin bakal cek mutasi & kirim produk ke WA kamu. Mohon tunggu 1-5 menit.</p>
+        <p class="sub-wait">Admin akan segera mengirim pesanan ke nomor WA yang kamu berikan. Mohon tunggu 1-5 menit.</p>
       </div>
       
       <div class="info-note">
@@ -431,6 +450,27 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
       </div>
     </div>
   </div>
+</div>
+
+<div class="music-player" id="musicPlayer">
+  <div class="music-mini" onclick="toggleExpand()">
+    <div class="music-cover paused" id="musicCover"></div>
+    <div class="music-mini-info">
+      <div class="music-mini-title" id="miniTitle">Pilih Lagu</div>
+      <div class="music-mini-artist" id="miniArtist">Klik untuk buka playlist</div>
+    </div>
+    <div class="music-mini-controls" onclick="event.stopPropagation()">
+      <button onclick="prevSong()">⏮</button>
+      <button class="play-main" id="playMainBtn" onclick="togglePlay()">▶</button>
+      <button onclick="nextSong()">⏭</button>
+    </div>
+  </div>
+  <div class="music-progress" id="progressBar" onclick="seekAudio(event)"><div class="music-progress-fill" id="progressFill"></div></div>
+  <div class="music-expanded" id="musicExpanded">
+    <div class="music-list-header"><span>🎧 Playlist</span><span class="close-x" onclick="event.stopPropagation(); toggleExpand();">×</span></div>
+    <div class="music-list" id="musicList"></div>
+  </div>
+  <audio id="audioPlayer" loop></audio>
 </div>
 
 <script>
@@ -620,9 +660,9 @@ const produkJpm = [
   { icon: "🚀", nama: "JPM (Jasa Push Member)", desc: "Push member ke grup / channel kamu dengan cepat & aman.", hargaPerUnit: 200, unit: "member", min: 5, max: 1000000, hot: true,
     bonusMinTotal: 4000, bonusUnit: 5, inputLabel: "🔗 Link Grup WA", inputPlaceholder: "Contoh: https://chat.whatsapp.com/xxxxx", inputValidasi: "chat.whatsapp.com",
     inputError: "Link harus link GRUP WhatsApp" },
-  { icon: "📱", nama: "Nokos WA Indo", desc: "Nomor kosong WhatsApp Indonesia siap pakai. Aman & terpercaya.", hargaPerUnit: 5000, unit: "nomor", min: 1, max: 100, hot: true,
+  { icon: "📱", nama: "Nokos WA Indo", desc: "Nomor kosong WhatsApp Indonesia siap pakai.", hargaPerUnit: 5000, unit: "nomor", min: 1, max: 100, hot: true,
     inputLabel: "👤 Nama Pemesan", inputPlaceholder: "Contoh: Bilzz", inputValidasi: "", inputError: "" },
-  { icon: "🌐", nama: "Jasa Web", desc: "Jasa pembuatan website profesional. Bisa custom sesuai request kamu.", hargaPerUnit: 15000, unit: "web", min: 1, max: 50, hot: true,
+  { icon: "🌐", nama: "Jasa Web", desc: "Jasa pembuatan website profesional.", hargaPerUnit: 15000, unit: "web", min: 1, max: 50, hot: true,
     inputLabel: "📝 Deskripsi Web", inputPlaceholder: "Contoh: Web toko online", inputValidasi: "", inputError: "" }
 ];
 
@@ -888,7 +928,26 @@ async function keStep3() {
   }
 }
 
-function userKonfirmasiBayar() {
+async function userKonfirmasiBayar() {
+  document.getElementById('btnSayaBayar').disabled = true;
+  document.getElementById('btnSayaBayar').innerText = '⏳ Mengirim konfirmasi...';
+  
+  try {
+    await fetch(BACKEND_URL + '/api/confirm-payment', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        totalAmount: dataPemesan.totalAmount,
+        customerPhone: dataPemesan.hp,
+        productName: produkAktif.nama,
+        productDetail: dataPemesan.jumlah + ' ' + (produkAktif.unit || 'pcs'),
+        link: dataPemesan.link
+      })
+    });
+  } catch (err) {
+    console.error('Confirm error:', err);
+  }
+  
   document.getElementById('btnSayaBayar').style.display = 'none';
   document.getElementById('qrisBox').style.display = 'none';
   document.getElementById('waitingBox').style.display = 'block';
@@ -897,6 +956,88 @@ function userKonfirmasiBayar() {
 renderProduk('sosmed', produkSosmed, 'SUNTIK ALL');
 renderProduk('jpm', produkJpm, 'LAYANAN LAINNYA');
 renderProduk('apkList', produkApk, 'JUAL APK');
+
+/* MUSIC PLAYER */
+const playlist = [
+  { judul: "Brazilian Phonk", artis: "MondaMusic", cover: "🔥", src: "lagu1.mp3" },
+  { judul: "Atmospheric Phonk", artis: "Evgeny Bardyuzha", cover: "💀", src: "lagu2.mp3" },
+  { judul: "Synthwave Background", artis: "Nveravetyan Music", cover: "🌆", src: "lagu3.mp3" },
+  { judul: "Wave", artis: "ApexBeats", cover: "🌊", src: "lagu4.mp3" }
+];
+
+let currentSong = 0;
+const audio = document.getElementById('audioPlayer');
+const musicPlayer = document.getElementById('musicPlayer');
+const miniTitle = document.getElementById('miniTitle');
+const miniArtist = document.getElementById('miniArtist');
+const musicCover = document.getElementById('musicCover');
+const playMainBtn = document.getElementById('playMainBtn');
+const progressFill = document.getElementById('progressFill');
+
+function renderPlaylist() {
+  document.getElementById('musicList').innerHTML = playlist.map((s, i) => `
+    <div class="music-item ${i === currentSong ? 'active' : ''}" onclick="playSong(${i})">
+      <div class="music-item-thumb">${s.cover}</div>
+      <div class="music-item-info">
+        <div class="music-item-title">${s.judul}</div>
+        <div class="music-item-artist">${s.artis}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function playSong(i) {
+  currentSong = i;
+  audio.src = playlist[i].src;
+  audio.loop = true;
+  audio.play().catch(err => console.log('Autoplay diblokir'));
+  updateUI();
+  renderPlaylist();
+}
+
+function updateUI() {
+  const s = playlist[currentSong];
+  miniTitle.innerText = s.judul;
+  miniArtist.innerText = s.artis;
+  if (!audio.paused) {
+    playMainBtn.innerText = '⏸';
+    musicCover.classList.remove('paused');
+  } else {
+    playMainBtn.innerText = '▶';
+    musicCover.classList.add('paused');
+  }
+}
+
+function togglePlay() {
+  if (!audio.src) { playSong(0); return; }
+  if (audio.paused) audio.play();
+  else audio.pause();
+  setTimeout(updateUI, 100);
+}
+
+function nextSong() { currentSong = (currentSong + 1) % playlist.length; playSong(currentSong); }
+function prevSong() { currentSong = (currentSong - 1 + playlist.length) % playlist.length; playSong(currentSong); }
+function toggleExpand() { musicPlayer.classList.toggle('open'); }
+
+function seekAudio(e) {
+  const bar = document.getElementById('progressBar');
+  const rect = bar.getBoundingClientRect();
+  const percent = (e.clientX - rect.left) / rect.width;
+  if (audio.duration) audio.currentTime = percent * audio.duration;
+}
+
+audio.addEventListener('timeupdate', () => {
+  if (audio.duration) {
+    const percent = (audio.currentTime / audio.duration) * 100;
+    progressFill.style.width = percent + "%";
+  }
+});
+
+audio.addEventListener('play', updateUI);
+audio.addEventListener('pause', updateUI);
+audio.addEventListener('ended', nextSong);
+
+renderPlaylist();
 </script>
 </body>
 </html>
