@@ -375,7 +375,7 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
     <div class="menu-home" onclick="switchTab('jpm')">
       <div class="menu-home-icon">🚀</div>
       <div class="menu-home-title">Layanan Lainnya</div>
-      <div class="menu-home-desc">JPM, Nokos WA Indo, dll</div>
+      <div class="menu-home-desc">JPM, Nokos WA Indo, Jasa Web</div>
     </div>
     
     <div class="menu-home" onclick="switchTab('suntik')">
@@ -875,18 +875,26 @@ const produkJpm = [
     inputPlaceholder: "Contoh: Bilzz",
     inputValidasi: "",
     inputError: ""
+  },
+  { 
+    icon: "🌐", nama: "Jasa Web", 
+    desc: "Jasa pembuatan website profesional. Bisa custom sesuai request kamu.", 
+    hargaPerUnit: 15000, unit: "web", min: 1, max: 50, hot: true,
+    inputLabel: "📝 Deskripsi Web yang Diinginkan",
+    inputPlaceholder: "Contoh: Web toko online, web portofolio, web company profile",
+    inputValidasi: "",
+    inputError: ""
   }
 ];
 
 const produkApk = [
   { icon: "💾", nama: "Auto Save Kontak", desc: "Aplikasi auto save kontak WhatsApp secara otomatis. Aman & gampang dipake.", harga: 1000, hot: true },
   { icon: "🎨", nama: "APK Bikin Logo", desc: "Aplikasi bikin logo profesional langsung dari HP. Banyak template & icon.", harga: 1000, hot: true },
-  { icon: "🛠️", nama: "APK Kebutuhan JB", desc: "Kumpulan APK kebutuhan JB (Jailbreak/Break). Lengkap & terpercaya.", harga: 1000, hot: true }
+  { icon: "🛠️", nama: "APK Kebutuhan JB", desc: "Kumpulan APK kebutuhan Jual Beli online. Lengkap & terpercaya.", harga: 1000, hot: true }
 ];
 
 const WA_ADMIN = "6283898669427";
 const MIN_PEMBELIAN = 200;
-/* MAX_TOTAL_TRANSAKSI DIHAPUS — biar bebas order berapapun */
 
 let produkAktif = null;
 let dataPemesan = { link: "", hp: "", jumlah: 0, total: 0, bonus: 0 };
@@ -1016,7 +1024,6 @@ function hitungTotal() {
     totalDapatRow.style.display = 'none';
   }
 
-  /* VALIDASI — HANYA MIN & MAX JUMLAH. TANPA LIMIT TOTAL TRANSAKSI. */
   const validJumlah = jumlah >= parseInt(document.getElementById('jumlahInput').min) && jumlah <= parseInt(document.getElementById('jumlahInput').max);
   const validTotal = total >= MIN_PEMBELIAN;
   document.getElementById('btnPesan').disabled = !(validJumlah && validTotal);
