@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test Backend Jimzz</title>
+<style>
+body { 
+  background: #0a0a0f; color: #e6e6e6; 
+  font-family: monospace; padding: 20px;
+  min-height: 100vh;
+}
+h1 { color: #00ff88; margin-bottom: 20px; font-size: 20px; }
+button { 
+  background: linear-gradient(135deg, #00ff88, #00cc6a);
+  color: #000; border: none; padding: 15px 30px;
+  border-radius: 12px; font-weight: bold; font-size: 16px;
+  cursor: pointer; width: 100%; margin-bottom: 20px;
+}
+pre { 
+  background: #0d1a14; border: 1px solid #2a3a32;
+  padding: 15px; border-radius: 10px;
+  white-space: pre-wrap; word-break: break-all;
+  font-size: 12px; color: #00ff88;
+  min-height: 200px;
+}
+.status { color: #888; font-size: 13px; margin-bottom: 15px; }
+</style>
+</head>
+<body>
+<h1>🧪 Test Backend Jimzz</h1>
+<div class="status">Klik tombol untuk test QRIS dinamis + notif WA</div>
+<button onclick="testOrder()">🚀 Test Order Rp 1.000</button>
+<pre id="result">Belum ada hasil...</pre>
+
+<script>
+async function testOrder() {
+  const resultEl = document.getElementById('result');
+  resultEl.innerText = '⏳ Loading...';
+  
+  try {
+    const res = await fetch('https://jimzz-backend.vercel.app/api/create-order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        amount: 1000,
+        customerPhone: '6283898669427',
+        productName: 'Test Suntik WA',
+        productDetail: '100 pengikut',
+        link: 'https://whatsapp.com/channel/test'
+      })
+    });
+    
+    const data = await res.json();
+    resultEl.innerText = JSON.stringify(data, null, 2);
+  } catch (err) {
+    resultEl.innerText = '❌ ERROR: ' + err.message;
+  }
+}
+</script>
+</body>
+</html>
