@@ -270,19 +270,31 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
     
     <div class="pengumuman">
       <div class="pengumuman-header">
-        <span>📢</span>
+        <span class="pengumuman-icon">📢</span>
         <span class="pengumuman-title">PENGUMUMAN PENTING</span>
       </div>
-      <p class="pengumuman-text">Jika jumlah <b>like</b> atau <b>followers</b> sosmed kamu <b>tiba-tiba menurun</b> — itu <b>NORMAL</b>.</p>
-      <p class="pengumuman-text">Platform <b>rutin pembersihan akun bot/fake otomatis</b>.</p>
+      <p class="pengumuman-text">
+        Jika jumlah <b>like</b> atau <b>followers</b> Instagram, TikTok, dan sosial media lainnya <b>tiba-tiba menurun</b> — itu adalah hal <b>NORMAL</b>.
+      </p>
+      <p class="pengumuman-text">
+        Instagram, TikTok, dan platform lainnya <b>rutin melakukan pembersihan akun bot/fake secara otomatis</b>. Ini bukan karena layanan kami gagal, tapi karena sistem keamanan platform tersebut.
+      </p>
+      <p class="pengumuman-text">
+        💡 Saran: Order jumlah <b>sedikit</b> terlebih dahulu untuk mengetes layanan kami.
+      </p>
     </div>
 
     <div class="pengumuman refund">
       <div class="pengumuman-header">
-        <span>💰</span>
+        <span class="pengumuman-icon">💰</span>
         <span class="pengumuman-title">JAMINAN REFUND</span>
       </div>
-      <p class="pengumuman-text">Kalau pesanan <b>tidak masuk sama sekali</b>, kalian berhak <b>REFUND 100%</b>.</p>
+      <p class="pengumuman-text">
+        Jika kalian membeli <b>suntik sosmed apapun</b> dan pesanan <b>tidak masuk sama sekali</b>, kalian berhak mendapatkan <b>REFUND 100%</b>.
+      </p>
+      <p class="pengumuman-text">
+        Silakan hubungi <b>chat admin</b> untuk proses refund. Kami akan memprosesnya secepat mungkin. 🙏
+      </p>
     </div>
     
     <div class="produk-list" id="sosmed"></div>
@@ -817,10 +829,7 @@ async function downloadQris() {
     document.body.removeChild(link);
     URL.revokeObjectURL(blobUrl);
     btn.innerText = '✅ Berhasil! Cek Galeri';
-    setTimeout(() => {
-      btn.innerText = originalText;
-      btn.disabled = false;
-    }, 3000);
+    setTimeout(() => { btn.innerText = originalText; btn.disabled = false; }, 3000);
   } catch (err) {
     console.error('Download error:', err);
     window.open(document.getElementById('qrisImage').src, '_blank');
@@ -844,9 +853,7 @@ async function userKonfirmasiBayar() {
         link: dataPemesan.link
       })
     });
-  } catch (err) {
-    console.error('Confirm error:', err);
-  }
+  } catch (err) { console.error('Confirm error:', err); }
   document.getElementById('btnSayaBayar').style.display = 'none';
   document.getElementById('qrisBox').style.display = 'none';
   document.getElementById('waitingBox').style.display = 'block';
