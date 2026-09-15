@@ -74,6 +74,67 @@ header .counter .dot { display: inline-block; width: 8px; height: 8px; backgroun
 .pengumuman.refund .pengumuman-title { color: #00c8ff; }
 .pengumuman.refund .pengumuman-text b { color: #00c8ff; }
 .produk-list { display: flex; flex-direction: column; gap: 14px; }
+.produk-list.grid-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.produk-list.grid-2col .produk-card {
+  padding: 15px 12px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 150px;
+  margin: 0;
+}
+.produk-list.grid-2col .produk-header {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.produk-list.grid-2col .produk-icon {
+  font-size: 32px;
+}
+.produk-list.grid-2col .produk-label {
+  font-size: 8px;
+  margin-bottom: 2px;
+}
+.produk-list.grid-2col .produk-nama {
+  font-size: 13px;
+  line-height: 1.2;
+}
+.produk-list.grid-2col .produk-desc {
+  font-size: 10px;
+  margin-bottom: 8px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.produk-list.grid-2col .produk-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: stretch;
+}
+.produk-list.grid-2col .produk-harga-info {
+  text-align: center;
+}
+.produk-list.grid-2col .produk-harga-label {
+  font-size: 8px;
+}
+.produk-list.grid-2col .produk-harga {
+  font-size: 13px;
+  text-align: center;
+}
+.produk-list.grid-2col .btn-order {
+  padding: 8px 10px;
+  font-size: 11px;
+  width: 100%;
+  text-align: center;
+}
 .produk-card { background: linear-gradient(145deg, rgba(13,26,20,0.85), rgba(13,13,21,0.85)); border: 1px solid #2a3a32; border-radius: 14px; padding: 20px 18px; transition: 0.3s; position: relative; }
 .produk-card:hover { border-color: #00ff88; box-shadow: 0 0 25px rgba(0,255,136,0.3); transform: translateY(-2px); }
 .produk-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
@@ -249,7 +310,7 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
   <section class="kategori">
     <h2>🎮 Top Up Game</h2>
     <p class="sub">Pilih game yang mau kamu top up</p>
-    <div class="produk-list" id="gameList"></div>
+    <div class="produk-list grid-2col" id="gameList"></div>
   </section>
   <footer><p>© 2025 Jimzz Store — All Rights Reserved 😈</p></footer>
 </div>
@@ -523,7 +584,8 @@ const produkJpm = [
 const produkApk = [
   { icon: "💾", nama: "Auto Save Kontak", desc: "Aplikasi auto save kontak WhatsApp secara otomatis.", harga: 1000, hot: true },
   { icon: "🎨", nama: "APK Bikin Logo", desc: "Aplikasi bikin logo profesional langsung dari HP.", harga: 1000, hot: true },
-  { icon: "🛠️", nama: "APK Kebutuhan JB", desc: "Kumpulan APK kebutuhan Jual Beli online.", harga: 1000, hot: true }
+  { icon: "🛠️", nama: "APK Kebutuhan JB", desc: "Kumpulan APK kebutuhan Jual Beli online.", harga: 1000, hot: true },
+  { icon: "🦏", nama: "APK WA Badak", desc: "Aplikasi WhatsApp mod dengan fitur lengkap & anti-banned.", harga: 1000, hot: true }
 ];
 
 const produkTopUp = [
@@ -840,23 +902,23 @@ function renderProduk(target, data, kategori) {
 function renderGameList() {
   const el = document.getElementById('gameList');
   if (!el) return;
+  el.className = 'produk-list grid-2col';
   el.innerHTML = produkTopUp.map((g, i) => `
     <div class="produk-card" onclick="bukaGameDetail(${i})" style="cursor:pointer;">
-      ${g.hot ? '<div class="badge-hot">🔥 TERLARIS</div>' : ''}
+      ${g.hot ? '<div class="badge-hot">🔥</div>' : ''}
       <div class="produk-header">
         <div class="produk-icon">${g.icon}</div>
         <div class="produk-title-block">
-          <div class="produk-label">TOP UP GAME</div>
+          <div class="produk-label">TOP UP</div>
           <div class="produk-nama">${g.nama}</div>
         </div>
       </div>
-      <div class="produk-desc">${g.desc}</div>
       <div class="produk-bottom">
         <div class="produk-harga-info">
           <div class="produk-harga-label">Mulai dari</div>
           <div class="produk-harga">Rp ${g.paket[0].harga.toLocaleString('id-ID')}</div>
         </div>
-        <button class="btn-order">Pilih Nominal →</button>
+        <button class="btn-order">Pilih →</button>
       </div>
     </div>
   `).join('');
@@ -887,7 +949,7 @@ function bukaGameDetail(index) {
       <button onclick="backToGameList()" style="background:transparent; border:none; color:#00ff88; font-size:14px; cursor:pointer; margin-bottom:15px;">← Kembali ke Daftar Game</button>
       <h2>${gameAktif.icon} ${gameAktif.nama}</h2>
       <p class="sub">Pilih nominal ${gameAktif.unit} yang mau kamu top up</p>
-      <div class="produk-list">${paketList}</div>
+      <div class="produk-list grid-2col">${paketList}</div>
     </section>
     <footer><p>© 2025 Jimzz Store — All Rights Reserved 😈</p></footer>
   `;
@@ -898,7 +960,7 @@ function backToGameList() {
     <section class="kategori">
       <h2>🎮 Top Up Game</h2>
       <p class="sub">Pilih game yang mau kamu top up</p>
-      <div class="produk-list" id="gameList"></div>
+      <div class="produk-list grid-2col" id="gameList"></div>
     </section>
     <footer><p>© 2025 Jimzz Store — All Rights Reserved 😈</p></footer>
   `;
