@@ -8,16 +8,35 @@
 <meta name="theme-color" content="#00ff88">
 <style>
 * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',Arial,sans-serif; }
-#passwordLock { position: fixed; inset: 0; background: #0a0a0f; z-index: 99999; display: flex; align-items: center; justify-content: center; padding: 20px; }
-.lock-box { background: linear-gradient(145deg, #0d1a14, #0d0d15); border: 1px solid #2a3a32; border-radius: 20px; padding: 40px 30px; max-width: 400px; width: 100%; text-align: center; box-shadow: 0 0 40px rgba(0,255,136,0.15); }
+
+#passwordLock {
+  position: fixed; inset: 0; background: #0a0a0f; z-index: 99999;
+  display: flex; align-items: center; justify-content: center; padding: 20px;
+}
+.lock-box {
+  background: linear-gradient(145deg, #0d1a14, #0d0d15);
+  border: 1px solid #2a3a32; border-radius: 20px;
+  padding: 40px 30px; max-width: 400px; width: 100%;
+  text-align: center; box-shadow: 0 0 40px rgba(0,255,136,0.15);
+}
 .lock-icon { font-size: 60px; margin-bottom: 20px; filter: drop-shadow(0 0 20px rgba(0,255,136,0.6)); }
-.lock-box h1 { color: #00ff88; font-size: 24px; margin-bottom: 10px; }
+.lock-box h1 { color: #00ff88; font-size: 24px; margin-bottom: 10px; text-shadow: 0 0 20px rgba(0,255,136,0.4); }
 .lock-box p { color: #888; font-size: 13px; margin-bottom: 25px; line-height: 1.6; }
-.lock-box input { width: 100%; background: #0a0a0f; border: 1px solid #2a3a32; color: #fff; padding: 15px; border-radius: 12px; font-size: 16px; text-align: center; letter-spacing: 2px; outline: none; margin-bottom: 15px; }
+.lock-box input {
+  width: 100%; background: #0a0a0f; border: 1px solid #2a3a32;
+  color: #fff; padding: 15px; border-radius: 12px; font-size: 16px;
+  text-align: center; letter-spacing: 2px; outline: none; margin-bottom: 15px;
+}
 .lock-box input:focus { border-color: #00ff88; box-shadow: 0 0 15px rgba(0,255,136,0.3); }
-.lock-box button { width: 100%; background: linear-gradient(135deg, #00ff88, #00cc6a); color: #000; border: none; padding: 15px; border-radius: 12px; font-weight: bold; font-size: 15px; cursor: pointer; }
+.lock-box button {
+  width: 100%; background: linear-gradient(135deg, #00ff88, #00cc6a);
+  color: #000; border: none; padding: 15px; border-radius: 12px;
+  font-weight: bold; font-size: 15px; cursor: pointer; transition: 0.25s;
+}
+.lock-box button:hover { transform: scale(1.02); box-shadow: 0 5px 20px rgba(0,255,136,0.6); }
 .lock-error { color: #ff6b6b; font-size: 12px; margin-top: 10px; display: none; }
 .lock-error.show { display: block; }
+
 body { background: #0a0a0f; color: #e6e6e6; line-height: 1.6; padding-bottom: 100px; overflow-x: hidden; }
 #jimzz-neon-bg { position: fixed; top:0; left:0; width:100vw; height:100vh; z-index:-1; pointer-events:none; background: radial-gradient(circle at 20% 20%, rgba(0,255,136,0.05) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(0,255,136,0.04) 0%, transparent 50%), #0a0a0f; }
 header { text-align: center; padding: 40px 20px 30px; background: radial-gradient(circle at 50% 100%, rgba(0,255,136,0.15), transparent 70%), linear-gradient(135deg, #001a0d, rgba(10,10,15,0.7)); border-bottom: 2px solid #00ff88; position: relative; z-index: 5; }
@@ -55,18 +74,67 @@ header .counter .dot { display: inline-block; width: 8px; height: 8px; backgroun
 .pengumuman.refund .pengumuman-title { color: #00c8ff; }
 .pengumuman.refund .pengumuman-text b { color: #00c8ff; }
 .produk-list { display: flex; flex-direction: column; gap: 14px; }
-.produk-list.grid-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.produk-list.grid-2col .produk-card { padding: 15px 12px; border-radius: 12px; display: flex; flex-direction: column; justify-content: space-between; min-height: 150px; margin: 0; }
-.produk-list.grid-2col .produk-header { flex-direction: column; align-items: flex-start; gap: 6px; margin-bottom: 8px; }
-.produk-list.grid-2col .produk-icon { font-size: 32px; }
-.produk-list.grid-2col .produk-label { font-size: 8px; margin-bottom: 2px; }
-.produk-list.grid-2col .produk-nama { font-size: 13px; line-height: 1.2; }
-.produk-list.grid-2col .produk-desc { font-size: 10px; margin-bottom: 8px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.produk-list.grid-2col .produk-bottom { display: flex; flex-direction: column; gap: 6px; align-items: stretch; }
-.produk-list.grid-2col .produk-harga-info { text-align: center; }
-.produk-list.grid-2col .produk-harga-label { font-size: 8px; }
-.produk-list.grid-2col .produk-harga { font-size: 13px; text-align: center; }
-.produk-list.grid-2col .btn-order { padding: 8px 10px; font-size: 11px; width: 100%; text-align: center; }
+.produk-list.grid-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.produk-list.grid-2col .produk-card {
+  padding: 15px 12px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 150px;
+  margin: 0;
+}
+.produk-list.grid-2col .produk-header {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.produk-list.grid-2col .produk-icon {
+  font-size: 32px;
+}
+.produk-list.grid-2col .produk-label {
+  font-size: 8px;
+  margin-bottom: 2px;
+}
+.produk-list.grid-2col .produk-nama {
+  font-size: 13px;
+  line-height: 1.2;
+}
+.produk-list.grid-2col .produk-desc {
+  font-size: 10px;
+  margin-bottom: 8px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.produk-list.grid-2col .produk-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: stretch;
+}
+.produk-list.grid-2col .produk-harga-info {
+  text-align: center;
+}
+.produk-list.grid-2col .produk-harga-label {
+  font-size: 8px;
+}
+.produk-list.grid-2col .produk-harga {
+  font-size: 13px;
+  text-align: center;
+}
+.produk-list.grid-2col .btn-order {
+  padding: 8px 10px;
+  font-size: 11px;
+  width: 100%;
+  text-align: center;
+}
 .produk-card { background: linear-gradient(145deg, rgba(13,26,20,0.85), rgba(13,13,21,0.85)); border: 1px solid #2a3a32; border-radius: 14px; padding: 20px 18px; transition: 0.3s; position: relative; }
 .produk-card:hover { border-color: #00ff88; box-shadow: 0 0 25px rgba(0,255,136,0.3); transform: translateY(-2px); }
 .produk-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
@@ -138,6 +206,7 @@ header .counter .dot { display: inline-block; width: 8px; height: 8px; backgroun
 .info-note b { color: #00ff88; }
 .term-text { color: #666; font-size: 11px; text-align: center; margin-top: 12px; }
 footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border-top: 1px solid #222; margin-top: 30px; position: relative; z-index: 5; }
+
 .music-player { position: fixed; bottom: 80px; right: 12px; left: auto; width: 220px; max-width: calc(100% - 24px); background: #0d1a14; border: 1px solid #2a3a32; border-radius: 10px; box-shadow: 0 6px 18px rgba(0,0,0,0.7); z-index: 300; overflow: hidden; }
 .music-mini { display: flex; align-items: center; gap: 7px; padding: 7px 9px; cursor: pointer; }
 .music-cover { width: 30px; height: 30px; border-radius: 6px; background: #0a0a0f; display: flex; align-items: center; justify-content: center; flex-shrink: 0; position: relative; overflow: hidden; }
@@ -166,7 +235,16 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
 .music-item-info { flex: 1; min-width: 0; }
 .music-item-title { font-size: 10px; color: #fff; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .music-item-artist { font-size: 9px; color: #888; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px; }
-@media (max-width: 480px) { header h1 { font-size: 30px; } .produk-icon { font-size: 26px; } .nav-item .nav-label { font-size: 8px; } .nav-item .nav-icon { font-size: 18px; } .music-player { bottom: 75px; right: 10px; left: auto; width: 200px; } }
+.music-list::-webkit-scrollbar { width: 3px; }
+.music-list::-webkit-scrollbar-thumb { background: #00ff88; border-radius: 2px; }
+
+@media (max-width: 480px) {
+  header h1 { font-size: 30px; }
+  .produk-icon { font-size: 26px; }
+  .nav-item .nav-label { font-size: 8px; }
+  .nav-item .nav-icon { font-size: 18px; }
+  .music-player { bottom: 75px; right: 10px; left: auto; width: 200px; }
+}
 </style>
 </head>
 <body>
@@ -183,6 +261,7 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
 </div>
 
 <div id="mainWeb" style="display:none;">
+
 <canvas id="jimzz-neon-bg"></canvas>
 
 <div class="tab-page active" id="page-home">
@@ -194,14 +273,36 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
     <h1>Jimzz Store</h1>
     <div class="counter"><span class="dot"></span>🔥 <span id="viewCount">1.234</span> orang sudah order</div>
   </header>
+
   <section class="kategori" style="text-align:center;">
     <h2>👋 Selamat Datang di Jimzz Store</h2>
     <p class="sub">Pilih menu di bawah untuk mulai order</p>
-    <div class="menu-home" onclick="switchTab('topup')"><div class="menu-home-icon">🎮</div><div class="menu-home-title">Top Up Game</div><div class="menu-home-desc">Diamond FF, ML, PUBG, dll</div></div>
-    <div class="menu-home" onclick="switchTab('jpm')"><div class="menu-home-icon">🚀</div><div class="menu-home-title">Layanan Lainnya</div><div class="menu-home-desc">JPM, Nokos WA Indo, Jasa Web</div></div>
-    <div class="menu-home" onclick="switchTab('suntik')"><div class="menu-home-icon">📱</div><div class="menu-home-title">Suntik All Sosmed</div><div class="menu-home-desc">Saluran WA, Like TikTok, Views TikTok</div></div>
-    <div class="menu-home" onclick="switchTab('apk')"><div class="menu-home-icon">📦</div><div class="menu-home-title">Jual APK</div><div class="menu-home-desc">Aplikasi premium murah & aman</div></div>
+    
+    <div class="menu-home" onclick="switchTab('topup')">
+      <div class="menu-home-icon">🎮</div>
+      <div class="menu-home-title">Top Up Game</div>
+      <div class="menu-home-desc">Diamond FF, ML, PUBG, dll</div>
+    </div>
+    
+    <div class="menu-home" onclick="switchTab('jpm')">
+      <div class="menu-home-icon">🚀</div>
+      <div class="menu-home-title">Layanan Lainnya</div>
+      <div class="menu-home-desc">JPM, Nokos WA Indo, Jasa Web</div>
+    </div>
+    
+    <div class="menu-home" onclick="switchTab('suntik')">
+      <div class="menu-home-icon">📱</div>
+      <div class="menu-home-title">Suntik All Sosmed</div>
+      <div class="menu-home-desc">Saluran WA, Like TikTok, Views TikTok</div>
+    </div>
+    
+    <div class="menu-home" onclick="switchTab('apk')">
+      <div class="menu-home-icon">📦</div>
+      <div class="menu-home-title">Jual APK</div>
+      <div class="menu-home-desc">Aplikasi premium murah & aman</div>
+    </div>
   </section>
+
   <footer><p>© 2025 Jimzz Store — All Rights Reserved 😈</p></footer>
 </div>
 
@@ -215,51 +316,104 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
 </div>
 
 <div class="tab-page" id="page-jpm">
-  <section class="kategori"><h2>🚀 Layanan Lainnya</h2><p class="sub">Pilih layanan yang kamu butuhkan</p><div class="produk-list" id="jpm"></div></section>
+  <section class="kategori">
+    <h2>🚀 Layanan Lainnya</h2>
+    <p class="sub">Pilih layanan yang kamu butuhkan</p>
+    <div class="produk-list" id="jpm"></div>
+  </section>
   <footer><p>© 2025 Jimzz Store — All Rights Reserved 😈</p></footer>
 </div>
 
 <div class="tab-page" id="page-suntik">
   <section class="kategori">
-    <h2>📱 Suntik All Sosmed</h2><p class="sub">Pilih layanan yang kamu butuhkan</p>
+    <h2>📱 Suntik All Sosmed</h2>
+    <p class="sub">Pilih layanan yang kamu butuhkan</p>
+    
     <div class="pengumuman">
-      <div class="pengumuman-header"><span class="pengumuman-icon">📢</span><span class="pengumuman-title">PENGUMUMAN PENTING</span></div>
-      <p class="pengumuman-text">Jika jumlah <b>like</b> atau <b>followers</b> Instagram, TikTok, dan sosial media lainnya <b>tiba-tiba menurun</b> — itu adalah hal <b>NORMAL</b>.</p>
-      <p class="pengumuman-text">Instagram, TikTok, dan platform lainnya <b>rutin melakukan pembersihan akun bot/fake secara otomatis</b>. Ini bukan karena layanan kami gagal, tapi karena sistem keamanan platform tersebut.</p>
-      <p class="pengumuman-text">💡 Saran: Order jumlah <b>sedikit</b> terlebih dahulu untuk mengetes layanan kami.</p>
+      <div class="pengumuman-header">
+        <span class="pengumuman-icon">📢</span>
+        <span class="pengumuman-title">PENGUMUMAN PENTING</span>
+      </div>
+      <p class="pengumuman-text">
+        Jika jumlah <b>like</b> atau <b>followers</b> Instagram, TikTok, dan sosial media lainnya <b>tiba-tiba menurun</b> — itu adalah hal <b>NORMAL</b>.
+      </p>
+      <p class="pengumuman-text">
+        Instagram, TikTok, dan platform lainnya <b>rutin melakukan pembersihan akun bot/fake secara otomatis</b>. Ini bukan karena layanan kami gagal, tapi karena sistem keamanan platform tersebut.
+      </p>
+      <p class="pengumuman-text">
+        💡 Saran: Order jumlah <b>sedikit</b> terlebih dahulu untuk mengetes layanan kami.
+      </p>
     </div>
+
     <div class="pengumuman refund">
-      <div class="pengumuman-header"><span class="pengumuman-icon">💰</span><span class="pengumuman-title">JAMINAN REFUND</span></div>
-      <p class="pengumuman-text">Jika kalian membeli <b>suntik sosmed apapun</b> dan pesanan <b>tidak masuk sama sekali</b>, kalian berhak mendapatkan <b>REFUND 100%</b>.</p>
-      <p class="pengumuman-text">Silakan hubungi <b>chat admin</b> untuk proses refund. Kami akan memprosesnya secepat mungkin. 🙏</p>
+      <div class="pengumuman-header">
+        <span class="pengumuman-icon">💰</span>
+        <span class="pengumuman-title">JAMINAN REFUND</span>
+      </div>
+      <p class="pengumuman-text">
+        Jika kalian membeli <b>suntik sosmed apapun</b> dan pesanan <b>tidak masuk sama sekali</b>, kalian berhak mendapatkan <b>REFUND 100%</b>.
+      </p>
+      <p class="pengumuman-text">
+        Silakan hubungi <b>chat admin</b> untuk proses refund. Kami akan memprosesnya secepat mungkin. 🙏
+      </p>
     </div>
+    
     <div class="produk-list" id="sosmed"></div>
   </section>
   <footer><p>© 2025 Jimzz Store — All Rights Reserved 😈</p></footer>
 </div>
 
 <div class="tab-page" id="page-apk">
-  <section class="kategori"><h2>📦 Jual APK</h2><p class="sub">Aplikasi premium murah & aman</p><div class="produk-list" id="apkList"></div></section>
+  <section class="kategori">
+    <h2>📦 Jual APK</h2>
+    <p class="sub">Aplikasi premium murah & aman</p>
+    <div class="produk-list" id="apkList"></div>
+  </section>
   <footer><p>© 2025 Jimzz Store — All Rights Reserved 😈</p></footer>
 </div>
 
 <div class="bottom-nav">
-  <button class="nav-item active" data-tab="home" onclick="switchTab('home')"><span class="nav-icon">🏠</span><span class="nav-label">Home</span></button>
-  <button class="nav-item" data-tab="topup" onclick="switchTab('topup')"><span class="nav-icon">🎮</span><span class="nav-label">Top Up</span></button>
-  <button class="nav-item" data-tab="jpm" onclick="switchTab('jpm')"><span class="nav-icon">🚀</span><span class="nav-label">Lainnya</span></button>
-  <button class="nav-item" data-tab="suntik" onclick="switchTab('suntik')"><span class="nav-icon">📱</span><span class="nav-label">Suntik All</span></button>
-  <button class="nav-item" data-tab="apk" onclick="switchTab('apk')"><span class="nav-icon">📦</span><span class="nav-label">Jual APK</span></button>
+  <button class="nav-item active" data-tab="home" onclick="switchTab('home')">
+    <span class="nav-icon">🏠</span>
+    <span class="nav-label">Home</span>
+  </button>
+  <button class="nav-item" data-tab="topup" onclick="switchTab('topup')">
+    <span class="nav-icon">🎮</span>
+    <span class="nav-label">Top Up</span>
+  </button>
+  <button class="nav-item" data-tab="jpm" onclick="switchTab('jpm')">
+    <span class="nav-icon">🚀</span>
+    <span class="nav-label">Lainnya</span>
+  </button>
+  <button class="nav-item" data-tab="suntik" onclick="switchTab('suntik')">
+    <span class="nav-icon">📱</span>
+    <span class="nav-label">Suntik All</span>
+  </button>
+  <button class="nav-item" data-tab="apk" onclick="switchTab('apk')">
+    <span class="nav-icon">📦</span>
+    <span class="nav-label">Jual APK</span>
+  </button>
 </div>
 
 <div class="modal-overlay" id="orderModal" onclick="if(event.target===this)tutupOrder()">
   <div class="modal-box">
     <button class="modal-close" onclick="tutupOrder()">×</button>
-    <div class="steps-indicator"><div class="step-dot active" id="dot1">1</div><div class="step-dot" id="dot2">2</div><div class="step-dot" id="dot3">3</div></div>
+    <div class="steps-indicator">
+      <div class="step-dot active" id="dot1">1</div>
+      <div class="step-dot" id="dot2">2</div>
+      <div class="step-dot" id="dot3">3</div>
+    </div>
+
     <div class="step-content active" id="step1">
-      <div class="modal-title-block"><div class="modal-label" id="modalLabel">LAYANAN</div><div class="modal-title" id="modalTitle">-</div><div class="modal-subtitle" id="modalSubtitle">-</div></div>
+      <div class="modal-title-block">
+        <div class="modal-label" id="modalLabel">LAYANAN</div>
+        <div class="modal-title" id="modalTitle">-</div>
+        <div class="modal-subtitle" id="modalSubtitle">-</div>
+      </div>
       <label class="jumlah-label" for="jumlahInput">Jumlah <span class="minmax" id="minmaxText">Min: 100 - Max: 20.000</span></label>
       <input type="number" id="jumlahInput" class="jumlah-input" placeholder="# Masukkan jumlah" oninput="hitungTotal()">
       <div class="jumlah-hint" id="jumlahHint">Sistem otomatis hitung harga sesuai jumlah.</div>
+
       <div class="total-box">
         <div class="total-row"><span class="label">Harga Satuan</span><span class="value" id="hargaSatuan">Rp 0</span></div>
         <div class="total-row"><span class="label">Jumlah Order</span><span class="value" id="jumlahDisplay">0</span></div>
@@ -267,34 +421,90 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
         <div class="total-row bonus" id="totalDapatRow" style="display:none;"><span class="label">📊 Total Diterima</span><span class="value" id="totalDapat">0</span></div>
         <div class="total-row big"><span class="label">Total Harga</span><span class="value" id="totalHarga">Rp 0</span></div>
       </div>
+
       <button class="btn-next" id="btnPesan" onclick="keStep2()" disabled>💬 Lanjut ke Pembayaran →</button>
       <div class="term-text">Dengan memesan, Anda menyetujui <a href="#">Syarat & Ketentuan</a> kami.</div>
     </div>
+
     <div class="step-content" id="step2">
-      <div class="modal-title-block"><div class="modal-label">LANGKAH 2 DARI 3</div><div class="modal-title">📝 Data Pemesan</div><div class="modal-subtitle">Isi data kamu dengan benar</div></div>
-      <div class="form-box"><label id="inputLabel">🔗 Link</label><input type="text" id="linkSaluran" placeholder="Contoh: link" oninput="clearError()" required><div class="form-error" id="inputError">Link tidak valid</div></div>
-      <div class="form-box"><label>📱 No WhatsApp Aktif</label><input type="tel" id="hpPemesan" placeholder="Contoh: 08xxxxxxxxxx" oninput="clearError()" required><div class="form-error" id="hpError">No WA tidak valid</div></div>
+      <div class="modal-title-block">
+        <div class="modal-label">LANGKAH 2 DARI 3</div>
+        <div class="modal-title">📝 Data Pemesan</div>
+        <div class="modal-subtitle">Isi data kamu dengan benar</div>
+      </div>
+      <div class="form-box">
+        <label id="inputLabel">🔗 Link</label>
+        <input type="text" id="linkSaluran" placeholder="Contoh: link" oninput="clearError()" required>
+        <div class="form-error" id="inputError">Link tidak valid</div>
+      </div>
+      <div class="form-box">
+        <label>📱 No WhatsApp Aktif</label>
+        <input type="tel" id="hpPemesan" placeholder="Contoh: 08xxxxxxxxxx" oninput="clearError()" required>
+        <div class="form-error" id="hpError">No WA tidak valid</div>
+      </div>
       <div class="form-note">📌 Nomor konfirmasi pesanan.</div>
       <button class="btn-next" onclick="keStep3()">Lanjut ke QRIS →</button>
     </div>
+
     <div class="step-content" id="step3">
-      <div class="modal-title-block"><div class="modal-label">LANGKAH 3 DARI 3</div><div class="modal-title">💳 Scan QRIS & Bayar</div></div>
-      <div id="qrisLoading" style="text-align:center; padding:30px 0;"><div class="loading-spinner" style="width:36px;height:36px;border:3px solid #2a3a32;border-top-color:#00ff88;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 10px;"></div><p style="color:#00ff88; font-size:13px;">⏳ Membuat QRIS...</p></div>
-      <div class="qris-box" id="qrisBox" style="display:none;"><img id="qrisImage" src="" alt="QRIS"><button id="qrisDownload" onclick="downloadQris()" style="display:inline-flex;align-items:center;justify-content:center;gap:6px;margin:12px auto 0;background:transparent;border:2px solid #00ff88;color:#00ff88;padding:10px 20px;border-radius:10px;font-weight:bold;font-size:13px;cursor:pointer;">⬇️ Download QRIS</button><div class="qris-nominal" id="qrisNominal">💳 Silahkan bayar QRIS ini sebesar Rp 0</div></div>
-      <button class="btn-subtle" id="btnSayaBayar" onclick="userKonfirmasiBayar()" style="display:none;">✅ Saya Sudah Bayar</button>
-      <div class="waiting-box" id="waitingBox" style="display:none;"><div class="loading-spinner"></div><p>⏳ Menunggu Konfirmasi Admin</p><p class="sub-wait">Admin akan segera memproses pesanan kamu.</p></div>
-      <div class="info-note">📌 <b>Bayar sesuai nominal</b>. Setelah bayar, klik <b>"Saya Sudah Bayar"</b>.</div>
+      <div class="modal-title-block">
+        <div class="modal-label">LANGKAH 3 DARI 3</div>
+        <div class="modal-title">💳 Scan QRIS & Bayar</div>
+      </div>
+      
+      <div id="qrisLoading" style="text-align:center; padding:30px 0;">
+        <div class="loading-spinner" style="width:36px;height:36px;border:3px solid #2a3a32;border-top-color:#00ff88;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 10px;"></div>
+        <p style="color:#00ff88; font-size:13px;">⏳ Membuat QRIS...</p>
+      </div>
+      
+      <div class="qris-box" id="qrisBox" style="display:none;">
+        <img id="qrisImage" src="" alt="QRIS">
+        <button id="qrisDownload" onclick="downloadQris()" style="display:inline-flex; align-items:center; justify-content:center; gap:6px; margin:12px auto 0; background:transparent; border:2px solid #00ff88; color:#00ff88; padding:10px 20px; border-radius:10px; font-weight:bold; font-size:13px; cursor:pointer;">
+          ⬇️ Download QRIS
+        </button>
+        <div class="qris-nominal" id="qrisNominal">💳 Silahkan bayar QRIS ini sebesar Rp 0</div>
+      </div>
+      
+      <button class="btn-subtle" id="btnSayaBayar" onclick="userKonfirmasiBayar()" style="display:none;">
+        ✅ Saya Sudah Bayar
+      </button>
+      
+      <div class="waiting-box" id="waitingBox" style="display:none;">
+        <div class="loading-spinner"></div>
+        <p>⏳ Menunggu Konfirmasi Admin</p>
+        <p class="sub-wait">Admin akan segera memproses pesanan kamu.</p>
+      </div>
+      
+      <div class="info-note">
+        📌 <b>Bayar sesuai nominal</b>. Setelah bayar, klik <b>"Saya Sudah Bayar"</b>.
+      </div>
     </div>
   </div>
 </div>
 
 <div class="music-player" id="musicPlayer">
-  <div class="music-mini" onclick="toggleExpand()"><div class="music-cover paused" id="musicCover"></div><div class="music-mini-info"><div class="music-mini-title" id="miniTitle">Pilih Lagu</div><div class="music-mini-artist" id="miniArtist">Klik untuk buka</div></div><div class="music-mini-controls" onclick="event.stopPropagation()"><button onclick="prevSong()">⏮</button><button class="play-main" id="playMainBtn" onclick="togglePlay()">▶</button><button onclick="nextSong()">⏭</button></div></div>
+  <div class="music-mini" onclick="toggleExpand()">
+    <div class="music-cover paused" id="musicCover"></div>
+    <div class="music-mini-info">
+      <div class="music-mini-title" id="miniTitle">Pilih Lagu</div>
+      <div class="music-mini-artist" id="miniArtist">Klik untuk buka</div>
+    </div>
+    <div class="music-mini-controls" onclick="event.stopPropagation()">
+      <button onclick="prevSong()">⏮</button>
+      <button class="play-main" id="playMainBtn" onclick="togglePlay()">▶</button>
+      <button onclick="nextSong()">⏭</button>
+    </div>
+  </div>
   <div class="music-progress" id="progressBar" onclick="seekAudio(event)"><div class="music-progress-fill" id="progressFill"></div></div>
-  <div class="music-expanded" id="musicExpanded"><div class="music-list-header"><span>🎧 Playlist</span><span class="close-x" onclick="event.stopPropagation(); toggleExpand();">×</span></div><div class="music-list" id="musicList"></div></div>
+  <div class="music-expanded" id="musicExpanded">
+    <div class="music-list-header"><span>🎧 Playlist</span><span class="close-x" onclick="event.stopPropagation(); toggleExpand();">×</span></div>
+    <div class="music-list" id="musicList"></div>
+  </div>
   <audio id="audioPlayer" loop></audio>
 </div>
+
 </div>
+
 <script>
 function checkPassword() {
   const input = document.getElementById('passwordInput').value;
@@ -309,12 +519,21 @@ function checkPassword() {
     setTimeout(() => error.classList.remove('show'), 2000);
   }
 }
+
 if (sessionStorage.getItem('jimzzUnlocked') === 'true') {
   document.getElementById('passwordLock').style.display = 'none';
   document.getElementById('mainWeb').style.display = 'block';
   setTimeout(startApp, 100);
 }
-function startApp() { initCanvas(); initData(); renderGameList(); renderPlaylist(); initMusicEvents(); }
+
+function startApp() {
+  initCanvas();
+  initData();
+  renderGameList();
+  renderPlaylist();
+  initMusicEvents();
+}
+
 function initCanvas() {
   const canvas = document.getElementById("jimzz-neon-bg");
   if (!canvas) return;
@@ -322,12 +541,32 @@ function initCanvas() {
   let W, H, particles = [], animationId;
   let isMobile = window.innerWidth < 600;
   function resizeJimzz() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; isMobile = window.innerWidth < 600; }
-  resizeJimzz(); window.addEventListener('resize', resizeJimzz);
+  resizeJimzz();
+  window.addEventListener('resize', resizeJimzz);
   const particleCount = isMobile ? 45 : 90;
-  for (let i = 0; i < particleCount; i++) { particles.push({ x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight, size: Math.random() * 2 + 0.5, speedX: (Math.random() - 0.5) * 0.35, speedY: (Math.random() - 0.5) * 0.35, alpha: Math.random() * 0.7 + 0.2 }); }
-  function animateJimzz() { ctx.clearRect(0, 0, W, H); particles.forEach(p => { p.x += p.speedX; p.y += p.speedY; if (p.x < -10) p.x = W + 10; if (p.x > W + 10) p.x = -10; if (p.y < -10) p.y = H + 10; if (p.y > H + 10) p.y = -10; ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fillStyle = `rgba(0, 255, 100, ${p.alpha})`; ctx.shadowBlur = 12; ctx.shadowColor = "#00ff66"; ctx.fill(); }); animationId = requestAnimationFrame(animateJimzz); }
+  for (let i = 0; i < particleCount; i++) {
+    particles.push({ x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight, size: Math.random() * 2 + 0.5, speedX: (Math.random() - 0.5) * 0.35, speedY: (Math.random() - 0.5) * 0.35, alpha: Math.random() * 0.7 + 0.2 });
+  }
+  function animateJimzz() {
+    ctx.clearRect(0, 0, W, H);
+    particles.forEach(p => {
+      p.x += p.speedX; p.y += p.speedY;
+      if (p.x < -10) p.x = W + 10;
+      if (p.x > W + 10) p.x = -10;
+      if (p.y < -10) p.y = H + 10;
+      if (p.y > H + 10) p.y = -10;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(0, 255, 100, ${p.alpha})`;
+      ctx.shadowBlur = 12;
+      ctx.shadowColor = "#00ff66";
+      ctx.fill();
+    });
+    animationId = requestAnimationFrame(animateJimzz);
+  }
   animateJimzz();
 }
+
 const produkSosmed = [
   { icon: "📱", nama: "Suntik Saluran WA", desc: "Tambah pengikut saluran WhatsApp kamu secara aman & cepat.", hargaPerUnit: 10, unit: "pengikut", min: 100, max: 1000000, hot: true, inputLabel: "🔗 Link Saluran WA", inputPlaceholder: "Contoh: https://whatsapp.com/channel/xxxxx", inputValidasi: "whatsapp.com/channel", inputError: "Link harus link SALURAN WhatsApp" },
   { icon: "😀", nama: "Suntik Random Emoji Reaction", desc: "Tambah reaction emoji random ke postingan kamu.", hargaPerUnit: 1, unit: "reaction", min: 250, max: 1000000, hot: true, inputLabel: "🔗 Link Postingan", inputPlaceholder: "Contoh: https://www.tiktok.com/@user/video/xxx", inputValidasi: "tiktok.com", inputError: "Link harus link postingan TikTok" },
@@ -335,289 +574,305 @@ const produkSosmed = [
   { icon: "❤️", nama: "Suntik Like TikTok", desc: "Tambah like video TikTok kamu secara aman & cepat.", hargaPerUnit: 10, unit: "like", min: 100, max: 1000000, hot: true, inputLabel: "🔗 Link Video TikTok", inputPlaceholder: "Contoh: https://www.tiktok.com/@user/video/xxx", inputValidasi: "tiktok.com", inputError: "Link harus link video TikTok" },
   { icon: "👁️", nama: "Suntik Views TikTok", desc: "Tambah views video TikTok kamu secara aman & cepat.", hargaPerUnit: 1, unit: "views", min: 500, max: 1000000, hot: false, inputLabel: "🔗 Link Video TikTok", inputPlaceholder: "Contoh: https://www.tiktok.com/@user/video/xxx", inputValidasi: "tiktok.com", inputError: "Link harus link video TikTok" }
 ];
+
 const produkJpm = [
   { icon: "🚀", nama: "JPM (Jasa Push Member)", desc: "Push member ke grup / channel kamu dengan cepat & aman.", hargaPerUnit: 200, unit: "member", min: 5, max: 1000000, hot: true, bonusMinTotal: 4000, bonusUnit: 5, inputLabel: "🔗 Link Grup WA", inputPlaceholder: "Contoh: https://chat.whatsapp.com/xxxxx", inputValidasi: "chat.whatsapp.com", inputError: "Link harus link GRUP WhatsApp" },
   { icon: "📱", nama: "Nokos WA Indo", desc: "Nomor kosong WhatsApp Indonesia siap pakai.", hargaPerUnit: 5000, unit: "nomor", min: 1, max: 100, hot: true, inputLabel: "👤 Nama Pemesan", inputPlaceholder: "Contoh: Bilzz", inputValidasi: "", inputError: "" },
   { icon: "🌐", nama: "Jasa Web", desc: "Jasa pembuatan website profesional.", hargaPerUnit: 15000, unit: "web", min: 1, max: 50, hot: true, inputLabel: "📝 Deskripsi Web", inputPlaceholder: "Contoh: Web toko online", inputValidasi: "", inputError: "" }
 ];
+
 const produkApk = [
   { icon: "💾", nama: "Auto Save Kontak", desc: "Aplikasi auto save kontak WhatsApp secara otomatis.", harga: 1000, hot: true },
   { icon: "🎨", nama: "APK Bikin Logo", desc: "Aplikasi bikin logo profesional langsung dari HP.", harga: 1000, hot: true },
   { icon: "🛠️", nama: "APK Kebutuhan JB", desc: "Kumpulan APK kebutuhan Jual Beli online.", harga: 1000, hot: true },
   { icon: "🦏", nama: "APK WA Badak", desc: "Aplikasi WhatsApp mod dengan fitur lengkap & anti-banned.", harga: 1000, hot: true }
 ];
+
 const produkTopUp = [
-  { icon: "🔥", nama: "Free Fire", desc: "Top up Diamond Free Fire murah & cepat", unit: "diamond", hot: true, paket: [
-    { nominal: "5 Diamond", harga: 778 },
-    { nominal: "10 Diamond", harga: 1555 },
-    { nominal: "12 Diamond", harga: 1865 },
-    { nominal: "15 Diamond", harga: 2331 },
-    { nominal: "20 Diamond", harga: 3105 },
-    { nominal: "25 Diamond", harga: 3877 },
-    { nominal: "30 Diamond", harga: 4649 },
-    { nominal: "40 Diamond", harga: 6190 },
-    { nominal: "50 Diamond", harga: 7747 },
-    { nominal: "70 Diamond", harga: 10808 },
-    { nominal: "80 Diamond", harga: 12365 },
-    { nominal: "100 Diamond", harga: 15466 },
-    { nominal: "140 Diamond", harga: 21617 },
-    { nominal: "150 Diamond", harga: 23165 },
-    { nominal: "200 Diamond", harga: 30879 },
-    { nominal: "250 Diamond", harga: 38560 },
-    { nominal: "300 Diamond", harga: 46239 },
-    { nominal: "355 Diamond", harga: 54631 },
-    { nominal: "400 Diamond", harga: 61591 },
-    { nominal: "500 Diamond", harga: 76752 },
-    { nominal: "600 Diamond", harga: 92102 },
-    { nominal: "720 Diamond", harga: 110523 },
-    { nominal: "800 Diamond", harga: 122776 },
-    { nominal: "1000 Diamond", harga: 152928 },
-    { nominal: "1200 Diamond", harga: 183048 },
-    { nominal: "1450 Diamond", harga: 220597 },
-    { nominal: "1500 Diamond", harga: 228170 },
-    { nominal: "1800 Diamond", harga: 273801 },
-    { nominal: "2000 Diamond", harga: 303702 },
-    { nominal: "2400 Diamond", harga: 364440 },
-    { nominal: "2500 Diamond", harga: 379558 },
-    { nominal: "3000 Diamond", harga: 455459 },
-    { nominal: "3550 Diamond", harga: 538961 },
-    { nominal: "4000 Diamond", harga: 606095 },
-    { nominal: "5000 Diamond", harga: 755618 },
-    { nominal: "6000 Diamond", harga: 905410 },
-    { nominal: "7200 Diamond", harga: 1082366 },
-    { nominal: "8000 Diamond", harga: 1201172 },
-    { nominal: "10000 Diamond", harga: 1498349 },
-    { nominal: "12000 Diamond", harga: 1795028 },
-    { nominal: "14500 Diamond", harga: 2166205 },
-    { nominal: "15000 Diamond", harga: 2240264 },
-    { nominal: "20000 Diamond", harga: 2975383 },
-    { nominal: "25000 Diamond", harga: 3717416 },
-    { nominal: "30000 Diamond", harga: 4453312 },
-    { nominal: "40000 Diamond", harga: 5929815 },
-    { nominal: "50000 Diamond", harga: 7406082 },
-    { nominal: "75000 Diamond", harga: 11101727 },
-    { nominal: "100000 Diamond", harga: 14796221 },
-    { nominal: "200000 Diamond", harga: 29562376 }
-  ]},
-  { icon: "⚔️", nama: "Mobile Legends", desc: "Top up Diamond Mobile Legends murah & cepat", unit: "diamond", hot: true, paket: [
-    { nominal: "11 Diamond", harga: 3024 },
-    { nominal: "22 Diamond", harga: 6048 },
-    { nominal: "44 Diamond", harga: 12084 },
-    { nominal: "56 Diamond", harga: 15366 },
-    { nominal: "86 Diamond", harga: 23574 },
-    { nominal: "110 Diamond", harga: 30130 },
-    { nominal: "172 Diamond", harga: 47045 },
-    { nominal: "240 Diamond", harga: 65562 },
-    { nominal: "257 Diamond", harga: 70170 },
-    { nominal: "355 Diamond", harga: 96782 },
-    { nominal: "500 Diamond", harga: 136017 },
-    { nominal: "720 Diamond", harga: 195549 },
-    { nominal: "1000 Diamond", harga: 271368 },
-    { nominal: "1440 Diamond", harga: 389533 },
-    { nominal: "2000 Diamond", harga: 540381 },
-    { nominal: "2880 Diamond", harga: 777190 },
-    { nominal: "4000 Diamond", harga: 1076220 },
-    { nominal: "6000 Diamond", harga: 1611582 },
-    { nominal: "8000 Diamond", harga: 2143874 },
-    { nominal: "10000 Diamond", harga: 2674883 },
-    { nominal: "12000 Diamond", harga: 3204882 },
-    { nominal: "15000 Diamond", harga: 3996526 },
-    { nominal: "20000 Diamond", harga: 5323854 },
-    { nominal: "25000 Diamond", harga: 6643812 },
-    { nominal: "30000 Diamond", harga: 7963119 },
-    { nominal: "40000 Diamond", harga: 10573310 },
-    { nominal: "50000 Diamond", harga: 13201387 },
-    { nominal: "75000 Diamond", harga: 19770864 },
-    { nominal: "100000 Diamond", harga: 26296630 },
-    { nominal: "150000 Diamond", harga: 39382036 },
-    { nominal: "200000 Diamond", harga: 52339329 },
-    { nominal: "250000 Diamond", harga: 65268979 },
-    { nominal: "300000 Diamond", harga: 78169273 },
-    { nominal: "400000 Diamond", harga: 103857918 },
-    { nominal: "500000 Diamond", harga: 129512124 },
-    { nominal: "750000 Diamond", harga: 193599284 },
-    { nominal: "1000000 Diamond", harga: 257523355 },
-    { nominal: "1500000 Diamond", harga: 385195439 },
-    { nominal: "2000000 Diamond", harga: 511988874 },
-    { nominal: "2500000 Diamond", harga: 638238789 },
-    { nominal: "3000000 Diamond", harga: 764137545 },
-    { nominal: "4000000 Diamond", harga: 1016104086 },
-    { nominal: "5000000 Diamond", harga: 1265910992 },
-    { nominal: "7500000 Diamond", harga: 1891289615 },
-    { nominal: "10000000 Diamond", harga: 2514597749 },
-    { nominal: "15000000 Diamond", harga: 3758709617 },
-    { nominal: "20000000 Diamond", harga: 4999992427 },
-    { nominal: "25000000 Diamond", harga: 6234201860 },
-    { nominal: "30000000 Diamond", harga: 7464766104 },
-    { nominal: "50000000 Diamond", harga: 12363778331 }
-  ]},
-  { icon: "🔫", nama: "PUBG Mobile", desc: "Top up UC PUBG Mobile murah & cepat", unit: "UC", hot: true, paket: [
-    { nominal: "60 UC", harga: 12960 },
-    { nominal: "120 UC", harga: 25920 },
-    { nominal: "180 UC", harga: 38812 },
-    { nominal: "325 UC", harga: 69874 },
-    { nominal: "385 UC", harga: 82661 },
-    { nominal: "660 UC", harga: 141223 },
-    { nominal: "720 UC", harga: 153659 },
-    { nominal: "985 UC", harga: 209564 },
-    { nominal: "1320 UC", harga: 280017 },
-    { nominal: "1800 UC", harga: 380502 },
-    { nominal: "2460 UC", harga: 517762 },
-    { nominal: "3850 UC", harga: 806220 },
-    { nominal: "4950 UC", harga: 1031393 },
-    { nominal: "6600 UC", harga: 1368614 },
-    { nominal: "8250 UC", harga: 1703007 },
-    { nominal: "10000 UC", harga: 2056757 },
-    { nominal: "12000 UC", harga: 2458976 },
-    { nominal: "15000 UC", harga: 3060713 },
-    { nominal: "18000 UC", harga: 3658893 },
-    { nominal: "20000 UC", harga: 4056142 },
-    { nominal: "25000 UC", harga: 5049643 },
-    { nominal: "30000 UC", harga: 6039283 },
-    { nominal: "40000 UC", harga: 8006837 },
-    { nominal: "50000 UC", harga: 9965828 },
-    { nominal: "75000 UC", harga: 14861305 },
-    { nominal: "100000 UC", harga: 19737466 },
-    { nominal: "150000 UC", harga: 29374389 },
-    { nominal: "200000 UC", harga: 38972229 },
-    { nominal: "250000 UC", harga: 48535215 },
-    { nominal: "300000 UC", harga: 58063106 },
-    { nominal: "400000 UC", harga: 77048157 },
-    { nominal: "500000 UC", harga: 95956195 },
-    { nominal: "750000 UC", harga: 143239413 },
-    { nominal: "1000000 UC", harga: 190355758 },
-    { nominal: "1500000 UC", harga: 284122718 },
-    { nominal: "2000000 UC", harga: 377355327 },
-    { nominal: "2500000 UC", harga: 470114870 },
-    { nominal: "3000000 UC", harga: 562429329 },
-    { nominal: "4000000 UC", harga: 746357540 },
-    { nominal: "5000000 UC", harga: 929196746 },
-    { nominal: "7500000 UC", harga: 1387640994 },
-    { nominal: "10000000 UC", harga: 1843987341 },
-    { nominal: "15000000 UC", harga: 2751347774 },
-    { nominal: "20000000 UC", harga: 3651936138 },
-    { nominal: "25000000 UC", harga: 4546841389 },
-    { nominal: "30000000 UC", harga: 5437337808 },
-    { nominal: "40000000 UC", harga: 7206349965 },
-    { nominal: "50000000 UC", harga: 8963553205 },
-    { nominal: "75000000 UC", harga: 13384888253 },
-    { nominal: "100000000 UC", harga: 17779882589 }
-  ]},
-  { icon: "🎮", nama: "Genshin Impact", desc: "Top up Crystal Genshin Impact murah & cepat", unit: "crystal", hot: false, paket: [
-    { nominal: "60 Crystal", harga: 13824 },
-    { nominal: "120 Crystal", harga: 27648 },
-    { nominal: "180 Crystal", harga: 41422 },
-    { nominal: "300 Crystal", harga: 68969 },
-    { nominal: "330 Crystal", harga: 75781 },
-    { nominal: "500 Crystal", harga: 114523 },
-    { nominal: "660 Crystal", harga: 150716 },
-    { nominal: "980 Crystal", harga: 223039 },
-    { nominal: "1280 Crystal", harga: 290436 },
-    { nominal: "1980 Crystal", harga: 447459 },
-    { nominal: "2480 Crystal", harga: 558492 },
-    { nominal: "3280 Crystal", harga: 734692 },
-    { nominal: "4480 Crystal", harga: 998461 },
-    { nominal: "6480 Crystal", harga: 1437062 },
-    { nominal: "8000 Crystal", harga: 1764879 },
-    { nominal: "10000 Crystal", harga: 2194414 },
-    { nominal: "12000 Crystal", harga: 2621545 },
-    { nominal: "15000 Crystal", harga: 3261673 },
-    { nominal: "18000 Crystal", harga: 3898696 },
-    { nominal: "20000 Crystal", harga: 4323589 },
-    { nominal: "25000 Crystal", harga: 5384798 },
-    { nominal: "30000 Crystal", harga: 6442494 },
-    { nominal: "40000 Crystal", harga: 8548877 },
-    { nominal: "50000 Crystal", harga: 10632164 },
-    { nominal: "75000 Crystal", harga: 15856076 },
-    { nominal: "100000 Crystal", harga: 21051773 },
-    { nominal: "150000 Crystal", harga: 31351595 },
-    { nominal: "200000 Crystal", harga: 41608241 },
-    { nominal: "250000 Crystal", harga: 51826517 },
-    { nominal: "300000 Crystal", harga: 62006523 },
-    { nominal: "400000 Crystal", harga: 82273025 },
-    { nominal: "500000 Crystal", harga: 102454683 },
-    { nominal: "750000 Crystal", harga: 153047022 },
-    { nominal: "1000000 Crystal", harga: 203289774 },
-    { nominal: "1500000 Crystal", harga: 303596735 },
-    { nominal: "2000000 Crystal", harga: 403186230 },
-    { nominal: "2500000 Crystal", harga: 502211921 },
-    { nominal: "3000000 Crystal", harga: 600794403 },
-    { nominal: "4000000 Crystal", harga: 797046812 },
-    { nominal: "5000000 Crystal", harga: 992292045 },
-    { nominal: "7500000 Crystal", harga: 1481827981 },
-    { nominal: "10000000 Crystal", harga: 1969187343 },
-    { nominal: "15000000 Crystal", harga: 2941000855 },
-    { nominal: "20000000 Crystal", harga: 3905096102 },
-    { nominal: "25000000 Crystal", harga: 4862454447 },
-    { nominal: "30000000 Crystal", harga: 5814664219 },
-    { nominal: "40000000 Crystal", harga: 7710299166 },
-    { nominal: "50000000 Crystal", harga: 9595948945 },
-    { nominal: "75000000 Crystal", harga: 14344998380 },
-    { nominal: "100000000 Crystal", harga: 19064277472 }
-  ]},
-  { icon: "🏆", nama: "Call of Duty Mobile", desc: "Top up CP COD Mobile murah & cepat", unit: "CP", hot: false, paket: [
-    { nominal: "80 CP", harga: 12960 },
-    { nominal: "160 CP", harga: 25920 },
-    { nominal: "240 CP", harga: 38812 },
-    { nominal: "420 CP", harga: 67790 },
-    { nominal: "500 CP", harga: 80573 },
-    { nominal: "800 CP", harga: 128574 },
-    { nominal: "880 CP", harga: 141222 },
-    { nominal: "1200 CP", harga: 192352 },
-    { nominal: "1600 CP", harga: 255826 },
-    { nominal: "2400 CP", harga: 382340 },
-    { nominal: "3200 CP", harga: 507642 },
-    { nominal: "4200 CP", harga: 663438 },
-    { nominal: "5600 CP", harga: 881807 },
-    { nominal: "8000 CP", harga: 1254397 },
-    { nominal: "10000 CP", harga: 1560518 },
-    { nominal: "12000 CP", harga: 1865364 },
-    { nominal: "15000 CP", harga: 2322276 },
-    { nominal: "18000 CP", harga: 2776289 },
-    { nominal: "20000 CP", harga: 3079292 },
-    { nominal: "25000 CP", harga: 3837309 },
-    { nominal: "30000 CP", harga: 4592895 },
-    { nominal: "40000 CP", harga: 6101365 },
-    { nominal: "50000 CP", harga: 7603023 },
-    { nominal: "75000 CP", harga: 11365194 },
-    { nominal: "100000 CP", harga: 15098897 },
-    { nominal: "150000 CP", harga: 22511277 },
-    { nominal: "200000 CP", harga: 29876226 },
-    { nominal: "250000 CP", harga: 37208054 },
-    { nominal: "300000 CP", harga: 44508077 },
-    { nominal: "400000 CP", harga: 59148105 },
-    { nominal: "500000 CP", harga: 73689106 },
-    { nominal: "750000 CP", harga: 110044621 },
-    { nominal: "1000000 CP", harga: 146277329 },
-    { nominal: "1500000 CP", harga: 218564140 },
-    { nominal: "2000000 CP", harga: 290527642 },
-    { nominal: "2500000 CP", harga: 362154437 },
-    { nominal: "3000000 CP", harga: 433574077 },
-    { nominal: "4000000 CP", harga: 575458487 },
-    { nominal: "5000000 CP", harga: 716675085 },
-    { nominal: "7500000 CP", harga: 1070536510 },
-    { nominal: "10000000 CP", harga: 1422532120 },
-    { nominal: "15000000 CP", harga: 2124584682 },
-    { nominal: "20000000 CP", harga: 2822080146 },
-    { nominal: "25000000 CP", harga: 3515204367 },
-    { nominal: "30000000 CP", harga: 4205161623 },
-    { nominal: "40000000 CP", harga: 5580333224 },
-    { nominal: "50000000 CP", harga: 6947491276 },
-    { nominal: "75000000 CP", harga: 10385780801 },
-    { nominal: "100000000 CP", harga: 13802806955 }
-  ]}
+  {
+    icon: "🔥",
+    nama: "Free Fire",
+    desc: "Top up Diamond Free Fire murah & cepat",
+    unit: "diamond",
+    hot: true,
+    paket: [
+      { nominal: "5 Diamond", harga: 1250 },
+      { nominal: "10 Diamond", harga: 2498 },
+      { nominal: "12 Diamond", harga: 2995 },
+      { nominal: "15 Diamond", harga: 3743 },
+      { nominal: "20 Diamond", harga: 4984 },
+      { nominal: "25 Diamond", harga: 6226 },
+      { nominal: "30 Diamond", harga: 7467 },
+      { nominal: "40 Diamond", harga: 9949 },
+      { nominal: "50 Diamond", harga: 12431 },
+      { nominal: "70 Diamond", harga: 17393 },
+      { nominal: "80 Diamond", harga: 19874 },
+      { nominal: "100 Diamond", harga: 24836 },
+      { nominal: "140 Diamond", harga: 34758 },
+      { nominal: "150 Diamond", harga: 37239 },
+      { nominal: "200 Diamond", harga: 49603 },
+      { nominal: "250 Diamond", harga: 61967 },
+      { nominal: "300 Diamond", harga: 74330 },
+      { nominal: "355 Diamond", harga: 87910 },
+      { nominal: "400 Diamond", harga: 99021 },
+      { nominal: "500 Diamond", harga: 123615 },
+      { nominal: "600 Diamond", harga: 148208 },
+      { nominal: "720 Diamond", harga: 177777 },
+      { nominal: "800 Diamond", harga: 197404 },
+      { nominal: "1000 Diamond", harga: 246460 },
+      { nominal: "1200 Diamond", harga: 295516 },
+      { nominal: "1450 Diamond", harga: 356824 },
+      { nominal: "1500 Diamond", harga: 368923 },
+      { nominal: "1800 Diamond", harga: 442267 },
+      { nominal: "2000 Diamond", harga: 491274 },
+      { nominal: "2400 Diamond", harga: 589288 },
+      { nominal: "2500 Diamond", harga: 613720 },
+      { nominal: "3000 Diamond", harga: 736071 },
+      { nominal: "3550 Diamond", harga: 870696 },
+      { nominal: "4000 Diamond", harga: 980374 },
+      { nominal: "5000 Diamond", harga: 1224206 },
+      { nominal: "6000 Diamond", harga: 1468037 },
+      { nominal: "7200 Diamond", harga: 1759782 },
+      { nominal: "8000 Diamond", harga: 1954078 },
+      { nominal: "10000 Diamond", harga: 2439680 },
+      { nominal: "12000 Diamond", harga: 2925282 },
+      { nominal: "14500 Diamond", harga: 3531904 },
+      { nominal: "15000 Diamond", harga: 3653486 },
+      { nominal: "20000 Diamond", harga: 4866436 },
+      { nominal: "25000 Diamond", harga: 6079386 },
+      { nominal: "50000 Diamond", harga: 12123411 }
+    ]
+  },
+  {
+    icon: "⚔️",
+    nama: "Mobile Legends",
+    desc: "Top up Diamond Mobile Legends murah & cepat",
+    unit: "diamond",
+    hot: true,
+    paket: [
+      { nominal: "11 Diamond", harga: 4375 },
+      { nominal: "22 Diamond", harga: 8740 },
+      { nominal: "44 Diamond", harga: 17466 },
+      { nominal: "56 Diamond", harga: 22206 },
+      { nominal: "86 Diamond", harga: 34074 },
+      { nominal: "110 Diamond", harga: 43546 },
+      { nominal: "172 Diamond", harga: 68013 },
+      { nominal: "240 Diamond", harga: 94788 },
+      { nominal: "257 Diamond", harga: 101386 },
+      { nominal: "355 Diamond", harga: 139856 },
+      { nominal: "500 Diamond", harga: 196557 },
+      { nominal: "720 Diamond", harga: 282718 },
+      { nominal: "1000 Diamond", harga: 392114 },
+      { nominal: "1440 Diamond", harga: 563584 },
+      { nominal: "2000 Diamond", harga: 781727 },
+      { nominal: "2880 Diamond", harga: 1123371 },
+      { nominal: "4000 Diamond", harga: 1557314 },
+      { nominal: "6000 Diamond", harga: 2330306 },
+      { nominal: "8000 Diamond", harga: 3100612 },
+      { nominal: "10000 Diamond", harga: 3868736 },
+      { nominal: "12000 Diamond", harga: 4636041 },
+      { nominal: "15000 Diamond", harga: 5785020 },
+      { nominal: "20000 Diamond", harga: 7699588 },
+      { nominal: "25000 Diamond", harga: 9603784 },
+      { nominal: "30000 Diamond", harga: 11507908 },
+      { nominal: "40000 Diamond", harga: 15316316 },
+      { nominal: "50000 Diamond", harga: 19111621 },
+      { nominal: "75000 Diamond", harga: 28599040 },
+      { nominal: "100000 Diamond", harga: 38018759 },
+      { nominal: "150000 Diamond", harga: 56815076 },
+      { nominal: "200000 Diamond", harga: 75542081 },
+      { nominal: "250000 Diamond", harga: 94201272 },
+      { nominal: "300000 Diamond", harga: 112787724 },
+      { nominal: "400000 Diamond", harga: 149856856 },
+      { nominal: "500000 Diamond", harga: 186825126 },
+      { nominal: "750000 Diamond", harga: 279085514 },
+      { nominal: "1000000 Diamond", harga: 371208058 },
+      { nominal: "1500000 Diamond", harga: 555148309 },
+      { nominal: "2000000 Diamond", harga: 737913964 },
+      { nominal: "2500000 Diamond", harga: 920081659 },
+      { nominal: "3000000 Diamond", harga: 1101771931 },
+      { nominal: "4000000 Diamond", harga: 1464249381 },
+      { nominal: "5000000 Diamond", harga: 1824233861 },
+      { nominal: "7500000 Diamond", harga: 2724537392 },
+      { nominal: "10000000 Diamond", harga: 3623144093 }
+    ]
+  },
+  {
+    icon: "🔫",
+    nama: "PUBG Mobile",
+    desc: "Top up UC PUBG Mobile murah & cepat",
+    unit: "UC",
+    hot: true,
+    paket: [
+      { nominal: "60 UC", harga: 18750 },
+      { nominal: "120 UC", harga: 37463 },
+      { nominal: "180 UC", harga: 56138 },
+      { nominal: "325 UC", harga: 101048 },
+      { nominal: "385 UC", harga: 119592 },
+      { nominal: "660 UC", harga: 204463 },
+      { nominal: "720 UC", harga: 222728 },
+      { nominal: "985 UC", harga: 304086 },
+      { nominal: "1320 UC", harga: 406820 },
+      { nominal: "1800 UC", harga: 553305 },
+      { nominal: "2460 UC", harga: 753665 },
+      { nominal: "3850 UC", harga: 1174925 },
+      { nominal: "4950 UC", harga: 1504384 },
+      { nominal: "6600 UC", harga: 1997684 },
+      { nominal: "8250 UC", harga: 2488619 },
+      { nominal: "10000 UC", harga: 3006988 },
+      { nominal: "12000 UC", harga: 3598447 },
+      { nominal: "15000 UC", harga: 4483225 },
+      { nominal: "18000 UC", harga: 5364010 },
+      { nominal: "20000 UC", harga: 5947413 },
+      { nominal: "25000 UC", harga: 7412212 },
+      { nominal: "30000 UC", harga: 8875428 },
+      { nominal: "40000 UC", harga: 11795412 },
+      { nominal: "50000 UC", harga: 14699541 },
+      { nominal: "75000 UC", harga: 21956818 },
+      { nominal: "100000 UC", harga: 29180815 },
+      { nominal: "150000 UC", harga: 43501330 },
+      { nominal: "200000 UC", harga: 57782200 },
+      { nominal: "250000 UC", harga: 71999042 },
+      { nominal: "300000 UC", harga: 86163253 },
+      { nominal: "400000 UC", harga: 114383918 },
+      { nominal: "500000 UC", harga: 142468876 },
+      { nominal: "750000 UC", harga: 212849635 },
+      { nominal: "1000000 UC", harga: 282897442 },
+      { nominal: "1500000 UC", harga: 422729926 },
+      { nominal: "2000000 UC", harga: 561893229 },
+      { nominal: "2500000 UC", harga: 700431721 },
+      { nominal: "3000000 UC", harga: 838410181 },
+      { nominal: "4000000 UC", harga: 1113122963 },
+      { nominal: "5000000 UC", harga: 1386330206 },
+      { nominal: "7500000 UC", harga: 2070976988 },
+      { nominal: "10000000 UC", harga: 2752691657 },
+      { nominal: "15000000 UC", harga: 4111356371 },
+      { nominal: "20000000 UC", harga: 5460837236 },
+      { nominal: "25000000 UC", harga: 6802994018 }
+    ]
+  },
+  {
+    icon: "🎮",
+    nama: "Genshin Impact",
+    desc: "Top up Crystal Genshin Impact murah & cepat",
+    unit: "crystal",
+    hot: false,
+    paket: [
+      { nominal: "60 Crystal", harga: 20000 },
+      { nominal: "120 Crystal", harga: 39963 },
+      { nominal: "180 Crystal", harga: 59888 },
+      { nominal: "300 Crystal", harga: 99729 },
+      { nominal: "330 Crystal", harga: 109570 },
+      { nominal: "500 Crystal", harga: 165659 },
+      { nominal: "660 Crystal", harga: 218091 },
+      { nominal: "980 Crystal", harga: 322847 },
+      { nominal: "1280 Crystal", harga: 420633 },
+      { nominal: "1980 Crystal", harga: 648350 },
+      { nominal: "2480 Crystal", harga: 808934 },
+      { nominal: "3280 Crystal", harga: 1064529 },
+      { nominal: "4480 Crystal", harga: 1446861 },
+      { nominal: "6480 Crystal", harga: 2082884 },
+      { nominal: "8000 Crystal", harga: 2559214 },
+      { nominal: "10000 Crystal", harga: 3182683 },
+      { nominal: "12000 Crystal", harga: 3802156 },
+      { nominal: "15000 Crystal", harga: 4732000 },
+      { nominal: "18000 Crystal", harga: 5657698 },
+      { nominal: "20000 Crystal", harga: 6274723 },
+      { nominal: "25000 Crystal", harga: 7818733 },
+      { nominal: "30000 Crystal", harga: 9357094 },
+      { nominal: "40000 Crystal", harga: 12420770 },
+      { nominal: "50000 Crystal", harga: 15455437 },
+      { nominal: "75000 Crystal", harga: 23063255 },
+      { nominal: "100000 Crystal", harga: 30633517 },
+      { nominal: "150000 Crystal", harga: 45667264 },
+      { nominal: "200000 Crystal", harga: 60642808 },
+      { nominal: "250000 Crystal", harga: 75554867 },
+      { nominal: "300000 Crystal", harga: 90409395 },
+      { nominal: "400000 Crystal", harga: 119989820 },
+      { nominal: "500000 Crystal", harga: 149445720 },
+      { nominal: "750000 Crystal", harga: 223294385 },
+      { nominal: "1000000 Crystal", harga: 296763130 },
+      { nominal: "1500000 Crystal", harga: 443419244 },
+      { nominal: "2000000 Crystal", harga: 589375602 },
+      { nominal: "2500000 Crystal", harga: 734662183 },
+      { nominal: "3000000 Crystal", harga: 879347925 },
+      { nominal: "4000000 Crystal", harga: 1167406279 },
+      { nominal: "5000000 Crystal", harga: 1453858394 },
+      { nominal: "7500000 Crystal", harga: 2171751952 },
+      { nominal: "10000000 Crystal", harga: 2885951777 },
+      { nominal: "15000000 Crystal", harga: 4310873857 },
+      { nominal: "20000000 Crystal", harga: 5725586164 },
+      { nominal: "25000000 Crystal", harga: 7131279021 }
+    ]
+  },
+  {
+    icon: "🏆",
+    nama: "Call of Duty Mobile",
+    desc: "Top up CP COD Mobile murah & cepat",
+    unit: "CP",
+    hot: false,
+    paket: [
+      { nominal: "80 CP", harga: 18750 },
+      { nominal: "160 CP", harga: 37463 },
+      { nominal: "240 CP", harga: 56138 },
+      { nominal: "420 CP", harga: 98086 },
+      { nominal: "500 CP", harga: 116587 },
+      { nominal: "800 CP", harga: 186032 },
+      { nominal: "880 CP", harga: 204363 },
+      { nominal: "1200 CP", harga: 278332 },
+      { nominal: "1600 CP", harga: 370330 },
+      { nominal: "2400 CP", harga: 553305 },
+      { nominal: "3200 CP", harga: 734870 },
+      { nominal: "4200 CP", harga: 960670 },
+      { nominal: "5600 CP", harga: 1277075 },
+      { nominal: "8000 CP", harga: 1817268 },
+      { nominal: "10000 CP", harga: 2261035 },
+      { nominal: "12000 CP", harga: 2702700 },
+      { nominal: "15000 CP", harga: 3364948 },
+      { nominal: "18000 CP", harga: 4023070 },
+      { nominal: "20000 CP", harga: 4462540 },
+      { nominal: "25000 CP", harga: 5562147 },
+      { nominal: "30000 CP", harga: 6659897 },
+      { nominal: "40000 CP", harga: 8847509 },
+      { nominal: "50000 CP", harga: 11026173 },
+      { nominal: "75000 CP", harga: 16481122 },
+      { nominal: "100000 CP", harga: 21896099 },
+      { nominal: "150000 CP", harga: 32641275 },
+      { nominal: "200000 CP", harga: 43339890 },
+      { nominal: "250000 CP", harga: 54000034 },
+      { nominal: "300000 CP", harga: 64626276 },
+      { nominal: "400000 CP", harga: 85803965 },
+      { nominal: "500000 CP", harga: 106888896 },
+      { nominal: "750000 CP", harga: 159680031 },
+      { nominal: "1000000 CP", harga: 212218712 },
+      { nominal: "1500000 CP", harga: 317122339 },
+      { nominal: "2000000 CP", harga: 421515632 },
+      { nominal: "2500000 CP", harga: 525455388 },
+      { nominal: "3000000 CP", harga: 628975731 },
+      { nominal: "4000000 CP", harga: 835039855 },
+      { nominal: "5000000 CP", harga: 1040012318 },
+      { nominal: "7500000 CP", harga: 1553385425 },
+      { nominal: "10000000 CP", harga: 2064376042 },
+      { nominal: "15000000 CP", harga: 3083166548 },
+      { nominal: "20000000 CP", harga: 4095437158 },
+      { nominal: "25000000 CP", harga: 5100636071 }
+    ]
+  }
 ];
+
 let gameAktif = null;
 let paketAktif = null;
 const MIN_PEMBELIAN = 200;
 const BACKEND_URL = "https://jimzz-backend.vercel.app";
 let produkAktif = null;
 let dataPemesan = { link: "", hp: "", jumlah: 0, total: 0, bonus: 0, totalAmount: 0 };
+
 function initData() {
   renderProduk('sosmed', produkSosmed, 'SUNTIK ALL');
   renderProduk('jpm', produkJpm, 'LAYANAN LAINNYA');
   renderProduk('apkList', produkApk, 'JUAL APK');
 }
+
 function renderProduk(target, data, kategori) {
   const el = document.getElementById(target);
   if (!el) return;
@@ -643,6 +898,7 @@ function renderProduk(target, data, kategori) {
     </div>
   `).join('');
 }
+
 function renderGameList() {
   const el = document.getElementById('gameList');
   if (!el) return;
@@ -667,6 +923,7 @@ function renderGameList() {
     </div>
   `).join('');
 }
+
 function bukaGameDetail(index) {
   gameAktif = produkTopUp[index];
   const paketList = gameAktif.paket.map((p, i) => `
@@ -686,6 +943,7 @@ function bukaGameDetail(index) {
       </div>
     </div>
   `).join('');
+  
   document.getElementById('page-topup').innerHTML = `
     <section class="kategori">
       <button onclick="backToGameList()" style="background:transparent; border:none; color:#00ff88; font-size:14px; cursor:pointer; margin-bottom:15px;">← Kembali ke Daftar Game</button>
@@ -696,6 +954,7 @@ function bukaGameDetail(index) {
     <footer><p>© 2025 Jimzz Store — All Rights Reserved 😈</p></footer>
   `;
 }
+
 function backToGameList() {
   document.getElementById('page-topup').innerHTML = `
     <section class="kategori">
@@ -707,16 +966,22 @@ function backToGameList() {
   `;
   renderGameList();
 }
+
 function pilihPaket(index) {
   paketAktif = gameAktif.paket[index];
   produkAktif = {
-    icon: gameAktif.icon, nama: gameAktif.nama + ' - ' + paketAktif.nominal,
+    icon: gameAktif.icon,
+    nama: gameAktif.nama + ' - ' + paketAktif.nominal,
     desc: 'Top up ' + paketAktif.nominal + ' ke ID ' + gameAktif.nama,
-    harga: paketAktif.harga, unit: gameAktif.unit,
-    kategori: 'TOP UP GAME', isApk: true, isTopUp: true,
+    harga: paketAktif.harga,
+    unit: gameAktif.unit,
+    kategori: 'TOP UP GAME',
+    isApk: true,
+    isTopUp: true,
     inputLabel: '🎮 User ID ' + gameAktif.nama,
     inputPlaceholder: 'Contoh: 123456789',
-    inputValidasi: '', inputError: ''
+    inputValidasi: '',
+    inputError: ''
   };
   document.getElementById('modalLabel').innerText = 'TOP UP GAME';
   document.getElementById('modalTitle').innerText = produkAktif.nama;
@@ -739,6 +1004,7 @@ function pilihPaket(index) {
   document.getElementById('orderModal').classList.add('show');
   document.body.style.overflow = 'hidden';
 }
+
 function bukaOrder(kategoriId, index) {
   let data, kategori, isApk;
   if (kategoriId === 'sosmed') { data = produkSosmed; kategori = 'SUNTIK ALL'; isApk = false; }
@@ -758,7 +1024,9 @@ function bukaOrder(kategoriId, index) {
     jumlahInput.disabled = false;
     minmaxText.innerText = `Min: ${produkAktif.min.toLocaleString('id-ID')} - Max: ${produkAktif.max.toLocaleString('id-ID')}`;
     document.getElementById('hargaSatuan').innerText = `Rp ${produkAktif.hargaPerUnit.toLocaleString('id-ID')}`;
-    jumlahInput.value = produkAktif.min; jumlahInput.min = produkAktif.min; jumlahInput.max = produkAktif.max;
+    jumlahInput.value = produkAktif.min;
+    jumlahInput.min = produkAktif.min;
+    jumlahInput.max = produkAktif.max;
   }
   if (isApk) {
     document.getElementById('inputLabel').innerText = '👤 Nama Lengkap';
@@ -779,11 +1047,13 @@ function bukaOrder(kategoriId, index) {
   document.getElementById('orderModal').classList.add('show');
   document.body.style.overflow = 'hidden';
 }
+
 function tutupOrder() {
   document.getElementById('orderModal').classList.remove('show');
   document.body.style.overflow = 'auto';
   produkAktif = null;
 }
+
 function setStep(num) {
   document.querySelectorAll('.step-content').forEach(s => s.classList.remove('active'));
   document.getElementById('step' + num).classList.add('active');
@@ -794,28 +1064,36 @@ function setStep(num) {
     else if (i === num) dot.classList.add('active');
   }
 }
+
 function clearError() {
   document.getElementById('linkSaluran').classList.remove('error');
   document.getElementById('inputError').classList.remove('show');
   document.getElementById('hpPemesan').classList.remove('error');
   document.getElementById('hpError').classList.remove('show');
 }
+
 function hitungTotal() {
   if (!produkAktif) return;
   const jumlah = parseInt(document.getElementById('jumlahInput').value) || 0;
   const hargaPerUnit = produkAktif.isApk ? produkAktif.harga : produkAktif.hargaPerUnit;
   const total = jumlah * hargaPerUnit;
   let bonus = 0;
-  if (!produkAktif.isApk && produkAktif.bonusMinTotal && total >= produkAktif.bonusMinTotal) bonus = produkAktif.bonusUnit || 0;
+  if (!produkAktif.isApk && produkAktif.bonusMinTotal && total >= produkAktif.bonusMinTotal) {
+    bonus = produkAktif.bonusUnit || 0;
+  }
   document.getElementById('jumlahDisplay').innerText = jumlah.toLocaleString('id-ID') + ' ' + (produkAktif.unit || 'pcs');
   document.getElementById('totalHarga').innerText = "Rp " + total.toLocaleString('id-ID');
   const bonusRow = document.getElementById('bonusRow');
   const totalDapatRow = document.getElementById('totalDapatRow');
   if (bonus > 0) {
-    bonusRow.style.display = 'flex'; totalDapatRow.style.display = 'flex';
+    bonusRow.style.display = 'flex';
+    totalDapatRow.style.display = 'flex';
     document.getElementById('bonusValue').innerText = '+' + bonus + ' ' + produkAktif.unit;
     document.getElementById('totalDapat').innerText = (jumlah + bonus).toLocaleString('id-ID') + ' ' + produkAktif.unit;
-  } else { bonusRow.style.display = 'none'; totalDapatRow.style.display = 'none'; }
+  } else {
+    bonusRow.style.display = 'none';
+    totalDapatRow.style.display = 'none';
+  }
   const validJumlah = jumlah >= parseInt(document.getElementById('jumlahInput').min) && jumlah <= parseInt(document.getElementById('jumlahInput').max);
   const validTotal = total >= MIN_PEMBELIAN;
   document.getElementById('btnPesan').disabled = !(validJumlah && validTotal);
@@ -825,15 +1103,21 @@ function hitungTotal() {
   else if (bonus > 0) { hintEl.innerHTML = `🎁 <b style="color:#00ff88">BONUS +${bonus} ${produkAktif.unit}</b> aktif!`; hintEl.style.color = '#00ff88'; }
   else { hintEl.innerText = '✅ Jumlah valid, klik "Lanjut ke Pembayaran".'; hintEl.style.color = '#00ff88'; }
 }
+
 function keStep2() {
   const jumlah = parseInt(document.getElementById('jumlahInput').value) || 0;
   const hargaPerUnit = produkAktif.isApk ? produkAktif.harga : produkAktif.hargaPerUnit;
   const total = jumlah * hargaPerUnit;
   let bonus = 0;
-  if (!produkAktif.isApk && produkAktif.bonusMinTotal && total >= produkAktif.bonusMinTotal) bonus = produkAktif.bonusUnit || 0;
-  dataPemesan.jumlah = jumlah; dataPemesan.total = total; dataPemesan.bonus = bonus;
+  if (!produkAktif.isApk && produkAktif.bonusMinTotal && total >= produkAktif.bonusMinTotal) {
+    bonus = produkAktif.bonusUnit || 0;
+  }
+  dataPemesan.jumlah = jumlah;
+  dataPemesan.total = total;
+  dataPemesan.bonus = bonus;
   setStep(2);
 }
+
 async function keStep3() {
   const link = document.getElementById('linkSaluran').value.trim();
   const hp = document.getElementById('hpPemesan').value.trim();
@@ -842,20 +1126,53 @@ async function keStep3() {
   const errorEl = document.getElementById('inputError');
   const hpErrorEl = document.getElementById('hpError');
   clearError();
-  if (!link) { inputEl.classList.add('error'); errorEl.innerText = produkAktif.isApk ? '❌ Isi nama dulu ya!' : '❌ Isi ' + (produkAktif.inputLabel || 'link') + ' dulu ya!'; errorEl.classList.add('show'); return; }
-  if (!produkAktif.isApk && produkAktif.inputValidasi) { if (!link.toLowerCase().includes(produkAktif.inputValidasi)) { inputEl.classList.add('error'); errorEl.innerText = '❌ ' + (produkAktif.inputError || 'Link tidak valid!'); errorEl.classList.add('show'); return; } }
-  if (!hp) { hpEl.classList.add('error'); hpErrorEl.innerText = '❌ Isi no WhatsApp dulu ya!'; hpErrorEl.classList.add('show'); return; }
+  if (!link) {
+    inputEl.classList.add('error');
+    errorEl.innerText = produkAktif.isApk ? '❌ Isi nama dulu ya!' : '❌ Isi ' + (produkAktif.inputLabel || 'link') + ' dulu ya!';
+    errorEl.classList.add('show');
+    return;
+  }
+  if (!produkAktif.isApk && produkAktif.inputValidasi) {
+    if (!link.toLowerCase().includes(produkAktif.inputValidasi)) {
+      inputEl.classList.add('error');
+      errorEl.innerText = '❌ ' + (produkAktif.inputError || 'Link tidak valid!');
+      errorEl.classList.add('show');
+      return;
+    }
+  }
+  if (!hp) {
+    hpEl.classList.add('error');
+    hpErrorEl.innerText = '❌ Isi no WhatsApp dulu ya!';
+    hpErrorEl.classList.add('show');
+    return;
+  }
   const hpClean = hp.replace(/[\s\-\+]/g, '');
   const hpValid = /^(62|0)8[0-9]{8,13}$/.test(hpClean);
-  if (!hpValid) { hpEl.classList.add('error'); hpErrorEl.innerText = '❌ No WA tidak valid!'; hpErrorEl.classList.add('show'); return; }
-  dataPemesan.link = link; dataPemesan.hp = hp;
+  if (!hpValid) {
+    hpEl.classList.add('error');
+    hpErrorEl.innerText = '❌ No WA tidak valid!';
+    hpErrorEl.classList.add('show');
+    return;
+  }
+  dataPemesan.link = link;
+  dataPemesan.hp = hp;
   setStep(3);
   document.getElementById('qrisLoading').style.display = 'block';
   document.getElementById('qrisBox').style.display = 'none';
   document.getElementById('btnSayaBayar').style.display = 'none';
   document.getElementById('waitingBox').style.display = 'none';
   try {
-    const res = await fetch(BACKEND_URL + '/api/create-order', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ amount: dataPemesan.total, customerPhone: dataPemesan.hp, productName: produkAktif.nama, productDetail: dataPemesan.jumlah + ' ' + (produkAktif.unit || 'pcs'), link: dataPemesan.link }) });
+    const res = await fetch(BACKEND_URL + '/api/create-order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        amount: dataPemesan.total,
+        customerPhone: dataPemesan.hp,
+        productName: produkAktif.nama,
+        productDetail: dataPemesan.jumlah + ' ' + (produkAktif.unit || 'pcs'),
+        link: dataPemesan.link
+      })
+    });
     const result = await res.json();
     if (!result.success) throw new Error(result.error || 'Gagal generate QRIS');
     dataPemesan.totalAmount = result.totalAmount;
@@ -865,35 +1182,60 @@ async function keStep3() {
     document.getElementById('qrisLoading').style.display = 'none';
     document.getElementById('qrisBox').style.display = 'block';
     document.getElementById('btnSayaBayar').style.display = 'flex';
-  } catch (err) { console.error('QRIS error:', err); document.getElementById('qrisLoading').innerHTML = '<p style="color:#ff6b6b; font-size:13px;">❌ Gagal membuat QRIS</p><p style="color:#888; font-size:11px; margin-top:5px;">' + err.message + '</p>'; }
+  } catch (err) {
+    console.error('QRIS error:', err);
+    document.getElementById('qrisLoading').innerHTML = '<p style="color:#ff6b6b; font-size:13px;">❌ Gagal membuat QRIS</p><p style="color:#888; font-size:11px; margin-top:5px;">' + err.message + '</p>';
+  }
 }
+
 async function downloadQris() {
   const btn = document.getElementById('qrisDownload');
   const originalText = btn.innerText;
-  btn.innerText = '⏳ Mendownload...'; btn.disabled = true;
+  btn.innerText = '⏳ Mendownload...';
+  btn.disabled = true;
   try {
     const qrImageUrl = document.getElementById('qrisImage').src;
     const response = await fetch(qrImageUrl);
     const blob = await response.blob();
     const blobUrl = URL.createObjectURL(blob);
     const link = document.createElement('a');
-    link.href = blobUrl; link.download = 'QRIS-JimzzStore.png';
-    document.body.appendChild(link); link.click(); document.body.removeChild(link);
+    link.href = blobUrl;
+    link.download = 'QRIS-JimzzStore.png';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
     URL.revokeObjectURL(blobUrl);
     btn.innerText = '✅ Berhasil! Cek Galeri';
     setTimeout(() => { btn.innerText = originalText; btn.disabled = false; }, 3000);
-  } catch (err) { console.error('Download error:', err); window.open(document.getElementById('qrisImage').src, '_blank'); btn.innerText = originalText; btn.disabled = false; }
+  } catch (err) {
+    console.error('Download error:', err);
+    window.open(document.getElementById('qrisImage').src, '_blank');
+    btn.innerText = originalText;
+    btn.disabled = false;
+  }
 }
+
 async function userKonfirmasiBayar() {
   document.getElementById('btnSayaBayar').disabled = true;
   document.getElementById('btnSayaBayar').innerText = '⏳ Mengirim konfirmasi...';
   try {
-    await fetch(BACKEND_URL + '/api/confirm-payment', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ totalAmount: dataPemesan.totalAmount, customerPhone: dataPemesan.hp, productName: produkAktif.nama, productDetail: dataPemesan.jumlah + ' ' + (produkAktif.unit || 'pcs'), link: dataPemesan.link }) });
+    await fetch(BACKEND_URL + '/api/confirm-payment', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        totalAmount: dataPemesan.totalAmount,
+        customerPhone: dataPemesan.hp,
+        productName: produkAktif.nama,
+        productDetail: dataPemesan.jumlah + ' ' + (produkAktif.unit || 'pcs'),
+        link: dataPemesan.link
+      })
+    });
   } catch (err) { console.error('Confirm error:', err); }
   document.getElementById('btnSayaBayar').style.display = 'none';
   document.getElementById('qrisBox').style.display = 'none';
   document.getElementById('waitingBox').style.display = 'block';
 }
+
 function switchTab(tab) {
   document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-' + tab).classList.add('active');
@@ -901,15 +1243,21 @@ function switchTab(tab) {
   document.querySelector(`.nav-item[data-tab="${tab}"]`).classList.add('active');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
-function toggleTheme() { document.body.classList.toggle('mode-2'); }
+
+function toggleTheme() {
+  document.body.classList.toggle('mode-2');
+}
+
 const playlist = [
   { judul: "Brazilian Phonk", artis: "MondaMusic", cover: "🔥", src: "lagu1.mp3" },
   { judul: "Atmospheric Phonk", artis: "Evgeny Bardyuzha", cover: "💀", src: "lagu2.mp3" },
   { judul: "Synthwave Background", artis: "Nveravetyan Music", cover: "🌆", src: "lagu3.mp3" },
   { judul: "Wave", artis: "ApexBeats", cover: "🌊", src: "lagu4.mp3" }
 ];
+
 let currentSong = 0;
 let audio;
+
 function renderPlaylist() {
   audio = document.getElementById('audioPlayer');
   const musicList = document.getElementById('musicList');
@@ -924,15 +1272,31 @@ function renderPlaylist() {
     </div>
   `).join('');
 }
+
 function initMusicEvents() {
   audio = document.getElementById('audioPlayer');
   if (!audio) return;
-  audio.addEventListener('timeupdate', () => { if (audio.duration) { const percent = (audio.currentTime / audio.duration) * 100; const fill = document.getElementById('progressFill'); if (fill) fill.style.width = percent + "%"; } });
+  audio.addEventListener('timeupdate', () => {
+    if (audio.duration) {
+      const percent = (audio.currentTime / audio.duration) * 100;
+      const fill = document.getElementById('progressFill');
+      if (fill) fill.style.width = percent + "%";
+    }
+  });
   audio.addEventListener('play', updateUI);
   audio.addEventListener('pause', updateUI);
   audio.addEventListener('ended', nextSong);
 }
-function playSong(i) { currentSong = i; audio.src = playlist[i].src; audio.loop = true; audio.play().catch(err => console.log('Autoplay diblokir')); updateUI(); renderPlaylist(); }
+
+function playSong(i) {
+  currentSong = i;
+  audio.src = playlist[i].src;
+  audio.loop = true;
+  audio.play().catch(err => console.log('Autoplay diblokir'));
+  updateUI();
+  renderPlaylist();
+}
+
 function updateUI() {
   const s = playlist[currentSong];
   const miniTitle = document.getElementById('miniTitle');
@@ -942,16 +1306,42 @@ function updateUI() {
   if (miniTitle) miniTitle.innerText = s.judul;
   if (miniArtist) miniArtist.innerText = s.artis;
   if (playMainBtn) playMainBtn.innerText = audio && !audio.paused ? '⏸' : '▶';
-  if (musicCover) { if (audio && !audio.paused) musicCover.classList.remove('paused'); else musicCover.classList.add('paused'); }
+  if (musicCover) {
+    if (audio && !audio.paused) musicCover.classList.remove('paused');
+    else musicCover.classList.add('paused');
+  }
 }
-function togglePlay() { if (!audio || !audio.src) { playSong(0); return; } if (audio.paused) audio.play(); else audio.pause(); setTimeout(updateUI, 100); }
+
+function togglePlay() {
+  if (!audio || !audio.src) { playSong(0); return; }
+  if (audio.paused) audio.play();
+  else audio.pause();
+  setTimeout(updateUI, 100);
+}
+
 function nextSong() { currentSong = (currentSong + 1) % playlist.length; playSong(currentSong); }
 function prevSong() { currentSong = (currentSong - 1 + playlist.length) % playlist.length; playSong(currentSong); }
 function toggleExpand() { document.getElementById('musicPlayer').classList.toggle('open'); }
-function seekAudio(e) { const bar = document.getElementById('progressBar'); const rect = bar.getBoundingClientRect(); const percent = (e.clientX - rect.left) / rect.width; if (audio && audio.duration) audio.currentTime = percent * audio.duration; }
+
+function seekAudio(e) {
+  const bar = document.getElementById('progressBar');
+  const rect = bar.getBoundingClientRect();
+  const percent = (e.clientX - rect.left) / rect.width;
+  if (audio && audio.duration) audio.currentTime = percent * audio.duration;
+}
+
 let viewCount = 1234;
-setInterval(() => { viewCount += Math.floor(Math.random() * 3) + 1; const el = document.getElementById('viewCount'); if (el) el.innerText = viewCount.toLocaleString('id-ID'); }, 5000);
-if ('serviceWorker' in navigator) { window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js').catch(err => console.log('SW error:', err)); }); }
+setInterval(() => {
+  viewCount += Math.floor(Math.random() * 3) + 1;
+  const el = document.getElementById('viewCount');
+  if (el) el.innerText = viewCount.toLocaleString('id-ID');
+}, 5000);
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(err => console.log('SW error:', err));
+  });
+}
 </script>
 </body>
 </html>
