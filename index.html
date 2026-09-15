@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Jimzz Store — Maintenance</title>
+<title>Jimzz Store</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#00ff88">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -17,13 +17,10 @@
 body { 
   background: #0a0a0f; 
   color: #e6e6e6; 
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  overflow: hidden;
-  position: relative;
+  line-height: 1.6; 
+  padding-bottom: 100px; 
+  overflow-x: hidden;
+  transition: background 0.5s ease, color 0.5s ease;
 }
 
 #jimzz-neon-bg {
@@ -35,334 +32,573 @@ body {
   z-index: -1;
   pointer-events: none;
   background: 
-    radial-gradient(circle at 20% 20%, rgba(0,255,136,0.08) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(0,255,136,0.06) 0%, transparent 50%),
+    radial-gradient(circle at 20% 20%, rgba(0,255,136,0.05) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(0,255,136,0.04) 0%, transparent 50%),
     #0a0a0f;
 }
 
-.maintenance-box {
-  background: linear-gradient(145deg, rgba(13,26,20,0.9), rgba(13,13,21,0.9));
-  border: 1px solid #2a3a32;
-  border-radius: 20px;
-  padding: 40px 30px;
-  max-width: 440px;
-  width: 100%;
-  text-align: center;
-  position: relative;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  animation: fadeInUp 0.6s ease;
-  box-shadow: 0 0 40px rgba(0,255,136,0.15);
-}
-
-.maintenance-box::before {
+body.mode-2 #jimzz-neon-bg { filter: brightness(1.3) saturate(1.4); }
+body.mode-2 { background: #0a0a0f; }
+body.mode-2::after {
   content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, #00ff88, #00cc6a, #00ff88);
-  border-radius: 20px 20px 0 0;
-  animation: slideBar 3s linear infinite;
-}
-
-@keyframes slideBar {
-  0% { background-position: 0% 50%; }
-  100% { background-position: 200% 50%; }
-}
-
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.wa-icon {
-  font-size: 70px;
-  display: inline-block;
-  margin-bottom: 20px;
-  animation: pulseIcon 2s ease-in-out infinite;
-  filter: drop-shadow(0 0 20px rgba(0,255,136,0.6));
-}
-
-@keyframes pulseIcon {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.1); }
-}
-
-h1 {
-  color: #00ff88;
-  font-size: 26px;
-  font-weight: bold;
-  margin-bottom: 12px;
-  text-shadow: 0 0 20px rgba(0,255,136,0.4);
-  letter-spacing: 0.5px;
-}
-
-.subtitle {
-  color: #00ff88;
-  font-size: 13px;
-  font-weight: bold;
-  margin-bottom: 18px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  opacity: 0.7;
-}
-
-.description {
-  color: #bbb;
-  font-size: 14px;
-  line-height: 1.7;
-  margin-bottom: 25px;
-}
-
-.description b {
-  color: #00ff88;
-}
-
-.countdown {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  margin-bottom: 25px;
-}
-
-.countdown-item {
-  background: rgba(0,255,136,0.08);
-  border: 1px solid rgba(0,255,136,0.3);
-  border-radius: 10px;
-  padding: 10px 14px;
-  min-width: 55px;
-}
-
-.countdown-num {
-  color: #00ff88;
-  font-size: 22px;
-  font-weight: bold;
-  line-height: 1;
-  margin-bottom: 3px;
-}
-
-.countdown-label {
-  color: #666;
-  font-size: 9px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.btn-wa {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  width: 100%;
-  background: linear-gradient(135deg, #25D366, #1da851);
-  color: #fff;
-  padding: 15px;
-  border-radius: 14px;
-  text-decoration: none;
-  font-weight: bold;
-  font-size: 15px;
-  box-shadow: 0 5px 20px rgba(37,211,102,0.4);
-  transition: 0.3s;
-  margin-bottom: 12px;
-}
-
-.btn-wa:hover {
-  transform: scale(1.02);
-  box-shadow: 0 5px 30px rgba(37,211,102,0.7);
-}
-
-.btn-info {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  width: 100%;
-  background: transparent;
-  color: #00ff88;
-  padding: 12px;
-  border: 1px solid rgba(0,255,136,0.3);
-  border-radius: 12px;
-  text-decoration: none;
-  font-weight: bold;
-  font-size: 13px;
-  transition: 0.3s;
-}
-
-.btn-info:hover {
-  background: rgba(0,255,136,0.1);
-  border-color: #00ff88;
-}
-
-.status-dot {
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  background: #ffc800;
-  border-radius: 50%;
-  margin-right: 6px;
-  animation: blink 1.5s infinite;
-}
-
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.3; }
-}
-
-.footer-note {
-  color: #555;
-  font-size: 11px;
-  margin-top: 25px;
-  line-height: 1.5;
-}
-
-.social-links {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  margin-top: 20px;
-}
-
-.social-link {
-  width: 40px;
-  height: 40px;
-  background: rgba(0,255,136,0.08);
-  border: 1px solid rgba(0,255,136,0.3);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #00ff88;
-  text-decoration: none;
-  font-size: 18px;
-  transition: 0.3s;
-}
-
-.social-link:hover {
-  background: rgba(0,255,136,0.2);
-  transform: translateY(-3px);
-  box-shadow: 0 5px 15px rgba(0,255,136,0.4);
-}
-
-/* Particles */
-.particle {
   position: fixed;
-  width: 3px;
-  height: 3px;
-  background: #00ff88;
-  border-radius: 50%;
-  box-shadow: 0 0 8px #00ff88, 0 0 16px #00ff88;
-  opacity: 0.6;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, transparent 30%, rgba(0,255,136,0.06) 100%);
   pointer-events: none;
-  z-index: 0;
-  animation: floatUp linear infinite;
+  z-index: -1;
+  animation: glowPulse 4s ease-in-out infinite;
 }
+@keyframes glowPulse { 0%,100% { opacity:0.4; } 50% { opacity:0.9; } }
 
-@keyframes floatUp {
-  0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
-  10% { opacity: 0.6; }
-  90% { opacity: 0.6; }
-  100% { transform: translateY(-100px) scale(1); opacity: 0; }
+.promo-banner { position: relative; z-index: 5; background: linear-gradient(90deg, #00ff88, #00cc6a, #00ff88); background-size: 200% 100%; animation: bannerSlide 3s linear infinite; color: #000; text-align: center; padding: 10px 15px; font-size: 12px; font-weight: bold; letter-spacing: 0.5px; }
+@keyframes bannerSlide { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
+.promo-banner b { background: #000; color: #00ff88; padding: 2px 8px; border-radius: 4px; margin: 0 4px; }
+
+header { text-align: center; padding: 40px 20px 30px; background: radial-gradient(circle at 50% 100%, rgba(0,255,136,0.15), transparent 70%), linear-gradient(135deg, #001a0d, rgba(10,10,15,0.7)); border-bottom: 2px solid #00ff88; position: relative; z-index: 5; }
+
+.header-top { display: flex; justify-content: space-between; align-items: center; max-width: 1100px; margin: 0 auto 15px; padding: 0 5px; }
+.logo-text { color: #00ff88; font-weight: bold; font-size: 16px; letter-spacing: 1px; }
+.theme-toggle { background: rgba(0,255,136,0.1); border: 1px solid rgba(0,255,136,0.3); color: #00ff88; width: 42px; height: 42px; border-radius: 50%; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center; transition: 0.3s; flex-shrink: 0; }
+.theme-toggle:hover { background: rgba(0,255,136,0.2); transform: rotate(20deg) scale(1.1); box-shadow: 0 0 15px rgba(0,255,136,0.5); }
+
+header h1 { font-size: 38px; color: #00ff88; text-shadow: 0 0 20px rgba(0,255,136,0.8), 0 0 40px rgba(0,255,136,0.4); }
+header .counter { display: inline-block; margin-top: 12px; background: rgba(0,255,136,0.1); border: 1px solid rgba(0,255,136,0.3); color: #00ff88; padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+header .counter .dot { display: inline-block; width: 8px; height: 8px; background: #00ff88; border-radius: 50%; margin-right: 6px; animation: blink 1.5s infinite; }
+@keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
+
+.tab-page { display: none; animation: fadeIn 0.3s ease; }
+.tab-page.active { display: block; }
+@keyframes fadeIn { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: translateY(0); } }
+
+.bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #0d0d15; border-top: 1px solid #2a3a32; display: flex; justify-content: space-around; align-items: center; z-index: 600; box-shadow: 0 -5px 20px rgba(0,0,0,0.5); padding: 6px 0; padding-bottom: max(6px, env(safe-area-inset-bottom)); }
+.nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 8px 4px; cursor: pointer; transition: 0.25s; background: transparent; border: none; color: #666; font-family: inherit; }
+.nav-item .nav-icon { font-size: 20px; line-height: 1; transition: 0.25s; }
+.nav-item .nav-label { font-size: 9px; font-weight: bold; letter-spacing: 0.3px; text-transform: uppercase; }
+.nav-item.active { color: #00ff88; }
+.nav-item.active .nav-icon { transform: translateY(-2px) scale(1.15); filter: drop-shadow(0 0 8px rgba(0,255,136,0.8)); }
+
+.kategori { padding: 30px 20px; max-width: 1100px; margin: auto; position: relative; z-index: 5; }
+.kategori h2 { text-align: center; font-size: 24px; color: #00ff88; margin-bottom: 8px; }
+.sub { text-align: center; color: #888; margin-bottom: 25px; font-size: 13px; }
+
+.menu-home { background: linear-gradient(145deg, rgba(13,26,20,0.85), rgba(13,13,21,0.85)); border: 1px solid #2a3a32; border-radius: 14px; padding: 20px; margin-bottom: 14px; text-align: center; cursor: pointer; transition: all 0.3s ease; position: relative; backdrop-filter: blur(8px); }
+.menu-home:hover { border-color: #00ff88; box-shadow: 0 0 25px rgba(0,255,136,0.4); transform: translateY(-3px) scale(1.02); }
+.menu-home::after { content: "›"; position: absolute; right: 20px; top: 50%; transform: translateY(-50%); color: #00ff88; font-size: 24px; font-weight: bold; opacity: 0.5; }
+.menu-home-icon { font-size: 36px; margin-bottom: 8px; }
+.menu-home-title { color: #fff; font-weight: bold; font-size: 15px; margin-bottom: 4px; }
+.menu-home-desc { color: #888; font-size: 12px; }
+
+.pengumuman { background: linear-gradient(145deg, rgba(255,200,0,0.08), rgba(255,150,0,0.05)); border: 1px solid rgba(255,200,0,0.3); border-left: 4px solid #ffc800; border-radius: 12px; padding: 16px 18px; margin-bottom: 22px; animation: pengumumanPulse 3s ease-in-out infinite; }
+@keyframes pengumumanPulse { 0%,100% { box-shadow:0 0 0 rgba(255,200,0,0); } 50% { box-shadow:0 0 20px rgba(255,200,0,0.2); } }
+.pengumuman-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.pengumuman-icon { font-size: 20px; }
+.pengumuman-title { color: #ffc800; font-size: 13px; font-weight: bold; letter-spacing: 1px; }
+.pengumuman-text { color: #ddd; font-size: 12px; line-height: 1.6; margin-bottom: 8px; }
+.pengumuman-text:last-child { margin-bottom: 0; }
+.pengumuman-text b { color: #ffc800; font-weight: bold; }
+
+.pengumuman.refund { background: linear-gradient(145deg, rgba(0,200,255,0.08), rgba(0,150,255,0.05)); border: 1px solid rgba(0,200,255,0.3); border-left: 4px solid #00c8ff; }
+.pengumuman.refund .pengumuman-title { color: #00c8ff; }
+.pengumuman.refund .pengumuman-text b { color: #00c8ff; }
+
+.produk-list { display: flex; flex-direction: column; gap: 14px; }
+.produk-card { background: linear-gradient(145deg, rgba(13,26,20,0.85), rgba(13,13,21,0.85)); border: 1px solid #2a3a32; border-radius: 14px; padding: 20px 18px; transition: 0.3s; position: relative; backdrop-filter: blur(8px); }
+.produk-card:hover { border-color: #00ff88; box-shadow: 0 0 25px rgba(0,255,136,0.3); transform: translateY(-2px); }
+.produk-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.produk-icon { font-size: 32px; flex-shrink: 0; }
+.produk-title-block { flex: 1; min-width: 0; }
+.produk-label { color: #00ff88; font-size: 10px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+.produk-nama { color: #fff; font-size: 17px; font-weight: bold; }
+.produk-desc { color: #888; font-size: 12px; margin-bottom: 15px; line-height: 1.5; }
+.produk-bottom { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.produk-harga-info { flex: 1; }
+.produk-harga-label { color: #666; font-size: 10px; text-transform: uppercase; }
+.produk-harga { color: #00ff88; font-size: 16px; font-weight: bold; }
+.produk-harga span { font-size: 12px; color: #888; font-weight: normal; }
+
+.btn-order { background: linear-gradient(135deg, #00ff88, #00cc6a); color: #000; border: none; padding: 12px 24px; border-radius: 12px; font-weight: bold; font-size: 13px; cursor: pointer; transition: 0.25s; white-space: nowrap; box-shadow: 0 4px 15px rgba(0,255,136,0.3); }
+.btn-order:hover { transform: scale(1.05); }
+
+.badge-hot { position: absolute; top: -8px; right: 12px; background: linear-gradient(135deg, #ff2b2b, #ff6b6b); color: #fff; font-size: 9px; font-weight: bold; padding: 3px 8px; border-radius: 10px; letter-spacing: 0.5px; animation: hotPulse 1.5s infinite; }
+@keyframes hotPulse { 0%,100% { transform:scale(1); } 50% { transform:scale(1.1); } }
+
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 400; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; }
+.modal-overlay.show { display: flex; }
+.modal-box { background: linear-gradient(145deg, #0d1a14, #0d0d15); border: 1px solid #2a3a32; border-radius: 20px; padding: 26px 22px; width: 100%; max-width: 440px; position: relative; animation: slideUp 0.3s ease; max-height: 90vh; overflow-y: auto; }
+@keyframes slideUp { from { opacity:0; transform: translateY(30px); } to { opacity:1; transform: translateY(0); } }
+.modal-box::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #00ff88, #00cc6a, #00ff88); border-radius: 20px 20px 0 0; }
+.modal-close { position: absolute; top: 14px; right: 16px; background: transparent; border: none; color: #888; font-size: 24px; cursor: pointer; width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+.modal-close:hover { color: #ff2b2b; }
+
+.steps-indicator { display: flex; justify-content: space-between; margin-bottom: 22px; position: relative; }
+.steps-indicator::before { content: ""; position: absolute; top: 14px; left: 15%; right: 15%; height: 2px; background: #2a3a32; z-index: 1; }
+.step-dot { width: 30px; height: 30px; border-radius: 50%; background: #0a0a0f; border: 2px solid #2a3a32; color: #666; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 12px; position: relative; z-index: 2; }
+.step-dot.active { background: #00ff88; border-color: #00ff88; color: #000; box-shadow: 0 0 12px rgba(0,255,136,0.6); }
+.step-dot.done { background: #25D366; border-color: #25D366; color: #fff; }
+
+.step-content { display: none; }
+.step-content.active { display: block; animation: fadeIn 0.3s ease; }
+
+.modal-title-block { margin-bottom: 18px; }
+.modal-label { color: #00ff88; font-size: 10px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+.modal-title { color: #fff; font-size: 18px; font-weight: bold; }
+.modal-subtitle { color: #888; font-size: 12px; margin-top: 4px; }
+
+.form-box { margin-bottom: 14px; }
+.form-box label { color: #888; font-size: 11px; font-weight: bold; margin-bottom: 5px; display: block; text-transform: uppercase; }
+.form-box input { width: 100%; background: #0a0a0f; border: 1px solid #2a3a32; color: #fff; padding: 13px 15px; border-radius: 10px; font-size: 14px; outline: none; transition: 0.25s; }
+.form-box input:focus { border-color: #00ff88; box-shadow: 0 0 12px rgba(0,255,136,0.3); }
+.form-box input.error { border-color: #ff2b2b; }
+.form-error { color: #ff6b6b; font-size: 11px; margin-top: 6px; display: none; }
+.form-error.show { display: block; }
+.form-note { color: #888; font-size: 11px; margin-top: -8px; margin-bottom: 14px; line-height: 1.5; }
+.form-note b { color: #00ff88; }
+
+.jumlah-label { color: #ccc; font-size: 13px; font-weight: bold; margin-bottom: 6px; display: block; }
+.jumlah-label .minmax { color: #888; font-weight: normal; font-size: 11px; margin-left: 4px; }
+.jumlah-input { width: 100%; background: #0a0a0f; border: 1px solid #2a3a32; color: #fff; padding: 14px 16px; border-radius: 12px; font-size: 16px; font-weight: bold; outline: none; }
+.jumlah-input:focus { border-color: #00ff88; box-shadow: 0 0 15px rgba(0,255,136,0.3); }
+.jumlah-input:disabled { background: #1a1a24; color: #666; }
+.jumlah-hint { color: #666; font-size: 11px; margin-top: 6px; line-height: 1.5; }
+
+.total-box { background: #0a0a0f; border: 1px dashed #2a3a32; border-radius: 12px; padding: 14px; margin: 16px 0; }
+.total-row { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; font-size: 13px; }
+.total-row .label { color: #888; }
+.total-row .value { color: #fff; font-weight: bold; }
+.total-row.big { border-top: 1px solid #2a3a32; margin-top: 6px; padding-top: 10px; }
+.total-row.big .label { color: #00ff88; font-weight: bold; }
+.total-row.big .value { color: #00ff88; font-size: 20px; font-weight: bold; }
+.total-row.bonus { background: rgba(0,255,136,0.08); border-radius: 6px; padding: 6px 8px; margin-top: 4px; }
+.total-row.bonus .label { color: #00ff88; font-weight: bold; }
+.total-row.bonus .value { color: #00ff88; }
+
+.btn-next { width: 100%; background: linear-gradient(135deg, #00ff88, #00cc6a); color: #000; border: none; padding: 15px; border-radius: 12px; font-weight: bold; font-size: 15px; cursor: pointer; box-shadow: 0 5px 20px rgba(0,255,136,0.4); transition: 0.25s; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 8px; }
+.btn-next:hover { transform: scale(1.02); }
+.btn-next:disabled { background: #333; color: #666; cursor: not-allowed; box-shadow: none; }
+
+.qris-box { text-align: center; margin: 12px 0; }
+.qris-box img { width: 250px; max-width: 100%; background: #fff; padding: 12px; border-radius: 14px; box-shadow: 0 0 25px rgba(0,255,136,0.4); border: 2px solid #00ff88; }
+.qris-nominal { background: rgba(0,255,136,0.1); border: 1px solid #00ff88; border-radius: 10px; padding: 12px; margin-top: 12px; font-size: 14px; color: #00ff88; font-weight: bold; }
+
+.btn-wa-modal { display: block; width: 100%; text-align: center; background: linear-gradient(135deg, #25D366, #1da851); color: #fff; padding: 15px; border-radius: 12px; text-decoration: none; font-weight: bold; font-size: 15px; margin-top: 10px; box-shadow: 0 5px 20px rgba(37,211,102,0.4); }
+.btn-wa-modal:hover { transform: scale(1.02); }
+
+.waiting-box { background: #0a0a0f; border: 1px solid #25D366; border-radius: 12px; padding: 18px; text-align: center; margin-top: 12px; }
+.waiting-box .loading-spinner { width: 36px; height: 36px; border: 3px solid #2a3a32; border-top-color: #25D366; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 10px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.waiting-box p { color: #25D366; font-size: 13px; font-weight: bold; }
+.waiting-box .sub-wait { color: #888; font-size: 11px; margin-top: 5px; font-weight: normal; }
+
+.info-note { background: rgba(0,255,136,0.08); border-left: 3px solid #00ff88; padding: 10px 12px; border-radius: 8px; font-size: 11px; color: #bbb; margin-top: 12px; line-height: 1.5; }
+.info-note b { color: #00ff88; }
+
+.term-text { color: #666; font-size: 11px; text-align: center; margin-top: 12px; }
+.term-text a { color: #00ff88; text-decoration: none; }
+
+.testimoni-section { padding: 30px 20px; max-width: 1100px; margin: auto; position: relative; z-index: 5; }
+.testimoni-section h2 { text-align: center; font-size: 24px; color: #00ff88; margin-bottom: 8px; }
+.testi-cards { display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 30px; }
+.testi-card { background: linear-gradient(145deg, rgba(13,26,20,0.85), rgba(13,13,21,0.85)); border: 1px solid #2a3a32; border-radius: 14px; padding: 18px; transition: 0.25s; backdrop-filter: blur(8px); }
+.testi-card:hover { border-color: #00ff88; box-shadow: 0 0 20px rgba(0,255,136,0.3); transform: translateY(-3px); }
+.testi-stars { color: #ffd700; font-size: 14px; margin-bottom: 8px; letter-spacing: 2px; }
+.testi-text { color: #ccc; font-size: 13px; line-height: 1.6; font-style: italic; margin-bottom: 10px; }
+.testi-name { color: #00ff88; font-size: 12px; font-weight: bold; text-align: right; }
+
+.wa-channel-btn { display: block; width: 100%; max-width: 500px; margin: 0 auto; text-align: center; background: linear-gradient(135deg, #25D366, #1da851); color: #fff; padding: 15px 20px; border-radius: 14px; text-decoration: none; font-weight: bold; font-size: 14px; box-shadow: 0 5px 25px rgba(37,211,102,0.5); animation: waChannelPulse 2s infinite; }
+@keyframes waChannelPulse { 0%,100% { box-shadow:0 5px 25px rgba(37,211,102,0.5); } 50% { box-shadow:0 5px 35px rgba(37,211,102,0.9), 0 0 0 8px rgba(37,211,102,0.08); } }
+.wa-channel-info { text-align: center; margin-top: 12px; font-size: 12px; color: #888; }
+
+@media (min-width: 600px) { .testi-cards { grid-template-columns: 1fr 1fr 1fr; } }
+
+footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border-top: 1px solid #222; margin-top: 30px; position: relative; z-index: 5; }
+
+.wa-float { position: fixed; top: 15px; right: 15px; width: 50px; height: 50px; background: linear-gradient(135deg, #25D366, #1da851); border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 24px; color: #fff; box-shadow: 0 5px 20px rgba(37,211,102,0.6); z-index: 500; animation: waPulse 2s infinite; }
+@keyframes waPulse { 0%,100% { box-shadow:0 5px 20px rgba(37,211,102,0.6); } 50% { box-shadow:0 5px 30px rgba(37,211,102,0.9), 0 0 0 10px rgba(37,211,102,0.1); } }
+
+@media (max-width: 480px) {
+  .wa-float { width: 44px; height: 44px; font-size: 20px; top: 12px; right: 12px; }
+  header h1 { font-size: 30px; }
+  .produk-header { gap: 10px; }
+  .produk-icon { font-size: 26px; }
+  .nav-item .nav-label { font-size: 8px; }
+  .nav-item .nav-icon { font-size: 18px; }
 }
 </style>
 </head>
 <body>
 
 <canvas id="jimzz-neon-bg"></canvas>
-<div id="particles-container"></div>
 
-<div class="maintenance-box">
-  <div class="wa-icon">🔧</div>
-  
-  <div class="subtitle">Status Sistem</div>
-  <h1>Sedang Maintenance</h1>
-  
-  <p class="description">
-    <span class="status-dot"></span>
-    Jimzz Store lagi <b>upgrade sistem pembayaran</b> biar makin cepet & otomatis.
-    <br><br>
-    Balik lagi dalam <b>waktu dekat</b> ya! 🙏
-  </p>
+<div class="promo-banner">
+  🎁 KHUSUS JPM: BONUS <b>+5 MEMBER</b> untuk order <b>Rp 4.000</b> ke atas! 🎁
+</div>
 
-  <div class="countdown">
-    <div class="countdown-item">
-      <div class="countdown-num" id="cd-hour">00</div>
-      <div class="countdown-label">Jam</div>
+<a href="https://wa.me/6283898669427" target="_blank" class="wa-float">💬</a>
+
+<!-- HOME -->
+<div class="tab-page active" id="page-home">
+  <header>
+    <div class="header-top">
+      <span class="logo-text">💚 JIMZZ STORE</span>
+      <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn" title="Ganti Efek">🎨</button>
     </div>
-    <div class="countdown-item">
-      <div class="countdown-num" id="cd-min">00</div>
-      <div class="countdown-label">Menit</div>
+    <h1>Jimzz Store</h1>
+    <div class="counter"><span class="dot"></span>🔥 <span id="viewCount">1.234</span> orang sudah order</div>
+  </header>
+
+  <section class="kategori" style="text-align:center;">
+    <h2>👋 Selamat Datang di Jimzz Store</h2>
+    <p class="sub">Pilih menu di bawah untuk mulai order</p>
+    
+    <div class="menu-home" onclick="switchTab('jpm')">
+      <div class="menu-home-icon">🚀</div>
+      <div class="menu-home-title">Layanan Lainnya</div>
+      <div class="menu-home-desc">JPM, Nokos WA Indo, Jasa Web</div>
     </div>
-    <div class="countdown-item">
-      <div class="countdown-num" id="cd-sec">00</div>
-      <div class="countdown-label">Detik</div>
+    
+    <div class="menu-home" onclick="switchTab('suntik')">
+      <div class="menu-home-icon">📱</div>
+      <div class="menu-home-title">Suntik All Sosmed</div>
+      <div class="menu-home-desc">Saluran WA, Like TikTok, Views TikTok</div>
+    </div>
+    
+    <div class="menu-home" onclick="switchTab('apk')">
+      <div class="menu-home-icon">📦</div>
+      <div class="menu-home-title">Jual APK</div>
+      <div class="menu-home-desc">Aplikasi premium murah & aman</div>
+    </div>
+  </section>
+
+  <section class="testimoni-section">
+    <h2>⭐ Testimoni Pelanggan</h2>
+    <p class="sub">Bukti nyata dari pelanggan setia Jimzz Store</p>
+    <div class="testi-cards">
+      <div class="testi-card">
+        <div class="testi-stars">⭐⭐⭐⭐⭐</div>
+        <p class="testi-text">"Cepet banget prosesnya, baru 5 menit langsung masuk. Recommended!"</p>
+        <p class="testi-name">— Andi, Jakarta</p>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">⭐⭐⭐⭐⭐</div>
+        <p class="testi-text">"Harga termurah dibanding yang lain, aman gak ada banned. Mantap!"</p>
+        <p class="testi-name">— Bilzz, Surabaya</p>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">⭐⭐⭐⭐⭐</div>
+        <p class="testi-text">"Adminnya ramah, fast respon, ordernya cepat selesai. Lanjut order lagi!"</p>
+        <p class="testi-name">— Rani, Bandung</p>
+      </div>
+    </div>
+    <a href="https://whatsapp.com/channel/0029VbCXMVy1HspwJTjh2P2P" target="_blank" class="wa-channel-btn">📢 Ikuti Saluran Testimoni Jimzz di WhatsApp</a>
+    <div class="wa-channel-info"><span>🔔 Update testimoni & promo terbaru di saluran WA</span></div>
+  </section>
+
+  <footer><p>© 2025 Jimzz Store — All Rights Reserved 😈</p></footer>
+</div>
+
+<!-- LAYANAN LAINNYA -->
+<div class="tab-page" id="page-jpm">
+  <section class="kategori">
+    <h2>🚀 Layanan Lainnya</h2>
+    <p class="sub">Pilih layanan yang kamu butuhkan</p>
+    <div class="produk-list" id="jpm"></div>
+  </section>
+  <footer><p>© 2025 Jimzz Store — All Rights Reserved 😈</p></footer>
+</div>
+
+<!-- SUNTIK ALL -->
+<div class="tab-page" id="page-suntik">
+  <section class="kategori">
+    <h2>📱 Suntik All Sosmed</h2>
+    <p class="sub">Pilih layanan yang kamu butuhkan</p>
+    
+    <div class="pengumuman">
+      <div class="pengumuman-header">
+        <span class="pengumuman-icon">📢</span>
+        <span class="pengumuman-title">PENGUMUMAN PENTING</span>
+      </div>
+      <p class="pengumuman-text">Jika jumlah <b>like</b> atau <b>followers</b> sosmed kamu <b>tiba-tiba menurun</b> — itu <b>NORMAL</b>.</p>
+      <p class="pengumuman-text">Platform <b>rutin pembersihan akun bot/fake otomatis</b>.</p>
+      <p class="pengumuman-text">💡 Saran: Order jumlah <b>sedikit</b> dulu buat tes.</p>
+    </div>
+
+    <div class="pengumuman refund">
+      <div class="pengumuman-header">
+        <span class="pengumuman-icon">💰</span>
+        <span class="pengumuman-title">JAMINAN REFUND</span>
+      </div>
+      <p class="pengumuman-text">Kalau pesanan <b>tidak masuk sama sekali</b>, kalian berhak <b>REFUND 100%</b>.</p>
+      <p class="pengumuman-text">Hubungi <b>chat admin</b> untuk proses refund. 🙏</p>
+    </div>
+    
+    <div class="produk-list" id="sosmed"></div>
+  </section>
+  <footer><p>© 2025 Jimzz Store — All Rights Reserved 😈</p></footer>
+</div>
+
+<!-- JUAL APK -->
+<div class="tab-page" id="page-apk">
+  <section class="kategori">
+    <h2>📦 Jual APK</h2>
+    <p class="sub">Aplikasi premium murah & aman</p>
+    <div class="produk-list" id="apkList"></div>
+  </section>
+  <footer><p>© 2025 Jimzz Store — All Rights Reserved 😈</p></footer>
+</div>
+
+<!-- NAVIGASI BAWAH -->
+<div class="bottom-nav">
+  <button class="nav-item active" data-tab="home" onclick="switchTab('home')">
+    <span class="nav-icon">🏠</span>
+    <span class="nav-label">Home</span>
+  </button>
+  <button class="nav-item" data-tab="jpm" onclick="switchTab('jpm')">
+    <span class="nav-icon">🚀</span>
+    <span class="nav-label">Lainnya</span>
+  </button>
+  <button class="nav-item" data-tab="suntik" onclick="switchTab('suntik')">
+    <span class="nav-icon">📱</span>
+    <span class="nav-label">Suntik All</span>
+  </button>
+  <button class="nav-item" data-tab="apk" onclick="switchTab('apk')">
+    <span class="nav-icon">📦</span>
+    <span class="nav-label">Jual APK</span>
+  </button>
+</div>
+
+<!-- MODAL ORDER -->
+<div class="modal-overlay" id="orderModal" onclick="if(event.target===this)tutupOrder()">
+  <div class="modal-box">
+    <button class="modal-close" onclick="tutupOrder()">×</button>
+    <div class="steps-indicator">
+      <div class="step-dot active" id="dot1">1</div>
+      <div class="step-dot" id="dot2">2</div>
+      <div class="step-dot" id="dot3">3</div>
+    </div>
+
+    <div class="step-content active" id="step1">
+      <div class="modal-title-block">
+        <div class="modal-label" id="modalLabel">LAYANAN</div>
+        <div class="modal-title" id="modalTitle">-</div>
+        <div class="modal-subtitle" id="modalSubtitle">-</div>
+      </div>
+      <label class="jumlah-label" for="jumlahInput">Jumlah <span class="minmax" id="minmaxText">Min: 100 - Max: 20.000</span></label>
+      <input type="number" id="jumlahInput" class="jumlah-input" placeholder="# Masukkan jumlah" oninput="hitungTotal()">
+      <div class="jumlah-hint" id="jumlahHint">Sistem otomatis hitung harga sesuai jumlah.</div>
+
+      <div class="total-box">
+        <div class="total-row"><span class="label">Harga Satuan</span><span class="value" id="hargaSatuan">Rp 0</span></div>
+        <div class="total-row"><span class="label">Jumlah Order</span><span class="value" id="jumlahDisplay">0</span></div>
+        <div class="total-row bonus" id="bonusRow" style="display:none;"><span class="label">🎁 Bonus</span><span class="value" id="bonusValue">+0</span></div>
+        <div class="total-row bonus" id="totalDapatRow" style="display:none;"><span class="label">📊 Total Diterima</span><span class="value" id="totalDapat">0</span></div>
+        <div class="total-row big"><span class="label">Total Harga</span><span class="value" id="totalHarga">Rp 0</span></div>
+      </div>
+
+      <button class="btn-next" id="btnPesan" onclick="keStep2()" disabled>💬 Lanjut ke Pembayaran →</button>
+      <div class="term-text">Dengan memesan, Anda menyetujui <a href="#">Syarat & Ketentuan</a> kami.</div>
+    </div>
+
+    <div class="step-content" id="step2">
+      <div class="modal-title-block">
+        <div class="modal-label">LANGKAH 2 DARI 3</div>
+        <div class="modal-title">📝 Data Pemesan</div>
+        <div class="modal-subtitle">Isi data kamu dengan benar</div>
+      </div>
+      <div class="form-box">
+        <label id="inputLabel">🔗 Link</label>
+        <input type="text" id="linkSaluran" placeholder="Contoh: link" oninput="clearError()" required>
+        <div class="form-error" id="inputError">Link tidak valid</div>
+      </div>
+      <div class="form-box">
+        <label>📱 No WhatsApp Aktif</label>
+        <input type="tel" id="hpPemesan" placeholder="Contoh: 08xxxxxxxxxx" oninput="clearError()" required>
+        <div class="form-error" id="hpError">No WA tidak valid</div>
+      </div>
+      <div class="form-note">📌 Nomor konfirmasi pesanan. Jika pesanan selesai, admin akan menginformasikan ke nomor tersebut.</div>
+      <button class="btn-next" onclick="keStep3()">Lanjut ke QRIS →</button>
+    </div>
+
+    <div class="step-content" id="step3">
+      <div class="modal-title-block">
+        <div class="modal-label">LANGKAH 3 DARI 3</div>
+        <div class="modal-title">💳 Scan QRIS & Bayar</div>
+        <div class="modal-subtitle">Nominal sudah otomatis, tinggal scan</div>
+      </div>
+      
+      <div id="qrisLoading" style="text-align:center; padding:30px 0;">
+        <div class="loading-spinner" style="width:36px;height:36px;border:3px solid #2a3a32;border-top-color:#00ff88;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 10px;"></div>
+        <p style="color:#00ff88; font-size:13px;">⏳ Membuat QRIS...</p>
+      </div>
+      
+      <div class="qris-box" id="qrisBox" style="display:none;">
+        <img id="qrisImage" src="" alt="QRIS">
+        <a id="qrisDownload" href="" download="QRIS-JimzzStore.png" class="btn-download-qris" style="display:inline-flex; align-items:center; justify-content:center; gap:6px; margin:12px auto 0; background:transparent; border:2px solid #00ff88; color:#00ff88; padding:10px 20px; border-radius:10px; font-weight:bold; font-size:13px; text-decoration:none;">
+          ⬇️ Download QRIS
+        </a>
+        <div class="qris-nominal" id="qrisNominal">⚠️ BAYAR TEPAT: Rp 0</div>
+      </div>
+      
+      <button class="btn-next" id="btnSayaBayar" onclick="userKonfirmasiBayar()" style="display:none; margin-top:15px;">
+        ✅ Saya Sudah Bayar
+      </button>
+      
+      <div class="waiting-box" id="waitingBox" style="display:none;">
+        <div class="loading-spinner"></div>
+        <p>⏳ Menunggu Konfirmasi Admin</p>
+        <p class="sub-wait">Admin bakal cek mutasi & kirim produk ke WA kamu. Mohon tunggu 1-5 menit.</p>
+      </div>
+      
+      <div class="info-note">
+        📌 <b>Bayar TEPAT sesuai nominal</b> (ada kode unik). Setelah bayar, klik <b>"Saya Sudah Bayar"</b>. Admin bakal langsung dapat notifikasi.
+      </div>
     </div>
   </div>
-
-  <a href="https://wa.me/6283898669427?text=Halo%20Admin%20Jimzz%20Store%2C%20saya%20mau%20tanya%20soal%20maintenance" target="_blank" class="btn-wa">
-    💬 Hubungi Admin via WhatsApp
-  </a>
-
-  <a href="https://whatsapp.com/channel/0029VbCXMVy1HspwJTjh2P2P" target="_blank" class="btn-info">
-    📢 Ikuti Saluran untuk Update
-  </a>
-
-  <div class="social-links">
-    <a href="https://wa.me/6283898669427" target="_blank" class="social-link" title="WhatsApp">💬</a>
-    <a href="https://whatsapp.com/channel/0029VbCXMVy1HspwJTjh2P2P" target="_blank" class="social-link" title="Saluran">📢</a>
-  </div>
-
-  <p class="footer-note">
-    © 2025 Jimzz Store — All Rights Reserved 😈<br>
-    Terima kasih atas kesabaran kalian 🙏
-  </p>
 </div>
 
 <script>
 /* ================================================================
-   COUNTDOWN TIMER
+   CANVAS PARTICLE ANIMATION
    ================================================================ */
-// Set waktu selesai maintenance (5 jam dari sekarang)
-const endTime = new Date().getTime() + (5 * 60 * 60 * 1000);
-
-function updateCountdown() {
-  const now = new Date().getTime();
-  const distance = endTime - now;
-
-  if (distance < 0) {
-    document.getElementById('cd-hour').innerText = '00';
-    document.getElementById('cd-min').innerText = '00';
-    document.getElementById('cd-sec').innerText = '00';
-    return;
+(function() {
+  const canvas = document.getElementById("jimzz-neon-bg");
+  if (!canvas) return;
+  const ctx = canvas.getContext("2d");
+  let W, H, particles = [], animationId;
+  let isMobile = window.innerWidth < 600;
+  let isLowEnd = (navigator.hardwareConcurrency || 4) <= 4;
+  let mouse = { x: -1000, y: -1000 };
+  let isPaused = false;
+  let glowMode = false;
+  
+  function resizeJimzz() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+    isMobile = window.innerWidth < 600;
   }
-
-  const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-  const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-  document.getElementById('cd-hour').innerText = String(hours).padStart(2, '0');
-  document.getElementById('cd-min').innerText = String(minutes).padStart(2, '0');
-  document.getElementById('cd-sec').innerText = String(seconds).padStart(2, '0');
-}
-
-setInterval(updateCountdown, 1000);
-updateCountdown();
+  resizeJimzz();
+  window.addEventListener('resize', resizeJimzz);
+  
+  const particleCount = isMobile ? 45 : 90;
+  const connectionDistance = isMobile ? 100 : 140;
+  
+  for (let i = 0; i < particleCount; i++) {
+    particles.push({
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * window.innerHeight,
+      size: Math.random() * 2 + 0.5,
+      speedX: (Math.random() - 0.5) * 0.35,
+      speedY: (Math.random() - 0.5) * 0.35,
+      alpha: Math.random() * 0.7 + 0.2
+    });
+  }
+  
+  if (!isMobile) {
+    document.addEventListener('mousemove', (e) => { mouse.x = e.clientX; mouse.y = e.clientY; });
+    document.addEventListener('mouseleave', () => { mouse.x = -1000; mouse.y = -1000; });
+  }
+  
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) { isPaused = true; cancelAnimationFrame(animationId); }
+    else { isPaused = false; animateJimzz(); }
+  });
+  
+  window.jimzzSetGlowMode = function(enabled) { glowMode = enabled; };
+  
+  function animateJimzz() {
+    if (isPaused) return;
+    ctx.clearRect(0, 0, W, H);
+    
+    if (!isLowEnd) {
+      ctx.shadowBlur = 0;
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < connectionDistance) {
+            const opacity = (1 - dist / connectionDistance) * (glowMode ? 0.3 : 0.15);
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.strokeStyle = `rgba(0, 255, 100, ${opacity})`;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
+        }
+      }
+    }
+    
+    particles.forEach(p => {
+      p.x += p.speedX; p.y += p.speedY;
+      if (p.x < -10) p.x = W + 10;
+      if (p.x > W + 10) p.x = -10;
+      if (p.y < -10) p.y = H + 10;
+      if (p.y > H + 10) p.y = -10;
+      
+      if (!isMobile && mouse.x > 0) {
+        const dx = p.x - mouse.x;
+        const dy = p.y - mouse.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 100 && dist > 0) {
+          const force = (100 - dist) / 100;
+          p.x += (dx / dist) * force * 2;
+          p.y += (dy / dist) * force * 2;
+        }
+      }
+      
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(0, 255, 100, ${p.alpha})`;
+      ctx.shadowBlur = isLowEnd ? 0 : (glowMode ? 20 : 12);
+      ctx.shadowColor = "#00ff66";
+      ctx.fill();
+    });
+    
+    ctx.shadowBlur = 0;
+    const time = performance.now() * 0.001;
+    
+    for (let i = 0; i < 3; i++) {
+      ctx.beginPath();
+      for (let x = 0; x <= W; x += 10) {
+        const y = H * (0.30 + i * 0.22) + Math.sin(x * 0.006 + time * (0.7 + i * 0.15)) * 35;
+        if (x === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.strokeStyle = `rgba(0, 255, 90, ${(0.08 + i * 0.025) * (glowMode ? 1.5 : 1)})`;
+      ctx.lineWidth = 1.5;
+      ctx.shadowBlur = isLowEnd ? 0 : 18;
+      ctx.shadowColor = "#00ff66";
+      ctx.stroke();
+    }
+    
+    ctx.shadowBlur = 0;
+    animationId = requestAnimationFrame(animateJimzz);
+  }
+  animateJimzz();
+})();
 
 /* ================================================================
-   PARTICLE ANIMATION
+   THEME TOGGLE
    ================================================================ */
-const container = document.getElementById('particles-container');
-
-for (let i = 0; i < 30; i++) {
-  const p = document.createElement('div');
-  p.className = 'particle';
-  p.style.left = Math.random() * 100 + '%';
-  p.style.animationDuration = (Math.random() * 15 + 10) + 's';
-  p.style.animationDelay = (Math.random() * 10) + 's';
-  p.style.width = p.style.height = (Math.random() * 3 + 2) + 'px';
-  container.appendChild(p);
+function toggleTheme() {
+  const body = document.body;
+  const btn = document.getElementById('themeBtn');
+  body.classList.toggle('mode-2');
+  const isMode2 = body.classList.contains('mode-2');
+  btn.innerText = isMode2 ? '✨' : '🎨';
+  localStorage.setItem('jimzzBgMode', isMode2 ? 'mode-2' : 'mode-1');
+  if (window.jimzzSetGlowMode) window.jimzzSetGlowMode(isMode2);
 }
+
+(function loadBgMode() {
+  const savedMode = localStorage.getItem('jimzzBgMode');
+  if (savedMode === 'mode-2') {
+    document.body.classList.add('mode-2');
+    const btn = document.getElementById('themeBtn');
+    if (btn) btn.innerText = '✨';
+    if (window.jimzzSetGlowMode) window.jimzzSetGlowMode(true);
+  }
+})();
 
 /* ================================================================
    SERVICE WORKER
@@ -372,6 +608,331 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js').catch(err => console.log('SW error:', err));
   });
 }
+
+/* ================================================================
+   TAB SWITCH
+   ================================================================ */
+function switchTab(tab) {
+  document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + tab).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelector(`.nav-item[data-tab="${tab}"]`).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ================================================================
+   COUNTER
+   ================================================================ */
+let viewCount = 1234;
+const viewEl = document.getElementById('viewCount');
+setInterval(() => {
+  viewCount += Math.floor(Math.random() * 3) + 1;
+  viewEl.innerText = viewCount.toLocaleString('id-ID');
+}, 5000);
+
+/* ================================================================
+   DATA PRODUK
+   ================================================================ */
+const produkSosmed = [
+  { icon: "📱", nama: "Suntik Saluran WA", desc: "Tambah pengikut saluran WhatsApp kamu secara aman & cepat.", hargaPerUnit: 10, unit: "pengikut", min: 100, max: 1000000, hot: true,
+    inputLabel: "🔗 Link Saluran WA", inputPlaceholder: "Contoh: https://whatsapp.com/channel/xxxxx", inputValidasi: "whatsapp.com/channel",
+    inputError: "Link harus link SALURAN WhatsApp (whatsapp.com/channel)" },
+  { icon: "😀", nama: "Suntik Random Emoji Reaction", desc: "Tambah reaction emoji random ke postingan kamu. Aman & cepat.", hargaPerUnit: 1, unit: "reaction", min: 250, max: 1000000, hot: true,
+    inputLabel: "🔗 Link Postingan", inputPlaceholder: "Contoh: https://www.tiktok.com/@user/video/xxx", inputValidasi: "tiktok.com",
+    inputError: "Link harus link postingan TikTok" },
+  { icon: "📊", nama: "Suntik Polling Vote", desc: "Tambah vote ke polling kamu secara aman & cepat.", hargaPerUnit: 20, unit: "vote", min: 50, max: 1000000, hot: true,
+    inputLabel: "🔗 Link Polling", inputPlaceholder: "Contoh: link polling", inputValidasi: "", inputError: "" },
+  { icon: "❤️", nama: "Suntik Like TikTok", desc: "Tambah like video TikTok kamu secara aman & cepat.", hargaPerUnit: 10, unit: "like", min: 100, max: 1000000, hot: true,
+    inputLabel: "🔗 Link Video TikTok", inputPlaceholder: "Contoh: https://www.tiktok.com/@user/video/xxx", inputValidasi: "tiktok.com",
+    inputError: "Link harus link video TikTok" },
+  { icon: "👁️", nama: "Suntik Views TikTok", desc: "Tambah views video TikTok kamu secara aman & cepat.", hargaPerUnit: 1, unit: "views", min: 500, max: 1000000, hot: false,
+    inputLabel: "🔗 Link Video TikTok", inputPlaceholder: "Contoh: https://www.tiktok.com/@user/video/xxx", inputValidasi: "tiktok.com",
+    inputError: "Link harus link video TikTok" }
+];
+
+const produkJpm = [
+  { icon: "🚀", nama: "JPM (Jasa Push Member)", desc: "Push member ke grup / channel kamu dengan cepat & aman.", hargaPerUnit: 200, unit: "member", min: 5, max: 1000000, hot: true,
+    bonusMinTotal: 4000, bonusUnit: 5, inputLabel: "🔗 Link Grup WA", inputPlaceholder: "Contoh: https://chat.whatsapp.com/xxxxx", inputValidasi: "chat.whatsapp.com",
+    inputError: "Link harus link GRUP WhatsApp" },
+  { icon: "📱", nama: "Nokos WA Indo", desc: "Nomor kosong WhatsApp Indonesia siap pakai. Aman & terpercaya.", hargaPerUnit: 5000, unit: "nomor", min: 1, max: 100, hot: true,
+    inputLabel: "👤 Nama Pemesan", inputPlaceholder: "Contoh: Bilzz", inputValidasi: "", inputError: "" },
+  { icon: "🌐", nama: "Jasa Web", desc: "Jasa pembuatan website profesional. Bisa custom sesuai request kamu.", hargaPerUnit: 15000, unit: "web", min: 1, max: 50, hot: true,
+    inputLabel: "📝 Deskripsi Web", inputPlaceholder: "Contoh: Web toko online", inputValidasi: "", inputError: "" }
+];
+
+const produkApk = [
+  { icon: "💾", nama: "Auto Save Kontak", desc: "Aplikasi auto save kontak WhatsApp secara otomatis.", harga: 1000, hot: true },
+  { icon: "🎨", nama: "APK Bikin Logo", desc: "Aplikasi bikin logo profesional langsung dari HP.", harga: 1000, hot: true },
+  { icon: "🛠️", nama: "APK Kebutuhan JB", desc: "Kumpulan APK kebutuhan Jual Beli online.", harga: 1000, hot: true }
+];
+
+const WA_ADMIN = "6283898669427";
+const MIN_PEMBELIAN = 200;
+const BACKEND_URL = "https://jimzz-backend.vercel.app";
+
+let produkAktif = null;
+let dataPemesan = { link: "", hp: "", jumlah: 0, total: 0, bonus: 0, uniqueCode: 0, totalAmount: 0 };
+
+function renderProduk(target, data, kategori) {
+  document.getElementById(target).innerHTML = data.map((p, i) => `
+    <div class="produk-card">
+      ${p.hot ? '<div class="badge-hot">🔥 TERLARIS</div>' : ''}
+      <div class="produk-header">
+        <div class="produk-icon">${p.icon}</div>
+        <div class="produk-title-block">
+          <div class="produk-label">${kategori}</div>
+          <div class="produk-nama">${p.nama}</div>
+        </div>
+      </div>
+      <div class="produk-desc">${p.desc}</div>
+      ${p.bonusMinTotal ? `<div style="background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.3);border-radius:8px;padding:8px 10px;font-size:11px;color:#00ff88;margin-bottom:12px;">🎁 <b>BONUS +${p.bonusUnit} ${p.unit}</b> untuk order Rp ${p.bonusMinTotal.toLocaleString('id-ID')} ke atas!</div>` : ''}
+      <div class="produk-bottom">
+        <div class="produk-harga-info">
+          <div class="produk-harga-label">Harga ${p.unit ? 'per ' + p.unit : ''}</div>
+          <div class="produk-harga">Rp ${(p.harga || p.hargaPerUnit).toLocaleString('id-ID')} ${p.unit ? '<span>/ ' + p.unit + '</span>' : ''}</div>
+        </div>
+        <button class="btn-order" onclick="bukaOrder('${target}', ${i})">Order</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function bukaOrder(kategoriId, index) {
+  let data, kategori, isApk;
+  if (kategoriId === 'sosmed') { data = produkSosmed; kategori = 'SUNTIK ALL'; isApk = false; }
+  else if (kategoriId === 'jpm') { data = produkJpm; kategori = 'LAYANAN LAINNYA'; isApk = false; }
+  else { data = produkApk; kategori = 'JUAL APK'; isApk = true; }
+  
+  produkAktif = { ...data[index], kategori, isApk };
+  document.getElementById('modalLabel').innerText = kategori;
+  document.getElementById('modalTitle').innerText = produkAktif.nama;
+  document.getElementById('modalSubtitle').innerText = produkAktif.desc;
+
+  const jumlahInput = document.getElementById('jumlahInput');
+  const minmaxText = document.getElementById('minmaxText');
+
+  if (isApk) {
+    jumlahInput.value = 1; jumlahInput.min = 1; jumlahInput.max = 1;
+    jumlahInput.disabled = true;
+    minmaxText.innerText = '(otomatis 1)';
+    document.getElementById('hargaSatuan').innerText = `Rp ${produkAktif.harga.toLocaleString('id-ID')}`;
+  } else {
+    jumlahInput.disabled = false;
+    minmaxText.innerText = `Min: ${produkAktif.min.toLocaleString('id-ID')} - Max: ${produkAktif.max.toLocaleString('id-ID')}`;
+    document.getElementById('hargaSatuan').innerText = `Rp ${produkAktif.hargaPerUnit.toLocaleString('id-ID')}`;
+    jumlahInput.value = produkAktif.min;
+    jumlahInput.min = produkAktif.min;
+    jumlahInput.max = produkAktif.max;
+  }
+
+  if (isApk) {
+    document.getElementById('inputLabel').innerText = '👤 Nama Lengkap';
+    document.getElementById('linkSaluran').placeholder = 'Contoh: Bilzz';
+  } else {
+    document.getElementById('inputLabel').innerText = produkAktif.inputLabel || '🔗 Link';
+    document.getElementById('linkSaluran').placeholder = produkAktif.inputPlaceholder || 'Contoh: link';
+  }
+
+  document.getElementById('linkSaluran').value = '';
+  document.getElementById('hpPemesan').value = '';
+  document.getElementById('waitingBox').style.display = 'none';
+  document.getElementById('qrisBox').style.display = 'none';
+  document.getElementById('qrisLoading').style.display = 'none';
+  document.getElementById('btnSayaBayar').style.display = 'none';
+  clearError();
+
+  hitungTotal();
+  setStep(1);
+  document.getElementById('orderModal').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+function tutupOrder() {
+  document.getElementById('orderModal').classList.remove('show');
+  document.body.style.overflow = 'auto';
+  produkAktif = null;
+}
+
+function setStep(num) {
+  document.querySelectorAll('.step-content').forEach(s => s.classList.remove('active'));
+  document.getElementById('step' + num).classList.add('active');
+  document.querySelectorAll('.step-dot').forEach(d => d.classList.remove('active','done'));
+  for (let i = 1; i <= 3; i++) {
+    const dot = document.getElementById('dot' + i);
+    if (i < num) dot.classList.add('done');
+    else if (i === num) dot.classList.add('active');
+  }
+}
+
+function clearError() {
+  document.getElementById('linkSaluran').classList.remove('error');
+  document.getElementById('inputError').classList.remove('show');
+  document.getElementById('hpPemesan').classList.remove('error');
+  document.getElementById('hpError').classList.remove('show');
+}
+
+function hitungTotal() {
+  if (!produkAktif) return;
+  const jumlah = parseInt(document.getElementById('jumlahInput').value) || 0;
+  const hargaPerUnit = produkAktif.isApk ? produkAktif.harga : produkAktif.hargaPerUnit;
+  const total = jumlah * hargaPerUnit;
+  
+  let bonus = 0;
+  if (!produkAktif.isApk && produkAktif.bonusMinTotal && total >= produkAktif.bonusMinTotal) {
+    bonus = produkAktif.bonusUnit || 0;
+  }
+
+  document.getElementById('jumlahDisplay').innerText = jumlah.toLocaleString('id-ID') + ' ' + (produkAktif.unit || 'pcs');
+  document.getElementById('totalHarga').innerText = "Rp " + total.toLocaleString('id-ID');
+
+  const bonusRow = document.getElementById('bonusRow');
+  const totalDapatRow = document.getElementById('totalDapatRow');
+  
+  if (bonus > 0) {
+    bonusRow.style.display = 'flex';
+    totalDapatRow.style.display = 'flex';
+    document.getElementById('bonusValue').innerText = '+' + bonus + ' ' + produkAktif.unit;
+    document.getElementById('totalDapat').innerText = (jumlah + bonus).toLocaleString('id-ID') + ' ' + produkAktif.unit;
+  } else {
+    bonusRow.style.display = 'none';
+    totalDapatRow.style.display = 'none';
+  }
+
+  const validJumlah = jumlah >= parseInt(document.getElementById('jumlahInput').min) && jumlah <= parseInt(document.getElementById('jumlahInput').max);
+  const validTotal = total >= MIN_PEMBELIAN;
+  document.getElementById('btnPesan').disabled = !(validJumlah && validTotal);
+
+  const hintEl = document.getElementById('jumlahHint');
+  if (!validJumlah) {
+    hintEl.innerHTML = `⚠️ Jumlah tidak valid.`;
+    hintEl.style.color = '#ff6b6b';
+  } else if (!validTotal) {
+    hintEl.innerHTML = `⚠️ Minimal pembelian <b style="color:#ff6b6b">Rp ${MIN_PEMBELIAN.toLocaleString('id-ID')}</b>.`;
+    hintEl.style.color = '#ff6b6b';
+  } else if (bonus > 0) {
+    hintEl.innerHTML = `🎁 <b style="color:#00ff88">BONUS +${bonus} ${produkAktif.unit}</b> aktif!`;
+    hintEl.style.color = '#00ff88';
+  } else {
+    hintEl.innerText = '✅ Jumlah valid, klik "Lanjut ke Pembayaran".';
+    hintEl.style.color = '#00ff88';
+  }
+}
+
+function keStep2() {
+  const jumlah = parseInt(document.getElementById('jumlahInput').value) || 0;
+  const hargaPerUnit = produkAktif.isApk ? produkAktif.harga : produkAktif.hargaPerUnit;
+  const total = jumlah * hargaPerUnit;
+  
+  let bonus = 0;
+  if (!produkAktif.isApk && produkAktif.bonusMinTotal && total >= produkAktif.bonusMinTotal) {
+    bonus = produkAktif.bonusUnit || 0;
+  }
+  
+  dataPemesan.jumlah = jumlah;
+  dataPemesan.total = total;
+  dataPemesan.bonus = bonus;
+  setStep(2);
+}
+
+async function keStep3() {
+  const link = document.getElementById('linkSaluran').value.trim();
+  const hp = document.getElementById('hpPemesan').value.trim();
+  const inputEl = document.getElementById('linkSaluran');
+  const hpEl = document.getElementById('hpPemesan');
+  const errorEl = document.getElementById('inputError');
+  const hpErrorEl = document.getElementById('hpError');
+  
+  clearError();
+  
+  if (!link) {
+    inputEl.classList.add('error');
+    errorEl.innerText = produkAktif.isApk ? '❌ Isi nama dulu ya!' : '❌ Isi ' + (produkAktif.inputLabel || 'link') + ' dulu ya!';
+    errorEl.classList.add('show');
+    return;
+  }
+  
+  if (!produkAktif.isApk && produkAktif.inputValidasi) {
+    if (!link.toLowerCase().includes(produkAktif.inputValidasi)) {
+      inputEl.classList.add('error');
+      errorEl.innerText = '❌ ' + (produkAktif.inputError || 'Link tidak valid!');
+      errorEl.classList.add('show');
+      return;
+    }
+  }
+  
+  if (!hp) {
+    hpEl.classList.add('error');
+    hpErrorEl.innerText = '❌ Isi no WhatsApp dulu ya!';
+    hpErrorEl.classList.add('show');
+    return;
+  }
+  
+  const hpClean = hp.replace(/[\s\-\+]/g, '');
+  const hpValid = /^(62|0)8[0-9]{8,13}$/.test(hpClean);
+  if (!hpValid) {
+    hpEl.classList.add('error');
+    hpErrorEl.innerText = '❌ No WA tidak valid!';
+    hpErrorEl.classList.add('show');
+    return;
+  }
+  
+  dataPemesan.link = link;
+  dataPemesan.hp = hp;
+
+  setStep(3);
+  document.getElementById('qrisLoading').style.display = 'block';
+  document.getElementById('qrisBox').style.display = 'none';
+  document.getElementById('btnSayaBayar').style.display = 'none';
+  document.getElementById('waitingBox').style.display = 'none';
+
+  // Panggil backend untuk generate QRIS dinamis
+  try {
+    const res = await fetch(BACKEND_URL + '/api/create-order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        amount: dataPemesan.total,
+        customerPhone: dataPemesan.hp,
+        productName: produkAktif.nama,
+        productDetail: dataPemesan.jumlah + ' ' + (produkAktif.unit || 'pcs'),
+        link: dataPemesan.link
+      })
+    });
+    
+    const result = await res.json();
+    
+    if (!result.success) {
+      throw new Error(result.error || 'Gagal generate QRIS');
+    }
+    
+    dataPemesan.uniqueCode = result.uniqueCode;
+    dataPemesan.totalAmount = result.totalAmount;
+    
+    const qrImageUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' + encodeURIComponent(result.qrisString);
+    
+    document.getElementById('qrisImage').src = qrImageUrl;
+    document.getElementById('qrisDownload').href = qrImageUrl;
+    document.getElementById('qrisNominal').innerText = '⚠️ BAYAR TEPAT: Rp ' + result.totalAmount.toLocaleString('id-ID');
+    
+    document.getElementById('qrisLoading').style.display = 'none';
+    document.getElementById('qrisBox').style.display = 'block';
+    document.getElementById('btnSayaBayar').style.display = 'flex';
+    
+  } catch (err) {
+    console.error('QRIS error:', err);
+    document.getElementById('qrisLoading').innerHTML = '<p style="color:#ff6b6b; font-size:13px;">❌ Gagal membuat QRIS</p><p style="color:#888; font-size:11px; margin-top:5px;">' + err.message + '</p>';
+  }
+}
+
+function userKonfirmasiBayar() {
+  document.getElementById('btnSayaBayar').style.display = 'none';
+  document.getElementById('qrisBox').style.display = 'none';
+  document.getElementById('waitingBox').style.display = 'block';
+}
+
+renderProduk('sosmed', produkSosmed, 'SUNTIK ALL');
+renderProduk('jpm', produkJpm, 'LAYANAN LAINNYA');
+renderProduk('apkList', produkApk, 'JUAL APK');
 </script>
 </body>
 </html>
