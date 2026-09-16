@@ -46,13 +46,7 @@ header { text-align: center; padding: 50px 20px 40px; position: relative; z-inde
 header::before { content: ""; position: absolute; top: -50%; left: 50%; transform: translateX(-50%); width: 300%; height: 300%; background: conic-gradient(from 0deg, transparent, rgba(0,255,136,0.1), transparent, rgba(0,255,136,0.05), transparent); animation: rotateBg 20s linear infinite; z-index: -1; }
 @keyframes rotateBg { to { transform: translateX(-50%) rotate(360deg); } }
 
-/* LOGO JIMZZ STORE BESAR - BISA DIKLIK 5x */
-.jimzz-clickable {
-  display: inline-block;
-  cursor: pointer;
-  user-select: none;
-  transition: 0.3s;
-}
+.jimzz-clickable { display: inline-block; cursor: pointer; user-select: none; transition: 0.3s; }
 .jimzz-clickable:active { transform: scale(0.98); }
 
 .hero-badge { display: inline-block; background: rgba(0,255,136,0.1); border: 1px solid rgba(0,255,136,0.3); color: #00ff88; font-size: 11px; font-weight: bold; padding: 6px 16px; border-radius: 20px; margin-bottom: 15px; letter-spacing: 1px; animation: floatUpDownBadge 3s ease-in-out infinite; }
@@ -138,7 +132,8 @@ header .counter .dot { width: 8px; height: 8px; background: #00ff88; border-radi
 .produk-title-block { flex: 1; min-width: 0; }
 .produk-label { color: #00ff88; font-size: 10px; font-weight: bold; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 4px; }
 .produk-nama { color: #fff; font-size: 17px; font-weight: bold; line-height: 1.3; }
-.produk-desc { color: #777; font-size: 12px; margin-bottom: 15px; line-height: 1.5; }
+.produk-desc { color: #777; font-size: 12px; margin-bottom: 10px; line-height: 1.5; }
+.produk-sold { display: inline-block; background: rgba(0,255,136,0.08); border: 1px solid rgba(0,255,136,0.2); color: #00ff88; font-size: 10px; font-weight: bold; padding: 4px 10px; border-radius: 10px; margin-bottom: 12px; letter-spacing: 0.3px; }
 .produk-bottom { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
 .produk-harga-info { flex: 1; }
 .produk-harga-label { color: #555; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
@@ -151,12 +146,13 @@ header .counter .dot { width: 8px; height: 8px; background: #00ff88; border-radi
 @keyframes pulseBadge { 0%,100% { transform: scale(1); } 50% { transform: scale(1.05); } }
 .badge-admin-preview { position: absolute; top: 12px; right: 12px; background: linear-gradient(135deg, #ffd700, #ff9500); color: #000; font-size: 9px; font-weight: bold; padding: 3px 8px; border-radius: 10px; letter-spacing: 0.5px; box-shadow: 0 0 15px rgba(255,215,0,0.5); }
 
-.produk-list.grid-2col .produk-card { padding: 15px 12px; display: flex; flex-direction: column; justify-content: space-between; min-height: 160px; margin: 0; }
+.produk-list.grid-2col .produk-card { padding: 15px 12px; display: flex; flex-direction: column; justify-content: space-between; min-height: 180px; margin: 0; }
 .produk-list.grid-2col .produk-header { flex-direction: column; align-items: flex-start; gap: 6px; margin-bottom: 8px; }
 .produk-list.grid-2col .produk-icon { font-size: 34px; }
 .produk-list.grid-2col .produk-label { font-size: 8px; }
 .produk-list.grid-2col .produk-nama { font-size: 13px; line-height: 1.2; }
-.produk-list.grid-2col .produk-desc { font-size: 10px; margin-bottom: 8px; }
+.produk-list.grid-2col .produk-desc { font-size: 10px; margin-bottom: 6px; }
+.produk-list.grid-2col .produk-sold { font-size: 9px; padding: 3px 8px; margin-bottom: 8px; }
 .produk-list.grid-2col .produk-bottom { display: flex; flex-direction: column; gap: 6px; align-items: stretch; }
 .produk-list.grid-2col .produk-harga-info { text-align: center; }
 .produk-list.grid-2col .produk-harga-label { font-size: 8px; }
@@ -303,7 +299,7 @@ footer { text-align: center; padding: 30px 20px; color: #444; font-size: 12px; b
     <div class="hero-badge">⚡ TRUSTED SINCE 2025</div>
     <h1 class="jimzz-clickable" onclick="secretClick()"><span class="gradient-text">Jimzz Store</span></h1>
     <p class="tagline">Top Up Game, Sosmed & Digital Produk Terlengkap</p>
-    <div class="counter"><span class="dot"></span>🔥 <span id="viewCount">1.374</span> orang sudah order</div>
+    <div class="counter"><span class="dot"></span>🔥 <span id="viewCount">1.375</span> orang sudah order</div>
     <div class="trust-row">
       <div class="trust-item"><span class="trust-icon">⚡</span> Proses Cepat</div>
       <div class="trust-item"><span class="trust-icon">🔒</span> Aman & Terpercaya</div>
@@ -520,9 +516,9 @@ let secretClickTimer = null;
 if (localStorage.getItem('jimzz_admin') === 'true') isAdmin = true;
 
 // ============================================
-// COUNTER ORDER - MULAI 1374, NAIK KALAU ADA ORDER
+// COUNTER ORDER TOTAL - MULAI 1375
 // ============================================
-const INITIAL_ORDER_COUNT = 1374;
+const INITIAL_ORDER_COUNT = 1375;
 let orderCount = parseInt(localStorage.getItem('jimzz_order_count')) || INITIAL_ORDER_COUNT;
 
 function updateOrderCounter() {
@@ -534,6 +530,21 @@ function incrementOrderCount() {
   orderCount++;
   localStorage.setItem('jimzz_order_count', orderCount);
   updateOrderCounter();
+}
+
+// ============================================
+// COUNTER PER PRODUK
+// ============================================
+function getProdukOrderCount(kategoriId, index) {
+  const key = 'jimzz_order_' + kategoriId + '_' + index;
+  return parseInt(localStorage.getItem(key)) || 0;
+}
+
+function incrementProdukOrder(kategoriId, index) {
+  const key = 'jimzz_order_' + kategoriId + '_' + index;
+  const current = parseInt(localStorage.getItem(key)) || 0;
+  localStorage.setItem(key, current + 1);
+  incrementOrderCount();
 }
 
 function secretClick() {
@@ -650,25 +661,29 @@ function initCanvas() {
   animateJimzz();
 }
 
+// ============================================
+// PRODUK DATA - DENGAN baseOrder (FAKE AWAL)
+// Total: 324+187+92+256+143+178+63+42+37+28+15+10 = 1375
+// ============================================
 const produkSosmed = [
-  { icon: "📱", nama: "Suntik Saluran WA", desc: "Tambah pengikut saluran WhatsApp kamu secara aman & cepat.", hargaPerUnit: 10, unit: "pengikut", min: 100, max: 1000000, hot: true, inputLabel: "🔗 Link Saluran WA", inputPlaceholder: "Contoh: https://whatsapp.com/channel/xxxxx", inputValidasi: "whatsapp.com/channel", inputError: "Link harus link SALURAN WhatsApp" },
-  { icon: "😀", nama: "Suntik Random Emoji Reaction", desc: "Tambah reaction emoji random ke postingan kamu.", hargaPerUnit: 1, unit: "reaction", min: 250, max: 1000000, hot: true, inputLabel: "🔗 Link Postingan", inputPlaceholder: "Contoh: https://www.tiktok.com/@user/video/xxx", inputValidasi: "tiktok.com", inputError: "Link harus link postingan TikTok" },
-  { icon: "📊", nama: "Suntik Polling Vote", desc: "Tambah vote ke polling kamu secara aman & cepat.", hargaPerUnit: 20, unit: "vote", min: 50, max: 1000000, hot: true, inputLabel: "🔗 Link Polling", inputPlaceholder: "Contoh: link polling", inputValidasi: "", inputError: "" },
-  { icon: "❤️", nama: "Suntik Like TikTok", desc: "Tambah like video TikTok kamu secara aman & cepat.", hargaPerUnit: 10, unit: "like", min: 100, max: 1000000, hot: true, inputLabel: "🔗 Link Video TikTok", inputPlaceholder: "Contoh: https://www.tiktok.com/@user/video/xxx", inputValidasi: "tiktok.com", inputError: "Link harus link video TikTok" },
-  { icon: "👁️", nama: "Suntik Views TikTok", desc: "Tambah views video TikTok kamu secara aman & cepat.", hargaPerUnit: 1, unit: "views", min: 500, max: 1000000, hot: false, inputLabel: "🔗 Link Video TikTok", inputPlaceholder: "Contoh: https://www.tiktok.com/@user/video/xxx", inputValidasi: "tiktok.com", inputError: "Link harus link video TikTok" }
+  { icon: "📱", nama: "Suntik Saluran WA", desc: "Tambah pengikut saluran WhatsApp kamu secara aman & cepat.", hargaPerUnit: 10, unit: "pengikut", min: 100, max: 1000000, hot: true, baseOrder: 324, inputLabel: "🔗 Link Saluran WA", inputPlaceholder: "Contoh: https://whatsapp.com/channel/xxxxx", inputValidasi: "whatsapp.com/channel", inputError: "Link harus link SALURAN WhatsApp" },
+  { icon: "😀", nama: "Suntik Random Emoji Reaction", desc: "Tambah reaction emoji random ke postingan kamu.", hargaPerUnit: 1, unit: "reaction", min: 250, max: 1000000, hot: true, baseOrder: 187, inputLabel: "🔗 Link Postingan", inputPlaceholder: "Contoh: https://www.tiktok.com/@user/video/xxx", inputValidasi: "tiktok.com", inputError: "Link harus link postingan TikTok" },
+  { icon: "📊", nama: "Suntik Polling Vote", desc: "Tambah vote ke polling kamu secara aman & cepat.", hargaPerUnit: 20, unit: "vote", min: 50, max: 1000000, hot: true, baseOrder: 92, inputLabel: "🔗 Link Polling", inputPlaceholder: "Contoh: link polling", inputValidasi: "", inputError: "" },
+  { icon: "❤️", nama: "Suntik Like TikTok", desc: "Tambah like video TikTok kamu secara aman & cepat.", hargaPerUnit: 10, unit: "like", min: 100, max: 1000000, hot: true, baseOrder: 256, inputLabel: "🔗 Link Video TikTok", inputPlaceholder: "Contoh: https://www.tiktok.com/@user/video/xxx", inputValidasi: "tiktok.com", inputError: "Link harus link video TikTok" },
+  { icon: "👁️", nama: "Suntik Views TikTok", desc: "Tambah views video TikTok kamu secara aman & cepat.", hargaPerUnit: 1, unit: "views", min: 500, max: 1000000, hot: false, baseOrder: 143, inputLabel: "🔗 Link Video TikTok", inputPlaceholder: "Contoh: https://www.tiktok.com/@user/video/xxx", inputValidasi: "tiktok.com", inputError: "Link harus link video TikTok" }
 ];
 
 const produkJpm = [
-  { icon: "🚀", nama: "JPM (Jasa Push Member)", desc: "Push member ke grup / channel kamu dengan cepat & aman.", hargaPerUnit: 200, unit: "member", min: 5, max: 1000000, hot: true, bonusMinTotal: 4000, bonusUnit: 5, inputLabel: "🔗 Link Grup WA", inputPlaceholder: "Contoh: https://chat.whatsapp.com/xxxxx", inputValidasi: "chat.whatsapp.com", inputError: "Link harus link GRUP WhatsApp" },
-  { icon: "📱", nama: "Nokos WA Indo", desc: "Nomor kosong WhatsApp Indonesia siap pakai.", hargaPerUnit: 5000, unit: "nomor", min: 1, max: 100, hot: true, inputLabel: "👤 Nama Pemesan", inputPlaceholder: "Contoh: Bilzz", inputValidasi: "", inputError: "" },
-  { icon: "🌐", nama: "Jasa Web", desc: "Jasa pembuatan website profesional.", hargaPerUnit: 15000, unit: "web", min: 1, max: 50, hot: true, inputLabel: "📝 Deskripsi Web", inputPlaceholder: "Contoh: Web toko online", inputValidasi: "", inputError: "" }
+  { icon: "🚀", nama: "JPM (Jasa Push Member)", desc: "Push member ke grup / channel kamu dengan cepat & aman.", hargaPerUnit: 200, unit: "member", min: 5, max: 1000000, hot: true, baseOrder: 178, bonusMinTotal: 4000, bonusUnit: 5, inputLabel: "🔗 Link Grup WA", inputPlaceholder: "Contoh: https://chat.whatsapp.com/xxxxx", inputValidasi: "chat.whatsapp.com", inputError: "Link harus link GRUP WhatsApp" },
+  { icon: "📱", nama: "Nokos WA Indo", desc: "Nomor kosong WhatsApp Indonesia siap pakai.", hargaPerUnit: 5000, unit: "nomor", min: 1, max: 100, hot: true, baseOrder: 63, inputLabel: "👤 Nama Pemesan", inputPlaceholder: "Contoh: Bilzz", inputValidasi: "", inputError: "" },
+  { icon: "🌐", nama: "Jasa Web", desc: "Jasa pembuatan website profesional.", hargaPerUnit: 15000, unit: "web", min: 1, max: 50, hot: true, baseOrder: 42, inputLabel: "📝 Deskripsi Web", inputPlaceholder: "Contoh: Web toko online", inputValidasi: "", inputError: "" }
 ];
 
 const produkApk = [
-  { icon: "💾", nama: "Auto Save Kontak", desc: "Aplikasi auto save kontak WhatsApp secara otomatis.", harga: 1000, hot: true },
-  { icon: "🎨", nama: "APK Bikin Logo", desc: "Aplikasi bikin logo profesional langsung dari HP.", harga: 1000, hot: true },
-  { icon: "🛠️", nama: "APK Kebutuhan JB", desc: "Kumpulan APK kebutuhan Jual Beli online.", harga: 1000, hot: true },
-  { icon: "🦏", nama: "APK WA Badak", desc: "Aplikasi WhatsApp mod dengan fitur lengkap & anti-banned.", harga: 1000, hot: true }
+  { icon: "💾", nama: "Auto Save Kontak", desc: "Aplikasi auto save kontak WhatsApp secara otomatis.", harga: 1000, hot: true, baseOrder: 37 },
+  { icon: "🎨", nama: "APK Bikin Logo", desc: "Aplikasi bikin logo profesional langsung dari HP.", harga: 1000, hot: true, baseOrder: 28 },
+  { icon: "🛠️", nama: "APK Kebutuhan JB", desc: "Kumpulan APK kebutuhan Jual Beli online.", harga: 1000, hot: true, baseOrder: 15 },
+  { icon: "🦏", nama: "APK WA Badak", desc: "Aplikasi WhatsApp mod dengan fitur lengkap & anti-banned.", harga: 1000, hot: true, baseOrder: 10 }
 ];
 
 const produkTopUp = [
@@ -719,7 +734,10 @@ function initData() {
 function renderProduk(target, data, kategori) {
   const el = document.getElementById(target);
   if (!el) return;
-  el.innerHTML = data.map((p, i) => `
+  el.innerHTML = data.map((p, i) => {
+    const realOrder = getProdukOrderCount(target, i);
+    const totalOrder = (p.baseOrder || 0) + realOrder;
+    return `
     <div class="produk-card">
       ${p.hot ? '<div class="badge-hot">🔥 TERLARIS</div>' : ''}
       <div class="produk-header">
@@ -727,6 +745,7 @@ function renderProduk(target, data, kategori) {
         <div class="produk-title-block"><div class="produk-label">${kategori}</div><div class="produk-nama">${p.nama}</div></div>
       </div>
       <div class="produk-desc">${p.desc}</div>
+      <div class="produk-sold">🛒 ${totalOrder.toLocaleString('id-ID')} sudah dibeli</div>
       <div class="produk-bottom">
         <div class="produk-harga-info">
           <div class="produk-harga-label">Harga ${p.unit ? 'per ' + p.unit : ''}</div>
@@ -735,7 +754,8 @@ function renderProduk(target, data, kategori) {
         <button class="btn-order" onclick="bukaOrder('${target}', ${i})">Order</button>
       </div>
     </div>
-  `).join('');
+  `;
+  }).join('');
 }
 
 function renderGameList() {
@@ -859,6 +879,11 @@ function bukaOrder(kategoriId, index) {
   else if (kategoriId === 'jpm') { data = produkJpm; kategori = 'LAYANAN LAINNYA'; isApk = false; }
   else { data = produkApk; kategori = 'JUAL APK'; isApk = true; }
   produkAktif = { ...data[index], kategori, isApk };
+  
+  // Simpan info produk yang di-order buat increment nanti
+  produkAktif._kategoriId = kategoriId;
+  produkAktif._index = index;
+  
   document.getElementById('modalLabel').innerText = kategori;
   document.getElementById('modalTitle').innerText = produkAktif.nama;
   document.getElementById('modalSubtitle').innerText = produkAktif.desc;
@@ -1029,8 +1054,17 @@ async function userKonfirmasiBayar() {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ totalAmount: dataPemesan.totalAmount, customerPhone: dataPemesan.hp, productName: produkAktif.nama, productDetail: dataPemesan.jumlah + ' ' + (produkAktif.unit || 'pcs'), link: dataPemesan.link })
     });
-    // Increment order counter setelah pembayaran sukses
-    incrementOrderCount();
+    
+    // Increment counter produk yang di-order
+    if (produkAktif._kategoriId && produkAktif._index !== undefined) {
+      incrementProdukOrder(produkAktif._kategoriId, produkAktif._index);
+      // Re-render produk biar angka "sudah dibeli" update
+      if (produkAktif._kategoriId === 'sosmed') renderProduk('sosmed', produkSosmed, 'SUNTIK ALL');
+      else if (produkAktif._kategoriId === 'jpm') renderProduk('jpm', produkJpm, 'LAYANAN LAINNYA');
+      else if (produkAktif._kategoriId === 'apk') renderProduk('apkList', produkApk, 'JUAL APK');
+    } else {
+      incrementOrderCount();
+    }
   } catch (err) { console.error('Confirm error:', err); }
   document.getElementById('btnSayaBayar').style.display = 'none';
   document.getElementById('qrisBox').style.display = 'none';
@@ -1046,7 +1080,7 @@ function switchTab(tab) {
 }
 
 // ============================================
-// MUSIC PLAYLIST - CUMA 4 LAGU LOKAL
+// MUSIC PLAYLIST - 4 LAGU LOKAL
 // ============================================
 const playlist = [
   { judul: "Lagu 1", artis: "Jimzz Playlist", cover: "🔥", src: "lagu1.mp3" },
@@ -1085,7 +1119,6 @@ function initMusicEvents() {
   });
   audio.addEventListener('play', updateUI);
   audio.addEventListener('pause', updateUI);
-  // FIX: Lagu ngulang terus
   audio.addEventListener('ended', () => {
     audio.currentTime = 0;
     audio.play().catch(err => console.log('Replay error:', err));
