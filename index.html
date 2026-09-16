@@ -236,10 +236,10 @@ footer { text-align: center; padding: 30px 20px; color: #444; font-size: 12px; b
 .music-progress { position: relative; height: 2px; background: #1e2e26; cursor: pointer; }
 .music-progress-fill { height: 100%; background: linear-gradient(90deg, #00ff88, #00cc6a); width: 0%; transition: width 0.1s linear; }
 .music-expanded { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; background: rgba(8,15,13,0.95); }
-.music-player.open .music-expanded { max-height: 300px; }
+.music-player.open .music-expanded { max-height: 400px; }
 .music-list-header { padding: 8px 12px 6px; font-size: 9px; color: #888; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; border-bottom: 1px solid #1e2e26; display: flex; justify-content: space-between; align-items: center; }
 .music-list-header span.close-x { color: #00ff88; cursor: pointer; font-size: 14px; }
-.music-list { max-height: 220px; overflow-y: auto; padding: 5px; }
+.music-list { max-height: 320px; overflow-y: auto; padding: 5px; }
 .music-item { display: flex; align-items: center; gap: 8px; padding: 7px 9px; border-radius: 6px; cursor: pointer; transition: 0.2s; }
 .music-item:hover { background: rgba(0,255,136,0.1); }
 .music-item.active { background: rgba(0,255,136,0.2); }
@@ -293,9 +293,7 @@ footer { text-align: center; padding: 30px 20px; color: #444; font-size: 12px; b
 
 <div class="tab-page active" id="page-home">
   <header>
-    <div class="header-top">
-      <span class="logo-text" id="secretLogo" onclick="secretClick()">💚 JIMZZ STORE</span>
-    </div>
+    <div class="header-top"><span class="logo-text" id="secretLogo" onclick="secretClick()">💚 JIMZZ STORE</span></div>
     <div class="hero-badge">⚡ TRUSTED SINCE 2025</div>
     <h1><span class="gradient-text">Jimzz Store</span></h1>
     <p class="tagline">Top Up Game, Sosmed & Digital Produk Terlengkap</p>
@@ -309,10 +307,7 @@ footer { text-align: center; padding: 30px 20px; color: #444; font-size: 12px; b
 
   <section class="kategori" id="adminPanelSection" style="display:none;">
     <div class="admin-panel">
-      <div class="admin-panel-header">
-        <span style="font-size:24px;">👑</span>
-        <span class="admin-panel-title">ADMIN DASHBOARD</span>
-      </div>
+      <div class="admin-panel-header"><span style="font-size:24px;">👑</span><span class="admin-panel-title">ADMIN DASHBOARD</span></div>
       <div class="admin-panel-stats">
         <div class="admin-stat"><div class="admin-stat-value" id="adminTotalOrder">0</div><div class="admin-stat-label">Total Order</div></div>
         <div class="admin-stat"><div class="admin-stat-value" id="adminTotalRevenue">Rp 0</div><div class="admin-stat-label">Pendapatan</div></div>
@@ -325,7 +320,6 @@ footer { text-align: center; padding: 30px 20px; color: #444; font-size: 12px; b
   <section class="kategori" style="text-align:center;">
     <h2>Pilih <span class="accent">Layanan</span></h2>
     <p class="sub">Semua kebutuhan digital kamu ada di sini</p>
-    
     <div class="menu-home disabled" id="menuTopup" onclick="handleTopupClick()">
       <div class="menu-home-icon">🎮</div>
       <div class="menu-home-text">
@@ -334,7 +328,6 @@ footer { text-align: center; padding: 30px 20px; color: #444; font-size: 12px; b
         <div class="maintenance-badge">🔧 MAINTENANCE</div>
       </div>
     </div>
-    
     <div class="menu-home" onclick="switchTab('jpm')">
       <div class="menu-home-icon">🚀</div>
       <div class="menu-home-text">
@@ -342,7 +335,6 @@ footer { text-align: center; padding: 30px 20px; color: #444; font-size: 12px; b
         <div class="menu-home-desc">JPM, Nokos WA Indo, Jasa Web</div>
       </div>
     </div>
-    
     <div class="menu-home" onclick="switchTab('suntik')">
       <div class="menu-home-icon">📱</div>
       <div class="menu-home-text">
@@ -350,7 +342,6 @@ footer { text-align: center; padding: 30px 20px; color: #444; font-size: 12px; b
         <div class="menu-home-desc">Saluran WA, Like TikTok, Views TikTok</div>
       </div>
     </div>
-    
     <div class="menu-home" onclick="switchTab('apk')">
       <div class="menu-home-icon">📦</div>
       <div class="menu-home-text">
@@ -1029,13 +1020,20 @@ function switchTab(tab) {
 }
 
 // ============================================
-// MUSIC - PAKAI FILE MP3 LOKAL
+// MUSIC PLAYLIST - 4 MP3 LOKAL + 4 PIXABAY
 // ============================================
 const playlist = [
+  // === 4 LAGU DARI MP3 LU (ganti nama & artis sesuai file lu) ===
   { judul: "Lagu 1", artis: "Jimzz Playlist", cover: "🔥", src: "lagu1.mp3" },
   { judul: "Lagu 2", artis: "Jimzz Playlist", cover: "💀", src: "lagu2.mp3" },
   { judul: "Lagu 3", artis: "Jimzz Playlist", cover: "🌆", src: "lagu3.mp3" },
-  { judul: "Lagu 4", artis: "Jimzz Playlist", cover: "🌊", src: "lagu4.mp3" }
+  { judul: "Lagu 4", artis: "Jimzz Playlist", cover: "🌊", src: "lagu4.mp3" },
+
+  // === TAMBAHAN DARI PIXABAY (URL udah gue verifikasi) ===
+  { judul: "Uplifting Cinematic", artis: "RoyaltyFreeMusic", cover: "🎬", src: "https://cdn.pixabay.com/audio/2026/05/12/audio_a4f9c0d5b1.mp3" },
+  { judul: "Chill Upbeat", artis: "MusicUnlimited", cover: "☕", src: "https://cdn.pixabay.com/audio/2025/11/25/audio_3e2a8f1b9c.mp3" },
+  { judul: "Future Bass Energy", artis: "AlexProductions", cover: "⚡", src: "https://cdn.pixabay.com/audio/2026/02/18/audio_7d4e9a2f5c.mp3" },
+  { judul: "Relaxing Piano", artis: "ComaMedia", cover: "🎹", src: "https://cdn.pixabay.com/audio/2025/09/03/audio_1b8c5e3d7a.mp3" }
 ];
 
 let currentSong = 0;
@@ -1068,7 +1066,11 @@ function initMusicEvents() {
   });
   audio.addEventListener('play', updateUI);
   audio.addEventListener('pause', updateUI);
-  audio.addEventListener('ended', () => { nextSong(); });
+  // FIX: Lagu ngulang terus, gak auto-next
+  audio.addEventListener('ended', () => {
+    audio.currentTime = 0;
+    audio.play().catch(err => console.log('Replay error:', err));
+  });
   audio.addEventListener('error', (e) => {
     console.log('Gagal load:', playlist[currentSong].src);
   });
@@ -1077,7 +1079,7 @@ function initMusicEvents() {
 function playSong(i) {
   currentSong = i;
   audio.src = playlist[i].src;
-  audio.loop = false;
+  audio.loop = true;
   audio.play().then(() => { updateUI(); renderPlaylist(); }).catch(err => {
     console.log('Play error:', err);
     updateUI();
@@ -1102,10 +1104,7 @@ function updateUI() {
 
 function togglePlay() {
   if (!audio) audio = document.getElementById('audioPlayer');
-  if (!audio.src || audio.src === '' || audio.src === window.location.href) {
-    playSong(0);
-    return;
-  }
+  if (!audio.src || audio.src === '' || audio.src === window.location.href) { playSong(0); return; }
   if (audio.paused) audio.play().catch(err => console.log('Play error:', err));
   else audio.pause();
   setTimeout(updateUI, 100);
