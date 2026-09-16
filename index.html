@@ -31,27 +31,42 @@ body { background: #08080d; color: #e6e6e6; line-height: 1.6; padding-bottom: 10
 @keyframes loadBar { to { width: 100%; } }
 @keyframes pulseGlow { 0%,100% { opacity:1; transform: scale(1); } 50% { opacity:0.7; transform: scale(0.97); } }
 
-/* CHAT ADMIN FLOATING */
+/* CHAT ADMIN FLOATING - KANAN ATAS */
 .chat-admin-float {
-  position: fixed; bottom: 90px; left: 12px; z-index: 350;
-  width: 56px; height: 56px; border-radius: 50%;
+  position: fixed; top: 15px; right: 15px; z-index: 500;
+  width: 50px; height: 50px; border-radius: 50%;
   background: linear-gradient(135deg, #25D366, #1da851);
   display: flex; align-items: center; justify-content: center;
-  text-decoration: none; font-size: 28px; color: #fff;
+  text-decoration: none; font-size: 26px; color: #fff;
   box-shadow: 0 5px 25px rgba(37,211,102,0.6);
   animation: waPulse 2s infinite;
   transition: 0.3s;
 }
 .chat-admin-float:hover { transform: scale(1.1); }
 @keyframes waPulse { 0%,100% { box-shadow: 0 5px 25px rgba(37,211,102,0.6); } 50% { box-shadow: 0 5px 35px rgba(37,211,102,0.9), 0 0 0 12px rgba(37,211,102,0.1); } }
-.chat-admin-label {
-  position: fixed; bottom: 102px; left: 78px; z-index: 350;
+.chat-admin-tooltip {
+  position: fixed; top: 25px; right: 75px; z-index: 500;
   background: #25D366; color: #fff; font-size: 10px; font-weight: bold;
-  padding: 4px 10px; border-radius: 10px; white-space: nowrap;
+  padding: 6px 12px; border-radius: 10px; white-space: nowrap;
   box-shadow: 0 3px 15px rgba(37,211,102,0.4);
-  animation: floatUpDown 3s ease-in-out infinite;
+  animation: tooltipFloat 3s ease-in-out infinite;
 }
-@keyframes floatUpDown { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+.chat-admin-tooltip::after {
+  content: ""; position: absolute; right: -6px; top: 50%; transform: translateY(-50%);
+  border-left: 6px solid #25D366; border-top: 6px solid transparent; border-bottom: 6px solid transparent;
+}
+@keyframes tooltipFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+
+/* ADMIN BADGE */
+.admin-badge-float {
+  position: fixed; top: 15px; right: 80px; z-index: 500;
+  background: linear-gradient(135deg, #ffd700, #ff9500); color: #000;
+  padding: 8px 14px; border-radius: 20px; font-size: 11px; font-weight: bold;
+  box-shadow: 0 5px 20px rgba(255,215,0,0.5); display: none; align-items: center; gap: 6px;
+  cursor: pointer;
+}
+.admin-badge-float.show { display: flex; }
+.admin-badge-float .logout-x { color: #000; font-weight: bold; margin-left: 5px; }
 
 /* ADMIN LOGIN MODAL */
 #adminLoginModal {
@@ -83,17 +98,6 @@ body { background: #08080d; color: #e6e6e6; line-height: 1.6; padding-bottom: 10
 .admin-login-box button:hover { transform: scale(1.02); }
 .admin-login-error { color: #ff6b6b; font-size: 12px; margin-top: 10px; display: none; }
 .admin-login-error.show { display: block; }
-
-/* ADMIN BADGE */
-.admin-badge-float {
-  position: fixed; top: 15px; right: 15px; z-index: 500;
-  background: linear-gradient(135deg, #ffd700, #ff9500); color: #000;
-  padding: 8px 14px; border-radius: 20px; font-size: 11px; font-weight: bold;
-  box-shadow: 0 5px 20px rgba(255,215,0,0.5); display: none; align-items: center; gap: 6px;
-  cursor: pointer;
-}
-.admin-badge-float.show { display: flex; }
-.admin-badge-float .logout-x { color: #000; font-weight: bold; margin-left: 5px; }
 
 /* HEADER */
 header { text-align: center; padding: 50px 20px 40px; position: relative; z-index: 5; overflow: hidden; }
@@ -383,22 +387,23 @@ header .counter .dot { width: 8px; height: 8px; background: #00ff88; border-radi
 .term-text a { color: #00ff88; text-decoration: none; }
 footer { text-align: center; padding: 30px 20px; color: #444; font-size: 12px; border-top: 1px solid #15151c; margin-top: 40px; position: relative; z-index: 5; }
 
-/* STICKY BACK - VERSI BARU */
+/* STICKY BACK - VERSI BARU: TOMBOL PANAH KECIL DI POJOK KIRI ATAS */
 .back-sticky {
   position: sticky; top: 0; z-index: 100;
-  background: linear-gradient(180deg, #08080d 0%, rgba(8,8,13,0.98) 100%);
-  padding: 15px 20px; margin: -35px -20px 20px -20px;
-  border-bottom: 2px solid #00ff88; box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+  background: linear-gradient(180deg, #08080d 0%, rgba(8,8,13,0.95) 100%);
+  padding: 12px 20px;
+  margin: -35px -20px 15px -20px;
+  border-bottom: 1px solid #1e2e26;
 }
 .btn-back {
-  background: linear-gradient(135deg, #00ff88, #00cc6a); color: #000;
-  border: none; padding: 15px 24px; border-radius: 14px;
-  font-size: 15px; font-weight: bold; cursor: pointer; display: flex; align-items: center;
-  justify-content: center; gap: 10px; width: 100%; font-family: inherit; transition: 0.3s;
-  box-shadow: 0 8px 30px rgba(0,255,136,0.4);
+  background: rgba(0,255,136,0.1); border: 2px solid #00ff88;
+  color: #00ff88; width: 48px; height: 48px; border-radius: 12px;
+  font-size: 24px; font-weight: bold; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: 0.3s; font-family: inherit;
 }
-.btn-back:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0,255,136,0.6); }
-.btn-back:active { transform: scale(0.98); }
+.btn-back:hover { background: rgba(0,255,136,0.25); transform: scale(1.05); }
+.btn-back:active { transform: scale(0.95); }
 
 /* MUSIC */
 .music-player { position: fixed; bottom: 85px; right: 12px; width: 220px; max-width: calc(100% - 24px); background: rgba(15,26,20,0.95); backdrop-filter: blur(10px); border: 1px solid #1e2e26; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.7); z-index: 300; overflow: hidden; }
@@ -441,8 +446,9 @@ footer { text-align: center; padding: 30px 20px; color: #444; font-size: 12px; b
   .nav-item .nav-icon { font-size: 18px; }
   .music-player { bottom: 80px; right: 10px; width: 200px; }
   .modal-close { top: -10px; right: -10px; width: 42px; height: 42px; font-size: 22px; }
-  .chat-admin-float { width: 50px; height: 50px; font-size: 24px; }
-  .chat-admin-label { display: none; }
+  .chat-admin-float { width: 44px; height: 44px; font-size: 22px; top: 12px; right: 12px; }
+  .chat-admin-tooltip { display: none; }
+  .admin-badge-float { top: 12px; right: 62px; font-size: 10px; padding: 6px 10px; }
 }
 </style>
 </head>
@@ -454,9 +460,13 @@ footer { text-align: center; padding: 30px 20px; color: #444; font-size: 12px; b
   <div class="loading-bar"><div class="loading-bar-fill"></div></div>
 </div>
 
-<!-- CHAT ADMIN FLOATING -->
+<!-- CHAT ADMIN FLOATING - KANAN ATAS -->
 <a href="https://wa.me/6283898669427?text=Halo%20Admin%20Jimzz%20Store%2C%20saya%20mau%20tanya..." target="_blank" class="chat-admin-float" title="Chat Admin">💬</a>
-<div class="chat-admin-label">Chat Admin</div>
+<div class="chat-admin-tooltip">Chat Admin</div>
+
+<div class="admin-badge-float" id="adminBadge" onclick="adminLogout()">
+  👑 ADMIN <span class="logout-x">×</span>
+</div>
 
 <div id="adminLoginModal">
   <div class="admin-login-box">
@@ -467,10 +477,6 @@ footer { text-align: center; padding: 30px 20px; color: #444; font-size: 12px; b
     <button onclick="adminLogin()">Login</button>
     <div class="admin-login-error" id="adminLoginError">❌ Password salah!</div>
   </div>
-</div>
-
-<div class="admin-badge-float" id="adminBadge" onclick="adminLogout()">
-  👑 ADMIN <span class="logout-x">×</span>
 </div>
 
 <canvas id="jimzz-neon-bg"></canvas>
@@ -585,7 +591,7 @@ footer { text-align: center; padding: 30px 20px; color: #444; font-size: 12px; b
 <div class="tab-page" id="page-topup">
   <section class="kategori">
     <div class="back-sticky">
-      <button class="btn-back" onclick="switchTab('home')">← Kembali ke Home</button>
+      <button class="btn-back" onclick="switchTab('home')">←</button>
     </div>
     
     <div class="pengumuman maintenance" id="topupMaintenanceInfo">
@@ -979,7 +985,9 @@ const produkTopUp = [
     { nominal: "50 Diamond", harga: 8500 },
     { nominal: "70 Diamond", harga: 11900 },
     { nominal: "100 Diamond", harga: 17000 },
-    { nominal: "140 Diamond", harga: 23800 }
+    { nominal: "140 Diamond", harga: 23800 },
+    { nominal: "200 Diamond", harga: 34000 },
+    { nominal: "355 Diamond", harga: 60300 }
   ]},
   { icon: "⚔️", nama: "Mobile Legends", desc: "Top up Diamond Mobile Legends murah & cepat", unit: "diamond", hot: true, status: "maintenance", paket: [
     { nominal: "11 Diamond", harga: 3800 },
@@ -989,7 +997,9 @@ const produkTopUp = [
     { nominal: "172 Diamond", harga: 57000 },
     { nominal: "355 Diamond", harga: 116000 },
     { nominal: "720 Diamond", harga: 237000 },
-    { nominal: "1000 Diamond", harga: 322000 }
+    { nominal: "1000 Diamond", harga: 322000 },
+    { nominal: "1440 Diamond", harga: 462000 },
+    { nominal: "2000 Diamond", harga: 644000 }
   ]},
   { icon: "🔫", nama: "PUBG Mobile", desc: "Top up UC PUBG Mobile murah & cepat", unit: "UC", hot: true, status: "maintenance", paket: [
     { nominal: "60 UC", harga: 17500 },
@@ -999,7 +1009,9 @@ const produkTopUp = [
     { nominal: "660 UC", harga: 165000 },
     { nominal: "1800 UC", harga: 445000 },
     { nominal: "3850 UC", harga: 930000 },
-    { nominal: "8100 UC", harga: 1920000 }
+    { nominal: "8100 UC", harga: 1920000 },
+    { nominal: "16200 UC", harga: 3840000 },
+    { nominal: "24300 UC", harga: 5760000 }
   ]},
   { icon: "🎮", nama: "Genshin Impact", desc: "Top up Crystal Genshin Impact murah & cepat", unit: "crystal", hot: false, status: "maintenance", paket: [
     { nominal: "60 Crystal", harga: 17000 },
@@ -1007,7 +1019,9 @@ const produkTopUp = [
     { nominal: "980 Crystal", harga: 258000 },
     { nominal: "1980 Crystal", harga: 518000 },
     { nominal: "3280 Crystal", harga: 854000 },
-    { nominal: "6480 Crystal", harga: 1672000 }
+    { nominal: "6480 Crystal", harga: 1672000 },
+    { nominal: "10000 Crystal", harga: 2556000 },
+    { nominal: "15000 Crystal", harga: 3800000 }
   ]},
   { icon: "🏆", nama: "Call of Duty Mobile", desc: "Top up CP COD Mobile murah & cepat", unit: "CP", hot: false, status: "maintenance", paket: [
     { nominal: "80 CP", harga: 17500 },
@@ -1017,7 +1031,9 @@ const produkTopUp = [
     { nominal: "800 CP", harga: 152000 },
     { nominal: "1600 CP", harga: 303000 },
     { nominal: "2400 CP", harga: 453000 },
-    { nominal: "4000 CP", harga: 725000 }
+    { nominal: "4000 CP", harga: 725000 },
+    { nominal: "8000 CP", harga: 1450000 },
+    { nominal: "12000 CP", harga: 2175000 }
   ]}
 ];
 
@@ -1140,7 +1156,7 @@ function bukaGameDetail(index) {
   document.getElementById('page-topup').innerHTML = `
     <section class="kategori">
       <div class="back-sticky">
-        <button class="btn-back" onclick="backToGameList()">← Kembali ke Daftar Game</button>
+        <button class="btn-back" onclick="backToGameList()">←</button>
       </div>
       <h2>${gameAktif.icon} ${gameAktif.nama}</h2>
       <p class="sub">Pilih nominal ${gameAktif.unit} yang mau kamu top up</p>
@@ -1177,7 +1193,7 @@ function backToGameList() {
   document.getElementById('page-topup').innerHTML = `
     <section class="kategori">
       <div class="back-sticky">
-        <button class="btn-back" onclick="switchTab('home')">← Kembali ke Home</button>
+        <button class="btn-back" onclick="switchTab('home')">←</button>
       </div>
       ${maintenanceInfo}
       <h2>🎮 Top Up <span class="accent">Game</span></h2>
@@ -1470,13 +1486,13 @@ function toggleTheme() {
 }
 
 // ============================================
-// MUSIC PLAYLIST — PAKAI URL ONLINE
+// MUSIC PLAYLIST - 4 LAGU PIXABAY YANG BERFUNGSI
 // ============================================
 const playlist = [
-  { judul: "Brazilian Phonk", artis: "MondaMusic", cover: "🔥", src: "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3" },
-  { judul: "Phonk Energy", artis: "Alex-Productions", cover: "💀", src: "https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0c6ff1bab.mp3" },
-  { judul: "Synthwave Beat", artis: "Music Unlimited", cover: "🌆", src: "https://cdn.pixabay.com/download/audio/2021/11/25/audio_00fa5593f3.mp3" },
-  { judul: "Chill Wave", artis: "Coma-Media", cover: "🌊", src: "https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3" }
+  { judul: "Uplifting Cinematic Flow", artis: "RoyaltyFreeMusicStudio", cover: "🎬", src: "https://cdn.pixabay.com/audio/2026/01/29/audio_6a8f5e4b2c.mp3" },
+  { judul: "Cinematic Open Future", artis: "RoyaltyFreeMusicStudio", cover: "🚀", src: "https://cdn.pixabay.com/audio/2026/05/07/audio_3e8a2f9d1b.mp3" },
+  { judul: "Feel Good Upbeat", artis: "RoyaltyFreeMusicStudio", cover: "😊", src: "https://cdn.pixabay.com/audio/2026/01/28/audio_7c4d8e2a5f.mp3" },
+  { judul: "Corporate Background", artis: "JoyInSound", cover: "💼", src: "https://cdn.pixabay.com/audio/2026/03/16/audio_9b1f4c7e3a.mp3" }
 ];
 
 let currentSong = 0;
