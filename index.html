@@ -20,7 +20,6 @@ body { background: #08080d; color: #e6e6e6; line-height: 1.6; padding-bottom: 10
 @keyframes loadBar { to { width: 100%; } }
 @keyframes pulseGlow { 0%,100% { opacity:1; transform: scale(1); } 50% { opacity:0.7; transform: scale(0.97); } }
 
-/* CHAT ADMIN - FIXED KANAN ATAS */
 .chat-admin-float { position: fixed; top: 12px; right: 12px; z-index: 999; width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #25D366, #1da851); display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 24px; color: #fff; box-shadow: 0 5px 25px rgba(37,211,102,0.7); animation: waPulse 2s infinite; }
 .chat-admin-float:hover { transform: scale(1.1); }
 @keyframes waPulse { 0%,100% { box-shadow: 0 5px 25px rgba(37,211,102,0.7); } 50% { box-shadow: 0 5px 35px rgba(37,211,102,1), 0 0 0 12px rgba(37,211,102,0.15); } }
@@ -46,8 +45,16 @@ body { background: #08080d; color: #e6e6e6; line-height: 1.6; padding-bottom: 10
 header { text-align: center; padding: 50px 20px 40px; position: relative; z-index: 5; overflow: hidden; }
 header::before { content: ""; position: absolute; top: -50%; left: 50%; transform: translateX(-50%); width: 300%; height: 300%; background: conic-gradient(from 0deg, transparent, rgba(0,255,136,0.1), transparent, rgba(0,255,136,0.05), transparent); animation: rotateBg 20s linear infinite; z-index: -1; }
 @keyframes rotateBg { to { transform: translateX(-50%) rotate(360deg); } }
-.header-top { display: flex; justify-content: center; align-items: center; max-width: 1100px; margin: 0 auto 25px; padding: 0 5px; }
-.logo-text { color: #00ff88; font-weight: bold; font-size: 15px; letter-spacing: 2px; text-shadow: 0 0 15px rgba(0,255,136,0.6); cursor: pointer; user-select: none; }
+
+/* LOGO JIMZZ STORE BESAR - BISA DIKLIK 5x */
+.jimzz-clickable {
+  display: inline-block;
+  cursor: pointer;
+  user-select: none;
+  transition: 0.3s;
+}
+.jimzz-clickable:active { transform: scale(0.98); }
+
 .hero-badge { display: inline-block; background: rgba(0,255,136,0.1); border: 1px solid rgba(0,255,136,0.3); color: #00ff88; font-size: 11px; font-weight: bold; padding: 6px 16px; border-radius: 20px; margin-bottom: 15px; letter-spacing: 1px; animation: floatUpDownBadge 3s ease-in-out infinite; }
 @keyframes floatUpDownBadge { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
 header h1 { font-size: 44px; font-weight: 900; color: #fff; text-shadow: 0 0 30px rgba(0,255,136,0.8), 0 0 60px rgba(0,255,136,0.4); letter-spacing: -1px; margin-bottom: 8px; }
@@ -236,10 +243,10 @@ footer { text-align: center; padding: 30px 20px; color: #444; font-size: 12px; b
 .music-progress { position: relative; height: 2px; background: #1e2e26; cursor: pointer; }
 .music-progress-fill { height: 100%; background: linear-gradient(90deg, #00ff88, #00cc6a); width: 0%; transition: width 0.1s linear; }
 .music-expanded { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; background: rgba(8,15,13,0.95); }
-.music-player.open .music-expanded { max-height: 400px; }
+.music-player.open .music-expanded { max-height: 300px; }
 .music-list-header { padding: 8px 12px 6px; font-size: 9px; color: #888; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; border-bottom: 1px solid #1e2e26; display: flex; justify-content: space-between; align-items: center; }
 .music-list-header span.close-x { color: #00ff88; cursor: pointer; font-size: 14px; }
-.music-list { max-height: 320px; overflow-y: auto; padding: 5px; }
+.music-list { max-height: 220px; overflow-y: auto; padding: 5px; }
 .music-item { display: flex; align-items: center; gap: 8px; padding: 7px 9px; border-radius: 6px; cursor: pointer; transition: 0.2s; }
 .music-item:hover { background: rgba(0,255,136,0.1); }
 .music-item.active { background: rgba(0,255,136,0.2); }
@@ -293,11 +300,10 @@ footer { text-align: center; padding: 30px 20px; color: #444; font-size: 12px; b
 
 <div class="tab-page active" id="page-home">
   <header>
-    <div class="header-top"><span class="logo-text" id="secretLogo" onclick="secretClick()">💚 JIMZZ STORE</span></div>
     <div class="hero-badge">⚡ TRUSTED SINCE 2025</div>
-    <h1><span class="gradient-text">Jimzz Store</span></h1>
+    <h1 class="jimzz-clickable" onclick="secretClick()"><span class="gradient-text">Jimzz Store</span></h1>
     <p class="tagline">Top Up Game, Sosmed & Digital Produk Terlengkap</p>
-    <div class="counter"><span class="dot"></span>🔥 <span id="viewCount">1.252</span> orang sudah order</div>
+    <div class="counter"><span class="dot"></span>🔥 <span id="viewCount">1.374</span> orang sudah order</div>
     <div class="trust-row">
       <div class="trust-item"><span class="trust-icon">⚡</span> Proses Cepat</div>
       <div class="trust-item"><span class="trust-icon">🔒</span> Aman & Terpercaya</div>
@@ -513,6 +519,23 @@ let secretClickCount = 0;
 let secretClickTimer = null;
 if (localStorage.getItem('jimzz_admin') === 'true') isAdmin = true;
 
+// ============================================
+// COUNTER ORDER - MULAI 1374, NAIK KALAU ADA ORDER
+// ============================================
+const INITIAL_ORDER_COUNT = 1374;
+let orderCount = parseInt(localStorage.getItem('jimzz_order_count')) || INITIAL_ORDER_COUNT;
+
+function updateOrderCounter() {
+  const el = document.getElementById('viewCount');
+  if (el) el.innerText = orderCount.toLocaleString('id-ID');
+}
+
+function incrementOrderCount() {
+  orderCount++;
+  localStorage.setItem('jimzz_order_count', orderCount);
+  updateOrderCounter();
+}
+
 function secretClick() {
   secretClickCount++;
   clearTimeout(secretClickTimer);
@@ -590,6 +613,7 @@ function startApp() {
   renderPlaylist();
   initMusicEvents();
   applyAdminUI();
+  updateOrderCounter();
   setTimeout(() => document.getElementById('loadingScreen').classList.add('hide'), 1400);
 }
 
@@ -1005,6 +1029,8 @@ async function userKonfirmasiBayar() {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ totalAmount: dataPemesan.totalAmount, customerPhone: dataPemesan.hp, productName: produkAktif.nama, productDetail: dataPemesan.jumlah + ' ' + (produkAktif.unit || 'pcs'), link: dataPemesan.link })
     });
+    // Increment order counter setelah pembayaran sukses
+    incrementOrderCount();
   } catch (err) { console.error('Confirm error:', err); }
   document.getElementById('btnSayaBayar').style.display = 'none';
   document.getElementById('qrisBox').style.display = 'none';
@@ -1020,20 +1046,13 @@ function switchTab(tab) {
 }
 
 // ============================================
-// MUSIC PLAYLIST - 4 MP3 LOKAL + 4 PIXABAY
+// MUSIC PLAYLIST - CUMA 4 LAGU LOKAL
 // ============================================
 const playlist = [
-  // === 4 LAGU DARI MP3 LU (ganti nama & artis sesuai file lu) ===
   { judul: "Lagu 1", artis: "Jimzz Playlist", cover: "🔥", src: "lagu1.mp3" },
   { judul: "Lagu 2", artis: "Jimzz Playlist", cover: "💀", src: "lagu2.mp3" },
   { judul: "Lagu 3", artis: "Jimzz Playlist", cover: "🌆", src: "lagu3.mp3" },
-  { judul: "Lagu 4", artis: "Jimzz Playlist", cover: "🌊", src: "lagu4.mp3" },
-
-  // === TAMBAHAN DARI PIXABAY (URL udah gue verifikasi) ===
-  { judul: "Uplifting Cinematic", artis: "RoyaltyFreeMusic", cover: "🎬", src: "https://cdn.pixabay.com/audio/2026/05/12/audio_a4f9c0d5b1.mp3" },
-  { judul: "Chill Upbeat", artis: "MusicUnlimited", cover: "☕", src: "https://cdn.pixabay.com/audio/2025/11/25/audio_3e2a8f1b9c.mp3" },
-  { judul: "Future Bass Energy", artis: "AlexProductions", cover: "⚡", src: "https://cdn.pixabay.com/audio/2026/02/18/audio_7d4e9a2f5c.mp3" },
-  { judul: "Relaxing Piano", artis: "ComaMedia", cover: "🎹", src: "https://cdn.pixabay.com/audio/2025/09/03/audio_1b8c5e3d7a.mp3" }
+  { judul: "Lagu 4", artis: "Jimzz Playlist", cover: "🌊", src: "lagu4.mp3" }
 ];
 
 let currentSong = 0;
@@ -1066,7 +1085,7 @@ function initMusicEvents() {
   });
   audio.addEventListener('play', updateUI);
   audio.addEventListener('pause', updateUI);
-  // FIX: Lagu ngulang terus, gak auto-next
+  // FIX: Lagu ngulang terus
   audio.addEventListener('ended', () => {
     audio.currentTime = 0;
     audio.play().catch(err => console.log('Replay error:', err));
@@ -1120,17 +1139,10 @@ function seekAudio(e) {
   if (audio && audio.duration) audio.currentTime = percent * audio.duration;
 }
 
-let viewCount = 1252;
-setInterval(() => {
-  viewCount += Math.floor(Math.random() * 3) + 1;
-  const el = document.getElementById('viewCount');
-  if (el) el.innerText = viewCount.toLocaleString('id-ID');
-}, 5000);
-
 setInterval(() => {
   if (isAdmin) {
-    document.getElementById('adminTotalOrder').innerText = Math.floor(Math.random() * 50) + 10;
-    document.getElementById('adminTotalRevenue').innerText = 'Rp ' + (Math.floor(Math.random() * 5000) + 1000).toLocaleString('id-ID') + 'k';
+    document.getElementById('adminTotalOrder').innerText = orderCount;
+    document.getElementById('adminTotalRevenue').innerText = 'Rp ' + (orderCount * 5).toLocaleString('id-ID') + 'k';
   }
 }, 5000);
 
