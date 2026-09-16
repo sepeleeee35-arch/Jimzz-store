@@ -197,7 +197,6 @@ header .counter .dot { width: 8px; height: 8px; background: #00ff88; border-radi
 .admin-stat-value { color: #ffd700; font-size: 22px; font-weight: 800; }
 .admin-stat-label { color: #888; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; font-weight: 600; }
 
-/* === VISITOR PANEL === */
 .visitor-panel { background: linear-gradient(145deg, rgba(0,200,255,0.08), rgba(0,150,255,0.03)); border: 2px solid rgba(0,200,255,0.4); border-radius: 18px; padding: 22px; margin-bottom: 24px; box-shadow: 0 0 40px rgba(0,200,255,0.1); }
 .visitor-panel-header { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
 .visitor-panel-title { color: #00c8ff; font-size: 15px; font-weight: 800; letter-spacing: 1.5px; }
@@ -221,7 +220,6 @@ header .counter .dot { width: 8px; height: 8px; background: #00ff88; border-radi
 .visitor-list::-webkit-scrollbar { width: 4px; }
 .visitor-list::-webkit-scrollbar-thumb { background: #00c8ff; border-radius: 2px; }
 
-/* === ORDER QUEUE === */
 .order-queue-panel { background: linear-gradient(145deg, rgba(255,100,0,0.08), rgba(255,50,0,0.03)); border: 2px solid rgba(255,100,0,0.4); border-radius: 18px; padding: 22px; margin-bottom: 24px; box-shadow: 0 0 40px rgba(255,100,0,0.1); }
 .order-queue-header { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
 .order-queue-title { color: #ff9500; font-size: 15px; font-weight: 800; letter-spacing: 1.5px; }
@@ -246,7 +244,6 @@ header .counter .dot { width: 8px; height: 8px; background: #00ff88; border-radi
 .order-item-unlock button:disabled { background: #333; color: #666; cursor: not-allowed; }
 .order-queue-empty { text-align: center; color: #666; font-size: 12px; padding: 30px; font-style: italic; }
 
-/* === PRODUK === */
 .produk-list { display: flex; flex-direction: column; gap: 16px; }
 .produk-list.grid-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .produk-card { background: linear-gradient(145deg, rgba(15,25,20,0.92), rgba(13,13,21,0.92)); border: 1px solid #1e2e26; border-radius: 18px; padding: 20px 18px; transition: 0.4s cubic-bezier(0.175,0.885,0.32,1.275); position: relative; overflow: hidden; }
@@ -295,7 +292,6 @@ header .counter .dot { width: 8px; height: 8px; background: #00ff88; border-radi
 .produk-list.grid-2col .produk-harga { font-size: 14px; text-align: center; }
 .produk-list.grid-2col .btn-order { padding: 9px 12px; font-size: 11px; width: 100%; text-align: center; }
 
-/* === MODAL === */
 .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); backdrop-filter: blur(15px); z-index: 400; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; }
 .modal-overlay.show { display: flex; }
 .modal-box { background: linear-gradient(145deg, #0f1a14, #0d0d15); border: 1px solid rgba(0,255,136,0.25); border-radius: 24px; padding: 30px 26px; width: 100%; max-width: 440px; position: relative; animation: slideUp 0.4s cubic-bezier(0.175,0.885,0.32,1.275); max-height: 90vh; overflow-y: auto; box-shadow: 0 30px 80px rgba(0,0,0,0.9), 0 0 60px rgba(0,255,136,0.1); }
@@ -743,9 +739,6 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
 </div>
 
 <script>
-// ============================================
-// BACKGROUND MODE SYSTEM
-// ============================================
 let currentBgMode = localStorage.getItem('jimzz_bg_mode') || 'simple';
 
 function applyBgMode() {
@@ -763,9 +756,7 @@ function applyBgMode() {
 
 function updateBgLabel() {
   const label = document.getElementById('bgModeLabel');
-  if (label) {
-    label.innerText = currentBgMode === 'simple' ? 'SIMPLE (RINGAN)' : 'NEON (PREMIUM)';
-  }
+  if (label) label.innerText = currentBgMode === 'simple' ? 'SIMPLE (RINGAN)' : 'NEON (PREMIUM)';
 }
 
 function toggleBgMode() {
@@ -776,7 +767,6 @@ function toggleBgMode() {
   else initCanvasNeon();
 }
 
-// === TOAST ===
 function showToast(message, type = 'success') {
   const container = document.getElementById('toastContainer');
   if (!container) return;
@@ -789,13 +779,9 @@ function showToast(message, type = 'success') {
   toast.innerHTML = `<span class="toast-icon">${icon}</span><span>${message}</span>`;
   container.appendChild(toast);
   setTimeout(() => toast.classList.add('show'), 50);
-  setTimeout(() => {
-    toast.classList.remove('show');
-    setTimeout(() => toast.remove(), 400);
-  }, 3500);
+  setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 400); }, 3500);
 }
 
-// === SHARE ===
 function shareTo(platform) {
   const url = window.location.href;
   const text = 'Cek Jimzz Store — Top Up Game, Sosmed & Digital Produk Termurah!';
@@ -820,7 +806,6 @@ function copyLink() {
   }
 }
 
-// === SCROLL TOP ===
 window.addEventListener('scroll', () => {
   const btn = document.getElementById('scrollTop');
   if (btn) {
@@ -829,7 +814,6 @@ window.addEventListener('scroll', () => {
   }
 });
 
-// === CONFETTI ===
 function showConfetti() {
   const container = document.getElementById('confettiContainer');
   if (!container) return;
@@ -849,9 +833,6 @@ function showConfetti() {
   }
 }
 
-// ============================================
-// VISITOR TRACKING
-// ============================================
 const VISITOR_SESSION_KEY = 'jimzz_session_id';
 
 function getSessionId() {
@@ -922,9 +903,6 @@ async function loadVisitors() {
 setInterval(pingVisitor, 30000);
 setInterval(loadVisitors, 10000);
 
-// ============================================
-// ORDER POLLING
-// ============================================
 let orderPollingInterval = null;
 
 function startOrderPolling(orderId) {
@@ -946,9 +924,6 @@ function startOrderPolling(orderId) {
   }, 5000);
 }
 
-// ============================================
-// ADMIN ORDER QUEUE
-// ============================================
 async function loadOrders() {
   if (!isAdmin) return;
   try {
@@ -1003,6 +978,7 @@ async function unlockOrder(orderId) {
     if (data.success) {
       showToast('✅ Order ' + orderId + ' berhasil di-unlock!', 'success');
       loadOrders();
+      loadCounters();
     } else {
       showToast('Gagal unlock: ' + (data.error || 'Unknown error'), 'error');
     }
@@ -1017,9 +993,6 @@ setInterval(() => {
   }
 }, 10000);
 
-// ============================================
-// BACKGROUND SIMPLE
-// ============================================
 let simpleAnimationId = null;
 let simpleCanvas, simpleCtx, simpleParticles = [], simpleMeteors = [], simpleTime = 0;
 let simpleIsPaused = false;
@@ -1070,12 +1043,8 @@ function animateSimple() {
   
   simpleCtx.strokeStyle = 'rgba(0, 255, 100, 0.025)';
   simpleCtx.lineWidth = 1;
-  for (let x = 0; x < simpleW; x += gridSize) {
-    simpleCtx.beginPath(); simpleCtx.moveTo(x, 0); simpleCtx.lineTo(x, simpleH); simpleCtx.stroke();
-  }
-  for (let y = 0; y < simpleH; y += gridSize) {
-    simpleCtx.beginPath(); simpleCtx.moveTo(0, y); simpleCtx.lineTo(simpleW, y); simpleCtx.stroke();
-  }
+  for (let x = 0; x < simpleW; x += gridSize) { simpleCtx.beginPath(); simpleCtx.moveTo(x, 0); simpleCtx.lineTo(x, simpleH); simpleCtx.stroke(); }
+  for (let y = 0; y < simpleH; y += gridSize) { simpleCtx.beginPath(); simpleCtx.moveTo(0, y); simpleCtx.lineTo(simpleW, y); simpleCtx.stroke(); }
   
   for (let i = 0; i < 3; i++) {
     const gradient = simpleCtx.createLinearGradient(0, 0, simpleW, simpleH);
@@ -1107,12 +1076,7 @@ function animateSimple() {
   }
   
   if (simpleMeteors.length < maxMeteors && Math.random() < 0.005) {
-    simpleMeteors.push({
-      x: Math.random() * simpleW, y: -50,
-      size: Math.random() * 2 + 1,
-      speed: Math.random() * 3 + 2,
-      speedX: (Math.random() - 0.5) * 3, alpha: 1
-    });
+    simpleMeteors.push({ x: Math.random() * simpleW, y: -50, size: Math.random() * 2 + 1, speed: Math.random() * 3 + 2, speedX: (Math.random() - 0.5) * 3, alpha: 1 });
   }
   simpleMeteors = simpleMeteors.filter(m => {
     m.x += m.speedX; m.y += m.speed;
@@ -1148,8 +1112,7 @@ function animateSimple() {
     simpleCtx.beginPath();
     for (let x = 0; x <= simpleW; x += 10) {
       const y = simpleH * (0.3 + i * 0.2) + Math.sin(x * 0.005 + simpleTime * 2 + i) * 30;
-      if (x === 0) simpleCtx.moveTo(x, y);
-      else simpleCtx.lineTo(x, y);
+      if (x === 0) simpleCtx.moveTo(x, y); else simpleCtx.lineTo(x, y);
     }
     simpleCtx.strokeStyle = `rgba(0, 255, 90, ${0.06 + i * 0.02})`;
     simpleCtx.lineWidth = 1.5;
@@ -1159,9 +1122,6 @@ function animateSimple() {
   simpleAnimationId = requestAnimationFrame(animateSimple);
 }
 
-// ============================================
-// BACKGROUND NEON
-// ============================================
 let neonAnimationId = null;
 let neonCanvas, neonCtx;
 let neonParticles = [];
@@ -1193,15 +1153,7 @@ function initCanvasNeon() {
     neonParticles = [];
     const count = Math.min(110, Math.max(40, Math.floor(neonW * neonH / 11000)));
     for (let i = 0; i < count; i++) {
-      neonParticles.push({
-        x: Math.random() * neonW,
-        y: Math.random() * neonH,
-        size: Math.random() * 2.2 + .5,
-        speed: Math.random() * .45 + .1,
-        opacity: Math.random() * .7 + .2,
-        phase: Math.random() * Math.PI * 2,
-        twinkle: Math.random() * .035 + .01
-      });
+      neonParticles.push({ x: Math.random() * neonW, y: Math.random() * neonH, size: Math.random() * 2.2 + .5, speed: Math.random() * .45 + .1, opacity: Math.random() * .7 + .2, phase: Math.random() * Math.PI * 2, twinkle: Math.random() * .035 + .01 });
     }
   }
   
@@ -1217,8 +1169,7 @@ function initCanvasNeon() {
       let px = p.x, py = p.y;
       if (!neonReducedMotion && distance < 180) {
         const force = (180 - distance) / 180;
-        px -= dx * force * .025;
-        py -= dy * force * .025;
+        px -= dx * force * .025; py -= dy * force * .025;
       }
       neonCtx.beginPath();
       neonCtx.arc(px, py, p.size, 0, Math.PI * 2);
@@ -1232,10 +1183,7 @@ function initCanvasNeon() {
   }
   
   window.addEventListener("pointermove", function (event) {
-    if (event.pointerType === "mouse") {
-      neonMouse.x = event.clientX;
-      neonMouse.y = event.clientY;
-    }
+    if (event.pointerType === "mouse") { neonMouse.x = event.clientX; neonMouse.y = event.clientY; }
   }, { passive: true });
   
   window.addEventListener("resize", resizeNeon);
@@ -1243,7 +1191,6 @@ function initCanvasNeon() {
   drawNeon();
 }
 
-// === CURSOR GLOW ===
 function initCursorGlow() {
   document.addEventListener('mousemove', (e) => {
     document.body.style.setProperty('--mouse-x', e.clientX + 'px');
@@ -1251,9 +1198,6 @@ function initCursorGlow() {
   });
 }
 
-// ============================================
-// APP LOGIC
-// ============================================
 const ADMIN_PASSWORD = "jimzzadmin2025";
 let isAdmin = false;
 let secretClickCount = 0;
@@ -1513,10 +1457,7 @@ function renderGameList() {
 }
 
 function bukaGameDetail(index) {
-  if (produkTopUp[index].status === 'maintenance' && !isAdmin) {
-    showToast('Fitur Top Up Game sedang MAINTENANCE', 'warning');
-    return;
-  }
+  if (produkTopUp[index].status === 'maintenance' && !isAdmin) { showToast('Fitur Top Up Game sedang MAINTENANCE', 'warning'); return; }
   gameAktif = produkTopUp[index];
   const paketList = gameAktif.paket.map((p, i) => {
     const populer = i === 0 || i === 4;
@@ -1679,14 +1620,10 @@ function hitungTotal() {
   const bonusRow = document.getElementById('bonusRow');
   const totalDapatRow = document.getElementById('totalDapatRow');
   if (bonus > 0) {
-    bonusRow.style.display = 'flex';
-    totalDapatRow.style.display = 'flex';
+    bonusRow.style.display = 'flex'; totalDapatRow.style.display = 'flex';
     document.getElementById('bonusValue').innerText = '+' + bonus + ' ' + produkAktif.unit;
     document.getElementById('totalDapat').innerText = (jumlah + bonus).toLocaleString('id-ID') + ' ' + produkAktif.unit;
-  } else {
-    bonusRow.style.display = 'none';
-    totalDapatRow.style.display = 'none';
-  }
+  } else { bonusRow.style.display = 'none'; totalDapatRow.style.display = 'none'; }
   const validJumlah = jumlah >= parseInt(document.getElementById('jumlahInput').min) && jumlah <= parseInt(document.getElementById('jumlahInput').max);
   const validTotal = total >= MIN_PEMBELIAN;
   document.getElementById('btnPesan').disabled = !(validJumlah && validTotal);
@@ -1730,7 +1667,15 @@ async function keStep3() {
   try {
     const res = await fetch(BACKEND_URL + '/api/create-order-v2', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ amount: dataPemesan.total, customerPhone: dataPemesan.hp, productName: produkAktif.nama, productDetail: dataPemesan.jumlah + ' ' + (produkAktif.unit || 'pcs'), link: dataPemesan.link })
+      body: JSON.stringify({ 
+        amount: dataPemesan.total, 
+        customerPhone: dataPemesan.hp, 
+        productName: produkAktif.nama, 
+        productDetail: dataPemesan.jumlah + ' ' + (produkAktif.unit || 'pcs'), 
+        link: dataPemesan.link,
+        kategoriId: produkAktif._kategoriId,
+        index: produkAktif._index
+      })
     });
     const result = await res.json();
     if (!result.success) throw new Error(result.error || 'Gagal generate QRIS');
@@ -1815,10 +1760,7 @@ function initMusicEvents() {
   });
   audio.addEventListener('play', updateUI);
   audio.addEventListener('pause', updateUI);
-  audio.addEventListener('ended', () => {
-    audio.currentTime = 0;
-    audio.play().catch(err => console.log('Replay error:', err));
-  });
+  audio.addEventListener('ended', () => { audio.currentTime = 0; audio.play().catch(err => console.log('Replay error:', err)); });
   audio.addEventListener('error', (e) => console.log('Gagal load:', playlist[currentSong].src));
 }
 
@@ -1826,11 +1768,7 @@ function playSong(i) {
   currentSong = i;
   audio.src = playlist[i].src;
   audio.loop = true;
-  audio.play().then(() => { updateUI(); renderPlaylist(); }).catch(err => {
-    console.log('Play error:', err);
-    updateUI();
-    renderPlaylist();
-  });
+  audio.play().then(() => { updateUI(); renderPlaylist(); }).catch(err => { console.log('Play error:', err); updateUI(); renderPlaylist(); });
 }
 
 function updateUI() {
