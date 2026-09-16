@@ -191,7 +191,6 @@ header .counter .dot { width: 8px; height: 8px; background: #00ff88; border-radi
 .pengumuman.admin-preview-info { background: linear-gradient(145deg, rgba(255,215,0,0.1), rgba(255,150,0,0.05)); border: 1px solid rgba(255,215,0,0.4); border-left: 4px solid #ffd700; text-align: center; }
 .pengumuman.admin-preview-info .pengumuman-title { color: #ffd700; font-size: 15px; }
 
-/* === ADMIN PANEL === */
 .admin-panel { background: linear-gradient(145deg, rgba(255,215,0,0.08), rgba(255,150,0,0.03)); border: 2px solid rgba(255,215,0,0.4); border-radius: 18px; padding: 22px; margin-bottom: 24px; box-shadow: 0 0 40px rgba(255,215,0,0.1); }
 .admin-panel-header { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
 .admin-panel-title { color: #ffd700; font-size: 15px; font-weight: 800; letter-spacing: 1.5px; }
@@ -223,6 +222,31 @@ header .counter .dot { width: 8px; height: 8px; background: #00ff88; border-radi
 .visitor-empty { text-align: center; color: #666; font-size: 12px; padding: 20px; font-style: italic; }
 .visitor-list::-webkit-scrollbar { width: 4px; }
 .visitor-list::-webkit-scrollbar-thumb { background: #00c8ff; border-radius: 2px; }
+
+/* === ORDER QUEUE === */
+.order-queue-panel { background: linear-gradient(145deg, rgba(255,100,0,0.08), rgba(255,50,0,0.03)); border: 2px solid rgba(255,100,0,0.4); border-radius: 18px; padding: 22px; margin-bottom: 24px; box-shadow: 0 0 40px rgba(255,100,0,0.1); }
+.order-queue-header { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+.order-queue-title { color: #ff9500; font-size: 15px; font-weight: 800; letter-spacing: 1.5px; }
+.order-queue-list { display: flex; flex-direction: column; gap: 12px; max-height: 400px; overflow-y: auto; }
+.order-queue-list::-webkit-scrollbar { width: 4px; }
+.order-queue-list::-webkit-scrollbar-thumb { background: #ff9500; border-radius: 2px; }
+.order-item { background: rgba(0,0,0,0.4); border: 1px solid rgba(255,100,0,0.3); border-radius: 12px; padding: 14px; }
+.order-item.success { border-color: rgba(0,255,136,0.4); opacity: 0.7; }
+.order-item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; gap: 8px; }
+.order-item-id { color: #ff9500; font-size: 11px; font-weight: 800; letter-spacing: 0.5px; font-family: monospace; }
+.order-item-status { font-size: 9px; font-weight: 800; padding: 3px 8px; border-radius: 8px; letter-spacing: 0.5px; }
+.order-item-status.pending { background: rgba(255,100,0,0.2); color: #ff9500; border: 1px solid rgba(255,100,0,0.4); }
+.order-item-status.success { background: rgba(0,255,136,0.2); color: #00ff88; border: 1px solid rgba(0,255,136,0.4); }
+.order-item-detail { color: #bbb; font-size: 11px; line-height: 1.5; margin-bottom: 10px; }
+.order-item-detail b { color: #fff; }
+.order-item-detail a { color: #00c8ff; text-decoration: none; }
+.order-item-unlock { display: flex; gap: 8px; align-items: stretch; }
+.order-item-unlock input { flex: 1; background: #08080d; border: 1.5px solid rgba(255,100,0,0.3); color: #fff; padding: 10px 12px; border-radius: 10px; font-size: 14px; text-align: center; letter-spacing: 3px; font-weight: 800; outline: none; font-family: monospace; }
+.order-item-unlock input:focus { border-color: #ff9500; box-shadow: 0 0 20px rgba(255,100,0,0.3); }
+.order-item-unlock button { background: linear-gradient(135deg, #ff9500, #ff6400); color: #000; border: none; padding: 10px 16px; border-radius: 10px; font-size: 12px; font-weight: 800; cursor: pointer; font-family: inherit; transition: 0.3s; white-space: nowrap; }
+.order-item-unlock button:hover { transform: scale(1.05); box-shadow: 0 5px 20px rgba(255,150,0,0.5); }
+.order-item-unlock button:disabled { background: #333; color: #666; cursor: not-allowed; }
+.order-queue-empty { text-align: center; color: #666; font-size: 12px; padding: 30px; font-style: italic; }
 
 /* === PRODUK === */
 .produk-list { display: flex; flex-direction: column; gap: 16px; }
@@ -273,6 +297,7 @@ header .counter .dot { width: 8px; height: 8px; background: #00ff88; border-radi
 .produk-list.grid-2col .produk-harga { font-size: 14px; text-align: center; }
 .produk-list.grid-2col .btn-order { padding: 9px 12px; font-size: 11px; width: 100%; text-align: center; }
 
+/* === MODAL === */
 .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); backdrop-filter: blur(15px); z-index: 400; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; }
 .modal-overlay.show { display: flex; }
 .modal-box { background: linear-gradient(145deg, #0f1a14, #0d0d15); border: 1px solid rgba(0,255,136,0.25); border-radius: 24px; padding: 30px 26px; width: 100%; max-width: 440px; position: relative; animation: slideUp 0.4s cubic-bezier(0.175,0.885,0.32,1.275); max-height: 90vh; overflow-y: auto; box-shadow: 0 30px 80px rgba(0,0,0,0.9), 0 0 60px rgba(0,255,136,0.1); }
@@ -328,14 +353,25 @@ header .counter .dot { width: 8px; height: 8px; background: #00ff88; border-radi
 .qris-box { text-align: center; margin: 18px 0; }
 .qris-box img { width: 270px; max-width: 100%; background: #fff; padding: 16px; border-radius: 18px; border: 2px solid #00ff88; box-shadow: 0 0 50px rgba(0,255,136,0.4); }
 .qris-nominal { background: rgba(0,255,136,0.1); border: 1px solid #00ff88; border-radius: 14px; padding: 16px; margin-top: 18px; font-size: 14px; color: #00ff88; font-weight: 800; }
-.btn-subtle { width: 100%; background: transparent; border: 2px solid #00ff88; color: #00ff88; padding: 14px 20px; border-radius: 12px; font-weight: 800; font-size: 13px; cursor: pointer; margin-top: 14px; transition: 0.3s; font-family: inherit; letter-spacing: 0.3px; }
-.btn-subtle:hover { background: rgba(0,255,136,0.15); transform: translateY(-2px); }
+
+.order-id-box { background: rgba(0,200,255,0.08); border: 1.5px dashed #00c8ff; border-radius: 14px; padding: 14px; margin-top: 15px; text-align: center; }
+.order-id-label { color: #00c8ff; font-size: 11px; font-weight: 800; letter-spacing: 1px; margin-bottom: 6px; text-transform: uppercase; }
+.order-id-value { color: #fff; font-size: 16px; font-weight: 800; letter-spacing: 1px; margin-bottom: 10px; font-family: monospace; }
+.order-id-copy { background: rgba(0,200,255,0.15); border: 1.5px solid #00c8ff; color: #00c8ff; padding: 8px 16px; border-radius: 10px; font-size: 12px; font-weight: 800; cursor: pointer; font-family: inherit; transition: 0.3s; }
+.order-id-copy:hover { background: rgba(0,200,255,0.3); transform: translateY(-2px); }
 
 .waiting-box { background: #08080d; border: 1.5px solid #25D366; border-radius: 16px; padding: 24px; text-align: center; margin-top: 18px; }
 .waiting-box .loading-spinner { width: 42px; height: 42px; border: 3px solid #1e2e26; border-top-color: #25D366; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 14px; }
 @keyframes spin { to { transform: rotate(360deg); } }
 .waiting-box p { color: #25D366; font-size: 14px; font-weight: 700; }
 .waiting-box .sub-wait { color: #777; font-size: 11px; margin-top: 6px; font-weight: normal; }
+
+.success-box { background: linear-gradient(145deg, rgba(0,255,136,0.1), rgba(0,200,100,0.05)); border: 2px solid #00ff88; border-radius: 18px; padding: 30px 20px; text-align: center; margin-top: 18px; animation: successPop 0.5s cubic-bezier(0.175,0.885,0.32,1.275); }
+@keyframes successPop { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.success-icon { font-size: 60px; margin-bottom: 12px; filter: drop-shadow(0 0 20px rgba(0,255,136,0.8)); animation: pulseGlow 1.5s ease-in-out infinite; }
+.success-title { color: #00ff88; font-size: 20px; font-weight: 900; letter-spacing: 1px; margin-bottom: 10px; }
+.success-text { color: #fff; font-size: 14px; font-weight: 700; margin-bottom: 8px; line-height: 1.5; }
+.success-sub { color: #888; font-size: 12px; line-height: 1.6; }
 
 .info-note { background: rgba(0,255,136,0.08); border-left: 3px solid #00ff88; padding: 14px 16px; border-radius: 12px; font-size: 11px; color: #bbb; margin-top: 16px; line-height: 1.6; }
 .info-note b { color: #00ff88; }
@@ -490,6 +526,19 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
       </div>
       <div class="visitor-list" id="visitorList">
         <div class="visitor-empty">Belum ada data visitor</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="kategori" id="orderQueueSection" style="display:none;">
+    <div class="order-queue-panel">
+      <div class="order-queue-header">
+        <span style="font-size:24px;">📋</span>
+        <span class="order-queue-title">ORDER QUEUE (PENDING)</span>
+        <button onclick="loadOrders()" style="margin-left:auto; background:rgba(255,150,0,0.15); border:1.5px solid #ff9500; color:#ff9500; padding:6px 12px; border-radius:8px; font-size:11px; font-weight:800; cursor:pointer; font-family:inherit;">🔄 Refresh</button>
+      </div>
+      <div class="order-queue-list" id="orderQueueList">
+        <div class="order-queue-empty">Belum ada order pending</div>
       </div>
     </div>
   </section>
@@ -662,14 +711,27 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
         <img id="qrisImage" src="" alt="QRIS">
         <button id="qrisDownload" onclick="downloadQris()" style="display:inline-flex; align-items:center; justify-content:center; gap:6px; margin:12px auto 0; background:transparent; border:2px solid #00ff88; color:#00ff88; padding:10px 20px; border-radius:10px; font-weight:bold; font-size:13px; cursor:pointer; font-family:inherit;">⬇️ Download QRIS</button>
         <div class="qris-nominal" id="qrisNominal">💳 Silahkan bayar QRIS ini sebesar Rp 0</div>
+        <div class="order-id-box">
+          <div class="order-id-label">🆔 Order ID Kamu</div>
+          <div class="order-id-value" id="orderIdDisplay">-</div>
+          <button class="order-id-copy" onclick="copyOrderId()">📋 Copy Order ID</button>
+        </div>
       </div>
-      <button class="btn-subtle" id="btnSayaBayar" onclick="userKonfirmasiBayar()" style="display:none;">✅ Saya Sudah Bayar</button>
+
       <div class="waiting-box" id="waitingBox" style="display:none;">
         <div class="loading-spinner"></div>
         <p>⏳ Menunggu Konfirmasi Admin</p>
         <p class="sub-wait">Admin akan segera memproses pesanan kamu.</p>
       </div>
-      <div class="info-note">📌 <b>Bayar sesuai nominal</b>. Setelah bayar, klik <b>"Saya Sudah Bayar"</b>.</div>
+
+      <div class="success-box" id="successBox" style="display:none;">
+        <div class="success-icon">✅</div>
+        <p class="success-title">PESANAN SELESAI!</p>
+        <p class="success-text">Admin telat mengirim produk ke nomor yang kamu kirim.</p>
+        <p class="success-sub">Silakan cek WhatsApp kamu secara berkala.</p>
+      </div>
+
+      <div class="info-note">📌 <b>Bayar sesuai nominal</b>. Setelah bayar, <b>tunggu di halaman ini</b>. Admin akan segera kirim produk ke WA kamu.</div>
     </div>
   </div>
 </div>
@@ -827,9 +889,7 @@ async function pingVisitor() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ sessionId, page: currentPage })
     });
-  } catch (err) {
-    console.log('Ping error:', err);
-  }
+  } catch (err) { console.log('Ping error:', err); }
 }
 
 async function loadVisitors() {
@@ -873,13 +933,123 @@ async function loadVisitors() {
         </div>
       `;
     }).join('');
-  } catch (err) {
-    console.log('Load visitors error:', err);
-  }
+  } catch (err) { console.log('Load visitors error:', err); }
 }
 
 setInterval(pingVisitor, 30000);
 setInterval(loadVisitors, 10000);
+
+// ============================================
+// ORDER POLLING
+// ============================================
+let orderPollingInterval = null;
+
+function startOrderPolling(orderId) {
+  if (orderPollingInterval) clearInterval(orderPollingInterval);
+  orderPollingInterval = setInterval(async () => {
+    try {
+      const res = await fetch(BACKEND_URL + '/api/check-order?orderId=' + encodeURIComponent(orderId));
+      const data = await res.json();
+      if (data.success && data.status === 'success') {
+        clearInterval(orderPollingInterval);
+        orderPollingInterval = null;
+        document.getElementById('qrisBox').style.display = 'none';
+        document.getElementById('waitingBox').style.display = 'none';
+        document.getElementById('successBox').style.display = 'block';
+        showConfetti();
+        showToast('Pesanan kamu selesai!', 'success');
+      }
+    } catch (err) { console.log('Polling error:', err); }
+  }, 5000);
+}
+
+function copyOrderId() {
+  const orderId = document.getElementById('orderIdDisplay').innerText;
+  if (orderId && orderId !== '-') {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(orderId).then(() => showToast('Order ID dicopy!', 'success'));
+    } else {
+      const temp = document.createElement('input');
+      temp.value = orderId;
+      document.body.appendChild(temp);
+      temp.select();
+      document.execCommand('copy');
+      document.body.removeChild(temp);
+      showToast('Order ID dicopy!', 'success');
+    }
+  }
+}
+
+// ============================================
+// ADMIN ORDER QUEUE
+// ============================================
+async function loadOrders() {
+  if (!isAdmin) return;
+  try {
+    const res = await fetch(BACKEND_URL + '/api/orders-list');
+    const data = await res.json();
+    if (!data.success) return;
+    
+    const listEl = document.getElementById('orderQueueList');
+    const pending = (data.orders || []).filter(o => o.status === 'pending');
+    
+    if (pending.length === 0) {
+      listEl.innerHTML = '<div class="order-queue-empty">Belum ada order pending</div>';
+      return;
+    }
+    
+    listEl.innerHTML = pending.map(o => `
+      <div class="order-item">
+        <div class="order-item-header">
+          <span class="order-item-id">${o.order_id}</span>
+          <span class="order-item-status pending">PENDING</span>
+        </div>
+        <div class="order-item-detail">
+          📦 <b>${o.product_name}</b><br>
+          📋 ${o.product_detail}<br>
+          🔗 <a href="${o.product_link}" target="_blank">${o.product_link}</a><br>
+          📱 WA: <b>${o.customer_phone}</b><br>
+          💰 Rp ${o.total_amount.toLocaleString('id-ID')}
+        </div>
+        <div class="order-item-unlock">
+          <input type="text" maxlength="6" placeholder="000000" id="unlock-${o.order_id}">
+          <button onclick="unlockOrder('${o.order_id}')">🔓 Unlock</button>
+        </div>
+      </div>
+    `).join('');
+  } catch (err) { console.log('Load orders error:', err); }
+}
+
+async function unlockOrder(orderId) {
+  const input = document.getElementById('unlock-' + orderId);
+  const code = input.value.trim();
+  if (!/^\d{6}$/.test(code)) {
+    showToast('Kode harus 6 digit angka!', 'warning');
+    return;
+  }
+  try {
+    const res = await fetch(BACKEND_URL + '/api/unlock-order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ orderId: orderId, unlockCode: code })
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast('✅ Order ' + orderId + ' berhasil di-unlock!', 'success');
+      loadOrders();
+    } else {
+      showToast('Gagal unlock: ' + (data.error || 'Unknown error'), 'error');
+    }
+  } catch (err) {
+    showToast('Error: ' + err.message, 'error');
+  }
+}
+
+setInterval(() => {
+  if (isAdmin && document.getElementById('orderQueueSection')?.style.display !== 'none') {
+    loadOrders();
+  }
+}, 10000);
 
 // ============================================
 // BACKGROUND SIMPLE
@@ -1153,16 +1323,6 @@ function getProdukOrderCount(kategoriId, index) {
   return cachedCounters.produkOrder[kategoriId + '_' + index] || 0;
 }
 
-async function incrementOrder(kategoriId, index) {
-  try {
-    await fetch(BACKEND_URL + '/api/increment-order', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ kategoriId, index })
-    });
-    await loadCounters();
-  } catch (err) { console.log('Gagal increment order:', err); }
-}
-
 setInterval(loadCounters, 3000);
 
 function secretClick() {
@@ -1205,13 +1365,16 @@ function applyAdminUI() {
   const adminBadge = document.getElementById('adminBadge');
   const adminPanel = document.getElementById('adminPanelSection');
   const visitorPanel = document.getElementById('visitorPanelSection');
+  const orderQueue = document.getElementById('orderQueueSection');
   const menuTopup = document.getElementById('menuTopup');
   const topupMaintenanceInfo = document.getElementById('topupMaintenanceInfo');
   if (isAdmin) {
     adminBadge.classList.add('show');
     adminPanel.style.display = 'block';
     visitorPanel.style.display = 'block';
+    orderQueue.style.display = 'block';
     loadVisitors();
+    loadOrders();
     menuTopup.classList.remove('disabled');
     menuTopup.classList.add('admin-view');
     if (topupMaintenanceInfo) {
@@ -1222,6 +1385,7 @@ function applyAdminUI() {
     adminBadge.classList.remove('show');
     adminPanel.style.display = 'none';
     visitorPanel.style.display = 'none';
+    orderQueue.style.display = 'none';
     menuTopup.classList.add('disabled');
     menuTopup.classList.remove('admin-view');
     if (topupMaintenanceInfo) {
@@ -1311,7 +1475,7 @@ let paketAktif = null;
 const MIN_PEMBELIAN = 500;
 const BACKEND_URL = "https://jimzz-backend.vercel.app";
 let produkAktif = null;
-let dataPemesan = { link: "", hp: "", jumlah: 0, total: 0, bonus: 0, totalAmount: 0 };
+let dataPemesan = { link: "", hp: "", jumlah: 0, total: 0, bonus: 0, totalAmount: 0, orderId: "" };
 
 function initData() {
   renderProduk('sosmed', produkSosmed, 'SUNTIK ALL');
@@ -1459,7 +1623,7 @@ function pilihPaket(index) {
   document.getElementById('waitingBox').style.display = 'none';
   document.getElementById('qrisBox').style.display = 'none';
   document.getElementById('qrisLoading').style.display = 'none';
-  document.getElementById('btnSayaBayar').style.display = 'none';
+  document.getElementById('successBox').style.display = 'none';
   clearError();
   hitungTotal();
   setStep(1);
@@ -1504,7 +1668,7 @@ function bukaOrder(kategoriId, index) {
   document.getElementById('waitingBox').style.display = 'none';
   document.getElementById('qrisBox').style.display = 'none';
   document.getElementById('qrisLoading').style.display = 'none';
-  document.getElementById('btnSayaBayar').style.display = 'none';
+  document.getElementById('successBox').style.display = 'none';
   clearError();
   hitungTotal();
   setStep(1);
@@ -1515,6 +1679,7 @@ function bukaOrder(kategoriId, index) {
 function tutupOrder() {
   document.getElementById('orderModal').classList.remove('show');
   document.body.style.overflow = 'auto';
+  if (orderPollingInterval) { clearInterval(orderPollingInterval); orderPollingInterval = null; }
   produkAktif = null;
 }
 
@@ -1594,22 +1759,25 @@ async function keStep3() {
   setStep(3);
   document.getElementById('qrisLoading').style.display = 'block';
   document.getElementById('qrisBox').style.display = 'none';
-  document.getElementById('btnSayaBayar').style.display = 'none';
   document.getElementById('waitingBox').style.display = 'none';
+  document.getElementById('successBox').style.display = 'none';
   try {
-    const res = await fetch(BACKEND_URL + '/api/create-order', {
+    const res = await fetch(BACKEND_URL + '/api/create-order-v2', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ amount: dataPemesan.total, customerPhone: dataPemesan.hp, productName: produkAktif.nama, productDetail: dataPemesan.jumlah + ' ' + (produkAktif.unit || 'pcs'), link: dataPemesan.link })
     });
     const result = await res.json();
     if (!result.success) throw new Error(result.error || 'Gagal generate QRIS');
     dataPemesan.totalAmount = result.totalAmount;
+    dataPemesan.orderId = result.orderId;
     const qrImageUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' + encodeURIComponent(result.qrisString);
     document.getElementById('qrisImage').src = qrImageUrl;
     document.getElementById('qrisNominal').innerText = '💳 Silahkan bayar QRIS ini sebesar Rp ' + result.totalAmount.toLocaleString('id-ID');
+    document.getElementById('orderIdDisplay').innerText = result.orderId;
     document.getElementById('qrisLoading').style.display = 'none';
     document.getElementById('qrisBox').style.display = 'block';
-    document.getElementById('btnSayaBayar').style.display = 'flex';
+    document.getElementById('waitingBox').style.display = 'block';
+    startOrderPolling(result.orderId);
   } catch (err) {
     console.error('QRIS error:', err);
     document.getElementById('qrisLoading').innerHTML = '<p style="color:#ff6b6b; font-size:13px;">❌ Gagal membuat QRIS</p><p style="color:#888; font-size:11px; margin-top:5px;">' + err.message + '</p>';
@@ -1635,36 +1803,6 @@ async function downloadQris() {
     window.open(document.getElementById('qrisImage').src, '_blank');
     btn.innerText = originalText; btn.disabled = false;
   }
-}
-
-async function userKonfirmasiBayar() {
-  document.getElementById('btnSayaBayar').disabled = true;
-  document.getElementById('btnSayaBayar').innerText = '⏳ Mengirim konfirmasi...';
-  try {
-    await fetch(BACKEND_URL + '/api/confirm-payment', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ 
-        totalAmount: dataPemesan.totalAmount, 
-        customerPhone: dataPemesan.hp, 
-        productName: produkAktif.nama, 
-        productDetail: dataPemesan.jumlah + ' ' + (produkAktif.unit || 'pcs'), 
-        link: dataPemesan.link,
-        kategoriId: produkAktif._kategoriId,
-        index: produkAktif._index
-      })
-    });
-    if (produkAktif._kategoriId && produkAktif._index !== undefined) {
-      await incrementOrder(produkAktif._kategoriId, produkAktif._index);
-    } else {
-      await incrementOrder(null, null);
-    }
-  } catch (err) { console.error('Confirm error:', err); }
-  document.getElementById('btnSayaBayar').style.display = 'none';
-  document.getElementById('qrisBox').style.display = 'none';
-  document.getElementById('waitingBox').style.display = 'block';
-  
-  showConfetti();
-  showToast('Pembayaran diterima! Admin akan segera proses.', 'success');
 }
 
 function switchTab(tab) {
