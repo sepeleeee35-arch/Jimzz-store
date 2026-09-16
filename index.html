@@ -28,8 +28,54 @@ body::after {
   transition: background 0.3s ease;
 }
 
-#jimzz-neon-bg { position: fixed; top:0; left:0; width:100vw; height:100vh; z-index:-2; pointer-events:none; }
+/* ============================================
+   BACKGROUND CONTAINER
+   ============================================ */
+#bgContainer { position: fixed; top:0; left:0; width:100vw; height:100vh; z-index:-2; pointer-events:none; overflow:hidden; }
 
+/* === MODE SIMPLE === */
+#bgSimple { position: absolute; inset:0; display: block; }
+#jimzz-neon-bg { position: absolute; top:0; left:0; width:100%; height:100%; }
+
+/* === MODE NEON (dari ChatGPT) === */
+#bgNeon { position: absolute; inset:0; display: none; overflow: hidden; background: radial-gradient(ellipse at 50% 100%, #064c35 0%, #02281d 28%, #010806 75%); }
+#bgNeon.active { display: block; }
+#bgSimple.hidden { display: none; }
+
+.jimzzz-neon::before { content: ""; position: absolute; width: 100%; height: 100%; background: radial-gradient(ellipse at 15% 25%, rgba(0, 255, 157, .15), transparent 35%), radial-gradient(ellipse at 85% 75%, rgba(0, 220, 120, .16), transparent 35%); animation: aura 16s ease-in-out infinite alternate; }
+.jimzzz-neon::after { content: ""; position: absolute; width: 700px; height: 700px; left: 50%; top: 50%; transform: translate(-50%, -50%); background: radial-gradient(circle, rgba(0, 255, 157, .07), transparent 70%); filter: blur(30px); animation: centerGlow 10s ease-in-out infinite alternate; }
+#neonCanvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.neon-grid { position: absolute; width: 220%; height: 75%; left: -60%; bottom: -35%; background-image: linear-gradient(rgba(0, 255, 157, .13) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 157, .13) 1px, transparent 1px); background-size: 65px 65px; transform: perspective(420px) rotateX(60deg); animation: gridMove 5s linear infinite; }
+.neon-horizon { position: absolute; top: 68%; left: -10%; width: 120%; height: 2px; background: linear-gradient(90deg, transparent, rgba(0, 255, 157, .6), transparent); box-shadow: 0 0 15px rgba(0, 255, 157, .6), 0 0 40px rgba(0, 255, 157, .3); }
+.wave { position: absolute; left: -10%; width: 120%; height: 140px; border-top: 2px solid rgba(0, 255, 157, .5); border-radius: 50%; filter: drop-shadow(0 0 8px #00ff9d); opacity: .55; animation: waveMove 9s ease-in-out infinite alternate; }
+.wave.one { top: 57%; transform: rotate(-4deg); }
+.wave.two { top: 63%; opacity: .3; animation-delay: -3s; animation-duration: 12s; }
+.wave.three { top: 70%; opacity: .2; animation-delay: -5s; animation-duration: 15s; }
+.laser { position: absolute; width: 280px; height: 2px; background: linear-gradient(90deg, transparent, #00ff9d); box-shadow: 0 0 10px #00ff9d, 0 0 30px #00ff9d; opacity: 0; transform: rotate(-25deg); animation: laserMove 10s linear infinite; }
+.laser.one { top: 20%; }
+.laser.two { top: 43%; animation-delay: 3s; animation-duration: 13s; }
+.laser.three { top: 75%; animation-delay: 6s; animation-duration: 11s; }
+.neon-ring { position: absolute; width: 240px; height: 240px; right: -100px; top: 20%; border: 1px solid rgba(0, 255, 157, .13); border-radius: 50%; box-shadow: 0 0 40px rgba(0, 255, 157, .05); animation: ringSpin 30s linear infinite; }
+.neon-ring::before, .neon-ring::after { content: ""; position: absolute; inset: 25px; border: 1px solid rgba(0, 255, 157, .1); border-radius: 50%; }
+.neon-ring::after { inset: 55px; border-style: dashed; }
+.scanlines { position: absolute; inset: 0; background: repeating-linear-gradient(0deg, transparent 0px, transparent 4px, rgba(0, 255, 157, .012) 5px); pointer-events: none; }
+.edge-glow { position: absolute; inset: 0; box-shadow: inset 0 0 120px rgba(0, 255, 157, .035); pointer-events: none; }
+
+@keyframes aura { from { transform: translate(-2%, -2%) scale(1); } to { transform: translate(2%, 3%) scale(1.15); } }
+@keyframes centerGlow { from { transform: translate(-50%, -50%) scale(1); } to { transform: translate(-50%, -50%) scale(1.35); } }
+@keyframes gridMove { from { transform: perspective(420px) rotateX(60deg) translateY(0); } to { transform: perspective(420px) rotateX(60deg) translateY(65px); } }
+@keyframes waveMove { from { transform: translateX(-3%) scaleY(1); } to { transform: translateX(3%) scaleY(1.7); } }
+@keyframes laserMove { 0% { left: -350px; opacity: 0; } 12% { opacity: .9; } 85% { opacity: .9; } 100% { left: 110%; opacity: 0; } }
+@keyframes ringSpin { to { transform: rotate(360deg); } }
+
+/* BACKGROUND TOGGLE */
+.bg-toggle { position: fixed; top: 12px; left: 12px; z-index: 999; background: rgba(0,255,136,0.1); border: 1.5px solid rgba(0,255,136,0.4); color: #00ff88; width: 44px; height: 44px; border-radius: 50%; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.3s; backdrop-filter: blur(10px); }
+.bg-toggle:hover { background: rgba(0,255,136,0.25); transform: scale(1.08) rotate(15deg); }
+.bg-toggle:active { transform: scale(0.95); }
+.bg-toggle .mode-label { position: absolute; top: 50px; left: 0; background: #00ff88; color: #000; font-size: 9px; font-weight: 800; padding: 3px 8px; border-radius: 6px; white-space: nowrap; letter-spacing: 0.5px; pointer-events: none; opacity: 0; transition: 0.3s; }
+.bg-toggle:hover .mode-label { opacity: 1; }
+
+/* LOADING */
 #loadingScreen { position: fixed; inset: 0; background: #08080d; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.5s ease; }
 #loadingScreen.hide { opacity: 0; pointer-events: none; }
 .loading-logo { font-size: 48px; font-weight: 900; color: #00ff88; text-shadow: 0 0 30px rgba(0,255,136,0.8); animation: pulseGlow 1.5s ease-in-out infinite; letter-spacing: -1px; }
@@ -302,6 +348,7 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
   .music-player { bottom: 85px; right: 10px; width: 210px; }
   .modal-close { top: -10px; right: -10px; width: 42px; height: 42px; font-size: 22px; }
   .admin-badge-float { top: 10px; right: 10px; font-size: 10px; padding: 6px 10px; }
+  .bg-toggle { width: 40px; height: 40px; font-size: 18px; top: 10px; left: 10px; }
 }
 </style>
 </head>
@@ -312,6 +359,11 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
   <div class="loading-tagline">Digital Store</div>
   <div class="loading-bar"><div class="loading-bar-fill"></div></div>
 </div>
+
+<button class="bg-toggle" id="bgToggle" onclick="toggleBgMode()" title="Ganti Background">
+  🎨
+  <span class="mode-label" id="bgModeLabel">SIMPLE</span>
+</button>
 
 <div class="admin-badge-float" id="adminBadge" onclick="adminLogout()">
   👑 ADMIN <span class="logout-x">×</span>
@@ -328,7 +380,28 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
   </div>
 </div>
 
-<canvas id="jimzz-neon-bg"></canvas>
+<!-- BACKGROUND CONTAINER -->
+<div id="bgContainer">
+  <!-- MODE SIMPLE -->
+  <div id="bgSimple">
+    <canvas id="jimzz-neon-bg"></canvas>
+  </div>
+  <!-- MODE NEON -->
+  <div id="bgNeon" class="jimzzz-neon">
+    <div class="neon-grid"></div>
+    <div class="neon-horizon"></div>
+    <div class="wave one"></div>
+    <div class="wave two"></div>
+    <div class="wave three"></div>
+    <canvas id="neonCanvas"></canvas>
+    <div class="laser one"></div>
+    <div class="laser two"></div>
+    <div class="laser three"></div>
+    <div class="neon-ring"></div>
+    <div class="scanlines"></div>
+    <div class="edge-glow"></div>
+  </div>
+</div>
 
 <div class="tab-page active" id="page-home">
   <header>
@@ -550,16 +623,307 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
 </div>
 
 <script>
+// ============================================
+// BACKGROUND MODE SYSTEM
+// ============================================
+let currentBgMode = localStorage.getItem('jimzz_bg_mode') || 'simple';
+
+function applyBgMode() {
+  const simple = document.getElementById('bgSimple');
+  const neon = document.getElementById('bgNeon');
+  if (currentBgMode === 'simple') {
+    simple.classList.remove('hidden');
+    neon.classList.remove('active');
+  } else {
+    simple.classList.add('hidden');
+    neon.classList.add('active');
+  }
+  updateBgLabel();
+}
+
+function updateBgLabel() {
+  const label = document.getElementById('bgModeLabel');
+  if (label) label.innerText = currentBgMode.toUpperCase();
+}
+
+function toggleBgMode() {
+  currentBgMode = currentBgMode === 'simple' ? 'neon' : 'simple';
+  localStorage.setItem('jimzz_bg_mode', currentBgMode);
+  applyBgMode();
+  // Restart animation canvas
+  if (currentBgMode === 'simple') {
+    initCanvasSimple();
+  } else {
+    initCanvasNeon();
+  }
+  // Feedback
+  const btn = document.getElementById('bgToggle');
+  btn.style.transform = 'scale(1.3) rotate(360deg)';
+  setTimeout(() => { btn.style.transform = ''; }, 400);
+}
+
+// ============================================
+// BACKGROUND SIMPLE (Particle Network + Aurora + Grid + Meteor)
+// ============================================
+let simpleAnimationId = null;
+let simpleCanvas, simpleCtx, simpleParticles = [], simpleMeteors = [], simpleTime = 0;
+let simpleIsPaused = false;
+let simpleMouse = { x: -1000, y: -1000 };
+let simpleW, simpleH, simpleIsMobile;
+
+function initCanvasSimple() {
+  simpleCanvas = document.getElementById("jimzz-neon-bg");
+  if (!simpleCanvas) return;
+  if (simpleAnimationId) cancelAnimationFrame(simpleAnimationId);
+  simpleParticles = [];
+  simpleMeteors = [];
+  simpleTime = 0;
+  simpleIsPaused = false;
+  simpleCtx = simpleCanvas.getContext("2d");
+  simpleIsMobile = window.innerWidth < 600;
+  
+  function resizeJimzz() {
+    simpleW = simpleCanvas.width = window.innerWidth;
+    simpleH = simpleCanvas.height = window.innerHeight;
+    simpleIsMobile = window.innerWidth < 600;
+  }
+  resizeJimzz();
+  window.addEventListener('resize', resizeJimzz);
+  
+  const particleCount = simpleIsMobile ? 50 : 100;
+  for (let i = 0; i < particleCount; i++) {
+    simpleParticles.push({
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * window.innerHeight,
+      size: Math.random() * 2 + 0.5,
+      speedX: (Math.random() - 0.5) * 0.4,
+      speedY: (Math.random() - 0.5) * 0.4,
+      alpha: Math.random() * 0.6 + 0.3,
+      pulse: Math.random() * Math.PI * 2
+    });
+  }
+  animateSimple();
+}
+
+function animateSimple() {
+  if (simpleIsPaused) return;
+  simpleCtx.clearRect(0, 0, simpleW, simpleH);
+  simpleTime += 0.005;
+  
+  const connectionDistance = simpleIsMobile ? 100 : 150;
+  const maxMeteors = simpleIsMobile ? 2 : 5;
+  
+  // Grid
+  simpleCtx.strokeStyle = 'rgba(0, 255, 100, 0.025)';
+  simpleCtx.lineWidth = 1;
+  const gridSize = 50;
+  for (let x = 0; x < simpleW; x += gridSize) {
+    simpleCtx.beginPath(); simpleCtx.moveTo(x, 0); simpleCtx.lineTo(x, simpleH); simpleCtx.stroke();
+  }
+  for (let y = 0; y < simpleH; y += gridSize) {
+    simpleCtx.beginPath(); simpleCtx.moveTo(0, y); simpleCtx.lineTo(simpleW, y); simpleCtx.stroke();
+  }
+  
+  // Aurora
+  for (let i = 0; i < 3; i++) {
+    const gradient = simpleCtx.createLinearGradient(0, 0, simpleW, simpleH);
+    const offset = simpleTime + i * 2;
+    const hue1 = 150 + Math.sin(offset) * 20;
+    const hue2 = 160 + Math.cos(offset * 1.3) * 20;
+    gradient.addColorStop(0, `hsla(${hue1}, 100%, 50%, 0.03)`);
+    gradient.addColorStop(0.5, `hsla(${hue2}, 100%, 50%, 0.05)`);
+    gradient.addColorStop(1, `hsla(${hue1}, 100%, 50%, 0.03)`);
+    simpleCtx.fillStyle = gradient;
+    simpleCtx.fillRect(0, 0, simpleW, simpleH);
+  }
+  
+  // Connection lines
+  for (let i = 0; i < simpleParticles.length; i++) {
+    for (let j = i + 1; j < simpleParticles.length; j++) {
+      const dx = simpleParticles[i].x - simpleParticles[j].x;
+      const dy = simpleParticles[i].y - simpleParticles[j].y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < connectionDistance) {
+        const opacity = (1 - dist / connectionDistance) * 0.15;
+        simpleCtx.beginPath();
+        simpleCtx.moveTo(simpleParticles[i].x, simpleParticles[i].y);
+        simpleCtx.lineTo(simpleParticles[j].x, simpleParticles[j].y);
+        simpleCtx.strokeStyle = `rgba(0, 255, 100, ${opacity})`;
+        simpleCtx.lineWidth = 0.5;
+        simpleCtx.stroke();
+      }
+    }
+  }
+  
+  // Meteors
+  if (simpleMeteors.length < maxMeteors && Math.random() < 0.005) {
+    simpleMeteors.push({
+      x: Math.random() * simpleW, y: -50,
+      size: Math.random() * 2 + 1,
+      speed: Math.random() * 3 + 2,
+      speedX: (Math.random() - 0.5) * 3, alpha: 1
+    });
+  }
+  simpleMeteors = simpleMeteors.filter(m => {
+    m.x += m.speedX; m.y += m.speed;
+    m.alpha -= 0.005;
+    simpleCtx.beginPath();
+    simpleCtx.moveTo(m.x, m.y);
+    simpleCtx.lineTo(m.x - m.speedX * 10, m.y - m.speed * 10);
+    simpleCtx.strokeStyle = `rgba(0, 255, 136, ${m.alpha})`;
+    simpleCtx.lineWidth = m.size;
+    simpleCtx.shadowBlur = 20;
+    simpleCtx.shadowColor = "#00ff88";
+    simpleCtx.stroke();
+    return m.y < simpleH + 100 && m.alpha > 0;
+  });
+  
+  // Particles
+  simpleParticles.forEach(p => {
+    p.x += p.speedX; p.y += p.speedY; p.pulse += 0.02;
+    if (p.x < -10) p.x = simpleW + 10;
+    if (p.x > simpleW + 10) p.x = -10;
+    if (p.y < -10) p.y = simpleH + 10;
+    if (p.y > simpleH + 10) p.y = -10;
+    
+    const size = p.size * (1 + Math.sin(p.pulse) * 0.3);
+    simpleCtx.beginPath();
+    simpleCtx.arc(p.x, p.y, size, 0, Math.PI * 2);
+    simpleCtx.fillStyle = `rgba(0, 255, 100, ${p.alpha})`;
+    simpleCtx.shadowBlur = 15;
+    simpleCtx.shadowColor = "#00ff66";
+    simpleCtx.fill();
+  });
+  simpleCtx.shadowBlur = 0;
+  
+  // Waves
+  for (let i = 0; i < 3; i++) {
+    simpleCtx.beginPath();
+    for (let x = 0; x <= simpleW; x += 10) {
+      const y = simpleH * (0.3 + i * 0.2) + Math.sin(x * 0.005 + simpleTime * 2 + i) * 30;
+      if (x === 0) simpleCtx.moveTo(x, y);
+      else simpleCtx.lineTo(x, y);
+    }
+    simpleCtx.strokeStyle = `rgba(0, 255, 90, ${0.06 + i * 0.02})`;
+    simpleCtx.lineWidth = 1.5;
+    simpleCtx.stroke();
+  }
+  
+  simpleAnimationId = requestAnimationFrame(animateSimple);
+}
+
+// ============================================
+// BACKGROUND NEON (dari ChatGPT)
+// ============================================
+let neonAnimationId = null;
+let neonCanvas, neonCtx;
+let neonParticles = [];
+let neonMouse = { x: -1000, y: -1000 };
+let neonW = 0, neonH = 0;
+let neonReducedMotion = false;
+
+function initCanvasNeon() {
+  neonCanvas = document.getElementById("neonCanvas");
+  if (!neonCanvas) return;
+  neonCtx = neonCanvas.getContext("2d");
+  if (!neonCtx) return;
+  if (neonAnimationId) cancelAnimationFrame(neonAnimationId);
+  neonReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  
+  function resizeNeon() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    neonW = window.innerWidth;
+    neonH = window.innerHeight;
+    neonCanvas.width = neonW * dpr;
+    neonCanvas.height = neonH * dpr;
+    neonCanvas.style.width = neonW + "px";
+    neonCanvas.style.height = neonH + "px";
+    neonCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    createNeonParticles();
+  }
+  
+  function createNeonParticles() {
+    neonParticles = [];
+    const count = Math.min(110, Math.max(40, Math.floor(neonW * neonH / 11000)));
+    for (let i = 0; i < count; i++) {
+      neonParticles.push({
+        x: Math.random() * neonW,
+        y: Math.random() * neonH,
+        size: Math.random() * 2.2 + .5,
+        speed: Math.random() * .45 + .1,
+        opacity: Math.random() * .7 + .2,
+        phase: Math.random() * Math.PI * 2,
+        twinkle: Math.random() * .035 + .01
+      });
+    }
+  }
+  
+  function drawNeon() {
+    neonCtx.clearRect(0, 0, neonW, neonH);
+    neonParticles.forEach(p => {
+      if (!neonReducedMotion) {
+        p.y -= p.speed;
+        p.phase += p.twinkle;
+      }
+      if (p.y < -10) {
+        p.y = neonH + 10;
+        p.x = Math.random() * neonW;
+      }
+      const glow = p.opacity * (.65 + Math.sin(p.phase) * .35);
+      const dx = neonMouse.x - p.x;
+      const dy = neonMouse.y - p.y;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      let px = p.x, py = p.y;
+      if (!neonReducedMotion && distance < 180) {
+        const force = (180 - distance) / 180;
+        px -= dx * force * .025;
+        py -= dy * force * .025;
+      }
+      neonCtx.beginPath();
+      neonCtx.arc(px, py, p.size, 0, Math.PI * 2);
+      neonCtx.fillStyle = "rgba(0,255,157," + glow + ")";
+      neonCtx.shadowColor = "#00ff9d";
+      neonCtx.shadowBlur = 12;
+      neonCtx.fill();
+    });
+    neonCtx.shadowBlur = 0;
+    if (!neonReducedMotion) {
+      neonAnimationId = requestAnimationFrame(drawNeon);
+    }
+  }
+  
+  window.addEventListener("pointermove", function (event) {
+    if (event.pointerType === "mouse") {
+      neonMouse.x = event.clientX;
+      neonMouse.y = event.clientY;
+    }
+  }, { passive: true });
+  
+  window.addEventListener("resize", resizeNeon);
+  resizeNeon();
+  drawNeon();
+}
+
+// ============================================
+// CURSOR GLOW
+// ============================================
+function initCursorGlow() {
+  document.addEventListener('mousemove', (e) => {
+    document.body.style.setProperty('--mouse-x', e.clientX + 'px');
+    document.body.style.setProperty('--mouse-y', e.clientY + 'px');
+  });
+}
+
+// ============================================
+// APP LOGIC (sama kayak sebelumnya)
+// ============================================
 const ADMIN_PASSWORD = "jimzzadmin2025";
 let isAdmin = false;
 let secretClickCount = 0;
 let secretClickTimer = null;
 if (localStorage.getItem('jimzz_admin') === 'true') isAdmin = true;
 
-let cachedCounters = {
-  totalOrder: 1375,
-  produkOrder: {}
-};
+let cachedCounters = { totalOrder: 1375, produkOrder: {} };
 
 async function loadCounters() {
   try {
@@ -576,9 +940,7 @@ async function loadCounters() {
         renderProduk('apkList', produkApk, 'JUAL APK');
       }
     }
-  } catch (err) {
-    console.log('Gagal load counters:', err);
-  }
+  } catch (err) { console.log('Gagal load counters:', err); }
 }
 
 function updateOrderCounter() {
@@ -587,21 +949,17 @@ function updateOrderCounter() {
 }
 
 function getProdukOrderCount(kategoriId, index) {
-  const key = kategoriId + '_' + index;
-  return cachedCounters.produkOrder[key] || 0;
+  return cachedCounters.produkOrder[kategoriId + '_' + index] || 0;
 }
 
 async function incrementOrder(kategoriId, index) {
   try {
     await fetch(BACKEND_URL + '/api/increment-order', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ kategoriId, index })
     });
     await loadCounters();
-  } catch (err) {
-    console.log('Gagal increment order:', err);
-  }
+  } catch (err) { console.log('Gagal increment order:', err); }
 }
 
 setInterval(loadCounters, 3000);
@@ -630,7 +988,7 @@ function adminLogin() {
     localStorage.setItem('jimzz_admin', 'true');
     document.getElementById('adminLoginModal').classList.remove('show');
     applyAdminUI();
-    alert('👑 Selamat datang, Admin!\n\nKamu sekarang bisa test order game yang masih maintenance.');
+    alert('👑 Selamat datang, Admin!');
   } else {
     error.classList.add('show');
     setTimeout(() => error.classList.remove('show'), 2000);
@@ -656,7 +1014,7 @@ function applyAdminUI() {
     menuTopup.classList.add('admin-view');
     if (topupMaintenanceInfo) {
       topupMaintenanceInfo.className = 'pengumuman admin-preview-info';
-      topupMaintenanceInfo.innerHTML = `<div class="pengumuman-header" style="justify-content:center;"><span style="font-size:20px;">👑</span><span class="pengumuman-title">MODE ADMIN — TEST ORDER</span></div><p class="pengumuman-text" style="text-align:center;">Kamu bisa <b>test order</b> produk yang masih maintenance.<br>User biasa nggak bisa akses halaman ini.</p>`;
+      topupMaintenanceInfo.innerHTML = `<div class="pengumuman-header" style="justify-content:center;"><span style="font-size:20px;">👑</span><span class="pengumuman-title">MODE ADMIN — TEST ORDER</span></div><p class="pengumuman-text" style="text-align:center;">Kamu bisa <b>test order</b> produk yang masih maintenance.</p>`;
     }
   } else {
     adminBadge.classList.remove('show');
@@ -665,7 +1023,7 @@ function applyAdminUI() {
     menuTopup.classList.remove('admin-view');
     if (topupMaintenanceInfo) {
       topupMaintenanceInfo.className = 'pengumuman maintenance';
-      topupMaintenanceInfo.innerHTML = `<div class="pengumuman-header" style="justify-content:center;"><span style="font-size:20px;">🔧</span><span class="pengumuman-title">SEDANG MAINTENANCE</span></div><p class="pengumuman-text" style="text-align:center;">Fitur <b>Top Up Game</b> sedang dalam perbaikan.<br>Silakan coba lagi nanti ya! 🙏</p>`;
+      topupMaintenanceInfo.innerHTML = `<div class="pengumuman-header" style="justify-content:center;"><span style="font-size:20px;">🔧</span><span class="pengumuman-title">SEDANG MAINTENANCE</span></div><p class="pengumuman-text" style="text-align:center;">Fitur <b>Top Up Game</b> sedang dalam perbaikan.</p>`;
     }
   }
   renderGameList();
@@ -673,11 +1031,13 @@ function applyAdminUI() {
 
 function handleTopupClick() {
   if (isAdmin) switchTab('topup');
-  else alert('⚠️ Top Up Game sedang MAINTENANCE.\n\nSilakan coba lagi nanti.');
+  else alert('⚠️ Top Up Game sedang MAINTENANCE.');
 }
 
 function startApp() {
-  initCanvas();
+  applyBgMode();
+  if (currentBgMode === 'simple') initCanvasSimple();
+  else initCanvasNeon();
   initCursorGlow();
   initData();
   renderGameList();
@@ -686,208 +1046,6 @@ function startApp() {
   applyAdminUI();
   loadCounters();
   setTimeout(() => document.getElementById('loadingScreen').classList.add('hide'), 1400);
-}
-
-function initCursorGlow() {
-  document.addEventListener('mousemove', (e) => {
-    document.body.style.setProperty('--mouse-x', e.clientX + 'px');
-    document.body.style.setProperty('--mouse-y', e.clientY + 'px');
-  });
-}
-
-// ============================================
-// BACKGROUND UPGRADE: PARTICLE NETWORK + AURORA + GRID + METEOR
-// ============================================
-function initCanvas() {
-  const canvas = document.getElementById("jimzz-neon-bg");
-  if (!canvas) return;
-  const ctx = canvas.getContext("2d");
-  let W, H, particles = [], meteors = [], animationId;
-  let isMobile = window.innerWidth < 600;
-  let isPaused = false;
-  let mouse = { x: -1000, y: -1000 };
-  
-  function resizeJimzz() { 
-    W = canvas.width = window.innerWidth; 
-    H = canvas.height = window.innerHeight; 
-    isMobile = window.innerWidth < 600; 
-  }
-  resizeJimzz();
-  window.addEventListener('resize', resizeJimzz);
-  
-  if (!isMobile) {
-    document.addEventListener('mousemove', (e) => {
-      mouse.x = e.clientX;
-      mouse.y = e.clientY;
-    });
-    document.addEventListener('mouseleave', () => {
-      mouse.x = -1000;
-      mouse.y = -1000;
-    });
-  }
-  
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden) {
-      isPaused = true;
-      cancelAnimationFrame(animationId);
-    } else {
-      isPaused = false;
-      animateJimzz();
-    }
-  });
-  
-  const particleCount = isMobile ? 50 : 100;
-  const connectionDistance = isMobile ? 100 : 150;
-  
-  for (let i = 0; i < particleCount; i++) {
-    particles.push({
-      x: Math.random() * window.innerWidth,
-      y: Math.random() * window.innerHeight,
-      size: Math.random() * 2 + 0.5,
-      speedX: (Math.random() - 0.5) * 0.4,
-      speedY: (Math.random() - 0.5) * 0.4,
-      alpha: Math.random() * 0.6 + 0.3,
-      pulse: Math.random() * Math.PI * 2
-    });
-  }
-  
-  let time = 0;
-  const maxMeteors = isMobile ? 2 : 5;
-  
-  function createMeteor() {
-    meteors.push({
-      x: Math.random() * W,
-      y: -50,
-      size: Math.random() * 2 + 1,
-      speed: Math.random() * 3 + 2,
-      speedX: (Math.random() - 0.5) * 3,
-      alpha: 1
-    });
-  }
-  
-  function animateJimzz() {
-    if (isPaused) return;
-    ctx.clearRect(0, 0, W, H);
-    time += 0.005;
-    
-    // LAPIS 1: GRID
-    ctx.strokeStyle = 'rgba(0, 255, 100, 0.025)';
-    ctx.lineWidth = 1;
-    const gridSize = 50;
-    for (let x = 0; x < W; x += gridSize) {
-      ctx.beginPath();
-      ctx.moveTo(x, 0);
-      ctx.lineTo(x, H);
-      ctx.stroke();
-    }
-    for (let y = 0; y < H; y += gridSize) {
-      ctx.beginPath();
-      ctx.moveTo(0, y);
-      ctx.lineTo(W, y);
-      ctx.stroke();
-    }
-    
-    // LAPIS 2: AURORA
-    for (let i = 0; i < 3; i++) {
-      const gradient = ctx.createLinearGradient(0, 0, W, H);
-      const offset = time + i * 2;
-      const hue1 = 150 + Math.sin(offset) * 20;
-      const hue2 = 160 + Math.cos(offset * 1.3) * 20;
-      gradient.addColorStop(0, `hsla(${hue1}, 100%, 50%, 0.03)`);
-      gradient.addColorStop(0.5, `hsla(${hue2}, 100%, 50%, 0.05)`);
-      gradient.addColorStop(1, `hsla(${hue1}, 100%, 50%, 0.03)`);
-      ctx.fillStyle = gradient;
-      ctx.fillRect(0, 0, W, H);
-    }
-    
-    // LAPIS 3: CONNECTION LINES
-    for (let i = 0; i < particles.length; i++) {
-      for (let j = i + 1; j < particles.length; j++) {
-        const dx = particles[i].x - particles[j].x;
-        const dy = particles[i].y - particles[j].y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < connectionDistance) {
-          const opacity = (1 - dist / connectionDistance) * 0.15;
-          ctx.beginPath();
-          ctx.moveTo(particles[i].x, particles[i].y);
-          ctx.lineTo(particles[j].x, particles[j].y);
-          ctx.strokeStyle = `rgba(0, 255, 100, ${opacity})`;
-          ctx.lineWidth = 0.5;
-          ctx.stroke();
-        }
-      }
-    }
-    
-    // LAPIS 4: METEORS
-    if (meteors.length < maxMeteors && Math.random() < 0.005) {
-      createMeteor();
-    }
-    meteors = meteors.filter(m => {
-      m.x += m.speedX;
-      m.y += m.speed;
-      m.alpha -= 0.005;
-      ctx.beginPath();
-      ctx.moveTo(m.x, m.y);
-      ctx.lineTo(m.x - m.speedX * 10, m.y - m.speed * 10);
-      ctx.strokeStyle = `rgba(0, 255, 136, ${m.alpha})`;
-      ctx.lineWidth = m.size;
-      ctx.shadowBlur = 20;
-      ctx.shadowColor = "#00ff88";
-      ctx.stroke();
-      return m.y < H + 100 && m.alpha > 0;
-    });
-    
-    // LAPIS 5: PARTICLES
-    particles.forEach(p => {
-      p.x += p.speedX;
-      p.y += p.speedY;
-      p.pulse += 0.02;
-      
-      if (p.x < -10) p.x = W + 10;
-      if (p.x > W + 10) p.x = -10;
-      if (p.y < -10) p.y = H + 10;
-      if (p.y > H + 10) p.y = -10;
-      
-      if (!isMobile && mouse.x > 0) {
-        const dx = p.x - mouse.x;
-        const dy = p.y - mouse.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 100 && dist > 0) {
-          const force = (100 - dist) / 100;
-          p.x += (dx / dist) * force * 2;
-          p.y += (dy / dist) * force * 2;
-        }
-      }
-      
-      const size = p.size * (1 + Math.sin(p.pulse) * 0.3);
-      
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, size, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(0, 255, 100, ${p.alpha})`;
-      ctx.shadowBlur = 15;
-      ctx.shadowColor = "#00ff66";
-      ctx.fill();
-    });
-    
-    ctx.shadowBlur = 0;
-    
-    // LAPIS 6: WAVE LINES
-    for (let i = 0; i < 3; i++) {
-      ctx.beginPath();
-      for (let x = 0; x <= W; x += 10) {
-        const y = H * (0.3 + i * 0.2) + Math.sin(x * 0.005 + time * 2 + i) * 30;
-        if (x === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
-      }
-      ctx.strokeStyle = `rgba(0, 255, 90, ${0.06 + i * 0.02})`;
-      ctx.lineWidth = 1.5;
-      ctx.stroke();
-    }
-    
-    animationId = requestAnimationFrame(animateJimzz);
-  }
-  
-  animateJimzz();
 }
 
 const produkSosmed = [
@@ -1058,8 +1216,8 @@ function bukaGameDetail(index) {
 
 function backToGameList() {
   const maintenanceInfo = isAdmin 
-    ? `<div class="pengumuman admin-preview-info" id="topupMaintenanceInfo"><div class="pengumuman-header" style="justify-content:center;"><span style="font-size:20px;">👑</span><span class="pengumuman-title">MODE ADMIN — TEST ORDER</span></div><p class="pengumuman-text" style="text-align:center;">Kamu bisa <b>test order</b> produk yang masih maintenance.<br>User biasa nggak bisa akses halaman ini.</p></div>` 
-    : `<div class="pengumuman maintenance" id="topupMaintenanceInfo"><div class="pengumuman-header" style="justify-content:center;"><span style="font-size:20px;">🔧</span><span class="pengumuman-title">SEDANG MAINTENANCE</span></div><p class="pengumuman-text" style="text-align:center;">Fitur <b>Top Up Game</b> sedang dalam perbaikan.<br>Silakan coba lagi nanti ya! 🙏</p></div>`;
+    ? `<div class="pengumuman admin-preview-info" id="topupMaintenanceInfo"><div class="pengumuman-header" style="justify-content:center;"><span style="font-size:20px;">👑</span><span class="pengumuman-title">MODE ADMIN — TEST ORDER</span></div><p class="pengumuman-text" style="text-align:center;">Kamu bisa <b>test order</b> produk yang masih maintenance.</p></div>` 
+    : `<div class="pengumuman maintenance" id="topupMaintenanceInfo"><div class="pengumuman-header" style="justify-content:center;"><span style="font-size:20px;">🔧</span><span class="pengumuman-title">SEDANG MAINTENANCE</span></div><p class="pengumuman-text" style="text-align:center;">Fitur <b>Top Up Game</b> sedang dalam perbaikan.</p></div>`;
   document.getElementById('page-topup').innerHTML = `
     <section class="kategori">
       <div class="back-sticky"><button class="btn-back" onclick="switchTab('home')">←</button></div>
@@ -1350,9 +1508,7 @@ function initMusicEvents() {
     audio.currentTime = 0;
     audio.play().catch(err => console.log('Replay error:', err));
   });
-  audio.addEventListener('error', (e) => {
-    console.log('Gagal load:', playlist[currentSong].src);
-  });
+  audio.addEventListener('error', (e) => console.log('Gagal load:', playlist[currentSong].src));
 }
 
 function playSong(i) {
