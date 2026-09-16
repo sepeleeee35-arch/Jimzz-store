@@ -55,38 +55,9 @@ header .counter .dot { width: 8px; height: 8px; background: #00ff88; border-radi
 .trust-item { display: flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.03); border: 1px solid #222; padding: 6px 14px; border-radius: 20px; font-size: 11px; color: #aaa; }
 .trust-item .trust-icon { font-size: 14px; }
 
-/* CHAT ADMIN DI HOME - DIAM, GAK NGIKUT SCROLL */
-.chat-admin-home {
-  text-align: center;
-  margin-top: 30px;
-  padding: 0 20px;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-}
-.chat-admin-text {
-  color: #888;
-  font-size: 13px;
-  margin-bottom: 12px;
-  line-height: 1.6;
-}
-.chat-admin-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  background: linear-gradient(135deg, #25D366, #1da851);
-  color: #fff;
-  text-decoration: none;
-  padding: 14px 28px;
-  border-radius: 30px;
-  font-size: 14px;
-  font-weight: bold;
-  box-shadow: 0 5px 25px rgba(37,211,102,0.5);
-  transition: 0.3s;
-  width: 100%;
-  max-width: 400px;
-}
+.chat-admin-home { text-align: center; margin-top: 30px; padding: 0 20px; max-width: 600px; margin-left: auto; margin-right: auto; }
+.chat-admin-text { color: #888; font-size: 13px; margin-bottom: 12px; line-height: 1.6; }
+.chat-admin-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: linear-gradient(135deg, #25D366, #1da851); color: #fff; text-decoration: none; padding: 14px 28px; border-radius: 30px; font-size: 14px; font-weight: bold; box-shadow: 0 5px 25px rgba(37,211,102,0.5); transition: 0.3s; width: 100%; max-width: 400px; }
 .chat-admin-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 35px rgba(37,211,102,0.7); }
 .chat-admin-btn:active { transform: scale(0.98); }
 
@@ -330,7 +301,6 @@ footer { text-align: center; padding: 30px 20px; color: #444; font-size: 12px; b
       <div class="trust-item"><span class="trust-icon">🔒</span> Aman & Terpercaya</div>
       <div class="trust-item"><span class="trust-icon">💰</span> Harga Murah</div>
     </div>
-    <!-- CHAT ADMIN DI HOME - DIAM, GAK NGIKUT SCROLL -->
     <div class="chat-admin-home">
       <p class="chat-admin-text">Jika ada kendala masalah silakan chat admin</p>
       <a href="https://wa.me/6283898669427?text=Halo%20Admin%20Jimzz%20Store%2C%20saya%20mau%20tanya..." target="_blank" class="chat-admin-btn">
@@ -712,51 +682,51 @@ function initCanvas() {
 }
 
 const produkSosmed = [
-  { icon: "📱", nama: "Suntik Saluran WA", desc: "Tambah pengikut saluran WhatsApp kamu secara aman & cepat.", hargaPerUnit: 10, unit: "pengikut", min: 100, max: 1000000, hot: true, baseOrder: 324, inputLabel: "🔗 Link Saluran WA", inputPlaceholder: "Contoh: https://whatsapp.com/channel/xxxxx", inputValidasi: "whatsapp.com/channel", inputError: "Link harus link SALURAN WhatsApp" },
-  { icon: "😀", nama: "Suntik Random Emoji Reaction", desc: "Tambah reaction emoji random ke postingan kamu.", hargaPerUnit: 1, unit: "reaction", min: 250, max: 1000000, hot: true, baseOrder: 187, inputLabel: "🔗 Link Postingan", inputPlaceholder: "Contoh: https://www.tiktok.com/@user/video/xxx", inputValidasi: "tiktok.com", inputError: "Link harus link postingan TikTok" },
-  { icon: "📊", nama: "Suntik Polling Vote", desc: "Tambah vote ke polling kamu secara aman & cepat.", hargaPerUnit: 20, unit: "vote", min: 50, max: 1000000, hot: true, baseOrder: 92, inputLabel: "🔗 Link Polling", inputPlaceholder: "Contoh: link polling", inputValidasi: "", inputError: "" },
-  { icon: "❤️", nama: "Suntik Like TikTok", desc: "Tambah like video TikTok kamu secara aman & cepat.", hargaPerUnit: 10, unit: "like", min: 100, max: 1000000, hot: true, baseOrder: 256, inputLabel: "🔗 Link Video TikTok", inputPlaceholder: "Contoh: https://www.tiktok.com/@user/video/xxx", inputValidasi: "tiktok.com", inputError: "Link harus link video TikTok" },
-  { icon: "👁️", nama: "Suntik Views TikTok", desc: "Tambah views video TikTok kamu secara aman & cepat.", hargaPerUnit: 1, unit: "views", min: 500, max: 1000000, hot: false, baseOrder: 143, inputLabel: "🔗 Link Video TikTok", inputPlaceholder: "Contoh: https://www.tiktok.com/@user/video/xxx", inputValidasi: "tiktok.com", inputError: "Link harus link video TikTok" }
+  { icon: "📱", nama: "Suntik Saluran WA", desc: "Tambah pengikut saluran WhatsApp kamu secara aman & cepat.", hargaPerUnit: 10, unit: "pengikut", min: 100, max: 1000000, baseOrder: 324, inputLabel: "🔗 Link Saluran WA", inputPlaceholder: "Contoh: https://whatsapp.com/channel/xxxxx", inputValidasi: "whatsapp.com/channel", inputError: "Link harus link SALURAN WhatsApp" },
+  { icon: "😀", nama: "Suntik Random Emoji Reaction", desc: "Tambah reaction emoji random ke postingan kamu.", hargaPerUnit: 1, unit: "reaction", min: 250, max: 1000000, baseOrder: 187, inputLabel: "🔗 Link Postingan", inputPlaceholder: "Contoh: https://www.tiktok.com/@user/video/xxx", inputValidasi: "tiktok.com", inputError: "Link harus link postingan TikTok" },
+  { icon: "📊", nama: "Suntik Polling Vote", desc: "Tambah vote ke polling kamu secara aman & cepat.", hargaPerUnit: 20, unit: "vote", min: 50, max: 1000000, baseOrder: 92, inputLabel: "🔗 Link Polling", inputPlaceholder: "Contoh: link polling", inputValidasi: "", inputError: "" },
+  { icon: "❤️", nama: "Suntik Like TikTok", desc: "Tambah like video TikTok kamu secara aman & cepat.", hargaPerUnit: 10, unit: "like", min: 100, max: 1000000, baseOrder: 256, inputLabel: "🔗 Link Video TikTok", inputPlaceholder: "Contoh: https://www.tiktok.com/@user/video/xxx", inputValidasi: "tiktok.com", inputError: "Link harus link video TikTok" },
+  { icon: "👁️", nama: "Suntik Views TikTok", desc: "Tambah views video TikTok kamu secara aman & cepat.", hargaPerUnit: 1, unit: "views", min: 500, max: 1000000, baseOrder: 143, inputLabel: "🔗 Link Video TikTok", inputPlaceholder: "Contoh: https://www.tiktok.com/@user/video/xxx", inputValidasi: "tiktok.com", inputError: "Link harus link video TikTok" }
 ];
 
 const produkJpm = [
-  { icon: "🚀", nama: "JPM (Jasa Push Member)", desc: "Push member ke grup / channel kamu dengan cepat & aman.", hargaPerUnit: 200, unit: "member", min: 5, max: 1000000, hot: true, baseOrder: 178, bonusMinTotal: 4000, bonusUnit: 5, inputLabel: "🔗 Link Grup WA", inputPlaceholder: "Contoh: https://chat.whatsapp.com/xxxxx", inputValidasi: "chat.whatsapp.com", inputError: "Link harus link GRUP WhatsApp" },
-  { icon: "📱", nama: "Nokos WA Indo", desc: "Nomor kosong WhatsApp Indonesia siap pakai.", hargaPerUnit: 5000, unit: "nomor", min: 1, max: 100, hot: true, baseOrder: 63, inputLabel: "👤 Nama Pemesan", inputPlaceholder: "Contoh: Bilzz", inputValidasi: "", inputError: "" },
-  { icon: "🌐", nama: "Jasa Web", desc: "Jasa pembuatan website profesional.", hargaPerUnit: 15000, unit: "web", min: 1, max: 50, hot: true, baseOrder: 42, inputLabel: "📝 Deskripsi Web", inputPlaceholder: "Contoh: Web toko online", inputValidasi: "", inputError: "" }
+  { icon: "🚀", nama: "JPM (Jasa Push Member)", desc: "Push member ke grup / channel kamu dengan cepat & aman.", hargaPerUnit: 200, unit: "member", min: 5, max: 1000000, baseOrder: 178, bonusMinTotal: 4000, bonusUnit: 5, inputLabel: "🔗 Link Grup WA", inputPlaceholder: "Contoh: https://chat.whatsapp.com/xxxxx", inputValidasi: "chat.whatsapp.com", inputError: "Link harus link GRUP WhatsApp" },
+  { icon: "📱", nama: "Nokos WA Indo", desc: "Nomor kosong WhatsApp Indonesia siap pakai.", hargaPerUnit: 5000, unit: "nomor", min: 1, max: 100, baseOrder: 63, inputLabel: "👤 Nama Pemesan", inputPlaceholder: "Contoh: Bilzz", inputValidasi: "", inputError: "" },
+  { icon: "🌐", nama: "Jasa Web", desc: "Jasa pembuatan website profesional.", hargaPerUnit: 15000, unit: "web", min: 1, max: 50, baseOrder: 42, inputLabel: "📝 Deskripsi Web", inputPlaceholder: "Contoh: Web toko online", inputValidasi: "", inputError: "" }
 ];
 
 const produkApk = [
-  { icon: "💾", nama: "Auto Save Kontak", desc: "Aplikasi auto save kontak WhatsApp secara otomatis.", harga: 1000, hot: true, baseOrder: 37 },
-  { icon: "🎨", nama: "APK Bikin Logo", desc: "Aplikasi bikin logo profesional langsung dari HP.", harga: 1000, hot: true, baseOrder: 28 },
-  { icon: "🛠️", nama: "APK Kebutuhan JB", desc: "Kumpulan APK kebutuhan Jual Beli online.", harga: 1000, hot: true, baseOrder: 15 },
-  { icon: "🦏", nama: "APK WA Badak", desc: "Aplikasi WhatsApp mod dengan fitur lengkap & anti-banned.", harga: 1000, hot: true, baseOrder: 10 }
+  { icon: "💾", nama: "Auto Save Kontak", desc: "Aplikasi auto save kontak WhatsApp secara otomatis.", harga: 1000, baseOrder: 37 },
+  { icon: "🎨", nama: "APK Bikin Logo", desc: "Aplikasi bikin logo profesional langsung dari HP.", harga: 1000, baseOrder: 28 },
+  { icon: "🛠️", nama: "APK Kebutuhan JB", desc: "Kumpulan APK kebutuhan Jual Beli online.", harga: 1000, baseOrder: 15 },
+  { icon: "🦏", nama: "APK WA Badak", desc: "Aplikasi WhatsApp mod dengan fitur lengkap & anti-banned.", harga: 1000, baseOrder: 10 }
 ];
 
 const produkTopUp = [
-  { icon: "🔥", nama: "Free Fire", desc: "Top up Diamond Free Fire murah & cepat", unit: "diamond", hot: true, status: "maintenance", paket: [
+  { icon: "🔥", nama: "Free Fire", desc: "Top up Diamond Free Fire murah & cepat", unit: "diamond", status: "maintenance", paket: [
     { nominal: "5 Diamond", harga: 900 }, { nominal: "12 Diamond", harga: 1950 }, { nominal: "20 Diamond", harga: 3400 },
     { nominal: "30 Diamond", harga: 5100 }, { nominal: "50 Diamond", harga: 8500 }, { nominal: "70 Diamond", harga: 11900 },
     { nominal: "100 Diamond", harga: 17000 }, { nominal: "140 Diamond", harga: 23800 }, { nominal: "200 Diamond", harga: 34000 },
     { nominal: "355 Diamond", harga: 60300 }
   ]},
-  { icon: "⚔️", nama: "Mobile Legends", desc: "Top up Diamond Mobile Legends murah & cepat", unit: "diamond", hot: true, status: "maintenance", paket: [
+  { icon: "⚔️", nama: "Mobile Legends", desc: "Top up Diamond Mobile Legends murah & cepat", unit: "diamond", status: "maintenance", paket: [
     { nominal: "11 Diamond", harga: 3800 }, { nominal: "22 Diamond", harga: 7500 }, { nominal: "44 Diamond", harga: 15000 },
     { nominal: "86 Diamond", harga: 28500 }, { nominal: "172 Diamond", harga: 57000 }, { nominal: "355 Diamond", harga: 116000 },
     { nominal: "720 Diamond", harga: 237000 }, { nominal: "1000 Diamond", harga: 322000 }, { nominal: "1440 Diamond", harga: 462000 },
     { nominal: "2000 Diamond", harga: 644000 }
   ]},
-  { icon: "🔫", nama: "PUBG Mobile", desc: "Top up UC PUBG Mobile murah & cepat", unit: "UC", hot: true, status: "maintenance", paket: [
+  { icon: "🔫", nama: "PUBG Mobile", desc: "Top up UC PUBG Mobile murah & cepat", unit: "UC", status: "maintenance", paket: [
     { nominal: "60 UC", harga: 17500 }, { nominal: "120 UC", harga: 35000 }, { nominal: "180 UC", harga: 52500 },
     { nominal: "325 UC", harga: 86000 }, { nominal: "660 UC", harga: 165000 }, { nominal: "1800 UC", harga: 445000 },
     { nominal: "3850 UC", harga: 930000 }, { nominal: "8100 UC", harga: 1920000 }, { nominal: "16200 UC", harga: 3840000 },
     { nominal: "24300 UC", harga: 5760000 }
   ]},
-  { icon: "🎮", nama: "Genshin Impact", desc: "Top up Crystal Genshin Impact murah & cepat", unit: "crystal", hot: false, status: "maintenance", paket: [
+  { icon: "🎮", nama: "Genshin Impact", desc: "Top up Crystal Genshin Impact murah & cepat", unit: "crystal", status: "maintenance", paket: [
     { nominal: "60 Crystal", harga: 17000 }, { nominal: "300 Crystal", harga: 82000 }, { nominal: "980 Crystal", harga: 258000 },
     { nominal: "1980 Crystal", harga: 518000 }, { nominal: "3280 Crystal", harga: 854000 }, { nominal: "6480 Crystal", harga: 1672000 },
     { nominal: "10000 Crystal", harga: 2556000 }, { nominal: "15000 Crystal", harga: 3800000 }
   ]},
-  { icon: "🏆", nama: "Call of Duty Mobile", desc: "Top up CP COD Mobile murah & cepat", unit: "CP", hot: false, status: "maintenance", paket: [
+  { icon: "🏆", nama: "Call of Duty Mobile", desc: "Top up CP COD Mobile murah & cepat", unit: "CP", status: "maintenance", paket: [
     { nominal: "80 CP", harga: 17500 }, { nominal: "160 CP", harga: 35000 }, { nominal: "240 CP", harga: 52500 },
     { nominal: "420 CP", harga: 81000 }, { nominal: "800 CP", harga: 152000 }, { nominal: "1600 CP", harga: 303000 },
     { nominal: "2400 CP", harga: 453000 }, { nominal: "4000 CP", harga: 725000 }, { nominal: "8000 CP", harga: 1450000 },
@@ -777,27 +747,41 @@ function initData() {
   renderProduk('apkList', produkApk, 'JUAL APK');
 }
 
+// ============================================
+// RENDER PRODUK - BADGE TERLARIS DINAMIS
+// ============================================
 function renderProduk(target, data, kategori) {
   const el = document.getElementById(target);
   if (!el) return;
-  el.innerHTML = data.map((p, i) => {
+  
+  // Hitung total order tiap produk (baseOrder + realOrder dari backend)
+  const withCounts = data.map((p, i) => {
     const realOrder = getProdukOrderCount(target, i);
     const totalOrder = (p.baseOrder || 0) + realOrder;
+    return { ...p, _index: i, _totalOrder: totalOrder };
+  });
+  
+  // Cari nilai tertinggi & index pertama yang punya nilai tertinggi
+  const maxOrder = Math.max(...withCounts.map(p => p._totalOrder));
+  const topSellerIndex = withCounts.findIndex(p => p._totalOrder === maxOrder);
+  
+  el.innerHTML = withCounts.map((p, i) => {
+    const isTopSeller = i === topSellerIndex; // Cuma 1 produk yang dapet badge
     return `
     <div class="produk-card">
-      ${p.hot ? '<div class="badge-hot">🔥 TERLARIS</div>' : ''}
+      ${isTopSeller ? '<div class="badge-hot">🔥 TERLARIS</div>' : ''}
       <div class="produk-header">
         <div class="produk-icon">${p.icon}</div>
         <div class="produk-title-block"><div class="produk-label">${kategori}</div><div class="produk-nama">${p.nama}</div></div>
       </div>
       <div class="produk-desc">${p.desc}</div>
-      <div class="produk-sold">🛒 ${totalOrder.toLocaleString('id-ID')} sudah dibeli</div>
+      <div class="produk-sold">🛒 ${p._totalOrder.toLocaleString('id-ID')} sudah dibeli</div>
       <div class="produk-bottom">
         <div class="produk-harga-info">
           <div class="produk-harga-label">Harga ${p.unit ? 'per ' + p.unit : ''}</div>
           <div class="produk-harga">Rp ${(p.harga || p.hargaPerUnit).toLocaleString('id-ID')} ${p.unit ? '<span>/ ' + p.unit + '</span>' : ''}</div>
         </div>
-        <button class="btn-order" onclick="bukaOrder('${target}', ${i})">Order</button>
+        <button class="btn-order" onclick="bukaOrder('${target}', ${p._index})">Order</button>
       </div>
     </div>
   `;
@@ -811,7 +795,7 @@ function renderGameList() {
   el.innerHTML = produkTopUp.map((g, i) => {
     if (g.status === 'maintenance' && !isAdmin) return '';
     const isMaintenance = g.status === 'maintenance';
-    const badge = isMaintenance && isAdmin ? '<div class="badge-admin-preview">👑 ADMIN PREVIEW</div>' : (g.hot ? '<div class="badge-hot">🔥</div>' : '');
+    const badge = isMaintenance && isAdmin ? '<div class="badge-admin-preview">👑 ADMIN PREVIEW</div>' : '';
     const cardClass = isMaintenance && isAdmin ? 'produk-card admin-preview' : (isMaintenance ? 'produk-card disabled' : 'produk-card');
     const btnText = isMaintenance ? (isAdmin ? '👑 Test Order' : 'Maintenance') : 'Pilih →';
     const clickHandler = (isMaintenance && !isAdmin) ? `onclick="alert('⚠️ Fitur Top Up Game sedang MAINTENANCE.')"` : `onclick="bukaGameDetail(${i})"`;
