@@ -20,11 +20,7 @@ body { background: #08080d; color: #e6e6e6; line-height: 1.6; padding-bottom: 10
 @keyframes loadBar { to { width: 100%; } }
 @keyframes pulseGlow { 0%,100% { opacity:1; transform: scale(1); } 50% { opacity:0.7; transform: scale(0.97); } }
 
-.chat-admin-float { position: fixed; top: 12px; right: 12px; z-index: 999; width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #25D366, #1da851); display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 24px; color: #fff; box-shadow: 0 5px 25px rgba(37,211,102,0.7); animation: waPulse 2s infinite; }
-.chat-admin-float:hover { transform: scale(1.1); }
-@keyframes waPulse { 0%,100% { box-shadow: 0 5px 25px rgba(37,211,102,0.7); } 50% { box-shadow: 0 5px 35px rgba(37,211,102,1), 0 0 0 12px rgba(37,211,102,0.15); } }
-
-.admin-badge-float { position: fixed; top: 12px; right: 70px; z-index: 999; background: linear-gradient(135deg, #ffd700, #ff9500); color: #000; padding: 8px 14px; border-radius: 20px; font-size: 11px; font-weight: bold; box-shadow: 0 5px 20px rgba(255,215,0,0.5); display: none; align-items: center; gap: 6px; cursor: pointer; }
+.admin-badge-float { position: fixed; top: 12px; right: 12px; z-index: 999; background: linear-gradient(135deg, #ffd700, #ff9500); color: #000; padding: 8px 14px; border-radius: 20px; font-size: 11px; font-weight: bold; box-shadow: 0 5px 20px rgba(255,215,0,0.5); display: none; align-items: center; gap: 6px; cursor: pointer; }
 .admin-badge-float.show { display: flex; }
 .admin-badge-float .logout-x { color: #000; font-weight: bold; margin-left: 5px; }
 
@@ -58,6 +54,41 @@ header .counter .dot { width: 8px; height: 8px; background: #00ff88; border-radi
 .trust-row { display: flex; justify-content: center; gap: 12px; margin-top: 25px; flex-wrap: wrap; }
 .trust-item { display: flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.03); border: 1px solid #222; padding: 6px 14px; border-radius: 20px; font-size: 11px; color: #aaa; }
 .trust-item .trust-icon { font-size: 14px; }
+
+/* CHAT ADMIN DI HOME - DIAM, GAK NGIKUT SCROLL */
+.chat-admin-home {
+  text-align: center;
+  margin-top: 30px;
+  padding: 0 20px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.chat-admin-text {
+  color: #888;
+  font-size: 13px;
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+.chat-admin-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #25D366, #1da851);
+  color: #fff;
+  text-decoration: none;
+  padding: 14px 28px;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: bold;
+  box-shadow: 0 5px 25px rgba(37,211,102,0.5);
+  transition: 0.3s;
+  width: 100%;
+  max-width: 400px;
+}
+.chat-admin-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 35px rgba(37,211,102,0.7); }
+.chat-admin-btn:active { transform: scale(0.98); }
 
 .tab-page { display: none; animation: fadeIn 0.4s ease; }
 .tab-page.active { display: block; }
@@ -260,8 +291,7 @@ footer { text-align: center; padding: 30px 20px; color: #444; font-size: 12px; b
   .nav-item .nav-icon { font-size: 18px; }
   .music-player { bottom: 80px; right: 10px; width: 200px; }
   .modal-close { top: -10px; right: -10px; width: 42px; height: 42px; font-size: 22px; }
-  .chat-admin-float { width: 42px; height: 42px; font-size: 20px; top: 10px; right: 10px; }
-  .admin-badge-float { top: 10px; right: 60px; font-size: 10px; padding: 6px 10px; }
+  .admin-badge-float { top: 10px; right: 10px; font-size: 10px; padding: 6px 10px; }
 }
 </style>
 </head>
@@ -272,8 +302,6 @@ footer { text-align: center; padding: 30px 20px; color: #444; font-size: 12px; b
   <div class="loading-tagline">Digital Store</div>
   <div class="loading-bar"><div class="loading-bar-fill"></div></div>
 </div>
-
-<a href="https://wa.me/6283898669427?text=Halo%20Admin%20Jimzz%20Store%2C%20saya%20mau%20tanya..." target="_blank" class="chat-admin-float" title="Chat Admin">💬</a>
 
 <div class="admin-badge-float" id="adminBadge" onclick="adminLogout()">
   👑 ADMIN <span class="logout-x">×</span>
@@ -301,6 +329,13 @@ footer { text-align: center; padding: 30px 20px; color: #444; font-size: 12px; b
       <div class="trust-item"><span class="trust-icon">⚡</span> Proses Cepat</div>
       <div class="trust-item"><span class="trust-icon">🔒</span> Aman & Terpercaya</div>
       <div class="trust-item"><span class="trust-icon">💰</span> Harga Murah</div>
+    </div>
+    <!-- CHAT ADMIN DI HOME - DIAM, GAK NGIKUT SCROLL -->
+    <div class="chat-admin-home">
+      <p class="chat-admin-text">Jika ada kendala masalah silakan chat admin</p>
+      <a href="https://wa.me/6283898669427?text=Halo%20Admin%20Jimzz%20Store%2C%20saya%20mau%20tanya..." target="_blank" class="chat-admin-btn">
+        💬 Chat Admin — 6283898669427
+      </a>
     </div>
   </header>
 
@@ -512,9 +547,6 @@ let secretClickCount = 0;
 let secretClickTimer = null;
 if (localStorage.getItem('jimzz_admin') === 'true') isAdmin = true;
 
-// ============================================
-// COUNTER SYSTEM - FETCH DARI BACKEND
-// ============================================
 let cachedCounters = {
   totalOrder: 1375,
   produkOrder: {}
@@ -528,10 +560,7 @@ async function loadCounters() {
       const oldTotal = cachedCounters.totalOrder;
       cachedCounters.totalOrder = data.totalOrder;
       cachedCounters.produkOrder = data.produkOrder || {};
-      
       updateOrderCounter();
-      
-      // Kalau ada perubahan, re-render produk biar angka "sudah dibeli" update
       if (oldTotal !== data.totalOrder) {
         renderProduk('sosmed', produkSosmed, 'SUNTIK ALL');
         renderProduk('jpm', produkJpm, 'LAYANAN LAINNYA');
@@ -560,14 +589,12 @@ async function incrementOrder(kategoriId, index) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ kategoriId, index })
     });
-    // Langsung fetch ulang biar angka update tanpa nunggu polling
     await loadCounters();
   } catch (err) {
     console.log('Gagal increment order:', err);
   }
 }
 
-// Polling tiap 3 detik — cek apakah ada update dari device lain
 setInterval(loadCounters, 3000);
 
 function secretClick() {
@@ -647,7 +674,7 @@ function startApp() {
   renderPlaylist();
   initMusicEvents();
   applyAdminUI();
-  loadCounters(); // Load counter dari backend
+  loadCounters();
   setTimeout(() => document.getElementById('loadingScreen').classList.add('hide'), 1400);
 }
 
@@ -898,10 +925,8 @@ function bukaOrder(kategoriId, index) {
   else if (kategoriId === 'jpm') { data = produkJpm; kategori = 'LAYANAN LAINNYA'; isApk = false; }
   else { data = produkApk; kategori = 'JUAL APK'; isApk = true; }
   produkAktif = { ...data[index], kategori, isApk };
-  
   produkAktif._kategoriId = kategoriId;
   produkAktif._index = index;
-  
   document.getElementById('modalLabel').innerText = kategori;
   document.getElementById('modalTitle').innerText = produkAktif.nama;
   document.getElementById('modalSubtitle').innerText = produkAktif.desc;
@@ -1080,7 +1105,6 @@ async function userKonfirmasiBayar() {
         index: produkAktif._index
       })
     });
-    // Increment counter di backend
     if (produkAktif._kategoriId && produkAktif._index !== undefined) {
       await incrementOrder(produkAktif._kategoriId, produkAktif._index);
     } else {
