@@ -39,6 +39,9 @@
 
 body { background: #0a0a0f; color: #e6e6e6; line-height: 1.6; padding-bottom: 100px; overflow-x: hidden; }
 #jimzz-neon-bg { position: fixed; top:0; left:0; width:100vw; height:100vh; z-index:-1; pointer-events:none; background: radial-gradient(circle at 20% 20%, rgba(0,255,136,0.05) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(0,255,136,0.04) 0%, transparent 50%), #0a0a0f; }
+.promo-banner { position: relative; z-index: 5; background: linear-gradient(90deg, #00ff88, #00cc6a, #00ff88); background-size: 200% 100%; animation: bannerSlide 3s linear infinite; color: #000; text-align: center; padding: 10px 15px; font-size: 12px; font-weight: bold; }
+@keyframes bannerSlide { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
+.promo-banner b { background: #000; color: #00ff88; padding: 2px 8px; border-radius: 4px; margin: 0 4px; }
 header { text-align: center; padding: 40px 20px 30px; background: radial-gradient(circle at 50% 100%, rgba(0,255,136,0.15), transparent 70%), linear-gradient(135deg, #001a0d, rgba(10,10,15,0.7)); border-bottom: 2px solid #00ff88; position: relative; z-index: 5; }
 .header-top { display: flex; justify-content: space-between; align-items: center; max-width: 1100px; margin: 0 auto 15px; padding: 0 5px; }
 .logo-text { color: #00ff88; font-weight: bold; font-size: 16px; letter-spacing: 1px; }
@@ -264,6 +267,10 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
 
 <canvas id="jimzz-neon-bg"></canvas>
 
+<div class="promo-banner">
+  ⚡ TOP UP GAME MURAH! Proses <b>1-5 MENIT</b> langsung masuk! ⚡
+</div>
+
 <div class="tab-page active" id="page-home">
   <header>
     <div class="header-top">
@@ -310,6 +317,17 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
   <section class="kategori">
     <h2>🎮 Top Up Game</h2>
     <p class="sub">Pilih game yang mau kamu top up</p>
+    
+    <div class="pengumuman" style="background: linear-gradient(145deg, rgba(0,255,136,0.08), rgba(0,150,80,0.05)); border-color: rgba(0,255,136,0.3); border-left-color: #00ff88;">
+      <div class="pengumuman-header">
+        <span class="pengumuman-icon">⚡</span>
+        <span class="pengumuman-title" style="color:#00ff88;">PROSES CEPAT & AMAN</span>
+      </div>
+      <p class="pengumuman-text">
+        Top up diproses <b style="color:#00ff88">1-5 menit</b> setelah pembayaran. Cukup masukkan <b style="color:#00ff88">User ID</b> game kamu, tanpa perlu login.
+      </p>
+    </div>
+    
     <div class="produk-list grid-2col" id="gameList"></div>
   </section>
   <footer><p>© 2025 Jimzz Store — All Rights Reserved 😈</p></footer>
@@ -596,51 +614,51 @@ const produkTopUp = [
     unit: "diamond",
     hot: true,
     paket: [
-      { nominal: "5 Diamond", harga: 1250 },
-      { nominal: "10 Diamond", harga: 2498 },
-      { nominal: "12 Diamond", harga: 2995 },
-      { nominal: "15 Diamond", harga: 3743 },
-      { nominal: "20 Diamond", harga: 4984 },
-      { nominal: "25 Diamond", harga: 6226 },
-      { nominal: "30 Diamond", harga: 7467 },
-      { nominal: "40 Diamond", harga: 9949 },
-      { nominal: "50 Diamond", harga: 12431 },
-      { nominal: "70 Diamond", harga: 17393 },
-      { nominal: "80 Diamond", harga: 19874 },
-      { nominal: "100 Diamond", harga: 24836 },
-      { nominal: "140 Diamond", harga: 34758 },
-      { nominal: "150 Diamond", harga: 37239 },
-      { nominal: "200 Diamond", harga: 49603 },
-      { nominal: "250 Diamond", harga: 61967 },
-      { nominal: "300 Diamond", harga: 74330 },
-      { nominal: "355 Diamond", harga: 87910 },
-      { nominal: "400 Diamond", harga: 99021 },
-      { nominal: "500 Diamond", harga: 123615 },
-      { nominal: "600 Diamond", harga: 148208 },
-      { nominal: "720 Diamond", harga: 177777 },
-      { nominal: "800 Diamond", harga: 197404 },
-      { nominal: "1000 Diamond", harga: 246460 },
-      { nominal: "1200 Diamond", harga: 295516 },
-      { nominal: "1450 Diamond", harga: 356824 },
-      { nominal: "1500 Diamond", harga: 368923 },
-      { nominal: "1800 Diamond", harga: 442267 },
-      { nominal: "2000 Diamond", harga: 491274 },
-      { nominal: "2400 Diamond", harga: 589288 },
-      { nominal: "2500 Diamond", harga: 613720 },
-      { nominal: "3000 Diamond", harga: 736071 },
-      { nominal: "3550 Diamond", harga: 870696 },
-      { nominal: "4000 Diamond", harga: 980374 },
-      { nominal: "5000 Diamond", harga: 1224206 },
-      { nominal: "6000 Diamond", harga: 1468037 },
-      { nominal: "7200 Diamond", harga: 1759782 },
-      { nominal: "8000 Diamond", harga: 1954078 },
-      { nominal: "10000 Diamond", harga: 2439680 },
-      { nominal: "12000 Diamond", harga: 2925282 },
-      { nominal: "14500 Diamond", harga: 3531904 },
-      { nominal: "15000 Diamond", harga: 3653486 },
-      { nominal: "20000 Diamond", harga: 4866436 },
-      { nominal: "25000 Diamond", harga: 6079386 },
-      { nominal: "50000 Diamond", harga: 12123411 }
+      { nominal: "5 Diamond", harga: 900 },
+      { nominal: "10 Diamond", harga: 1700 },
+      { nominal: "12 Diamond", harga: 2100 },
+      { nominal: "15 Diamond", harga: 2600 },
+      { nominal: "20 Diamond", harga: 3400 },
+      { nominal: "25 Diamond", harga: 4300 },
+      { nominal: "30 Diamond", harga: 5100 },
+      { nominal: "40 Diamond", harga: 6800 },
+      { nominal: "50 Diamond", harga: 8500 },
+      { nominal: "70 Diamond", harga: 11900 },
+      { nominal: "80 Diamond", harga: 13600 },
+      { nominal: "100 Diamond", harga: 17000 },
+      { nominal: "140 Diamond", harga: 23800 },
+      { nominal: "150 Diamond", harga: 25500 },
+      { nominal: "200 Diamond", harga: 34000 },
+      { nominal: "250 Diamond", harga: 42500 },
+      { nominal: "300 Diamond", harga: 51000 },
+      { nominal: "355 Diamond", harga: 60300 },
+      { nominal: "400 Diamond", harga: 68000 },
+      { nominal: "500 Diamond", harga: 85000 },
+      { nominal: "600 Diamond", harga: 102000 },
+      { nominal: "720 Diamond", harga: 122400 },
+      { nominal: "800 Diamond", harga: 136000 },
+      { nominal: "1000 Diamond", harga: 170000 },
+      { nominal: "1200 Diamond", harga: 204000 },
+      { nominal: "1450 Diamond", harga: 246500 },
+      { nominal: "1500 Diamond", harga: 255000 },
+      { nominal: "1800 Diamond", harga: 306000 },
+      { nominal: "2000 Diamond", harga: 340000 },
+      { nominal: "2400 Diamond", harga: 408000 },
+      { nominal: "2500 Diamond", harga: 425000 },
+      { nominal: "3000 Diamond", harga: 510000 },
+      { nominal: "3550 Diamond", harga: 603500 },
+      { nominal: "4000 Diamond", harga: 680000 },
+      { nominal: "5000 Diamond", harga: 850000 },
+      { nominal: "6000 Diamond", harga: 1020000 },
+      { nominal: "7200 Diamond", harga: 1224000 },
+      { nominal: "8000 Diamond", harga: 1360000 },
+      { nominal: "10000 Diamond", harga: 1700000 },
+      { nominal: "12000 Diamond", harga: 2040000 },
+      { nominal: "14500 Diamond", harga: 2465000 },
+      { nominal: "15000 Diamond", harga: 2550000 },
+      { nominal: "20000 Diamond", harga: 3400000 },
+      { nominal: "25000 Diamond", harga: 4250000 },
+      { nominal: "50000 Diamond", harga: 8500000 }
     ]
   },
   {
@@ -650,51 +668,35 @@ const produkTopUp = [
     unit: "diamond",
     hot: true,
     paket: [
-      { nominal: "11 Diamond", harga: 4375 },
-      { nominal: "22 Diamond", harga: 8740 },
-      { nominal: "44 Diamond", harga: 17466 },
-      { nominal: "56 Diamond", harga: 22206 },
-      { nominal: "86 Diamond", harga: 34074 },
-      { nominal: "110 Diamond", harga: 43546 },
-      { nominal: "172 Diamond", harga: 68013 },
-      { nominal: "240 Diamond", harga: 94788 },
-      { nominal: "257 Diamond", harga: 101386 },
-      { nominal: "355 Diamond", harga: 139856 },
-      { nominal: "500 Diamond", harga: 196557 },
-      { nominal: "720 Diamond", harga: 282718 },
-      { nominal: "1000 Diamond", harga: 392114 },
-      { nominal: "1440 Diamond", harga: 563584 },
-      { nominal: "2000 Diamond", harga: 781727 },
-      { nominal: "2880 Diamond", harga: 1123371 },
-      { nominal: "4000 Diamond", harga: 1557314 },
-      { nominal: "6000 Diamond", harga: 2330306 },
-      { nominal: "8000 Diamond", harga: 3100612 },
-      { nominal: "10000 Diamond", harga: 3868736 },
-      { nominal: "12000 Diamond", harga: 4636041 },
-      { nominal: "15000 Diamond", harga: 5785020 },
-      { nominal: "20000 Diamond", harga: 7699588 },
-      { nominal: "25000 Diamond", harga: 9603784 },
-      { nominal: "30000 Diamond", harga: 11507908 },
-      { nominal: "40000 Diamond", harga: 15316316 },
-      { nominal: "50000 Diamond", harga: 19111621 },
-      { nominal: "75000 Diamond", harga: 28599040 },
-      { nominal: "100000 Diamond", harga: 38018759 },
-      { nominal: "150000 Diamond", harga: 56815076 },
-      { nominal: "200000 Diamond", harga: 75542081 },
-      { nominal: "250000 Diamond", harga: 94201272 },
-      { nominal: "300000 Diamond", harga: 112787724 },
-      { nominal: "400000 Diamond", harga: 149856856 },
-      { nominal: "500000 Diamond", harga: 186825126 },
-      { nominal: "750000 Diamond", harga: 279085514 },
-      { nominal: "1000000 Diamond", harga: 371208058 },
-      { nominal: "1500000 Diamond", harga: 555148309 },
-      { nominal: "2000000 Diamond", harga: 737913964 },
-      { nominal: "2500000 Diamond", harga: 920081659 },
-      { nominal: "3000000 Diamond", harga: 1101771931 },
-      { nominal: "4000000 Diamond", harga: 1464249381 },
-      { nominal: "5000000 Diamond", harga: 1824233861 },
-      { nominal: "7500000 Diamond", harga: 2724537392 },
-      { nominal: "10000000 Diamond", harga: 3623144093 }
+      { nominal: "11 Diamond", harga: 3200 },
+      { nominal: "22 Diamond", harga: 6400 },
+      { nominal: "44 Diamond", harga: 12800 },
+      { nominal: "56 Diamond", harga: 16200 },
+      { nominal: "86 Diamond", harga: 24900 },
+      { nominal: "110 Diamond", harga: 31800 },
+      { nominal: "172 Diamond", harga: 49700 },
+      { nominal: "240 Diamond", harga: 69200 },
+      { nominal: "257 Diamond", harga: 74000 },
+      { nominal: "355 Diamond", harga: 102100 },
+      { nominal: "500 Diamond", harga: 143800 },
+      { nominal: "720 Diamond", harga: 206800 },
+      { nominal: "1000 Diamond", harga: 287200 },
+      { nominal: "1440 Diamond", harga: 412000 },
+      { nominal: "2000 Diamond", harga: 572000 },
+      { nominal: "2880 Diamond", harga: 823000 },
+      { nominal: "4000 Diamond", harga: 1140800 },
+      { nominal: "6000 Diamond", harga: 1706800 },
+      { nominal: "8000 Diamond", harga: 2270400 },
+      { nominal: "10000 Diamond", harga: 2834000 },
+      { nominal: "12000 Diamond", harga: 3396000 },
+      { nominal: "15000 Diamond", harga: 4238000 },
+      { nominal: "20000 Diamond", harga: 5640000 },
+      { nominal: "25000 Diamond", harga: 7036000 },
+      { nominal: "30000 Diamond", harga: 8430000 },
+      { nominal: "40000 Diamond", harga: 11218000 },
+      { nominal: "50000 Diamond", harga: 14000000 },
+      { nominal: "75000 Diamond", harga: 20949000 },
+      { nominal: "100000 Diamond", harga: 27849000 }
     ]
   },
   {
@@ -704,51 +706,34 @@ const produkTopUp = [
     unit: "UC",
     hot: true,
     paket: [
-      { nominal: "60 UC", harga: 18750 },
-      { nominal: "120 UC", harga: 37463 },
-      { nominal: "180 UC", harga: 56138 },
-      { nominal: "325 UC", harga: 101048 },
-      { nominal: "385 UC", harga: 119592 },
-      { nominal: "660 UC", harga: 204463 },
-      { nominal: "720 UC", harga: 222728 },
-      { nominal: "985 UC", harga: 304086 },
-      { nominal: "1320 UC", harga: 406820 },
-      { nominal: "1800 UC", harga: 553305 },
-      { nominal: "2460 UC", harga: 753665 },
-      { nominal: "3850 UC", harga: 1174925 },
-      { nominal: "4950 UC", harga: 1504384 },
-      { nominal: "6600 UC", harga: 1997684 },
-      { nominal: "8250 UC", harga: 2488619 },
-      { nominal: "10000 UC", harga: 3006988 },
-      { nominal: "12000 UC", harga: 3598447 },
-      { nominal: "15000 UC", harga: 4483225 },
-      { nominal: "18000 UC", harga: 5364010 },
-      { nominal: "20000 UC", harga: 5947413 },
-      { nominal: "25000 UC", harga: 7412212 },
-      { nominal: "30000 UC", harga: 8875428 },
-      { nominal: "40000 UC", harga: 11795412 },
-      { nominal: "50000 UC", harga: 14699541 },
-      { nominal: "75000 UC", harga: 21956818 },
-      { nominal: "100000 UC", harga: 29180815 },
-      { nominal: "150000 UC", harga: 43501330 },
-      { nominal: "200000 UC", harga: 57782200 },
-      { nominal: "250000 UC", harga: 71999042 },
-      { nominal: "300000 UC", harga: 86163253 },
-      { nominal: "400000 UC", harga: 114383918 },
-      { nominal: "500000 UC", harga: 142468876 },
-      { nominal: "750000 UC", harga: 212849635 },
-      { nominal: "1000000 UC", harga: 282897442 },
-      { nominal: "1500000 UC", harga: 422729926 },
-      { nominal: "2000000 UC", harga: 561893229 },
-      { nominal: "2500000 UC", harga: 700431721 },
-      { nominal: "3000000 UC", harga: 838410181 },
-      { nominal: "4000000 UC", harga: 1113122963 },
-      { nominal: "5000000 UC", harga: 1386330206 },
-      { nominal: "7500000 UC", harga: 2070976988 },
-      { nominal: "10000000 UC", harga: 2752691657 },
-      { nominal: "15000000 UC", harga: 4111356371 },
-      { nominal: "20000000 UC", harga: 5460837236 },
-      { nominal: "25000000 UC", harga: 6802994018 }
+      { nominal: "60 UC", harga: 13500 },
+      { nominal: "120 UC", harga: 27000 },
+      { nominal: "180 UC", harga: 40500 },
+      { nominal: "325 UC", harga: 72900 },
+      { nominal: "385 UC", harga: 86400 },
+      { nominal: "660 UC", harga: 147600 },
+      { nominal: "720 UC", harga: 161100 },
+      { nominal: "985 UC", harga: 219600 },
+      { nominal: "1320 UC", harga: 294300 },
+      { nominal: "1800 UC", harga: 399600 },
+      { nominal: "2460 UC", harga: 544500 },
+      { nominal: "3850 UC", harga: 848700 },
+      { nominal: "4950 UC", harga: 1086300 },
+      { nominal: "6600 UC", harga: 1442700 },
+      { nominal: "8250 UC", harga: 1797300 },
+      { nominal: "10000 UC", harga: 2171700 },
+      { nominal: "12000 UC", harga: 2599200 },
+      { nominal: "15000 UC", harga: 3238200 },
+      { nominal: "18000 UC", harga: 3874500 },
+      { nominal: "20000 UC", harga: 4295700 },
+      { nominal: "25000 UC", harga: 5353200 },
+      { nominal: "30000 UC", harga: 6409800 },
+      { nominal: "40000 UC", harga: 8518500 },
+      { nominal: "50000 UC", harga: 10616400 },
+      { nominal: "75000 UC", harga: 15858000 },
+      { nominal: "100000 UC", harga: 21075300 },
+      { nominal: "150000 UC", harga: 31419000 },
+      { nominal: "200000 UC", harga: 41732100 }
     ]
   },
   {
@@ -758,51 +743,34 @@ const produkTopUp = [
     unit: "crystal",
     hot: false,
     paket: [
-      { nominal: "60 Crystal", harga: 20000 },
-      { nominal: "120 Crystal", harga: 39963 },
-      { nominal: "180 Crystal", harga: 59888 },
-      { nominal: "300 Crystal", harga: 99729 },
-      { nominal: "330 Crystal", harga: 109570 },
-      { nominal: "500 Crystal", harga: 165659 },
-      { nominal: "660 Crystal", harga: 218091 },
-      { nominal: "980 Crystal", harga: 322847 },
-      { nominal: "1280 Crystal", harga: 420633 },
-      { nominal: "1980 Crystal", harga: 648350 },
-      { nominal: "2480 Crystal", harga: 808934 },
-      { nominal: "3280 Crystal", harga: 1064529 },
-      { nominal: "4480 Crystal", harga: 1446861 },
-      { nominal: "6480 Crystal", harga: 2082884 },
-      { nominal: "8000 Crystal", harga: 2559214 },
-      { nominal: "10000 Crystal", harga: 3182683 },
-      { nominal: "12000 Crystal", harga: 3802156 },
-      { nominal: "15000 Crystal", harga: 4732000 },
-      { nominal: "18000 Crystal", harga: 5657698 },
-      { nominal: "20000 Crystal", harga: 6274723 },
-      { nominal: "25000 Crystal", harga: 7818733 },
-      { nominal: "30000 Crystal", harga: 9357094 },
-      { nominal: "40000 Crystal", harga: 12420770 },
-      { nominal: "50000 Crystal", harga: 15455437 },
-      { nominal: "75000 Crystal", harga: 23063255 },
-      { nominal: "100000 Crystal", harga: 30633517 },
-      { nominal: "150000 Crystal", harga: 45667264 },
-      { nominal: "200000 Crystal", harga: 60642808 },
-      { nominal: "250000 Crystal", harga: 75554867 },
-      { nominal: "300000 Crystal", harga: 90409395 },
-      { nominal: "400000 Crystal", harga: 119989820 },
-      { nominal: "500000 Crystal", harga: 149445720 },
-      { nominal: "750000 Crystal", harga: 223294385 },
-      { nominal: "1000000 Crystal", harga: 296763130 },
-      { nominal: "1500000 Crystal", harga: 443419244 },
-      { nominal: "2000000 Crystal", harga: 589375602 },
-      { nominal: "2500000 Crystal", harga: 734662183 },
-      { nominal: "3000000 Crystal", harga: 879347925 },
-      { nominal: "4000000 Crystal", harga: 1167406279 },
-      { nominal: "5000000 Crystal", harga: 1453858394 },
-      { nominal: "7500000 Crystal", harga: 2171751952 },
-      { nominal: "10000000 Crystal", harga: 2885951777 },
-      { nominal: "15000000 Crystal", harga: 4310873857 },
-      { nominal: "20000000 Crystal", harga: 5725586164 },
-      { nominal: "25000000 Crystal", harga: 7131279021 }
+      { nominal: "60 Crystal", harga: 14400 },
+      { nominal: "120 Crystal", harga: 28800 },
+      { nominal: "180 Crystal", harga: 43200 },
+      { nominal: "300 Crystal", harga: 72000 },
+      { nominal: "330 Crystal", harga: 79200 },
+      { nominal: "500 Crystal", harga: 119700 },
+      { nominal: "660 Crystal", harga: 157500 },
+      { nominal: "980 Crystal", harga: 233100 },
+      { nominal: "1280 Crystal", harga: 303300 },
+      { nominal: "1980 Crystal", harga: 468000 },
+      { nominal: "2480 Crystal", harga: 584100 },
+      { nominal: "3280 Crystal", harga: 768600 },
+      { nominal: "4480 Crystal", harga: 1044900 },
+      { nominal: "6480 Crystal", harga: 1503900 },
+      { nominal: "8000 Crystal", harga: 1847700 },
+      { nominal: "10000 Crystal", harga: 2297700 },
+      { nominal: "12000 Crystal", harga: 2745000 },
+      { nominal: "15000 Crystal", harga: 3416400 },
+      { nominal: "18000 Crystal", harga: 4084200 },
+      { nominal: "20000 Crystal", harga: 4529700 },
+      { nominal: "25000 Crystal", harga: 5644800 },
+      { nominal: "30000 Crystal", harga: 6755400 },
+      { nominal: "40000 Crystal", harga: 8966700 },
+      { nominal: "50000 Crystal", harga: 11158200 },
+      { nominal: "75000 Crystal", harga: 16649100 },
+      { nominal: "100000 Crystal", harga: 22114800 },
+      { nominal: "150000 Crystal", harga: 32969700 },
+      { nominal: "200000 Crystal", harga: 43778700 }
     ]
   },
   {
@@ -812,57 +780,40 @@ const produkTopUp = [
     unit: "CP",
     hot: false,
     paket: [
-      { nominal: "80 CP", harga: 18750 },
-      { nominal: "160 CP", harga: 37463 },
-      { nominal: "240 CP", harga: 56138 },
-      { nominal: "420 CP", harga: 98086 },
-      { nominal: "500 CP", harga: 116587 },
-      { nominal: "800 CP", harga: 186032 },
-      { nominal: "880 CP", harga: 204363 },
-      { nominal: "1200 CP", harga: 278332 },
-      { nominal: "1600 CP", harga: 370330 },
-      { nominal: "2400 CP", harga: 553305 },
-      { nominal: "3200 CP", harga: 734870 },
-      { nominal: "4200 CP", harga: 960670 },
-      { nominal: "5600 CP", harga: 1277075 },
-      { nominal: "8000 CP", harga: 1817268 },
-      { nominal: "10000 CP", harga: 2261035 },
-      { nominal: "12000 CP", harga: 2702700 },
-      { nominal: "15000 CP", harga: 3364948 },
-      { nominal: "18000 CP", harga: 4023070 },
-      { nominal: "20000 CP", harga: 4462540 },
-      { nominal: "25000 CP", harga: 5562147 },
-      { nominal: "30000 CP", harga: 6659897 },
-      { nominal: "40000 CP", harga: 8847509 },
-      { nominal: "50000 CP", harga: 11026173 },
-      { nominal: "75000 CP", harga: 16481122 },
-      { nominal: "100000 CP", harga: 21896099 },
-      { nominal: "150000 CP", harga: 32641275 },
-      { nominal: "200000 CP", harga: 43339890 },
-      { nominal: "250000 CP", harga: 54000034 },
-      { nominal: "300000 CP", harga: 64626276 },
-      { nominal: "400000 CP", harga: 85803965 },
-      { nominal: "500000 CP", harga: 106888896 },
-      { nominal: "750000 CP", harga: 159680031 },
-      { nominal: "1000000 CP", harga: 212218712 },
-      { nominal: "1500000 CP", harga: 317122339 },
-      { nominal: "2000000 CP", harga: 421515632 },
-      { nominal: "2500000 CP", harga: 525455388 },
-      { nominal: "3000000 CP", harga: 628975731 },
-      { nominal: "4000000 CP", harga: 835039855 },
-      { nominal: "5000000 CP", harga: 1040012318 },
-      { nominal: "7500000 CP", harga: 1553385425 },
-      { nominal: "10000000 CP", harga: 2064376042 },
-      { nominal: "15000000 CP", harga: 3083166548 },
-      { nominal: "20000000 CP", harga: 4095437158 },
-      { nominal: "25000000 CP", harga: 5100636071 }
+      { nominal: "80 CP", harga: 13500 },
+      { nominal: "160 CP", harga: 27000 },
+      { nominal: "240 CP", harga: 40500 },
+      { nominal: "420 CP", harga: 70830 },
+      { nominal: "500 CP", harga: 84240 },
+      { nominal: "800 CP", harga: 134370 },
+      { nominal: "880 CP", harga: 147600 },
+      { nominal: "1200 CP", harga: 201060 },
+      { nominal: "1600 CP", harga: 267480 },
+      { nominal: "2400 CP", harga: 399600 },
+      { nominal: "3200 CP", harga: 530730 },
+      { nominal: "4200 CP", harga: 693900 },
+      { nominal: "5600 CP", harga: 922500 },
+      { nominal: "8000 CP", harga: 1312200 },
+      { nominal: "10000 CP", harga: 1632600 },
+      { nominal: "12000 CP", harga: 1952100 },
+      { nominal: "15000 CP", harga: 2430000 },
+      { nominal: "18000 CP", harga: 2905200 },
+      { nominal: "20000 CP", harga: 3222000 },
+      { nominal: "25000 CP", harga: 4015800 },
+      { nominal: "30000 CP", harga: 4808700 },
+      { nominal: "40000 CP", harga: 6388200 },
+      { nominal: "50000 CP", harga: 7960500 },
+      { nominal: "75000 CP", harga: 11898900 },
+      { nominal: "100000 CP", harga: 15807600 },
+      { nominal: "150000 CP", harga: 23445000 },
+      { nominal: "200000 CP", harga: 31183200 }
     ]
   }
 ];
 
 let gameAktif = null;
 let paketAktif = null;
-const MIN_PEMBELIAN = 200;
+const MIN_PEMBELIAN = 500;
 const BACKEND_URL = "https://jimzz-backend.vercel.app";
 let produkAktif = null;
 let dataPemesan = { link: "", hp: "", jumlah: 0, total: 0, bonus: 0, totalAmount: 0 };
@@ -926,33 +877,38 @@ function renderGameList() {
 
 function bukaGameDetail(index) {
   gameAktif = produkTopUp[index];
-  const paketList = gameAktif.paket.map((p, i) => `
-    <div class="produk-card" style="cursor:pointer;" onclick="pilihPaket(${i})">
-      <div class="produk-header">
-        <div class="produk-icon">💎</div>
-        <div class="produk-title-block">
-          <div class="produk-label">${gameAktif.nama}</div>
-          <div class="produk-nama">${p.nominal}</div>
+  const paketList = gameAktif.paket.map((p, i) => {
+    const populer = i === 0 || i === 4 || i === 8;
+    return `
+    <div class="produk-card" style="cursor:pointer; position:relative;" onclick="pilihPaket(${i})">
+      ${populer ? '<div class="badge-hot" style="top:6px; right:6px; font-size:8px; padding:2px 6px;">🔥 POPULER</div>' : ''}
+      <div class="produk-header" style="flex-direction:column; align-items:center; text-align:center; gap:4px;">
+        <div class="produk-icon" style="font-size:28px;">💎</div>
+        <div class="produk-title-block" style="text-align:center; width:100%;">
+          <div class="produk-label" style="font-size:8px;">${gameAktif.nama}</div>
+          <div class="produk-nama" style="font-size:14px; line-height:1.2;">${p.nominal}</div>
         </div>
       </div>
-      <div class="produk-bottom">
-        <div class="produk-harga-info">
-          <div class="produk-harga">Rp ${p.harga.toLocaleString('id-ID')}</div>
+      <div class="produk-bottom" style="flex-direction:column; gap:6px; align-items:stretch;">
+        <div class="produk-harga-info" style="text-align:center;">
+          <div class="produk-harga" style="font-size:14px;">Rp ${p.harga.toLocaleString('id-ID')}</div>
         </div>
-        <button class="btn-order">Order</button>
+        <button class="btn-order" style="width:100%; padding:8px;">Order</button>
       </div>
     </div>
-  `).join('');
+  `;
+  }).join('');
   
   document.getElementById('page-topup').innerHTML = `
     <section class="kategori">
-      <button onclick="backToGameList()" style="background:transparent; border:none; color:#00ff88; font-size:14px; cursor:pointer; margin-bottom:15px;">← Kembali ke Daftar Game</button>
+      <button onclick="backToGameList()" style="background:transparent; border:none; color:#00ff88; font-size:14px; cursor:pointer; margin-bottom:15px; display:flex; align-items:center; gap:5px;">← Kembali ke Daftar Game</button>
       <h2>${gameAktif.icon} ${gameAktif.nama}</h2>
       <p class="sub">Pilih nominal ${gameAktif.unit} yang mau kamu top up</p>
       <div class="produk-list grid-2col">${paketList}</div>
     </section>
     <footer><p>© 2025 Jimzz Store — All Rights Reserved 😈</p></footer>
   `;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function backToGameList() {
@@ -960,6 +916,17 @@ function backToGameList() {
     <section class="kategori">
       <h2>🎮 Top Up Game</h2>
       <p class="sub">Pilih game yang mau kamu top up</p>
+      
+      <div class="pengumuman" style="background: linear-gradient(145deg, rgba(0,255,136,0.08), rgba(0,150,80,0.05)); border-color: rgba(0,255,136,0.3); border-left-color: #00ff88;">
+        <div class="pengumuman-header">
+          <span class="pengumuman-icon">⚡</span>
+          <span class="pengumuman-title" style="color:#00ff88;">PROSES CEPAT & AMAN</span>
+        </div>
+        <p class="pengumuman-text">
+          Top up diproses <b style="color:#00ff88">1-5 menit</b> setelah pembayaran. Cukup masukkan <b style="color:#00ff88">User ID</b> game kamu, tanpa perlu login.
+        </p>
+      </div>
+      
       <div class="produk-list grid-2col" id="gameList"></div>
     </section>
     <footer><p>© 2025 Jimzz Store — All Rights Reserved 😈</p></footer>
@@ -979,7 +946,7 @@ function pilihPaket(index) {
     isApk: true,
     isTopUp: true,
     inputLabel: '🎮 User ID ' + gameAktif.nama,
-    inputPlaceholder: 'Contoh: 123456789',
+    inputPlaceholder: 'Contoh: 123456789 (cek di profil game)',
     inputValidasi: '',
     inputError: ''
   };
