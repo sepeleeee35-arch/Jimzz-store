@@ -187,6 +187,8 @@ header .counter .dot { width: 8px; height: 8px; background: #00ff88; border-radi
 .pengumuman.refund .pengumuman-text b { color: #00c8ff; }
 .pengumuman.maintenance { background: linear-gradient(145deg, rgba(255,100,0,0.1), rgba(255,50,0,0.05)); border: 1px solid rgba(255,100,0,0.4); border-left: 4px solid #ff6400; text-align: center; }
 .pengumuman.maintenance .pengumuman-title { color: #ff9500; font-size: 15px; }
+.pengumuman.admin-preview-info { background: linear-gradient(145deg, rgba(255,215,0,0.1), rgba(255,150,0,0.05)); border: 1px solid rgba(255,215,0,0.4); border-left: 4px solid #ffd700; text-align: center; }
+.pengumuman.admin-preview-info .pengumuman-title { color: #ffd700; font-size: 15px; }
 
 /* ADMIN PANEL */
 .admin-panel {
@@ -217,7 +219,10 @@ header .counter .dot { width: 8px; height: 8px; background: #00ff88; border-radi
 .produk-card:hover::before { opacity: 1; }
 .produk-card:hover { border-color: #00ff88; box-shadow: 0 15px 40px rgba(0,255,136,0.2); transform: translateY(-4px); }
 .produk-card.disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; border-color: #333; }
-.produk-card.admin-preview { border-color: rgba(255,215,0,0.5); opacity: 0.85; }
+.produk-card.admin-preview { border-color: rgba(255,215,0,0.6); opacity: 1; cursor: pointer; }
+.produk-card.admin-preview:hover { border-color: #ffd700; box-shadow: 0 15px 40px rgba(255,215,0,0.3); }
+.produk-card.admin-preview .btn-order { background: linear-gradient(135deg, #ffd700, #ff9500); color: #000; }
+.produk-card.admin-preview .btn-order:hover { box-shadow: 0 8px 30px rgba(255,215,0,0.5); }
 .produk-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
 .produk-icon { font-size: 36px; flex-shrink: 0; filter: drop-shadow(0 0 10px rgba(0,255,136,0.3)); }
 .produk-title-block { flex: 1; min-width: 0; }
@@ -429,7 +434,6 @@ footer { text-align: center; padding: 30px 20px; color: #444; font-size: 12px; b
   <div class="loading-bar"><div class="loading-bar-fill"></div></div>
 </div>
 
-<!-- ADMIN LOGIN MODAL -->
 <div id="adminLoginModal">
   <div class="admin-login-box">
     <div class="admin-login-icon">👑</div>
@@ -441,7 +445,6 @@ footer { text-align: center; padding: 30px 20px; color: #444; font-size: 12px; b
   </div>
 </div>
 
-<!-- ADMIN BADGE (muncul kalau admin) -->
 <div class="admin-badge-float" id="adminBadge" onclick="adminLogout()">
   👑 ADMIN <span class="logout-x">×</span>
 </div>
@@ -465,7 +468,6 @@ footer { text-align: center; padding: 30px 20px; color: #444; font-size: 12px; b
     </div>
   </header>
 
-  <!-- ADMIN PANEL (cuma muncul kalau admin) -->
   <section class="kategori" id="adminPanelSection" style="display:none;">
     <div class="admin-panel">
       <div class="admin-panel-header">
@@ -752,7 +754,7 @@ footer { text-align: center; padding: 30px 20px; color: #444; font-size: 12px; b
     <div class="music-cover paused" id="musicCover"></div>
     <div class="music-mini-info">
       <div class="music-mini-title" id="miniTitle">Pilih Lagu</div>
-      <div class="music-mini-artist" id="miniArtist">Klik untuk buka</div>
+      <div class="mini-artist" id="miniArtist">Klik untuk buka</div>
     </div>
     <div class="music-mini-controls" onclick="event.stopPropagation()">
       <button onclick="prevSong()">⏮</button>
@@ -772,17 +774,15 @@ footer { text-align: center; padding: 30px 20px; color: #444; font-size: 12px; b
 // ============================================
 // ADMIN SYSTEM
 // ============================================
-const ADMIN_PASSWORD = "jimzzadmin2025"; // GANTI INI
+const ADMIN_PASSWORD = "jimzzadmin2025";
 let isAdmin = false;
 let secretClickCount = 0;
 let secretClickTimer = null;
 
-// Cek login admin dari localStorage (biar tetep login pas refresh)
 if (localStorage.getItem('jimzz_admin') === 'true') {
   isAdmin = true;
 }
 
-// Secret click: klik logo 5x cepat
 function secretClick() {
   secretClickCount++;
   clearTimeout(secretClickTimer);
@@ -791,7 +791,6 @@ function secretClick() {
   if (secretClickCount >= 5) {
     secretClickCount = 0;
     if (isAdmin) {
-      // Kalau udah admin, klik 5x lagi buat logout
       adminLogout();
     } else {
       document.getElementById('adminLoginModal').classList.add('show');
@@ -802,7 +801,6 @@ function secretClick() {
   }
 }
 
-// Login admin
 function adminLogin() {
   const input = document.getElementById('adminPasswordInput').value;
   const error = document.getElementById('adminLoginError');
@@ -812,14 +810,13 @@ function adminLogin() {
     localStorage.setItem('jimzz_admin', 'true');
     document.getElementById('adminLoginModal').classList.remove('show');
     applyAdminUI();
-    alert('👑 Selamat datang, Admin!\n\nKamu sekarang bisa lihat produk yang sedang maintenance & akses panel admin.');
+    alert('👑 Selamat datang, Admin!\n\nKamu sekarang bisa test order game yang masih maintenance.');
   } else {
     error.classList.add('show');
     setTimeout(() => error.classList.remove('show'), 2000);
   }
 }
 
-// Logout admin
 function adminLogout() {
   isAdmin = false;
   localStorage.removeItem('jimzz_admin');
@@ -827,7 +824,6 @@ function adminLogout() {
   alert('👋 Berhasil logout dari mode Admin.');
 }
 
-// Apply UI berdasarkan status admin
 function applyAdminUI() {
   const adminBadge = document.getElementById('adminBadge');
   const adminPanel = document.getElementById('adminPanelSection');
@@ -837,43 +833,44 @@ function applyAdminUI() {
   if (isAdmin) {
     adminBadge.classList.add('show');
     adminPanel.style.display = 'block';
-    // Menu top up jadi admin-view (bisa diklik, ada badge 👑)
     menuTopup.classList.remove('disabled');
     menuTopup.classList.add('admin-view');
-    // Info maintenance di halaman top up diganti jadi info admin
-    topupMaintenanceInfo.innerHTML = `
-      <div class="pengumuman-header" style="justify-content:center;">
-        <span style="font-size:20px;">👑</span>
-        <span class="pengumuman-title" style="color:#ffd700;">MODE ADMIN — PREVIEW</span>
-      </div>
-      <p class="pengumuman-text" style="text-align:center;">
-        Kamu sedang lihat halaman ini sebagai <b style="color:#ffd700;">Admin</b>.<br>
-        User biasa nggak bisa lihat halaman ini.
-      </p>
-    `;
+    if (topupMaintenanceInfo) {
+      topupMaintenanceInfo.className = 'pengumuman admin-preview-info';
+      topupMaintenanceInfo.innerHTML = `
+        <div class="pengumuman-header" style="justify-content:center;">
+          <span style="font-size:20px;">👑</span>
+          <span class="pengumuman-title">MODE ADMIN — TEST ORDER</span>
+        </div>
+        <p class="pengumuman-text" style="text-align:center;">
+          Kamu bisa <b>test order</b> produk yang masih maintenance.<br>
+          User biasa nggak bisa akses halaman ini.
+        </p>
+      `;
+    }
   } else {
     adminBadge.classList.remove('show');
     adminPanel.style.display = 'none';
     menuTopup.classList.add('disabled');
     menuTopup.classList.remove('admin-view');
-    topupMaintenanceInfo.innerHTML = `
-      <div class="pengumuman-header" style="justify-content:center;">
-        <span style="font-size:20px;">🔧</span>
-        <span class="pengumuman-title">SEDANG MAINTENANCE</span>
-      </div>
-      <p class="pengumuman-text" style="text-align:center;">
-        Fitur <b>Top Up Game</b> sedang dalam perbaikan.<br>
-        Silakan coba lagi nanti ya! 🙏
-      </p>
-    `;
+    if (topupMaintenanceInfo) {
+      topupMaintenanceInfo.className = 'pengumuman maintenance';
+      topupMaintenanceInfo.innerHTML = `
+        <div class="pengumuman-header" style="justify-content:center;">
+          <span style="font-size:20px;">🔧</span>
+          <span class="pengumuman-title">SEDANG MAINTENANCE</span>
+        </div>
+        <p class="pengumuman-text" style="text-align:center;">
+          Fitur <b>Top Up Game</b> sedang dalam perbaikan.<br>
+          Silakan coba lagi nanti ya! 🙏
+        </p>
+      `;
+    }
   }
   
-  // Re-render produk & game list
   renderGameList();
-  if (document.getElementById('gameList')) renderGameList();
 }
 
-// Handle klik menu top up
 function handleTopupClick() {
   if (isAdmin) {
     switchTab('topup');
@@ -949,7 +946,6 @@ const produkApk = [
   { icon: "🦏", nama: "APK WA Badak", desc: "Aplikasi WhatsApp mod dengan fitur lengkap & anti-banned.", harga: 1000, hot: true }
 ];
 
-// Produk Top Up Game dengan status
 const produkTopUp = [
   { icon: "🔥", nama: "Free Fire", desc: "Top up Diamond Free Fire murah & cepat", unit: "diamond", hot: true, status: "maintenance", paket: [{ nominal: "5 Diamond", harga: 900 },{ nominal: "12 Diamond", harga: 1950 }] },
   { icon: "⚔️", nama: "Mobile Legends", desc: "Top up Diamond Mobile Legends murah & cepat", unit: "diamond", hot: true, status: "maintenance", paket: [{ nominal: "11 Diamond", harga: 3800 },{ nominal: "22 Diamond", harga: 7500 }] },
@@ -1002,20 +998,24 @@ function renderGameList() {
   el.className = 'produk-list grid-2col';
   
   el.innerHTML = produkTopUp.map((g, i) => {
-    // Kalau user biasa & produk maintenance → SKIP (nggak muncul)
     if (g.status === 'maintenance' && !isAdmin) {
       return '';
     }
     
-    // Kalau admin & maintenance → tampil dengan badge admin preview
     const isMaintenance = g.status === 'maintenance';
     const badge = isMaintenance && isAdmin 
       ? '<div class="badge-admin-preview">👑 ADMIN PREVIEW</div>' 
       : (g.hot ? '<div class="badge-hot">🔥</div>' : '');
     
-    const cardClass = isMaintenance ? 'produk-card admin-preview disabled' : 'produk-card';
-    const btnText = isMaintenance ? 'Maintenance' : 'Pilih →';
-    const clickHandler = isMaintenance 
+    const cardClass = isMaintenance && isAdmin 
+      ? 'produk-card admin-preview' 
+      : (isMaintenance ? 'produk-card disabled' : 'produk-card');
+    
+    const btnText = isMaintenance 
+      ? (isAdmin ? '👑 Test Order' : 'Maintenance') 
+      : 'Pilih →';
+    
+    const clickHandler = (isMaintenance && !isAdmin) 
       ? `onclick="alert('⚠️ Fitur Top Up Game sedang MAINTENANCE.')"` 
       : `onclick="bukaGameDetail(${i})"`;
     
@@ -1034,7 +1034,7 @@ function renderGameList() {
             <div class="produk-harga-label">Mulai dari</div>
             <div class="produk-harga">Rp ${g.paket[0].harga.toLocaleString('id-ID')}</div>
           </div>
-          <button class="btn-order" ${isMaintenance ? 'disabled' : ''}>${btnText}</button>
+          <button class="btn-order" ${isMaintenance && !isAdmin ? 'disabled' : ''}>${btnText}</button>
         </div>
       </div>
     `;
@@ -1042,7 +1042,6 @@ function renderGameList() {
 }
 
 function bukaGameDetail(index) {
-  // Cek status maintenance — kalau user biasa, block
   if (produkTopUp[index].status === 'maintenance' && !isAdmin) {
     alert('⚠️ Fitur Top Up Game sedang MAINTENANCE.');
     return;
@@ -1084,13 +1083,18 @@ function bukaGameDetail(index) {
 }
 
 function backToGameList() {
-  document.getElementById('page-topup').innerHTML = `
-    <section class="kategori">
-      <div class="back-sticky">
-        <button class="btn-back" onclick="switchTab('home')">← Kembali ke Home</button>
-      </div>
-      
-      <div class="pengumuman maintenance" id="topupMaintenanceInfo">
+  const maintenanceInfo = isAdmin 
+    ? `<div class="pengumuman admin-preview-info" id="topupMaintenanceInfo">
+        <div class="pengumuman-header" style="justify-content:center;">
+          <span style="font-size:20px;">👑</span>
+          <span class="pengumuman-title">MODE ADMIN — TEST ORDER</span>
+        </div>
+        <p class="pengumuman-text" style="text-align:center;">
+          Kamu bisa <b>test order</b> produk yang masih maintenance.<br>
+          User biasa nggak bisa akses halaman ini.
+        </p>
+      </div>` 
+    : `<div class="pengumuman maintenance" id="topupMaintenanceInfo">
         <div class="pengumuman-header" style="justify-content:center;">
           <span style="font-size:20px;">🔧</span>
           <span class="pengumuman-title">SEDANG MAINTENANCE</span>
@@ -1099,8 +1103,14 @@ function backToGameList() {
           Fitur <b>Top Up Game</b> sedang dalam perbaikan.<br>
           Silakan coba lagi nanti ya! 🙏
         </p>
+      </div>`;
+  
+  document.getElementById('page-topup').innerHTML = `
+    <section class="kategori">
+      <div class="back-sticky">
+        <button class="btn-back" onclick="switchTab('home')">← Kembali ke Home</button>
       </div>
-      
+      ${maintenanceInfo}
       <h2>🎮 Top Up <span class="accent">Game</span></h2>
       <p class="sub">Pilih game yang mau kamu top up</p>
       <div class="produk-list grid-2col" id="gameList"></div>
@@ -1479,7 +1489,6 @@ setInterval(() => {
   if (el) el.innerText = viewCount.toLocaleString('id-ID');
 }, 5000);
 
-// Update admin stats (simulasi — bisa lu ganti dengan data asli dari backend)
 setInterval(() => {
   if (isAdmin) {
     document.getElementById('adminTotalOrder').innerText = Math.floor(Math.random() * 50) + 10;
