@@ -31,6 +31,28 @@ body { background: #08080d; color: #e6e6e6; line-height: 1.6; padding-bottom: 10
 @keyframes loadBar { to { width: 100%; } }
 @keyframes pulseGlow { 0%,100% { opacity:1; transform: scale(1); } 50% { opacity:0.7; transform: scale(0.97); } }
 
+/* CHAT ADMIN FLOATING */
+.chat-admin-float {
+  position: fixed; bottom: 90px; left: 12px; z-index: 350;
+  width: 56px; height: 56px; border-radius: 50%;
+  background: linear-gradient(135deg, #25D366, #1da851);
+  display: flex; align-items: center; justify-content: center;
+  text-decoration: none; font-size: 28px; color: #fff;
+  box-shadow: 0 5px 25px rgba(37,211,102,0.6);
+  animation: waPulse 2s infinite;
+  transition: 0.3s;
+}
+.chat-admin-float:hover { transform: scale(1.1); }
+@keyframes waPulse { 0%,100% { box-shadow: 0 5px 25px rgba(37,211,102,0.6); } 50% { box-shadow: 0 5px 35px rgba(37,211,102,0.9), 0 0 0 12px rgba(37,211,102,0.1); } }
+.chat-admin-label {
+  position: fixed; bottom: 102px; left: 78px; z-index: 350;
+  background: #25D366; color: #fff; font-size: 10px; font-weight: bold;
+  padding: 4px 10px; border-radius: 10px; white-space: nowrap;
+  box-shadow: 0 3px 15px rgba(37,211,102,0.4);
+  animation: floatUpDown 3s ease-in-out infinite;
+}
+@keyframes floatUpDown { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+
 /* ADMIN LOGIN MODAL */
 #adminLoginModal {
   position: fixed; inset: 0; background: rgba(0,0,0,0.95); backdrop-filter: blur(10px);
@@ -88,9 +110,9 @@ header::before {
 .hero-badge {
   display: inline-block; background: rgba(0,255,136,0.1); border: 1px solid rgba(0,255,136,0.3);
   color: #00ff88; font-size: 11px; font-weight: bold; padding: 6px 16px; border-radius: 20px;
-  margin-bottom: 15px; letter-spacing: 1px; animation: floatUpDown 3s ease-in-out infinite;
+  margin-bottom: 15px; letter-spacing: 1px; animation: floatUpDownBadge 3s ease-in-out infinite;
 }
-@keyframes floatUpDown { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+@keyframes floatUpDownBadge { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
 header h1 { font-size: 44px; font-weight: 900; color: #fff; text-shadow: 0 0 30px rgba(0,255,136,0.8), 0 0 60px rgba(0,255,136,0.4); letter-spacing: -1px; margin-bottom: 8px; }
 header h1 .gradient-text { background: linear-gradient(135deg, #00ff88, #00cc6a, #00ff88); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 header .tagline { color: #888; font-size: 14px; margin-bottom: 20px; }
@@ -250,12 +272,6 @@ header .counter .dot { width: 8px; height: 8px; background: #00ff88; border-radi
   animation: pulseBadge 2s infinite;
 }
 @keyframes pulseBadge { 0%,100% { transform: scale(1); } 50% { transform: scale(1.05); } }
-.badge-maintenance {
-  position: absolute; top: 12px; right: 12px;
-  background: linear-gradient(135deg, #ffc800, #ff9500); color: #000;
-  font-size: 9px; font-weight: bold; padding: 3px 8px; border-radius: 10px;
-  letter-spacing: 0.5px;
-}
 .badge-admin-preview {
   position: absolute; top: 12px; right: 12px;
   background: linear-gradient(135deg, #ffd700, #ff9500); color: #000;
@@ -367,20 +383,22 @@ header .counter .dot { width: 8px; height: 8px; background: #00ff88; border-radi
 .term-text a { color: #00ff88; text-decoration: none; }
 footer { text-align: center; padding: 30px 20px; color: #444; font-size: 12px; border-top: 1px solid #15151c; margin-top: 40px; position: relative; z-index: 5; }
 
-/* STICKY BACK */
+/* STICKY BACK - VERSI BARU */
 .back-sticky {
   position: sticky; top: 0; z-index: 100;
-  background: linear-gradient(180deg, #08080d 0%, rgba(8,8,13,0.95) 100%);
-  padding: 12px 20px; margin: -35px -20px 15px -20px;
-  border-bottom: 2px solid #00ff88; box-shadow: 0 5px 25px rgba(0,0,0,0.5);
+  background: linear-gradient(180deg, #08080d 0%, rgba(8,8,13,0.98) 100%);
+  padding: 15px 20px; margin: -35px -20px 20px -20px;
+  border-bottom: 2px solid #00ff88; box-shadow: 0 8px 30px rgba(0,0,0,0.6);
 }
 .btn-back {
-  background: linear-gradient(135deg, rgba(0,255,136,0.15), rgba(0,255,136,0.05));
-  border: 2px solid #00ff88; color: #00ff88; padding: 13px 20px; border-radius: 14px;
+  background: linear-gradient(135deg, #00ff88, #00cc6a); color: #000;
+  border: none; padding: 15px 24px; border-radius: 14px;
   font-size: 15px; font-weight: bold; cursor: pointer; display: flex; align-items: center;
-  justify-content: center; gap: 8px; width: 100%; font-family: inherit; transition: 0.3s;
+  justify-content: center; gap: 10px; width: 100%; font-family: inherit; transition: 0.3s;
+  box-shadow: 0 8px 30px rgba(0,255,136,0.4);
 }
-.btn-back:hover { background: rgba(0,255,136,0.25); transform: scale(1.02); }
+.btn-back:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0,255,136,0.6); }
+.btn-back:active { transform: scale(0.98); }
 
 /* MUSIC */
 .music-player { position: fixed; bottom: 85px; right: 12px; width: 220px; max-width: calc(100% - 24px); background: rgba(15,26,20,0.95); backdrop-filter: blur(10px); border: 1px solid #1e2e26; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.7); z-index: 300; overflow: hidden; }
@@ -423,6 +441,8 @@ footer { text-align: center; padding: 30px 20px; color: #444; font-size: 12px; b
   .nav-item .nav-icon { font-size: 18px; }
   .music-player { bottom: 80px; right: 10px; width: 200px; }
   .modal-close { top: -10px; right: -10px; width: 42px; height: 42px; font-size: 22px; }
+  .chat-admin-float { width: 50px; height: 50px; font-size: 24px; }
+  .chat-admin-label { display: none; }
 }
 </style>
 </head>
@@ -433,6 +453,10 @@ footer { text-align: center; padding: 30px 20px; color: #444; font-size: 12px; b
   <div class="loading-tagline">Digital Store</div>
   <div class="loading-bar"><div class="loading-bar-fill"></div></div>
 </div>
+
+<!-- CHAT ADMIN FLOATING -->
+<a href="https://wa.me/6283898669427?text=Halo%20Admin%20Jimzz%20Store%2C%20saya%20mau%20tanya..." target="_blank" class="chat-admin-float" title="Chat Admin">💬</a>
+<div class="chat-admin-label">Chat Admin</div>
 
 <div id="adminLoginModal">
   <div class="admin-login-box">
@@ -484,7 +508,7 @@ footer { text-align: center; padding: 30px 20px; color: #444; font-size: 12px; b
           <div class="admin-stat-label">Pendapatan</div>
         </div>
         <div class="admin-stat">
-          <div class="admin-stat-value" id="adminProdukMT">1</div>
+          <div class="admin-stat-value" id="adminProdukMT">5</div>
           <div class="admin-stat-label">Produk MT</div>
         </div>
         <div class="admin-stat">
@@ -754,7 +778,7 @@ footer { text-align: center; padding: 30px 20px; color: #444; font-size: 12px; b
     <div class="music-cover paused" id="musicCover"></div>
     <div class="music-mini-info">
       <div class="music-mini-title" id="miniTitle">Pilih Lagu</div>
-      <div class="mini-artist" id="miniArtist">Klik untuk buka</div>
+      <div class="music-mini-artist" id="miniArtist">Klik untuk buka</div>
     </div>
     <div class="music-mini-controls" onclick="event.stopPropagation()">
       <button onclick="prevSong()">⏮</button>
@@ -947,11 +971,54 @@ const produkApk = [
 ];
 
 const produkTopUp = [
-  { icon: "🔥", nama: "Free Fire", desc: "Top up Diamond Free Fire murah & cepat", unit: "diamond", hot: true, status: "maintenance", paket: [{ nominal: "5 Diamond", harga: 900 },{ nominal: "12 Diamond", harga: 1950 }] },
-  { icon: "⚔️", nama: "Mobile Legends", desc: "Top up Diamond Mobile Legends murah & cepat", unit: "diamond", hot: true, status: "maintenance", paket: [{ nominal: "11 Diamond", harga: 3800 },{ nominal: "22 Diamond", harga: 7500 }] },
-  { icon: "🔫", nama: "PUBG Mobile", desc: "Top up UC PUBG Mobile murah & cepat", unit: "UC", hot: true, status: "maintenance", paket: [{ nominal: "60 UC", harga: 17500 },{ nominal: "120 UC", harga: 35000 }] },
-  { icon: "🎮", nama: "Genshin Impact", desc: "Top up Crystal Genshin Impact murah & cepat", unit: "crystal", hot: false, status: "maintenance", paket: [{ nominal: "60 Crystal", harga: 17000 },{ nominal: "120 Crystal", harga: 34000 }] },
-  { icon: "🏆", nama: "Call of Duty Mobile", desc: "Top up CP COD Mobile murah & cepat", unit: "CP", hot: false, status: "maintenance", paket: [{ nominal: "80 CP", harga: 17500 },{ nominal: "160 CP", harga: 35000 }] }
+  { icon: "🔥", nama: "Free Fire", desc: "Top up Diamond Free Fire murah & cepat", unit: "diamond", hot: true, status: "maintenance", paket: [
+    { nominal: "5 Diamond", harga: 900 },
+    { nominal: "12 Diamond", harga: 1950 },
+    { nominal: "20 Diamond", harga: 3400 },
+    { nominal: "30 Diamond", harga: 5100 },
+    { nominal: "50 Diamond", harga: 8500 },
+    { nominal: "70 Diamond", harga: 11900 },
+    { nominal: "100 Diamond", harga: 17000 },
+    { nominal: "140 Diamond", harga: 23800 }
+  ]},
+  { icon: "⚔️", nama: "Mobile Legends", desc: "Top up Diamond Mobile Legends murah & cepat", unit: "diamond", hot: true, status: "maintenance", paket: [
+    { nominal: "11 Diamond", harga: 3800 },
+    { nominal: "22 Diamond", harga: 7500 },
+    { nominal: "44 Diamond", harga: 15000 },
+    { nominal: "86 Diamond", harga: 28500 },
+    { nominal: "172 Diamond", harga: 57000 },
+    { nominal: "355 Diamond", harga: 116000 },
+    { nominal: "720 Diamond", harga: 237000 },
+    { nominal: "1000 Diamond", harga: 322000 }
+  ]},
+  { icon: "🔫", nama: "PUBG Mobile", desc: "Top up UC PUBG Mobile murah & cepat", unit: "UC", hot: true, status: "maintenance", paket: [
+    { nominal: "60 UC", harga: 17500 },
+    { nominal: "120 UC", harga: 35000 },
+    { nominal: "180 UC", harga: 52500 },
+    { nominal: "325 UC", harga: 86000 },
+    { nominal: "660 UC", harga: 165000 },
+    { nominal: "1800 UC", harga: 445000 },
+    { nominal: "3850 UC", harga: 930000 },
+    { nominal: "8100 UC", harga: 1920000 }
+  ]},
+  { icon: "🎮", nama: "Genshin Impact", desc: "Top up Crystal Genshin Impact murah & cepat", unit: "crystal", hot: false, status: "maintenance", paket: [
+    { nominal: "60 Crystal", harga: 17000 },
+    { nominal: "300 Crystal", harga: 82000 },
+    { nominal: "980 Crystal", harga: 258000 },
+    { nominal: "1980 Crystal", harga: 518000 },
+    { nominal: "3280 Crystal", harga: 854000 },
+    { nominal: "6480 Crystal", harga: 1672000 }
+  ]},
+  { icon: "🏆", nama: "Call of Duty Mobile", desc: "Top up CP COD Mobile murah & cepat", unit: "CP", hot: false, status: "maintenance", paket: [
+    { nominal: "80 CP", harga: 17500 },
+    { nominal: "160 CP", harga: 35000 },
+    { nominal: "240 CP", harga: 52500 },
+    { nominal: "420 CP", harga: 81000 },
+    { nominal: "800 CP", harga: 152000 },
+    { nominal: "1600 CP", harga: 303000 },
+    { nominal: "2400 CP", harga: 453000 },
+    { nominal: "4000 CP", harga: 725000 }
+  ]}
 ];
 
 let gameAktif = null;
@@ -1049,7 +1116,7 @@ function bukaGameDetail(index) {
   
   gameAktif = produkTopUp[index];
   const paketList = gameAktif.paket.map((p, i) => {
-    const populer = i === 0 || i === 4 || i === 8;
+    const populer = i === 0 || i === 4;
     return `
     <div class="produk-card" style="cursor:pointer; position:relative;" onclick="pilihPaket(${i})">
       ${populer ? '<div class="badge-hot" style="top:6px; right:6px; font-size:8px; padding:2px 6px;">🔥 POPULER</div>' : ''}
@@ -1072,7 +1139,9 @@ function bukaGameDetail(index) {
   
   document.getElementById('page-topup').innerHTML = `
     <section class="kategori">
-      <button onclick="backToGameList()" style="background:transparent; border:none; color:#00ff88; font-size:14px; cursor:pointer; margin-bottom:15px; display:flex; align-items:center; gap:5px;">← Kembali ke Daftar Game</button>
+      <div class="back-sticky">
+        <button class="btn-back" onclick="backToGameList()">← Kembali ke Daftar Game</button>
+      </div>
       <h2>${gameAktif.icon} ${gameAktif.nama}</h2>
       <p class="sub">Pilih nominal ${gameAktif.unit} yang mau kamu top up</p>
       <div class="produk-list grid-2col">${paketList}</div>
@@ -1400,11 +1469,14 @@ function toggleTheme() {
   document.body.classList.toggle('mode-2');
 }
 
+// ============================================
+// MUSIC PLAYLIST — PAKAI URL ONLINE
+// ============================================
 const playlist = [
-  { judul: "Brazilian Phonk", artis: "MondaMusic", cover: "🔥", src: "lagu1.mp3" },
-  { judul: "Atmospheric Phonk", artis: "Evgeny Bardyuzha", cover: "💀", src: "lagu2.mp3" },
-  { judul: "Synthwave Background", artis: "Nveravetyan Music", cover: "🌆", src: "lagu3.mp3" },
-  { judul: "Wave", artis: "ApexBeats", cover: "🌊", src: "lagu4.mp3" }
+  { judul: "Brazilian Phonk", artis: "MondaMusic", cover: "🔥", src: "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3" },
+  { judul: "Phonk Energy", artis: "Alex-Productions", cover: "💀", src: "https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0c6ff1bab.mp3" },
+  { judul: "Synthwave Beat", artis: "Music Unlimited", cover: "🌆", src: "https://cdn.pixabay.com/download/audio/2021/11/25/audio_00fa5593f3.mp3" },
+  { judul: "Chill Wave", artis: "Coma-Media", cover: "🌊", src: "https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3" }
 ];
 
 let currentSong = 0;
@@ -1437,13 +1509,14 @@ function initMusicEvents() {
   });
   audio.addEventListener('play', updateUI);
   audio.addEventListener('pause', updateUI);
+  audio.addEventListener('error', () => { console.log('Audio error, skip ke lagu berikutnya'); nextSong(); });
   audio.addEventListener('ended', nextSong);
 }
 
 function playSong(i) {
   currentSong = i;
   audio.src = playlist[i].src;
-  audio.loop = true;
+  audio.loop = false;
   audio.play().catch(err => console.log('Autoplay diblokir'));
   updateUI();
   renderPlaylist();
