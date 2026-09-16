@@ -9,39 +9,9 @@
 <style>
 * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',Arial,sans-serif; }
 
-#passwordLock {
-  position: fixed; inset: 0; background: #0a0a0f; z-index: 99999;
-  display: flex; align-items: center; justify-content: center; padding: 20px;
-}
-.lock-box {
-  background: linear-gradient(145deg, #0d1a14, #0d0d15);
-  border: 1px solid #2a3a32; border-radius: 20px;
-  padding: 40px 30px; max-width: 400px; width: 100%;
-  text-align: center; box-shadow: 0 0 40px rgba(0,255,136,0.15);
-}
-.lock-icon { font-size: 60px; margin-bottom: 20px; filter: drop-shadow(0 0 20px rgba(0,255,136,0.6)); }
-.lock-box h1 { color: #00ff88; font-size: 24px; margin-bottom: 10px; text-shadow: 0 0 20px rgba(0,255,136,0.4); }
-.lock-box p { color: #888; font-size: 13px; margin-bottom: 25px; line-height: 1.6; }
-.lock-box input {
-  width: 100%; background: #0a0a0f; border: 1px solid #2a3a32;
-  color: #fff; padding: 15px; border-radius: 12px; font-size: 16px;
-  text-align: center; letter-spacing: 2px; outline: none; margin-bottom: 15px;
-}
-.lock-box input:focus { border-color: #00ff88; box-shadow: 0 0 15px rgba(0,255,136,0.3); }
-.lock-box button {
-  width: 100%; background: linear-gradient(135deg, #00ff88, #00cc6a);
-  color: #000; border: none; padding: 15px; border-radius: 12px;
-  font-weight: bold; font-size: 15px; cursor: pointer; transition: 0.25s;
-}
-.lock-box button:hover { transform: scale(1.02); box-shadow: 0 5px 20px rgba(0,255,136,0.6); }
-.lock-error { color: #ff6b6b; font-size: 12px; margin-top: 10px; display: none; }
-.lock-error.show { display: block; }
-
 body { background: #0a0a0f; color: #e6e6e6; line-height: 1.6; padding-bottom: 100px; overflow-x: hidden; }
 #jimzz-neon-bg { position: fixed; top:0; left:0; width:100vw; height:100vh; z-index:-1; pointer-events:none; background: radial-gradient(circle at 20% 20%, rgba(0,255,136,0.05) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(0,255,136,0.04) 0%, transparent 50%), #0a0a0f; }
-.promo-banner { position: relative; z-index: 5; background: linear-gradient(90deg, #00ff88, #00cc6a, #00ff88); background-size: 200% 100%; animation: bannerSlide 3s linear infinite; color: #000; text-align: center; padding: 10px 15px; font-size: 12px; font-weight: bold; }
-@keyframes bannerSlide { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
-.promo-banner b { background: #000; color: #00ff88; padding: 2px 8px; border-radius: 4px; margin: 0 4px; }
+
 header { text-align: center; padding: 40px 20px 30px; background: radial-gradient(circle at 50% 100%, rgba(0,255,136,0.15), transparent 70%), linear-gradient(135deg, #001a0d, rgba(10,10,15,0.7)); border-bottom: 2px solid #00ff88; position: relative; z-index: 5; }
 .header-top { display: flex; justify-content: space-between; align-items: center; max-width: 1100px; margin: 0 auto 15px; padding: 0 5px; }
 .logo-text { color: #00ff88; font-weight: bold; font-size: 16px; letter-spacing: 1px; }
@@ -67,6 +37,10 @@ header .counter .dot { display: inline-block; width: 8px; height: 8px; backgroun
 .menu-home-icon { font-size: 36px; margin-bottom: 8px; }
 .menu-home-title { color: #fff; font-weight: bold; font-size: 15px; margin-bottom: 4px; }
 .menu-home-desc { color: #888; font-size: 12px; }
+.menu-home.disabled { opacity: 0.6; cursor: not-allowed; border-color: #ffc800; }
+.menu-home.disabled:hover { transform: none; box-shadow: none; border-color: #ffc800; }
+.menu-home.disabled::after { content: "🔧"; opacity: 1; font-size: 20px; }
+.maintenance-badge { display: inline-block; background: linear-gradient(135deg, #ffc800, #ff9500); color: #000; font-size: 9px; font-weight: bold; padding: 3px 10px; border-radius: 10px; margin-top: 6px; letter-spacing: 0.5px; }
 .pengumuman { background: linear-gradient(145deg, rgba(255,200,0,0.08), rgba(255,150,0,0.05)); border: 1px solid rgba(255,200,0,0.3); border-left: 4px solid #ffc800; border-radius: 12px; padding: 16px 18px; margin-bottom: 22px; }
 .pengumuman-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
 .pengumuman-title { color: #ffc800; font-size: 13px; font-weight: bold; letter-spacing: 1px; }
@@ -76,70 +50,24 @@ header .counter .dot { display: inline-block; width: 8px; height: 8px; backgroun
 .pengumuman.refund { background: linear-gradient(145deg, rgba(0,200,255,0.08), rgba(0,150,255,0.05)); border: 1px solid rgba(0,200,255,0.3); border-left: 4px solid #00c8ff; }
 .pengumuman.refund .pengumuman-title { color: #00c8ff; }
 .pengumuman.refund .pengumuman-text b { color: #00c8ff; }
+.pengumuman.maintenance { background: linear-gradient(145deg, rgba(255,100,0,0.1), rgba(255,50,0,0.05)); border: 1px solid rgba(255,100,0,0.4); border-left: 4px solid #ff6400; text-align: center; }
+.pengumuman.maintenance .pengumuman-title { color: #ff9500; font-size: 15px; }
 .produk-list { display: flex; flex-direction: column; gap: 14px; }
-.produk-list.grid-2col {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-.produk-list.grid-2col .produk-card {
-  padding: 15px 12px;
-  border-radius: 12px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  min-height: 150px;
-  margin: 0;
-}
-.produk-list.grid-2col .produk-header {
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 6px;
-  margin-bottom: 8px;
-}
-.produk-list.grid-2col .produk-icon {
-  font-size: 32px;
-}
-.produk-list.grid-2col .produk-label {
-  font-size: 8px;
-  margin-bottom: 2px;
-}
-.produk-list.grid-2col .produk-nama {
-  font-size: 13px;
-  line-height: 1.2;
-}
-.produk-list.grid-2col .produk-desc {
-  font-size: 10px;
-  margin-bottom: 8px;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-.produk-list.grid-2col .produk-bottom {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  align-items: stretch;
-}
-.produk-list.grid-2col .produk-harga-info {
-  text-align: center;
-}
-.produk-list.grid-2col .produk-harga-label {
-  font-size: 8px;
-}
-.produk-list.grid-2col .produk-harga {
-  font-size: 13px;
-  text-align: center;
-}
-.produk-list.grid-2col .btn-order {
-  padding: 8px 10px;
-  font-size: 11px;
-  width: 100%;
-  text-align: center;
-}
+.produk-list.grid-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.produk-list.grid-2col .produk-card { padding: 15px 12px; border-radius: 12px; display: flex; flex-direction: column; justify-content: space-between; min-height: 150px; margin: 0; }
+.produk-list.grid-2col .produk-header { flex-direction: column; align-items: flex-start; gap: 6px; margin-bottom: 8px; }
+.produk-list.grid-2col .produk-icon { font-size: 32px; }
+.produk-list.grid-2col .produk-label { font-size: 8px; margin-bottom: 2px; }
+.produk-list.grid-2col .produk-nama { font-size: 13px; line-height: 1.2; }
+.produk-list.grid-2col .produk-desc { font-size: 10px; margin-bottom: 8px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.produk-list.grid-2col .produk-bottom { display: flex; flex-direction: column; gap: 6px; align-items: stretch; }
+.produk-list.grid-2col .produk-harga-info { text-align: center; }
+.produk-list.grid-2col .produk-harga-label { font-size: 8px; }
+.produk-list.grid-2col .produk-harga { font-size: 13px; text-align: center; }
+.produk-list.grid-2col .btn-order { padding: 8px 10px; font-size: 11px; width: 100%; text-align: center; }
 .produk-card { background: linear-gradient(145deg, rgba(13,26,20,0.85), rgba(13,13,21,0.85)); border: 1px solid #2a3a32; border-radius: 14px; padding: 20px 18px; transition: 0.3s; position: relative; }
 .produk-card:hover { border-color: #00ff88; box-shadow: 0 0 25px rgba(0,255,136,0.3); transform: translateY(-2px); }
+.produk-card.disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; border-color: #444; }
 .produk-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
 .produk-icon { font-size: 32px; flex-shrink: 0; }
 .produk-title-block { flex: 1; min-width: 0; }
@@ -153,13 +81,18 @@ header .counter .dot { display: inline-block; width: 8px; height: 8px; backgroun
 .produk-harga span { font-size: 12px; color: #888; font-weight: normal; }
 .btn-order { background: linear-gradient(135deg, #00ff88, #00cc6a); color: #000; border: none; padding: 12px 24px; border-radius: 12px; font-weight: bold; font-size: 13px; cursor: pointer; white-space: nowrap; }
 .btn-order:hover { transform: scale(1.05); }
+.btn-order:disabled { background: #444; color: #888; cursor: not-allowed; }
 .badge-hot { position: absolute; top: -8px; right: 12px; background: linear-gradient(135deg, #ff2b2b, #ff6b6b); color: #fff; font-size: 9px; font-weight: bold; padding: 3px 8px; border-radius: 10px; letter-spacing: 0.5px; }
-.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 400; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; }
+.badge-maintenance { position: absolute; top: -8px; right: 12px; background: linear-gradient(135deg, #ffc800, #ff9500); color: #000; font-size: 9px; font-weight: bold; padding: 3px 8px; border-radius: 10px; letter-spacing: 0.5px; }
+
+/* MODAL */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 400; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; }
 .modal-overlay.show { display: flex; }
 .modal-box { background: linear-gradient(145deg, #0d1a14, #0d0d15); border: 1px solid #2a3a32; border-radius: 20px; padding: 26px 22px; width: 100%; max-width: 440px; position: relative; animation: slideUp 0.3s ease; max-height: 90vh; overflow-y: auto; }
 @keyframes slideUp { from { opacity:0; transform: translateY(30px); } to { opacity:1; transform: translateY(0); } }
 .modal-box::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #00ff88, #00cc6a, #00ff88); border-radius: 20px 20px 0 0; }
-.modal-close { position: absolute; top: 14px; right: 16px; background: transparent; border: none; color: #888; font-size: 24px; cursor: pointer; width: 34px; height: 34px; }
+.modal-close { position: absolute; top: -10px; right: -10px; background: #ff2b2b; border: 2px solid #fff; color: #fff; font-size: 26px; cursor: pointer; width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(255,43,43,0.6); font-weight: bold; line-height: 1; z-index: 10; }
+.modal-close:hover { background: #ff5555; transform: scale(1.1); }
 .steps-indicator { display: flex; justify-content: space-between; margin-bottom: 22px; position: relative; }
 .steps-indicator::before { content: ""; position: absolute; top: 14px; left: 15%; right: 15%; height: 2px; background: #2a3a32; z-index: 1; }
 .step-dot { width: 30px; height: 30px; border-radius: 50%; background: #0a0a0f; border: 2px solid #2a3a32; color: #666; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 12px; position: relative; z-index: 2; }
@@ -210,6 +143,38 @@ header .counter .dot { display: inline-block; width: 8px; height: 8px; backgroun
 .term-text { color: #666; font-size: 11px; text-align: center; margin-top: 12px; }
 footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border-top: 1px solid #222; margin-top: 30px; position: relative; z-index: 5; }
 
+/* STICKY BACK BUTTON */
+.back-sticky {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: linear-gradient(180deg, #0a0a0f 0%, rgba(10,10,15,0.95) 100%);
+  padding: 12px 20px;
+  margin: -30px -20px 15px -20px;
+  border-bottom: 2px solid #00ff88;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+}
+.btn-back {
+  background: linear-gradient(135deg, rgba(0,255,136,0.15), rgba(0,255,136,0.05));
+  border: 2px solid #00ff88;
+  color: #00ff88;
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  font-family: inherit;
+  transition: 0.25s;
+}
+.btn-back:hover { background: rgba(0,255,136,0.25); transform: scale(1.02); }
+.btn-back:active { transform: scale(0.98); }
+
+/* MUSIC */
 .music-player { position: fixed; bottom: 80px; right: 12px; left: auto; width: 220px; max-width: calc(100% - 24px); background: #0d1a14; border: 1px solid #2a3a32; border-radius: 10px; box-shadow: 0 6px 18px rgba(0,0,0,0.7); z-index: 300; overflow: hidden; }
 .music-mini { display: flex; align-items: center; gap: 7px; padding: 7px 9px; cursor: pointer; }
 .music-cover { width: 30px; height: 30px; border-radius: 6px; background: #0a0a0f; display: flex; align-items: center; justify-content: center; flex-shrink: 0; position: relative; overflow: hidden; }
@@ -247,29 +212,13 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
   .nav-item .nav-label { font-size: 8px; }
   .nav-item .nav-icon { font-size: 18px; }
   .music-player { bottom: 75px; right: 10px; left: auto; width: 200px; }
+  .modal-close { top: -12px; right: -8px; width: 44px; height: 44px; font-size: 24px; }
 }
 </style>
 </head>
 <body>
 
-<div id="passwordLock">
-  <div class="lock-box">
-    <div class="lock-icon">🔒</div>
-    <h1>Jimzz Store</h1>
-    <p>Web lagi dalam perbaikan.<br>Masukin password dulu ya.</p>
-    <input type="password" id="passwordInput" placeholder="••••••••" onkeypress="if(event.key==='Enter')checkPassword()">
-    <button onclick="checkPassword()">Buka Web</button>
-    <div class="lock-error" id="lockError">❌ Password salah!</div>
-  </div>
-</div>
-
-<div id="mainWeb" style="display:none;">
-
 <canvas id="jimzz-neon-bg"></canvas>
-
-<div class="promo-banner">
-  ⚡ TOP UP GAME MURAH! Proses <b>1-5 MENIT</b> langsung masuk! ⚡
-</div>
 
 <div class="tab-page active" id="page-home">
   <header>
@@ -278,17 +227,18 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
       <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🎨</button>
     </div>
     <h1>Jimzz Store</h1>
-    <div class="counter"><span class="dot"></span>🔥 <span id="viewCount">1.234</span> orang sudah order</div>
+    <div class="counter"><span class="dot"></span>🔥 <span id="viewCount">1.252</span> orang sudah order</div>
   </header>
 
   <section class="kategori" style="text-align:center;">
     <h2>👋 Selamat Datang di Jimzz Store</h2>
     <p class="sub">Pilih menu di bawah untuk mulai order</p>
     
-    <div class="menu-home" onclick="switchTab('topup')">
+    <div class="menu-home disabled" onclick="alert('⚠️ Top Up Game sedang MAINTENANCE.\n\nSilakan coba lagi nanti.')">
       <div class="menu-home-icon">🎮</div>
       <div class="menu-home-title">Top Up Game</div>
       <div class="menu-home-desc">Diamond FF, ML, PUBG, dll</div>
+      <div class="maintenance-badge">🔧 MAINTENANCE</div>
     </div>
     
     <div class="menu-home" onclick="switchTab('jpm')">
@@ -315,19 +265,23 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
 
 <div class="tab-page" id="page-topup">
   <section class="kategori">
-    <h2>🎮 Top Up Game</h2>
-    <p class="sub">Pilih game yang mau kamu top up</p>
+    <div class="back-sticky">
+      <button class="btn-back" onclick="switchTab('home')">← Kembali ke Home</button>
+    </div>
     
-    <div class="pengumuman" style="background: linear-gradient(145deg, rgba(0,255,136,0.08), rgba(0,150,80,0.05)); border-color: rgba(0,255,136,0.3); border-left-color: #00ff88;">
-      <div class="pengumuman-header">
-        <span class="pengumuman-icon">⚡</span>
-        <span class="pengumuman-title" style="color:#00ff88;">PROSES CEPAT & AMAN</span>
+    <div class="pengumuman maintenance">
+      <div class="pengumuman-header" style="justify-content:center;">
+        <span style="font-size:20px;">🔧</span>
+        <span class="pengumuman-title">SEDANG MAINTENANCE</span>
       </div>
-      <p class="pengumuman-text">
-        Top up diproses <b style="color:#00ff88">1-5 menit</b> setelah pembayaran. Cukup masukkan <b style="color:#00ff88">User ID</b> game kamu, tanpa perlu login.
+      <p class="pengumuman-text" style="text-align:center;">
+        Fitur <b>Top Up Game</b> sedang dalam perbaikan.<br>
+        Silakan coba lagi nanti ya! 🙏
       </p>
     </div>
     
+    <h2>🎮 Top Up Game</h2>
+    <p class="sub">Pilih game yang mau kamu top up</p>
     <div class="produk-list grid-2col" id="gameList"></div>
   </section>
   <footer><p>© 2025 Jimzz Store — All Rights Reserved 😈</p></footer>
@@ -521,29 +475,7 @@ footer { text-align: center; padding: 25px; color: #555; font-size: 12px; border
   <audio id="audioPlayer" loop></audio>
 </div>
 
-</div>
-
 <script>
-function checkPassword() {
-  const input = document.getElementById('passwordInput').value;
-  const error = document.getElementById('lockError');
-  if (input === 'jimzz2026') {
-    document.getElementById('passwordLock').style.display = 'none';
-    document.getElementById('mainWeb').style.display = 'block';
-    sessionStorage.setItem('jimzzUnlocked', 'true');
-    startApp();
-  } else {
-    error.classList.add('show');
-    setTimeout(() => error.classList.remove('show'), 2000);
-  }
-}
-
-if (sessionStorage.getItem('jimzzUnlocked') === 'true') {
-  document.getElementById('passwordLock').style.display = 'none';
-  document.getElementById('mainWeb').style.display = 'block';
-  setTimeout(startApp, 100);
-}
-
 function startApp() {
   initCanvas();
   initData();
@@ -607,236 +539,11 @@ const produkApk = [
 ];
 
 const produkTopUp = [
-  {
-    icon: "🔥",
-    nama: "Free Fire",
-    desc: "Top up Diamond Free Fire murah & cepat",
-    unit: "diamond",
-    hot: true,
-    paket: [
-      { nominal: "5 Diamond", harga: 900 },
-      { nominal: "10 Diamond", harga: 1750 },
-      { nominal: "12 Diamond", harga: 1950 },
-      { nominal: "15 Diamond", harga: 2450 },
-      { nominal: "20 Diamond", harga: 3300 },
-      { nominal: "25 Diamond", harga: 4100 },
-      { nominal: "30 Diamond", harga: 4950 },
-      { nominal: "40 Diamond", harga: 6250 },
-      { nominal: "50 Diamond", harga: 6600 },
-      { nominal: "55 Diamond", harga: 8500 },
-      { nominal: "70 Diamond", harga: 9500 },
-      { nominal: "75 Diamond", harga: 9900 },
-      { nominal: "80 Diamond", harga: 10700 },
-      { nominal: "90 Diamond", harga: 12400 },
-      { nominal: "100 Diamond", harga: 13200 },
-      { nominal: "120 Diamond", harga: 15700 },
-      { nominal: "130 Diamond", harga: 17300 },
-      { nominal: "140 Diamond", harga: 18200 },
-      { nominal: "145 Diamond", harga: 19000 },
-      { nominal: "150 Diamond", harga: 19900 },
-      { nominal: "160 Diamond", harga: 21500 },
-      { nominal: "170 Diamond", harga: 22400 },
-      { nominal: "190 Diamond", harga: 24800 },
-      { nominal: "200 Diamond", harga: 28700 },
-      { nominal: "210 Diamond", harga: 28700 },
-      { nominal: "280 Diamond", harga: 36400 },
-      { nominal: "300 Diamond", harga: 39700 },
-      { nominal: "355 Diamond", harga: 45500 },
-      { nominal: "360 Diamond", harga: 46400 },
-      { nominal: "375 Diamond", harga: 48900 },
-      { nominal: "400 Diamond", harga: 52200 },
-      { nominal: "405 Diamond", harga: 52200 },
-      { nominal: "425 Diamond", harga: 54700 },
-      { nominal: "475 Diamond", harga: 61300 },
-      { nominal: "495 Diamond", harga: 63800 },
-      { nominal: "500 Diamond", harga: 64600 },
-      { nominal: "510 Diamond", harga: 66300 },
-      { nominal: "545 Diamond", harga: 70400 },
-      { nominal: "565 Diamond", harga: 72900 },
-      { nominal: "635 Diamond", harga: 82000 },
-      { nominal: "720 Diamond", harga: 91200 },
-      { nominal: "725 Diamond", harga: 92000 },
-      { nominal: "740 Diamond", harga: 94500 },
-      { nominal: "770 Diamond", harga: 97800 },
-      { nominal: "790 Diamond", harga: 100200 },
-      { nominal: "800 Diamond", harga: 101900 },
-      { nominal: "860 Diamond", harga: 109300 },
-      { nominal: "930 Diamond", harga: 118500 },
-      { nominal: "1000 Diamond", harga: 127600 },
-      { nominal: "1050 Diamond", harga: 134200 },
-      { nominal: "1075 Diamond", harga: 136700 },
-      { nominal: "1080 Diamond", harga: 137500 },
-      { nominal: "1440 Diamond", harga: 182300 },
-      { nominal: "1450 Diamond", harga: 182300 },
-      { nominal: "2000 Diamond", harga: 253300 },
-      { nominal: "2020 Diamond", harga: 271100 },
-      { nominal: "2140 Diamond", harga: 271500 },
-      { nominal: "2180 Diamond", harga: 273200 },
-      { nominal: "2200 Diamond", harga: 276500 },
-      { nominal: "2720 Diamond", harga: 343700 },
-      { nominal: "3000 Diamond", harga: 377700 },
-      { nominal: "3640 Diamond", harga: 455600 },
-      { nominal: "4000 Diamond", harga: 502100 },
-      { nominal: "4450 Diamond", harga: 559300 },
-      { nominal: "5500 Diamond", harga: 691200 },
-      { nominal: "6000 Diamond", harga: 753400 },
-      { nominal: "6480 Diamond", harga: 815600 },
-      { nominal: "7290 Diamond", harga: 913500 },
-      { nominal: "8010 Diamond", harga: 1004200 },
-      { nominal: "9800 Diamond", harga: 1229800 },
-      { nominal: "14580 Diamond", harga: 1827000 },
-      { nominal: "36500 Diamond", harga: 4573900 },
-      { nominal: "73100 Diamond", harga: 9162100 }
-    ]
-  },
-  {
-    icon: "⚔️",
-    nama: "Mobile Legends",
-    desc: "Top up Diamond Mobile Legends murah & cepat",
-    unit: "diamond",
-    hot: true,
-    paket: [
-      { nominal: "11 Diamond", harga: 3800 },
-      { nominal: "22 Diamond", harga: 7500 },
-      { nominal: "44 Diamond", harga: 15000 },
-      { nominal: "56 Diamond", harga: 19000 },
-      { nominal: "86 Diamond", harga: 28500 },
-      { nominal: "110 Diamond", harga: 36400 },
-      { nominal: "172 Diamond", harga: 57000 },
-      { nominal: "240 Diamond", harga: 79500 },
-      { nominal: "257 Diamond", harga: 85000 },
-      { nominal: "355 Diamond", harga: 116000 },
-      { nominal: "500 Diamond", harga: 165000 },
-      { nominal: "720 Diamond", harga: 237000 },
-      { nominal: "1000 Diamond", harga: 322000 },
-      { nominal: "1440 Diamond", harga: 462000 },
-      { nominal: "2000 Diamond", harga: 644000 },
-      { nominal: "2880 Diamond", harga: 928000 },
-      { nominal: "4000 Diamond", harga: 1290000 },
-      { nominal: "6000 Diamond", harga: 1930000 },
-      { nominal: "8000 Diamond", harga: 2565000 },
-      { nominal: "10000 Diamond", harga: 3195000 },
-      { nominal: "12000 Diamond", harga: 3825000 },
-      { nominal: "15000 Diamond", harga: 4780000 },
-      { nominal: "20000 Diamond", harga: 6370000 },
-      { nominal: "25000 Diamond", harga: 7945000 },
-      { nominal: "30000 Diamond", harga: 9510000 },
-      { nominal: "40000 Diamond", harga: 12650000 },
-      { nominal: "50000 Diamond", harga: 15785000 },
-      { nominal: "75000 Diamond", harga: 23615000 },
-      { nominal: "100000 Diamond", harga: 31420000 }
-    ]
-  },
-  {
-    icon: "🔫",
-    nama: "PUBG Mobile",
-    desc: "Top up UC PUBG Mobile murah & cepat",
-    unit: "UC",
-    hot: true,
-    paket: [
-      { nominal: "60 UC", harga: 17500 },
-      { nominal: "120 UC", harga: 35000 },
-      { nominal: "180 UC", harga: 52500 },
-      { nominal: "325 UC", harga: 86000 },
-      { nominal: "385 UC", harga: 102000 },
-      { nominal: "660 UC", harga: 165000 },
-      { nominal: "720 UC", harga: 180000 },
-      { nominal: "985 UC", harga: 245000 },
-      { nominal: "1320 UC", harga: 328000 },
-      { nominal: "1800 UC", harga: 445000 },
-      { nominal: "2460 UC", harga: 605000 },
-      { nominal: "3850 UC", harga: 930000 },
-      { nominal: "4950 UC", harga: 1190000 },
-      { nominal: "6600 UC", harga: 1580000 },
-      { nominal: "8250 UC", harga: 1965000 },
-      { nominal: "10000 UC", harga: 2375000 },
-      { nominal: "12000 UC", harga: 2845000 },
-      { nominal: "15000 UC", harga: 3550000 },
-      { nominal: "18000 UC", harga: 4250000 },
-      { nominal: "20000 UC", harga: 4715000 },
-      { nominal: "25000 UC", harga: 5880000 },
-      { nominal: "30000 UC", harga: 7040000 },
-      { nominal: "40000 UC", harga: 9360000 },
-      { nominal: "50000 UC", harga: 11670000 },
-      { nominal: "75000 UC", harga: 17450000 },
-      { nominal: "100000 UC", harga: 23200000 },
-      { nominal: "150000 UC", harga: 34700000 },
-      { nominal: "200000 UC", harga: 46100000 }
-    ]
-  },
-  {
-    icon: "🎮",
-    nama: "Genshin Impact",
-    desc: "Top up Crystal Genshin Impact murah & cepat",
-    unit: "crystal",
-    hot: false,
-    paket: [
-      { nominal: "60 Crystal", harga: 17000 },
-      { nominal: "120 Crystal", harga: 34000 },
-      { nominal: "180 Crystal", harga: 51000 },
-      { nominal: "300 Crystal", harga: 82000 },
-      { nominal: "330 Crystal", harga: 90000 },
-      { nominal: "500 Crystal", harga: 133000 },
-      { nominal: "660 Crystal", harga: 175000 },
-      { nominal: "980 Crystal", harga: 258000 },
-      { nominal: "1280 Crystal", harga: 338000 },
-      { nominal: "1980 Crystal", harga: 518000 },
-      { nominal: "2480 Crystal", harga: 648000 },
-      { nominal: "3280 Crystal", harga: 854000 },
-      { nominal: "4480 Crystal", harga: 1163000 },
-      { nominal: "6480 Crystal", harga: 1672000 },
-      { nominal: "8000 Crystal", harga: 2055000 },
-      { nominal: "10000 Crystal", harga: 2556000 },
-      { nominal: "12000 Crystal", harga: 3053000 },
-      { nominal: "15000 Crystal", harga: 3800000 },
-      { nominal: "18000 Crystal", harga: 4540000 },
-      { nominal: "20000 Crystal", harga: 5040000 },
-      { nominal: "25000 Crystal", harga: 6278000 },
-      { nominal: "30000 Crystal", harga: 7513000 },
-      { nominal: "40000 Crystal", harga: 9970000 },
-      { nominal: "50000 Crystal", harga: 12413000 },
-      { nominal: "75000 Crystal", harga: 18520000 },
-      { nominal: "100000 Crystal", harga: 24592000 },
-      { nominal: "150000 Crystal", harga: 36668000 },
-      { nominal: "200000 Crystal", harga: 48688000 }
-    ]
-  },
-  {
-    icon: "🏆",
-    nama: "Call of Duty Mobile",
-    desc: "Top up CP COD Mobile murah & cepat",
-    unit: "CP",
-    hot: false,
-    paket: [
-      { nominal: "80 CP", harga: 17500 },
-      { nominal: "160 CP", harga: 35000 },
-      { nominal: "240 CP", harga: 52500 },
-      { nominal: "420 CP", harga: 81000 },
-      { nominal: "500 CP", harga: 96000 },
-      { nominal: "800 CP", harga: 152000 },
-      { nominal: "880 CP", harga: 167000 },
-      { nominal: "1200 CP", harga: 228000 },
-      { nominal: "1600 CP", harga: 303000 },
-      { nominal: "2400 CP", harga: 453000 },
-      { nominal: "3200 CP", harga: 602000 },
-      { nominal: "4200 CP", harga: 787000 },
-      { nominal: "5600 CP", harga: 1047000 },
-      { nominal: "8000 CP", harga: 1489000 },
-      { nominal: "10000 CP", harga: 1853000 },
-      { nominal: "12000 CP", harga: 2215000 },
-      { nominal: "15000 CP", harga: 2758000 },
-      { nominal: "18000 CP", harga: 3298000 },
-      { nominal: "20000 CP", harga: 3656000 },
-      { nominal: "25000 CP", harga: 4558000 },
-      { nominal: "30000 CP", harga: 5458000 },
-      { nominal: "40000 CP", harga: 7250000 },
-      { nominal: "50000 CP", harga: 9035000 },
-      { nominal: "75000 CP", harga: 13507000 },
-      { nominal: "100000 CP", harga: 17943000 },
-      { nominal: "150000 CP", harga: 26590000 },
-      { nominal: "200000 CP", harga: 35210000 }
-    ]
-  }
+  { icon: "🔥", nama: "Free Fire", desc: "Top up Diamond Free Fire murah & cepat", unit: "diamond", hot: true, paket: [{ nominal: "5 Diamond", harga: 900 },{ nominal: "12 Diamond", harga: 1950 }] },
+  { icon: "⚔️", nama: "Mobile Legends", desc: "Top up Diamond Mobile Legends murah & cepat", unit: "diamond", hot: true, paket: [{ nominal: "11 Diamond", harga: 3800 },{ nominal: "22 Diamond", harga: 7500 }] },
+  { icon: "🔫", nama: "PUBG Mobile", desc: "Top up UC PUBG Mobile murah & cepat", unit: "UC", hot: true, paket: [{ nominal: "60 UC", harga: 17500 },{ nominal: "120 UC", harga: 35000 }] },
+  { icon: "🎮", nama: "Genshin Impact", desc: "Top up Crystal Genshin Impact murah & cepat", unit: "crystal", hot: false, paket: [{ nominal: "60 Crystal", harga: 17000 },{ nominal: "120 Crystal", harga: 34000 }] },
+  { icon: "🏆", nama: "Call of Duty Mobile", desc: "Top up CP COD Mobile murah & cepat", unit: "CP", hot: false, paket: [{ nominal: "80 CP", harga: 17500 },{ nominal: "160 CP", harga: 35000 }] }
 ];
 
 let gameAktif = null;
@@ -866,7 +573,6 @@ function renderProduk(target, data, kategori) {
         </div>
       </div>
       <div class="produk-desc">${p.desc}</div>
-      ${p.bonusMinTotal ? `<div style="background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.3);border-radius:8px;padding:8px 10px;font-size:11px;color:#00ff88;margin-bottom:12px;">🎁 <b>BONUS +${p.bonusUnit} ${p.unit}</b> untuk order Rp ${p.bonusMinTotal.toLocaleString('id-ID')} ke atas!</div>` : ''}
       <div class="produk-bottom">
         <div class="produk-harga-info">
           <div class="produk-harga-label">Harga ${p.unit ? 'per ' + p.unit : ''}</div>
@@ -883,8 +589,8 @@ function renderGameList() {
   if (!el) return;
   el.className = 'produk-list grid-2col';
   el.innerHTML = produkTopUp.map((g, i) => `
-    <div class="produk-card" onclick="bukaGameDetail(${i})" style="cursor:pointer;">
-      ${g.hot ? '<div class="badge-hot">🔥</div>' : ''}
+    <div class="produk-card disabled" onclick="alert('⚠️ Fitur Top Up Game sedang MAINTENANCE.')">
+      <div class="badge-maintenance">🔧 MAINTENANCE</div>
       <div class="produk-header">
         <div class="produk-icon">${g.icon}</div>
         <div class="produk-title-block">
@@ -897,107 +603,10 @@ function renderGameList() {
           <div class="produk-harga-label">Mulai dari</div>
           <div class="produk-harga">Rp ${g.paket[0].harga.toLocaleString('id-ID')}</div>
         </div>
-        <button class="btn-order">Pilih →</button>
+        <button class="btn-order" disabled>Maintenance</button>
       </div>
     </div>
   `).join('');
-}
-
-function bukaGameDetail(index) {
-  gameAktif = produkTopUp[index];
-  const paketList = gameAktif.paket.map((p, i) => {
-    const populer = i === 0 || i === 4 || i === 8;
-    return `
-    <div class="produk-card" style="cursor:pointer; position:relative;" onclick="pilihPaket(${i})">
-      ${populer ? '<div class="badge-hot" style="top:6px; right:6px; font-size:8px; padding:2px 6px;">🔥 POPULER</div>' : ''}
-      <div class="produk-header" style="flex-direction:column; align-items:center; text-align:center; gap:4px;">
-        <div class="produk-icon" style="font-size:28px;">💎</div>
-        <div class="produk-title-block" style="text-align:center; width:100%;">
-          <div class="produk-label" style="font-size:8px;">${gameAktif.nama}</div>
-          <div class="produk-nama" style="font-size:14px; line-height:1.2;">${p.nominal}</div>
-        </div>
-      </div>
-      <div class="produk-bottom" style="flex-direction:column; gap:6px; align-items:stretch;">
-        <div class="produk-harga-info" style="text-align:center;">
-          <div class="produk-harga" style="font-size:14px;">Rp ${p.harga.toLocaleString('id-ID')}</div>
-        </div>
-        <button class="btn-order" style="width:100%; padding:8px;">Order</button>
-      </div>
-    </div>
-  `;
-  }).join('');
-  
-  document.getElementById('page-topup').innerHTML = `
-    <section class="kategori">
-      <button onclick="backToGameList()" style="background:transparent; border:none; color:#00ff88; font-size:14px; cursor:pointer; margin-bottom:15px; display:flex; align-items:center; gap:5px;">← Kembali ke Daftar Game</button>
-      <h2>${gameAktif.icon} ${gameAktif.nama}</h2>
-      <p class="sub">Pilih nominal ${gameAktif.unit} yang mau kamu top up</p>
-      <div class="produk-list grid-2col">${paketList}</div>
-    </section>
-    <footer><p>© 2025 Jimzz Store — All Rights Reserved 😈</p></footer>
-  `;
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-function backToGameList() {
-  document.getElementById('page-topup').innerHTML = `
-    <section class="kategori">
-      <h2>🎮 Top Up Game</h2>
-      <p class="sub">Pilih game yang mau kamu top up</p>
-      
-      <div class="pengumuman" style="background: linear-gradient(145deg, rgba(0,255,136,0.08), rgba(0,150,80,0.05)); border-color: rgba(0,255,136,0.3); border-left-color: #00ff88;">
-        <div class="pengumuman-header">
-          <span class="pengumuman-icon">⚡</span>
-          <span class="pengumuman-title" style="color:#00ff88;">PROSES CEPAT & AMAN</span>
-        </div>
-        <p class="pengumuman-text">
-          Top up diproses <b style="color:#00ff88">1-5 menit</b> setelah pembayaran. Cukup masukkan <b style="color:#00ff88">User ID</b> game kamu, tanpa perlu login.
-        </p>
-      </div>
-      
-      <div class="produk-list grid-2col" id="gameList"></div>
-    </section>
-    <footer><p>© 2025 Jimzz Store — All Rights Reserved 😈</p></footer>
-  `;
-  renderGameList();
-}
-
-function pilihPaket(index) {
-  paketAktif = gameAktif.paket[index];
-  produkAktif = {
-    icon: gameAktif.icon,
-    nama: gameAktif.nama + ' - ' + paketAktif.nominal,
-    desc: 'Top up ' + paketAktif.nominal + ' ke ID ' + gameAktif.nama,
-    harga: paketAktif.harga,
-    unit: gameAktif.unit,
-    kategori: 'TOP UP GAME',
-    isApk: true,
-    isTopUp: true,
-    inputLabel: '🎮 User ID ' + gameAktif.nama,
-    inputPlaceholder: 'Contoh: 123456789 (cek di profil game)',
-    inputValidasi: '',
-    inputError: ''
-  };
-  document.getElementById('modalLabel').innerText = 'TOP UP GAME';
-  document.getElementById('modalTitle').innerText = produkAktif.nama;
-  document.getElementById('modalSubtitle').innerText = produkAktif.desc;
-  const jumlahInput = document.getElementById('jumlahInput');
-  jumlahInput.value = 1; jumlahInput.min = 1; jumlahInput.max = 1; jumlahInput.disabled = true;
-  document.getElementById('minmaxText').innerText = '(otomatis 1)';
-  document.getElementById('hargaSatuan').innerText = 'Rp ' + paketAktif.harga.toLocaleString('id-ID');
-  document.getElementById('inputLabel').innerText = produkAktif.inputLabel;
-  document.getElementById('linkSaluran').placeholder = produkAktif.inputPlaceholder;
-  document.getElementById('linkSaluran').value = '';
-  document.getElementById('hpPemesan').value = '';
-  document.getElementById('waitingBox').style.display = 'none';
-  document.getElementById('qrisBox').style.display = 'none';
-  document.getElementById('qrisLoading').style.display = 'none';
-  document.getElementById('btnSayaBayar').style.display = 'none';
-  clearError();
-  hitungTotal();
-  setStep(1);
-  document.getElementById('orderModal').classList.add('show');
-  document.body.style.overflow = 'hidden';
 }
 
 function bukaOrder(kategoriId, index) {
@@ -1203,7 +812,6 @@ async function downloadQris() {
     btn.innerText = '✅ Berhasil! Cek Galeri';
     setTimeout(() => { btn.innerText = originalText; btn.disabled = false; }, 3000);
   } catch (err) {
-    console.error('Download error:', err);
     window.open(document.getElementById('qrisImage').src, '_blank');
     btn.innerText = originalText;
     btn.disabled = false;
@@ -1325,7 +933,7 @@ function seekAudio(e) {
   if (audio && audio.duration) audio.currentTime = percent * audio.duration;
 }
 
-let viewCount = 1234;
+let viewCount = 1252;
 setInterval(() => {
   viewCount += Math.floor(Math.random() * 3) + 1;
   const el = document.getElementById('viewCount');
@@ -1337,6 +945,9 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js').catch(err => console.log('SW error:', err));
   });
 }
+
+// Start app immediately (no password)
+startApp();
 </script>
 </body>
 </html>
