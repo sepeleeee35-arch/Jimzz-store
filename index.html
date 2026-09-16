@@ -49,8 +49,6 @@ header::before { content: ""; position: absolute; top: -50%; left: 50%; transfor
 .jimzz-clickable { display: inline-block; cursor: pointer; user-select: none; transition: 0.3s; }
 .jimzz-clickable:active { transform: scale(0.98); }
 
-.hero-badge { display: inline-block; background: rgba(0,255,136,0.1); border: 1px solid rgba(0,255,136,0.3); color: #00ff88; font-size: 11px; font-weight: bold; padding: 6px 16px; border-radius: 20px; margin-bottom: 15px; letter-spacing: 1px; animation: floatUpDownBadge 3s ease-in-out infinite; }
-@keyframes floatUpDownBadge { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
 header h1 { font-size: 44px; font-weight: 900; color: #fff; text-shadow: 0 0 30px rgba(0,255,136,0.8), 0 0 60px rgba(0,255,136,0.4); letter-spacing: -1px; margin-bottom: 8px; }
 header h1 .gradient-text { background: linear-gradient(135deg, #00ff88, #00cc6a, #00ff88); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 header .tagline { color: #888; font-size: 14px; margin-bottom: 20px; }
@@ -296,7 +294,6 @@ footer { text-align: center; padding: 30px 20px; color: #444; font-size: 12px; b
 
 <div class="tab-page active" id="page-home">
   <header>
-    <div class="hero-badge">⚡ TRUSTED SINCE 2025</div>
     <h1 class="jimzz-clickable" onclick="secretClick()"><span class="gradient-text">Jimzz Store</span></h1>
     <p class="tagline">Top Up Game, Sosmed & Digital Produk Terlengkap</p>
     <div class="counter"><span class="dot"></span>🔥 <span id="viewCount">1.375</span> orang sudah order</div>
@@ -516,36 +513,62 @@ let secretClickTimer = null;
 if (localStorage.getItem('jimzz_admin') === 'true') isAdmin = true;
 
 // ============================================
-// COUNTER ORDER TOTAL - MULAI 1375
+// COUNTER SYSTEM - FETCH DARI BACKEND
 // ============================================
-const INITIAL_ORDER_COUNT = 1375;
-let orderCount = parseInt(localStorage.getItem('jimzz_order_count')) || INITIAL_ORDER_COUNT;
+let cachedCounters = {
+  totalOrder: 1375,
+  produkOrder: {}
+};
+
+async function loadCounters() {
+  try {
+    const res = await fetch(BACKEND_URL + '/api/counters');
+    const data = await res.json();
+    if (data.success) {
+      const oldTotal = cachedCounters.totalOrder;
+      cachedCounters.totalOrder = data.totalOrder;
+      cachedCounters.produkOrder = data.produkOrder || {};
+      
+      updateOrderCounter();
+      
+      // Kalau ada perubahan, re-render produk biar angka "sudah dibeli" update
+      if (oldTotal !== data.totalOrder) {
+        renderProduk('sosmed', produkSosmed, 'SUNTIK ALL');
+        renderProduk('jpm', produkJpm, 'LAYANAN LAINNYA');
+        renderProduk('apkList', produkApk, 'JUAL APK');
+      }
+    }
+  } catch (err) {
+    console.log('Gagal load counters:', err);
+  }
+}
 
 function updateOrderCounter() {
   const el = document.getElementById('viewCount');
-  if (el) el.innerText = orderCount.toLocaleString('id-ID');
+  if (el) el.innerText = cachedCounters.totalOrder.toLocaleString('id-ID');
 }
 
-function incrementOrderCount() {
-  orderCount++;
-  localStorage.setItem('jimzz_order_count', orderCount);
-  updateOrderCounter();
-}
-
-// ============================================
-// COUNTER PER PRODUK
-// ============================================
 function getProdukOrderCount(kategoriId, index) {
-  const key = 'jimzz_order_' + kategoriId + '_' + index;
-  return parseInt(localStorage.getItem(key)) || 0;
+  const key = kategoriId + '_' + index;
+  return cachedCounters.produkOrder[key] || 0;
 }
 
-function incrementProdukOrder(kategoriId, index) {
-  const key = 'jimzz_order_' + kategoriId + '_' + index;
-  const current = parseInt(localStorage.getItem(key)) || 0;
-  localStorage.setItem(key, current + 1);
-  incrementOrderCount();
+async function incrementOrder(kategoriId, index) {
+  try {
+    await fetch(BACKEND_URL + '/api/increment-order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ kategoriId, index })
+    });
+    // Langsung fetch ulang biar angka update tanpa nunggu polling
+    await loadCounters();
+  } catch (err) {
+    console.log('Gagal increment order:', err);
+  }
 }
+
+// Polling tiap 3 detik — cek apakah ada update dari device lain
+setInterval(loadCounters, 3000);
 
 function secretClick() {
   secretClickCount++;
@@ -624,7 +647,7 @@ function startApp() {
   renderPlaylist();
   initMusicEvents();
   applyAdminUI();
-  updateOrderCounter();
+  loadCounters(); // Load counter dari backend
   setTimeout(() => document.getElementById('loadingScreen').classList.add('hide'), 1400);
 }
 
@@ -661,10 +684,6 @@ function initCanvas() {
   animateJimzz();
 }
 
-// ============================================
-// PRODUK DATA - DENGAN baseOrder (FAKE AWAL)
-// Total: 324+187+92+256+143+178+63+42+37+28+15+10 = 1375
-// ============================================
 const produkSosmed = [
   { icon: "📱", nama: "Suntik Saluran WA", desc: "Tambah pengikut saluran WhatsApp kamu secara aman & cepat.", hargaPerUnit: 10, unit: "pengikut", min: 100, max: 1000000, hot: true, baseOrder: 324, inputLabel: "🔗 Link Saluran WA", inputPlaceholder: "Contoh: https://whatsapp.com/channel/xxxxx", inputValidasi: "whatsapp.com/channel", inputError: "Link harus link SALURAN WhatsApp" },
   { icon: "😀", nama: "Suntik Random Emoji Reaction", desc: "Tambah reaction emoji random ke postingan kamu.", hargaPerUnit: 1, unit: "reaction", min: 250, max: 1000000, hot: true, baseOrder: 187, inputLabel: "🔗 Link Postingan", inputPlaceholder: "Contoh: https://www.tiktok.com/@user/video/xxx", inputValidasi: "tiktok.com", inputError: "Link harus link postingan TikTok" },
@@ -880,7 +899,6 @@ function bukaOrder(kategoriId, index) {
   else { data = produkApk; kategori = 'JUAL APK'; isApk = true; }
   produkAktif = { ...data[index], kategori, isApk };
   
-  // Simpan info produk yang di-order buat increment nanti
   produkAktif._kategoriId = kategoriId;
   produkAktif._index = index;
   
@@ -1052,18 +1070,21 @@ async function userKonfirmasiBayar() {
   try {
     await fetch(BACKEND_URL + '/api/confirm-payment', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ totalAmount: dataPemesan.totalAmount, customerPhone: dataPemesan.hp, productName: produkAktif.nama, productDetail: dataPemesan.jumlah + ' ' + (produkAktif.unit || 'pcs'), link: dataPemesan.link })
+      body: JSON.stringify({ 
+        totalAmount: dataPemesan.totalAmount, 
+        customerPhone: dataPemesan.hp, 
+        productName: produkAktif.nama, 
+        productDetail: dataPemesan.jumlah + ' ' + (produkAktif.unit || 'pcs'), 
+        link: dataPemesan.link,
+        kategoriId: produkAktif._kategoriId,
+        index: produkAktif._index
+      })
     });
-    
-    // Increment counter produk yang di-order
+    // Increment counter di backend
     if (produkAktif._kategoriId && produkAktif._index !== undefined) {
-      incrementProdukOrder(produkAktif._kategoriId, produkAktif._index);
-      // Re-render produk biar angka "sudah dibeli" update
-      if (produkAktif._kategoriId === 'sosmed') renderProduk('sosmed', produkSosmed, 'SUNTIK ALL');
-      else if (produkAktif._kategoriId === 'jpm') renderProduk('jpm', produkJpm, 'LAYANAN LAINNYA');
-      else if (produkAktif._kategoriId === 'apk') renderProduk('apkList', produkApk, 'JUAL APK');
+      await incrementOrder(produkAktif._kategoriId, produkAktif._index);
     } else {
-      incrementOrderCount();
+      await incrementOrder(null, null);
     }
   } catch (err) { console.error('Confirm error:', err); }
   document.getElementById('btnSayaBayar').style.display = 'none';
@@ -1079,9 +1100,6 @@ function switchTab(tab) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// ============================================
-// MUSIC PLAYLIST - 4 LAGU LOKAL
-// ============================================
 const playlist = [
   { judul: "Lagu 1", artis: "Jimzz Playlist", cover: "🔥", src: "lagu1.mp3" },
   { judul: "Lagu 2", artis: "Jimzz Playlist", cover: "💀", src: "lagu2.mp3" },
@@ -1174,8 +1192,8 @@ function seekAudio(e) {
 
 setInterval(() => {
   if (isAdmin) {
-    document.getElementById('adminTotalOrder').innerText = orderCount;
-    document.getElementById('adminTotalRevenue').innerText = 'Rp ' + (orderCount * 5).toLocaleString('id-ID') + 'k';
+    document.getElementById('adminTotalOrder').innerText = cachedCounters.totalOrder;
+    document.getElementById('adminTotalRevenue').innerText = 'Rp ' + (cachedCounters.totalOrder * 5).toLocaleString('id-ID') + 'k';
   }
 }, 5000);
 
