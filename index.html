@@ -31,6 +31,48 @@ body { background: #08080d; color: #e6e6e6; line-height: 1.6; padding-bottom: 10
 @keyframes loadBar { to { width: 100%; } }
 @keyframes pulseGlow { 0%,100% { opacity:1; transform: scale(1); } 50% { opacity:0.7; transform: scale(0.97); } }
 
+/* ADMIN LOGIN MODAL */
+#adminLoginModal {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.95); backdrop-filter: blur(10px);
+  z-index: 5000; display: none; align-items: center; justify-content: center; padding: 20px;
+}
+#adminLoginModal.show { display: flex; }
+.admin-login-box {
+  background: linear-gradient(145deg, #0f1a14, #0d0d15); border: 1px solid #1e2e26;
+  border-radius: 22px; padding: 35px 28px; max-width: 400px; width: 100%; text-align: center;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.8); position: relative;
+  animation: slideUp 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+}
+.admin-login-box::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #00ff88, #00cc6a, #00ff88); border-radius: 22px 22px 0 0; }
+.admin-login-icon { font-size: 50px; margin-bottom: 15px; filter: drop-shadow(0 0 20px rgba(0,255,136,0.6)); }
+.admin-login-box h2 { color: #00ff88; font-size: 22px; margin-bottom: 8px; }
+.admin-login-box p { color: #777; font-size: 12px; margin-bottom: 20px; }
+.admin-login-box input {
+  width: 100%; background: #08080d; border: 1.5px solid #1e2e26; color: #fff;
+  padding: 14px 16px; border-radius: 12px; font-size: 14px; text-align: center;
+  letter-spacing: 2px; outline: none; margin-bottom: 15px; font-family: inherit;
+}
+.admin-login-box input:focus { border-color: #00ff88; box-shadow: 0 0 20px rgba(0,255,136,0.2); }
+.admin-login-box button {
+  width: 100%; background: linear-gradient(135deg, #00ff88, #00cc6a); color: #000;
+  border: none; padding: 14px; border-radius: 12px; font-weight: bold; font-size: 14px;
+  cursor: pointer; font-family: inherit; transition: 0.3s;
+}
+.admin-login-box button:hover { transform: scale(1.02); }
+.admin-login-error { color: #ff6b6b; font-size: 12px; margin-top: 10px; display: none; }
+.admin-login-error.show { display: block; }
+
+/* ADMIN BADGE */
+.admin-badge-float {
+  position: fixed; top: 15px; right: 15px; z-index: 500;
+  background: linear-gradient(135deg, #ffd700, #ff9500); color: #000;
+  padding: 8px 14px; border-radius: 20px; font-size: 11px; font-weight: bold;
+  box-shadow: 0 5px 20px rgba(255,215,0,0.5); display: none; align-items: center; gap: 6px;
+  cursor: pointer;
+}
+.admin-badge-float.show { display: flex; }
+.admin-badge-float .logout-x { color: #000; font-weight: bold; margin-left: 5px; }
+
 /* HEADER */
 header { text-align: center; padding: 50px 20px 40px; position: relative; z-index: 5; overflow: hidden; }
 header::before {
@@ -40,7 +82,7 @@ header::before {
 }
 @keyframes rotateBg { to { transform: translateX(-50%) rotate(360deg); } }
 .header-top { display: flex; justify-content: space-between; align-items: center; max-width: 1100px; margin: 0 auto 25px; padding: 0 5px; }
-.logo-text { color: #00ff88; font-weight: bold; font-size: 15px; letter-spacing: 2px; text-shadow: 0 0 15px rgba(0,255,136,0.6); }
+.logo-text { color: #00ff88; font-weight: bold; font-size: 15px; letter-spacing: 2px; text-shadow: 0 0 15px rgba(0,255,136,0.6); cursor: pointer; user-select: none; }
 .theme-toggle { background: rgba(0,255,136,0.08); border: 1px solid rgba(0,255,136,0.3); color: #00ff88; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
 .theme-toggle:hover { background: rgba(0,255,136,0.2); transform: rotate(20deg); }
 .hero-badge {
@@ -121,6 +163,8 @@ header .counter .dot { width: 8px; height: 8px; background: #00ff88; border-radi
 .menu-home.disabled { opacity: 0.6; cursor: not-allowed; border-color: rgba(255,200,0,0.4); }
 .menu-home.disabled:hover { transform: none; box-shadow: none; border-color: rgba(255,200,0,0.4); }
 .menu-home.disabled::after { content: "🔧"; opacity: 1; font-size: 22px; }
+.menu-home.admin-view { border-color: rgba(255,215,0,0.5); opacity: 1; cursor: pointer; }
+.menu-home.admin-view::after { content: "👑"; opacity: 1; font-size: 22px; }
 .maintenance-badge {
   display: inline-block; background: linear-gradient(135deg, #ffc800, #ff9500);
   color: #000; font-size: 9px; font-weight: bold; padding: 3px 10px;
@@ -144,6 +188,19 @@ header .counter .dot { width: 8px; height: 8px; background: #00ff88; border-radi
 .pengumuman.maintenance { background: linear-gradient(145deg, rgba(255,100,0,0.1), rgba(255,50,0,0.05)); border: 1px solid rgba(255,100,0,0.4); border-left: 4px solid #ff6400; text-align: center; }
 .pengumuman.maintenance .pengumuman-title { color: #ff9500; font-size: 15px; }
 
+/* ADMIN PANEL */
+.admin-panel {
+  background: linear-gradient(145deg, rgba(255,215,0,0.08), rgba(255,150,0,0.03));
+  border: 2px solid rgba(255,215,0,0.4); border-radius: 16px;
+  padding: 20px; margin-bottom: 22px;
+}
+.admin-panel-header { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
+.admin-panel-title { color: #ffd700; font-size: 15px; font-weight: bold; letter-spacing: 1px; }
+.admin-panel-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.admin-stat { background: rgba(0,0,0,0.4); border: 1px solid rgba(255,215,0,0.2); border-radius: 12px; padding: 12px; text-align: center; }
+.admin-stat-value { color: #ffd700; font-size: 20px; font-weight: bold; }
+.admin-stat-label { color: #888; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 3px; }
+
 /* PRODUK CARD */
 .produk-list { display: flex; flex-direction: column; gap: 14px; }
 .produk-list.grid-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -160,6 +217,7 @@ header .counter .dot { width: 8px; height: 8px; background: #00ff88; border-radi
 .produk-card:hover::before { opacity: 1; }
 .produk-card:hover { border-color: #00ff88; box-shadow: 0 15px 40px rgba(0,255,136,0.2); transform: translateY(-4px); }
 .produk-card.disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; border-color: #333; }
+.produk-card.admin-preview { border-color: rgba(255,215,0,0.5); opacity: 0.85; }
 .produk-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
 .produk-icon { font-size: 36px; flex-shrink: 0; filter: drop-shadow(0 0 10px rgba(0,255,136,0.3)); }
 .produk-title-block { flex: 1; min-width: 0; }
@@ -192,6 +250,12 @@ header .counter .dot { width: 8px; height: 8px; background: #00ff88; border-radi
   background: linear-gradient(135deg, #ffc800, #ff9500); color: #000;
   font-size: 9px; font-weight: bold; padding: 3px 8px; border-radius: 10px;
   letter-spacing: 0.5px;
+}
+.badge-admin-preview {
+  position: absolute; top: 12px; right: 12px;
+  background: linear-gradient(135deg, #ffd700, #ff9500); color: #000;
+  font-size: 9px; font-weight: bold; padding: 3px 8px; border-radius: 10px;
+  letter-spacing: 0.5px; box-shadow: 0 0 15px rgba(255,215,0,0.5);
 }
 
 /* GRID 2COL ADJUSTMENTS */
@@ -365,12 +429,29 @@ footer { text-align: center; padding: 30px 20px; color: #444; font-size: 12px; b
   <div class="loading-bar"><div class="loading-bar-fill"></div></div>
 </div>
 
+<!-- ADMIN LOGIN MODAL -->
+<div id="adminLoginModal">
+  <div class="admin-login-box">
+    <div class="admin-login-icon">👑</div>
+    <h2>Admin Login</h2>
+    <p>Masukkan password untuk akses panel admin</p>
+    <input type="password" id="adminPasswordInput" placeholder="••••••••" onkeypress="if(event.key==='Enter')adminLogin()">
+    <button onclick="adminLogin()">Login</button>
+    <div class="admin-login-error" id="adminLoginError">❌ Password salah!</div>
+  </div>
+</div>
+
+<!-- ADMIN BADGE (muncul kalau admin) -->
+<div class="admin-badge-float" id="adminBadge" onclick="adminLogout()">
+  👑 ADMIN <span class="logout-x">×</span>
+</div>
+
 <canvas id="jimzz-neon-bg"></canvas>
 
 <div class="tab-page active" id="page-home">
   <header>
     <div class="header-top">
-      <span class="logo-text">💚 JIMZZ STORE</span>
+      <span class="logo-text" id="secretLogo" onclick="secretClick()">💚 JIMZZ STORE</span>
       <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🎨</button>
     </div>
     <div class="hero-badge">⚡ TRUSTED SINCE 2025</div>
@@ -384,11 +465,39 @@ footer { text-align: center; padding: 30px 20px; color: #444; font-size: 12px; b
     </div>
   </header>
 
+  <!-- ADMIN PANEL (cuma muncul kalau admin) -->
+  <section class="kategori" id="adminPanelSection" style="display:none;">
+    <div class="admin-panel">
+      <div class="admin-panel-header">
+        <span style="font-size:24px;">👑</span>
+        <span class="admin-panel-title">ADMIN DASHBOARD</span>
+      </div>
+      <div class="admin-panel-stats">
+        <div class="admin-stat">
+          <div class="admin-stat-value" id="adminTotalOrder">0</div>
+          <div class="admin-stat-label">Total Order</div>
+        </div>
+        <div class="admin-stat">
+          <div class="admin-stat-value" id="adminTotalRevenue">Rp 0</div>
+          <div class="admin-stat-label">Pendapatan</div>
+        </div>
+        <div class="admin-stat">
+          <div class="admin-stat-value" id="adminProdukMT">1</div>
+          <div class="admin-stat-label">Produk MT</div>
+        </div>
+        <div class="admin-stat">
+          <div class="admin-stat-value" id="adminStatus">Online</div>
+          <div class="admin-stat-label">Status Web</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="kategori" style="text-align:center;">
     <h2>Pilih <span class="accent">Layanan</span></h2>
     <p class="sub">Semua kebutuhan digital kamu ada di sini</p>
     
-    <div class="menu-home disabled" onclick="alert('⚠️ Top Up Game sedang MAINTENANCE.\n\nSilakan coba lagi nanti.')">
+    <div class="menu-home disabled" id="menuTopup" onclick="handleTopupClick()">
       <div class="menu-home-icon">🎮</div>
       <div class="menu-home-text">
         <div class="menu-home-title">Top Up Game</div>
@@ -453,7 +562,7 @@ footer { text-align: center; padding: 30px 20px; color: #444; font-size: 12px; b
       <button class="btn-back" onclick="switchTab('home')">← Kembali ke Home</button>
     </div>
     
-    <div class="pengumuman maintenance">
+    <div class="pengumuman maintenance" id="topupMaintenanceInfo">
       <div class="pengumuman-header" style="justify-content:center;">
         <span style="font-size:20px;">🔧</span>
         <span class="pengumuman-title">SEDANG MAINTENANCE</span>
@@ -660,12 +769,129 @@ footer { text-align: center; padding: 30px 20px; color: #444; font-size: 12px; b
 </div>
 
 <script>
+// ============================================
+// ADMIN SYSTEM
+// ============================================
+const ADMIN_PASSWORD = "jimzzadmin2025"; // GANTI INI
+let isAdmin = false;
+let secretClickCount = 0;
+let secretClickTimer = null;
+
+// Cek login admin dari localStorage (biar tetep login pas refresh)
+if (localStorage.getItem('jimzz_admin') === 'true') {
+  isAdmin = true;
+}
+
+// Secret click: klik logo 5x cepat
+function secretClick() {
+  secretClickCount++;
+  clearTimeout(secretClickTimer);
+  secretClickTimer = setTimeout(() => { secretClickCount = 0; }, 1500);
+  
+  if (secretClickCount >= 5) {
+    secretClickCount = 0;
+    if (isAdmin) {
+      // Kalau udah admin, klik 5x lagi buat logout
+      adminLogout();
+    } else {
+      document.getElementById('adminLoginModal').classList.add('show');
+      document.getElementById('adminPasswordInput').value = '';
+      document.getElementById('adminLoginError').classList.remove('show');
+      setTimeout(() => document.getElementById('adminPasswordInput').focus(), 300);
+    }
+  }
+}
+
+// Login admin
+function adminLogin() {
+  const input = document.getElementById('adminPasswordInput').value;
+  const error = document.getElementById('adminLoginError');
+  
+  if (input === ADMIN_PASSWORD) {
+    isAdmin = true;
+    localStorage.setItem('jimzz_admin', 'true');
+    document.getElementById('adminLoginModal').classList.remove('show');
+    applyAdminUI();
+    alert('👑 Selamat datang, Admin!\n\nKamu sekarang bisa lihat produk yang sedang maintenance & akses panel admin.');
+  } else {
+    error.classList.add('show');
+    setTimeout(() => error.classList.remove('show'), 2000);
+  }
+}
+
+// Logout admin
+function adminLogout() {
+  isAdmin = false;
+  localStorage.removeItem('jimzz_admin');
+  applyAdminUI();
+  alert('👋 Berhasil logout dari mode Admin.');
+}
+
+// Apply UI berdasarkan status admin
+function applyAdminUI() {
+  const adminBadge = document.getElementById('adminBadge');
+  const adminPanel = document.getElementById('adminPanelSection');
+  const menuTopup = document.getElementById('menuTopup');
+  const topupMaintenanceInfo = document.getElementById('topupMaintenanceInfo');
+  
+  if (isAdmin) {
+    adminBadge.classList.add('show');
+    adminPanel.style.display = 'block';
+    // Menu top up jadi admin-view (bisa diklik, ada badge 👑)
+    menuTopup.classList.remove('disabled');
+    menuTopup.classList.add('admin-view');
+    // Info maintenance di halaman top up diganti jadi info admin
+    topupMaintenanceInfo.innerHTML = `
+      <div class="pengumuman-header" style="justify-content:center;">
+        <span style="font-size:20px;">👑</span>
+        <span class="pengumuman-title" style="color:#ffd700;">MODE ADMIN — PREVIEW</span>
+      </div>
+      <p class="pengumuman-text" style="text-align:center;">
+        Kamu sedang lihat halaman ini sebagai <b style="color:#ffd700;">Admin</b>.<br>
+        User biasa nggak bisa lihat halaman ini.
+      </p>
+    `;
+  } else {
+    adminBadge.classList.remove('show');
+    adminPanel.style.display = 'none';
+    menuTopup.classList.add('disabled');
+    menuTopup.classList.remove('admin-view');
+    topupMaintenanceInfo.innerHTML = `
+      <div class="pengumuman-header" style="justify-content:center;">
+        <span style="font-size:20px;">🔧</span>
+        <span class="pengumuman-title">SEDANG MAINTENANCE</span>
+      </div>
+      <p class="pengumuman-text" style="text-align:center;">
+        Fitur <b>Top Up Game</b> sedang dalam perbaikan.<br>
+        Silakan coba lagi nanti ya! 🙏
+      </p>
+    `;
+  }
+  
+  // Re-render produk & game list
+  renderGameList();
+  if (document.getElementById('gameList')) renderGameList();
+}
+
+// Handle klik menu top up
+function handleTopupClick() {
+  if (isAdmin) {
+    switchTab('topup');
+  } else {
+    alert('⚠️ Top Up Game sedang MAINTENANCE.\n\nSilakan coba lagi nanti.');
+  }
+}
+
+// ============================================
+// START APP
+// ============================================
 function startApp() {
   initCanvas();
   initData();
   renderGameList();
   renderPlaylist();
   initMusicEvents();
+  applyAdminUI();
   setTimeout(() => document.getElementById('loadingScreen').classList.add('hide'), 1400);
 }
 
@@ -723,12 +949,13 @@ const produkApk = [
   { icon: "🦏", nama: "APK WA Badak", desc: "Aplikasi WhatsApp mod dengan fitur lengkap & anti-banned.", harga: 1000, hot: true }
 ];
 
+// Produk Top Up Game dengan status
 const produkTopUp = [
-  { icon: "🔥", nama: "Free Fire", desc: "Top up Diamond Free Fire murah & cepat", unit: "diamond", hot: true, paket: [{ nominal: "5 Diamond", harga: 900 },{ nominal: "12 Diamond", harga: 1950 }] },
-  { icon: "⚔️", nama: "Mobile Legends", desc: "Top up Diamond Mobile Legends murah & cepat", unit: "diamond", hot: true, paket: [{ nominal: "11 Diamond", harga: 3800 },{ nominal: "22 Diamond", harga: 7500 }] },
-  { icon: "🔫", nama: "PUBG Mobile", desc: "Top up UC PUBG Mobile murah & cepat", unit: "UC", hot: true, paket: [{ nominal: "60 UC", harga: 17500 },{ nominal: "120 UC", harga: 35000 }] },
-  { icon: "🎮", nama: "Genshin Impact", desc: "Top up Crystal Genshin Impact murah & cepat", unit: "crystal", hot: false, paket: [{ nominal: "60 Crystal", harga: 17000 },{ nominal: "120 Crystal", harga: 34000 }] },
-  { icon: "🏆", nama: "Call of Duty Mobile", desc: "Top up CP COD Mobile murah & cepat", unit: "CP", hot: false, paket: [{ nominal: "80 CP", harga: 17500 },{ nominal: "160 CP", harga: 35000 }] }
+  { icon: "🔥", nama: "Free Fire", desc: "Top up Diamond Free Fire murah & cepat", unit: "diamond", hot: true, status: "maintenance", paket: [{ nominal: "5 Diamond", harga: 900 },{ nominal: "12 Diamond", harga: 1950 }] },
+  { icon: "⚔️", nama: "Mobile Legends", desc: "Top up Diamond Mobile Legends murah & cepat", unit: "diamond", hot: true, status: "maintenance", paket: [{ nominal: "11 Diamond", harga: 3800 },{ nominal: "22 Diamond", harga: 7500 }] },
+  { icon: "🔫", nama: "PUBG Mobile", desc: "Top up UC PUBG Mobile murah & cepat", unit: "UC", hot: true, status: "maintenance", paket: [{ nominal: "60 UC", harga: 17500 },{ nominal: "120 UC", harga: 35000 }] },
+  { icon: "🎮", nama: "Genshin Impact", desc: "Top up Crystal Genshin Impact murah & cepat", unit: "crystal", hot: false, status: "maintenance", paket: [{ nominal: "60 Crystal", harga: 17000 },{ nominal: "120 Crystal", harga: 34000 }] },
+  { icon: "🏆", nama: "Call of Duty Mobile", desc: "Top up CP COD Mobile murah & cepat", unit: "CP", hot: false, status: "maintenance", paket: [{ nominal: "80 CP", harga: 17500 },{ nominal: "160 CP", harga: 35000 }] }
 ];
 
 let gameAktif = null;
@@ -773,25 +1000,152 @@ function renderGameList() {
   const el = document.getElementById('gameList');
   if (!el) return;
   el.className = 'produk-list grid-2col';
-  el.innerHTML = produkTopUp.map((g, i) => `
-    <div class="produk-card disabled" onclick="alert('⚠️ Fitur Top Up Game sedang MAINTENANCE.')">
-      <div class="badge-maintenance">🔧 MAINTENANCE</div>
-      <div class="produk-header">
-        <div class="produk-icon">${g.icon}</div>
-        <div class="produk-title-block">
-          <div class="produk-label">TOP UP</div>
-          <div class="produk-nama">${g.nama}</div>
+  
+  el.innerHTML = produkTopUp.map((g, i) => {
+    // Kalau user biasa & produk maintenance → SKIP (nggak muncul)
+    if (g.status === 'maintenance' && !isAdmin) {
+      return '';
+    }
+    
+    // Kalau admin & maintenance → tampil dengan badge admin preview
+    const isMaintenance = g.status === 'maintenance';
+    const badge = isMaintenance && isAdmin 
+      ? '<div class="badge-admin-preview">👑 ADMIN PREVIEW</div>' 
+      : (g.hot ? '<div class="badge-hot">🔥</div>' : '');
+    
+    const cardClass = isMaintenance ? 'produk-card admin-preview disabled' : 'produk-card';
+    const btnText = isMaintenance ? 'Maintenance' : 'Pilih →';
+    const clickHandler = isMaintenance 
+      ? `onclick="alert('⚠️ Fitur Top Up Game sedang MAINTENANCE.')"` 
+      : `onclick="bukaGameDetail(${i})"`;
+    
+    return `
+      <div class="${cardClass}" ${clickHandler}>
+        ${badge}
+        <div class="produk-header">
+          <div class="produk-icon">${g.icon}</div>
+          <div class="produk-title-block">
+            <div class="produk-label">TOP UP</div>
+            <div class="produk-nama">${g.nama}</div>
+          </div>
+        </div>
+        <div class="produk-bottom">
+          <div class="produk-harga-info">
+            <div class="produk-harga-label">Mulai dari</div>
+            <div class="produk-harga">Rp ${g.paket[0].harga.toLocaleString('id-ID')}</div>
+          </div>
+          <button class="btn-order" ${isMaintenance ? 'disabled' : ''}>${btnText}</button>
         </div>
       </div>
-      <div class="produk-bottom">
-        <div class="produk-harga-info">
-          <div class="produk-harga-label">Mulai dari</div>
-          <div class="produk-harga">Rp ${g.paket[0].harga.toLocaleString('id-ID')}</div>
+    `;
+  }).join('');
+}
+
+function bukaGameDetail(index) {
+  // Cek status maintenance — kalau user biasa, block
+  if (produkTopUp[index].status === 'maintenance' && !isAdmin) {
+    alert('⚠️ Fitur Top Up Game sedang MAINTENANCE.');
+    return;
+  }
+  
+  gameAktif = produkTopUp[index];
+  const paketList = gameAktif.paket.map((p, i) => {
+    const populer = i === 0 || i === 4 || i === 8;
+    return `
+    <div class="produk-card" style="cursor:pointer; position:relative;" onclick="pilihPaket(${i})">
+      ${populer ? '<div class="badge-hot" style="top:6px; right:6px; font-size:8px; padding:2px 6px;">🔥 POPULER</div>' : ''}
+      <div class="produk-header" style="flex-direction:column; align-items:center; text-align:center; gap:4px;">
+        <div class="produk-icon" style="font-size:28px;">💎</div>
+        <div class="produk-title-block" style="text-align:center; width:100%;">
+          <div class="produk-label" style="font-size:8px;">${gameAktif.nama}</div>
+          <div class="produk-nama" style="font-size:14px; line-height:1.2;">${p.nominal}</div>
         </div>
-        <button class="btn-order" disabled>Maintenance</button>
+      </div>
+      <div class="produk-bottom" style="flex-direction:column; gap:6px; align-items:stretch;">
+        <div class="produk-harga-info" style="text-align:center;">
+          <div class="produk-harga" style="font-size:14px;">Rp ${p.harga.toLocaleString('id-ID')}</div>
+        </div>
+        <button class="btn-order" style="width:100%; padding:8px;">Order</button>
       </div>
     </div>
-  `).join('');
+  `;
+  }).join('');
+  
+  document.getElementById('page-topup').innerHTML = `
+    <section class="kategori">
+      <button onclick="backToGameList()" style="background:transparent; border:none; color:#00ff88; font-size:14px; cursor:pointer; margin-bottom:15px; display:flex; align-items:center; gap:5px;">← Kembali ke Daftar Game</button>
+      <h2>${gameAktif.icon} ${gameAktif.nama}</h2>
+      <p class="sub">Pilih nominal ${gameAktif.unit} yang mau kamu top up</p>
+      <div class="produk-list grid-2col">${paketList}</div>
+    </section>
+    <footer><p>© 2025 Jimzz Store — All Rights Reserved 😈</p></footer>
+  `;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function backToGameList() {
+  document.getElementById('page-topup').innerHTML = `
+    <section class="kategori">
+      <div class="back-sticky">
+        <button class="btn-back" onclick="switchTab('home')">← Kembali ke Home</button>
+      </div>
+      
+      <div class="pengumuman maintenance" id="topupMaintenanceInfo">
+        <div class="pengumuman-header" style="justify-content:center;">
+          <span style="font-size:20px;">🔧</span>
+          <span class="pengumuman-title">SEDANG MAINTENANCE</span>
+        </div>
+        <p class="pengumuman-text" style="text-align:center;">
+          Fitur <b>Top Up Game</b> sedang dalam perbaikan.<br>
+          Silakan coba lagi nanti ya! 🙏
+        </p>
+      </div>
+      
+      <h2>🎮 Top Up <span class="accent">Game</span></h2>
+      <p class="sub">Pilih game yang mau kamu top up</p>
+      <div class="produk-list grid-2col" id="gameList"></div>
+    </section>
+    <footer><p>© 2025 Jimzz Store — All Rights Reserved 😈</p></footer>
+  `;
+  renderGameList();
+}
+
+function pilihPaket(index) {
+  paketAktif = gameAktif.paket[index];
+  produkAktif = {
+    icon: gameAktif.icon,
+    nama: gameAktif.nama + ' - ' + paketAktif.nominal,
+    desc: 'Top up ' + paketAktif.nominal + ' ke ID ' + gameAktif.nama,
+    harga: paketAktif.harga,
+    unit: gameAktif.unit,
+    kategori: 'TOP UP GAME',
+    isApk: true,
+    isTopUp: true,
+    inputLabel: '🎮 User ID ' + gameAktif.nama,
+    inputPlaceholder: 'Contoh: 123456789 (cek di profil game)',
+    inputValidasi: '',
+    inputError: ''
+  };
+  document.getElementById('modalLabel').innerText = 'TOP UP GAME';
+  document.getElementById('modalTitle').innerText = produkAktif.nama;
+  document.getElementById('modalSubtitle').innerText = produkAktif.desc;
+  const jumlahInput = document.getElementById('jumlahInput');
+  jumlahInput.value = 1; jumlahInput.min = 1; jumlahInput.max = 1; jumlahInput.disabled = true;
+  document.getElementById('minmaxText').innerText = '(otomatis 1)';
+  document.getElementById('hargaSatuan').innerText = 'Rp ' + paketAktif.harga.toLocaleString('id-ID');
+  document.getElementById('inputLabel').innerText = produkAktif.inputLabel;
+  document.getElementById('linkSaluran').placeholder = produkAktif.inputPlaceholder;
+  document.getElementById('linkSaluran').value = '';
+  document.getElementById('hpPemesan').value = '';
+  document.getElementById('waitingBox').style.display = 'none';
+  document.getElementById('qrisBox').style.display = 'none';
+  document.getElementById('qrisLoading').style.display = 'none';
+  document.getElementById('btnSayaBayar').style.display = 'none';
+  clearError();
+  hitungTotal();
+  setStep(1);
+  document.getElementById('orderModal').classList.add('show');
+  document.body.style.overflow = 'hidden';
 }
 
 function bukaOrder(kategoriId, index) {
@@ -1123,6 +1477,14 @@ setInterval(() => {
   viewCount += Math.floor(Math.random() * 3) + 1;
   const el = document.getElementById('viewCount');
   if (el) el.innerText = viewCount.toLocaleString('id-ID');
+}, 5000);
+
+// Update admin stats (simulasi — bisa lu ganti dengan data asli dari backend)
+setInterval(() => {
+  if (isAdmin) {
+    document.getElementById('adminTotalOrder').innerText = Math.floor(Math.random() * 50) + 10;
+    document.getElementById('adminTotalRevenue').innerText = 'Rp ' + (Math.floor(Math.random() * 5000) + 1000).toLocaleString('id-ID') + 'k';
+  }
 }, 5000);
 
 if ('serviceWorker' in navigator) {
