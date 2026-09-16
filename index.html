@@ -72,8 +72,6 @@ body::after {
 .share-btn { display: flex; align-items: center; justify-content: center; width: 46px; height: 46px; border-radius: 50%; border: none; cursor: pointer; font-size: 22px; color: #fff; transition: 0.3s; text-decoration: none; }
 .share-btn:hover { transform: translateY(-3px) scale(1.08); }
 .share-btn.wa { background: linear-gradient(135deg, #25D366, #1da851); box-shadow: 0 5px 20px rgba(37,211,102,0.5); }
-.share-btn.tw { background: linear-gradient(135deg, #1DA1F2, #0d8bd9); box-shadow: 0 5px 20px rgba(29,161,242,0.5); }
-.share-btn.tg { background: linear-gradient(135deg, #0088cc, #006699); box-shadow: 0 5px 20px rgba(0,136,204,0.5); }
 .share-btn.copy { background: linear-gradient(135deg, #ffd700, #ff9500); box-shadow: 0 5px 20px rgba(255,215,0,0.5); }
 
 .scroll-top { position: fixed; bottom: 90px; left: 12px; z-index: 500; width: 46px; height: 46px; border-radius: 50%; background: linear-gradient(135deg, #00ff88, #00cc6a); color: #000; border: none; font-size: 22px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 25px rgba(0,255,136,0.5); opacity: 0; transform: translateY(20px); pointer-events: none; transition: 0.3s; }
@@ -354,12 +352,6 @@ header .counter .dot { width: 8px; height: 8px; background: #00ff88; border-radi
 .qris-box img { width: 270px; max-width: 100%; background: #fff; padding: 16px; border-radius: 18px; border: 2px solid #00ff88; box-shadow: 0 0 50px rgba(0,255,136,0.4); }
 .qris-nominal { background: rgba(0,255,136,0.1); border: 1px solid #00ff88; border-radius: 14px; padding: 16px; margin-top: 18px; font-size: 14px; color: #00ff88; font-weight: 800; }
 
-.order-id-box { background: rgba(0,200,255,0.08); border: 1.5px dashed #00c8ff; border-radius: 14px; padding: 14px; margin-top: 15px; text-align: center; }
-.order-id-label { color: #00c8ff; font-size: 11px; font-weight: 800; letter-spacing: 1px; margin-bottom: 6px; text-transform: uppercase; }
-.order-id-value { color: #fff; font-size: 16px; font-weight: 800; letter-spacing: 1px; margin-bottom: 10px; font-family: monospace; }
-.order-id-copy { background: rgba(0,200,255,0.15); border: 1.5px solid #00c8ff; color: #00c8ff; padding: 8px 16px; border-radius: 10px; font-size: 12px; font-weight: 800; cursor: pointer; font-family: inherit; transition: 0.3s; }
-.order-id-copy:hover { background: rgba(0,200,255,0.3); transform: translateY(-2px); }
-
 .waiting-box { background: #08080d; border: 1.5px solid #25D366; border-radius: 16px; padding: 24px; text-align: center; margin-top: 18px; }
 .waiting-box .loading-spinner { width: 42px; height: 42px; border: 3px solid #1e2e26; border-top-color: #25D366; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 14px; }
 @keyframes spin { to { transform: rotate(360deg); } }
@@ -487,8 +479,6 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
     </div>
     <div class="share-row">
       <a class="share-btn wa" href="#" onclick="shareTo('wa');return false;" title="Share ke WhatsApp">💬</a>
-      <a class="share-btn tw" href="#" onclick="shareTo('tw');return false;" title="Share ke Twitter">🐦</a>
-      <a class="share-btn tg" href="#" onclick="shareTo('tg');return false;" title="Share ke Telegram">✈️</a>
       <button class="share-btn copy" onclick="copyLink()" title="Copy Link">🔗</button>
     </div>
     <div class="chat-admin-home">
@@ -711,11 +701,6 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
         <img id="qrisImage" src="" alt="QRIS">
         <button id="qrisDownload" onclick="downloadQris()" style="display:inline-flex; align-items:center; justify-content:center; gap:6px; margin:12px auto 0; background:transparent; border:2px solid #00ff88; color:#00ff88; padding:10px 20px; border-radius:10px; font-weight:bold; font-size:13px; cursor:pointer; font-family:inherit;">⬇️ Download QRIS</button>
         <div class="qris-nominal" id="qrisNominal">💳 Silahkan bayar QRIS ini sebesar Rp 0</div>
-        <div class="order-id-box">
-          <div class="order-id-label">🆔 Order ID Kamu</div>
-          <div class="order-id-value" id="orderIdDisplay">-</div>
-          <button class="order-id-copy" onclick="copyOrderId()">📋 Copy Order ID</button>
-        </div>
       </div>
 
       <div class="waiting-box" id="waitingBox" style="display:none;">
@@ -816,8 +801,6 @@ function shareTo(platform) {
   const text = 'Cek Jimzz Store — Top Up Game, Sosmed & Digital Produk Termurah!';
   let shareUrl = '';
   if (platform === 'wa') shareUrl = `https://wa.me/?text=${encodeURIComponent(text + '\n\n' + url)}`;
-  else if (platform === 'tw') shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
-  else if (platform === 'tg') shareUrl = `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`;
   if (shareUrl) window.open(shareUrl, '_blank');
 }
 
@@ -961,23 +944,6 @@ function startOrderPolling(orderId) {
       }
     } catch (err) { console.log('Polling error:', err); }
   }, 5000);
-}
-
-function copyOrderId() {
-  const orderId = document.getElementById('orderIdDisplay').innerText;
-  if (orderId && orderId !== '-') {
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(orderId).then(() => showToast('Order ID dicopy!', 'success'));
-    } else {
-      const temp = document.createElement('input');
-      temp.value = orderId;
-      document.body.appendChild(temp);
-      temp.select();
-      document.execCommand('copy');
-      document.body.removeChild(temp);
-      showToast('Order ID dicopy!', 'success');
-    }
-  }
 }
 
 // ============================================
@@ -1773,7 +1739,6 @@ async function keStep3() {
     const qrImageUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' + encodeURIComponent(result.qrisString);
     document.getElementById('qrisImage').src = qrImageUrl;
     document.getElementById('qrisNominal').innerText = '💳 Silahkan bayar QRIS ini sebesar Rp ' + result.totalAmount.toLocaleString('id-ID');
-    document.getElementById('orderIdDisplay').innerText = result.orderId;
     document.getElementById('qrisLoading').style.display = 'none';
     document.getElementById('qrisBox').style.display = 'block';
     document.getElementById('waitingBox').style.display = 'block';
