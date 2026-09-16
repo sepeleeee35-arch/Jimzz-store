@@ -8,146 +8,63 @@
 <meta name="theme-color" content="#00ff88">
 <style>
 * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',Arial,sans-serif; -webkit-tap-highlight-color:transparent; }
-
 body { background: #08080d; color: #e6e6e6; line-height: 1.6; padding-bottom: 100px; overflow-x: hidden; }
-
 #jimzz-neon-bg { position: fixed; top:0; left:0; width:100vw; height:100vh; z-index:-2; pointer-events:none; background: radial-gradient(circle at 20% 20%, rgba(0,255,136,0.06) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(0,255,136,0.05) 0%, transparent 50%), #08080d; }
 
-/* LOADING SCREEN */
-#loadingScreen {
-  position: fixed; inset: 0; background: #08080d; z-index: 9999;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  transition: opacity 0.5s ease;
-}
+#loadingScreen { position: fixed; inset: 0; background: #08080d; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.5s ease; }
 #loadingScreen.hide { opacity: 0; pointer-events: none; }
-.loading-logo {
-  font-size: 48px; font-weight: bold; color: #00ff88;
-  text-shadow: 0 0 30px rgba(0,255,136,0.8);
-  animation: pulseGlow 1.5s ease-in-out infinite;
-}
+.loading-logo { font-size: 48px; font-weight: bold; color: #00ff88; text-shadow: 0 0 30px rgba(0,255,136,0.8); animation: pulseGlow 1.5s ease-in-out infinite; }
 .loading-tagline { color: #666; font-size: 13px; margin-top: 10px; letter-spacing: 2px; text-transform: uppercase; }
 .loading-bar { width: 200px; height: 3px; background: #1a1a24; border-radius: 2px; margin-top: 25px; overflow: hidden; }
 .loading-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #00ff88, #00cc6a); border-radius: 2px; animation: loadBar 1.2s ease-out forwards; }
 @keyframes loadBar { to { width: 100%; } }
 @keyframes pulseGlow { 0%,100% { opacity:1; transform: scale(1); } 50% { opacity:0.7; transform: scale(0.97); } }
 
-/* CHAT ADMIN FLOATING - KANAN ATAS */
-.chat-admin-float {
-  position: fixed; top: 15px; right: 15px; z-index: 500;
-  width: 50px; height: 50px; border-radius: 50%;
-  background: linear-gradient(135deg, #25D366, #1da851);
-  display: flex; align-items: center; justify-content: center;
-  text-decoration: none; font-size: 26px; color: #fff;
-  box-shadow: 0 5px 25px rgba(37,211,102,0.6);
-  animation: waPulse 2s infinite;
-  transition: 0.3s;
-}
+/* CHAT ADMIN - FIXED KANAN ATAS */
+.chat-admin-float { position: fixed; top: 12px; right: 12px; z-index: 999; width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #25D366, #1da851); display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 24px; color: #fff; box-shadow: 0 5px 25px rgba(37,211,102,0.7); animation: waPulse 2s infinite; }
 .chat-admin-float:hover { transform: scale(1.1); }
-@keyframes waPulse { 0%,100% { box-shadow: 0 5px 25px rgba(37,211,102,0.6); } 50% { box-shadow: 0 5px 35px rgba(37,211,102,0.9), 0 0 0 12px rgba(37,211,102,0.1); } }
-.chat-admin-tooltip {
-  position: fixed; top: 25px; right: 75px; z-index: 500;
-  background: #25D366; color: #fff; font-size: 10px; font-weight: bold;
-  padding: 6px 12px; border-radius: 10px; white-space: nowrap;
-  box-shadow: 0 3px 15px rgba(37,211,102,0.4);
-  animation: tooltipFloat 3s ease-in-out infinite;
-}
-.chat-admin-tooltip::after {
-  content: ""; position: absolute; right: -6px; top: 50%; transform: translateY(-50%);
-  border-left: 6px solid #25D366; border-top: 6px solid transparent; border-bottom: 6px solid transparent;
-}
-@keyframes tooltipFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+@keyframes waPulse { 0%,100% { box-shadow: 0 5px 25px rgba(37,211,102,0.7); } 50% { box-shadow: 0 5px 35px rgba(37,211,102,1), 0 0 0 12px rgba(37,211,102,0.15); } }
 
-/* ADMIN BADGE */
-.admin-badge-float {
-  position: fixed; top: 15px; right: 80px; z-index: 500;
-  background: linear-gradient(135deg, #ffd700, #ff9500); color: #000;
-  padding: 8px 14px; border-radius: 20px; font-size: 11px; font-weight: bold;
-  box-shadow: 0 5px 20px rgba(255,215,0,0.5); display: none; align-items: center; gap: 6px;
-  cursor: pointer;
-}
+.admin-badge-float { position: fixed; top: 12px; right: 70px; z-index: 999; background: linear-gradient(135deg, #ffd700, #ff9500); color: #000; padding: 8px 14px; border-radius: 20px; font-size: 11px; font-weight: bold; box-shadow: 0 5px 20px rgba(255,215,0,0.5); display: none; align-items: center; gap: 6px; cursor: pointer; }
 .admin-badge-float.show { display: flex; }
 .admin-badge-float .logout-x { color: #000; font-weight: bold; margin-left: 5px; }
 
-/* ADMIN LOGIN MODAL */
-#adminLoginModal {
-  position: fixed; inset: 0; background: rgba(0,0,0,0.95); backdrop-filter: blur(10px);
-  z-index: 5000; display: none; align-items: center; justify-content: center; padding: 20px;
-}
+#adminLoginModal { position: fixed; inset: 0; background: rgba(0,0,0,0.95); backdrop-filter: blur(10px); z-index: 5000; display: none; align-items: center; justify-content: center; padding: 20px; }
 #adminLoginModal.show { display: flex; }
-.admin-login-box {
-  background: linear-gradient(145deg, #0f1a14, #0d0d15); border: 1px solid #1e2e26;
-  border-radius: 22px; padding: 35px 28px; max-width: 400px; width: 100%; text-align: center;
-  box-shadow: 0 30px 80px rgba(0,0,0,0.8); position: relative;
-  animation: slideUp 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
-}
+.admin-login-box { background: linear-gradient(145deg, #0f1a14, #0d0d15); border: 1px solid #1e2e26; border-radius: 22px; padding: 35px 28px; max-width: 400px; width: 100%; text-align: center; box-shadow: 0 30px 80px rgba(0,0,0,0.8); position: relative; animation: slideUp 0.4s cubic-bezier(0.175,0.885,0.32,1.275); }
 .admin-login-box::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #00ff88, #00cc6a, #00ff88); border-radius: 22px 22px 0 0; }
 .admin-login-icon { font-size: 50px; margin-bottom: 15px; filter: drop-shadow(0 0 20px rgba(0,255,136,0.6)); }
 .admin-login-box h2 { color: #00ff88; font-size: 22px; margin-bottom: 8px; }
 .admin-login-box p { color: #777; font-size: 12px; margin-bottom: 20px; }
-.admin-login-box input {
-  width: 100%; background: #08080d; border: 1.5px solid #1e2e26; color: #fff;
-  padding: 14px 16px; border-radius: 12px; font-size: 14px; text-align: center;
-  letter-spacing: 2px; outline: none; margin-bottom: 15px; font-family: inherit;
-}
+.admin-login-box input { width: 100%; background: #08080d; border: 1.5px solid #1e2e26; color: #fff; padding: 14px 16px; border-radius: 12px; font-size: 14px; text-align: center; letter-spacing: 2px; outline: none; margin-bottom: 15px; font-family: inherit; }
 .admin-login-box input:focus { border-color: #00ff88; box-shadow: 0 0 20px rgba(0,255,136,0.2); }
-.admin-login-box button {
-  width: 100%; background: linear-gradient(135deg, #00ff88, #00cc6a); color: #000;
-  border: none; padding: 14px; border-radius: 12px; font-weight: bold; font-size: 14px;
-  cursor: pointer; font-family: inherit; transition: 0.3s;
-}
+.admin-login-box button { width: 100%; background: linear-gradient(135deg, #00ff88, #00cc6a); color: #000; border: none; padding: 14px; border-radius: 12px; font-weight: bold; font-size: 14px; cursor: pointer; font-family: inherit; transition: 0.3s; }
 .admin-login-box button:hover { transform: scale(1.02); }
 .admin-login-error { color: #ff6b6b; font-size: 12px; margin-top: 10px; display: none; }
 .admin-login-error.show { display: block; }
 
-/* HEADER */
 header { text-align: center; padding: 50px 20px 40px; position: relative; z-index: 5; overflow: hidden; }
-header::before {
-  content: ""; position: absolute; top: -50%; left: 50%; transform: translateX(-50%);
-  width: 300%; height: 300%; background: conic-gradient(from 0deg, transparent, rgba(0,255,136,0.1), transparent, rgba(0,255,136,0.05), transparent);
-  animation: rotateBg 20s linear infinite; z-index: -1;
-}
+header::before { content: ""; position: absolute; top: -50%; left: 50%; transform: translateX(-50%); width: 300%; height: 300%; background: conic-gradient(from 0deg, transparent, rgba(0,255,136,0.1), transparent, rgba(0,255,136,0.05), transparent); animation: rotateBg 20s linear infinite; z-index: -1; }
 @keyframes rotateBg { to { transform: translateX(-50%) rotate(360deg); } }
-.header-top { display: flex; justify-content: space-between; align-items: center; max-width: 1100px; margin: 0 auto 25px; padding: 0 5px; }
+.header-top { display: flex; justify-content: center; align-items: center; max-width: 1100px; margin: 0 auto 25px; padding: 0 5px; }
 .logo-text { color: #00ff88; font-weight: bold; font-size: 15px; letter-spacing: 2px; text-shadow: 0 0 15px rgba(0,255,136,0.6); cursor: pointer; user-select: none; }
-.theme-toggle { background: rgba(0,255,136,0.08); border: 1px solid rgba(0,255,136,0.3); color: #00ff88; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
-.theme-toggle:hover { background: rgba(0,255,136,0.2); transform: rotate(20deg); }
-.hero-badge {
-  display: inline-block; background: rgba(0,255,136,0.1); border: 1px solid rgba(0,255,136,0.3);
-  color: #00ff88; font-size: 11px; font-weight: bold; padding: 6px 16px; border-radius: 20px;
-  margin-bottom: 15px; letter-spacing: 1px; animation: floatUpDownBadge 3s ease-in-out infinite;
-}
+.hero-badge { display: inline-block; background: rgba(0,255,136,0.1); border: 1px solid rgba(0,255,136,0.3); color: #00ff88; font-size: 11px; font-weight: bold; padding: 6px 16px; border-radius: 20px; margin-bottom: 15px; letter-spacing: 1px; animation: floatUpDownBadge 3s ease-in-out infinite; }
 @keyframes floatUpDownBadge { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
 header h1 { font-size: 44px; font-weight: 900; color: #fff; text-shadow: 0 0 30px rgba(0,255,136,0.8), 0 0 60px rgba(0,255,136,0.4); letter-spacing: -1px; margin-bottom: 8px; }
 header h1 .gradient-text { background: linear-gradient(135deg, #00ff88, #00cc6a, #00ff88); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 header .tagline { color: #888; font-size: 14px; margin-bottom: 20px; }
-header .counter {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: linear-gradient(135deg, rgba(0,255,136,0.15), rgba(0,255,136,0.05));
-  border: 1px solid rgba(0,255,136,0.3); color: #00ff88;
-  padding: 8px 20px; border-radius: 25px; font-size: 12px; font-weight: bold;
-  box-shadow: 0 0 25px rgba(0,255,136,0.2);
-}
+header .counter { display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, rgba(0,255,136,0.15), rgba(0,255,136,0.05)); border: 1px solid rgba(0,255,136,0.3); color: #00ff88; padding: 8px 20px; border-radius: 25px; font-size: 12px; font-weight: bold; box-shadow: 0 0 25px rgba(0,255,136,0.2); }
 header .counter .dot { width: 8px; height: 8px; background: #00ff88; border-radius: 50%; animation: blink 1.5s infinite; box-shadow: 0 0 10px #00ff88; }
 @keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
-
-/* TRUST BADGES */
 .trust-row { display: flex; justify-content: center; gap: 12px; margin-top: 25px; flex-wrap: wrap; }
 .trust-item { display: flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.03); border: 1px solid #222; padding: 6px 14px; border-radius: 20px; font-size: 11px; color: #aaa; }
 .trust-item .trust-icon { font-size: 14px; }
 
-/* TAB */
 .tab-page { display: none; animation: fadeIn 0.4s ease; }
 .tab-page.active { display: block; }
 @keyframes fadeIn { from { opacity:0; transform: translateY(15px); } to { opacity:1; transform: translateY(0); } }
 
-/* BOTTOM NAV */
-.bottom-nav {
-  position: fixed; bottom: 0; left: 0; right: 0;
-  background: rgba(13,13,21,0.95); backdrop-filter: blur(20px);
-  border-top: 1px solid #222; display: flex; justify-content: space-around; align-items: center;
-  z-index: 600; padding: 6px 0; padding-bottom: max(6px, env(safe-area-inset-bottom));
-  box-shadow: 0 -5px 30px rgba(0,0,0,0.5);
-}
+.bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(13,13,21,0.95); backdrop-filter: blur(20px); border-top: 1px solid #222; display: flex; justify-content: space-around; align-items: center; z-index: 600; padding: 6px 0; padding-bottom: max(6px, env(safe-area-inset-bottom)); box-shadow: 0 -5px 30px rgba(0,0,0,0.5); }
 .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 8px 4px; cursor: pointer; background: transparent; border: none; color: #555; font-family: inherit; transition: 0.3s; position: relative; }
 .nav-item .nav-icon { font-size: 20px; transition: 0.3s; }
 .nav-item .nav-label { font-size: 9px; font-weight: bold; letter-spacing: 0.3px; text-transform: uppercase; }
@@ -155,34 +72,18 @@ header .counter .dot { width: 8px; height: 8px; background: #00ff88; border-radi
 .nav-item.active .nav-icon { transform: translateY(-3px) scale(1.15); filter: drop-shadow(0 0 10px rgba(0,255,136,0.8)); }
 .nav-item.active::before { content: ""; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 30px; height: 3px; background: #00ff88; border-radius: 0 0 3px 3px; box-shadow: 0 0 10px #00ff88; }
 
-/* KATEGORI */
 .kategori { padding: 35px 20px; max-width: 1100px; margin: auto; position: relative; z-index: 5; }
 .kategori h2 { text-align: center; font-size: 26px; color: #fff; margin-bottom: 6px; font-weight: 800; }
 .kategori h2 .accent { color: #00ff88; text-shadow: 0 0 20px rgba(0,255,136,0.5); }
 .sub { text-align: center; color: #777; margin-bottom: 30px; font-size: 13px; }
 
-/* MENU HOME */
-.menu-home {
-  background: linear-gradient(145deg, rgba(15,25,20,0.9), rgba(13,13,21,0.9));
-  border: 1px solid #1e2e26; border-radius: 18px; padding: 22px 20px;
-  margin-bottom: 14px; cursor: pointer; transition: all 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
-  position: relative; overflow: hidden; display: flex; align-items: center; gap: 16px;
-}
-.menu-home::before {
-  content: ""; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(0,255,136,0.1), transparent);
-  transition: 0.6s;
-}
+.menu-home { background: linear-gradient(145deg, rgba(15,25,20,0.9), rgba(13,13,21,0.9)); border: 1px solid #1e2e26; border-radius: 18px; padding: 22px 20px; margin-bottom: 14px; cursor: pointer; transition: all 0.4s cubic-bezier(0.175,0.885,0.32,1.275); position: relative; overflow: hidden; display: flex; align-items: center; gap: 16px; }
+.menu-home::before { content: ""; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(0,255,136,0.1), transparent); transition: 0.6s; }
 .menu-home:hover::before { left: 100%; }
 .menu-home:hover { border-color: #00ff88; box-shadow: 0 10px 40px rgba(0,255,136,0.3); transform: translateY(-4px); }
 .menu-home::after { content: "›"; position: absolute; right: 20px; top: 50%; transform: translateY(-50%); color: #00ff88; font-size: 26px; font-weight: bold; opacity: 0.4; transition: 0.3s; }
 .menu-home:hover::after { opacity: 1; right: 15px; }
-.menu-home-icon {
-  font-size: 32px; width: 60px; height: 60px; flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center;
-  background: linear-gradient(135deg, rgba(0,255,136,0.15), rgba(0,255,136,0.05));
-  border-radius: 15px; border: 1px solid rgba(0,255,136,0.2);
-}
+.menu-home-icon { font-size: 32px; width: 60px; height: 60px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, rgba(0,255,136,0.15), rgba(0,255,136,0.05)); border-radius: 15px; border: 1px solid rgba(0,255,136,0.2); }
 .menu-home-text { flex: 1; text-align: left; min-width: 0; }
 .menu-home-title { color: #fff; font-weight: bold; font-size: 16px; margin-bottom: 3px; }
 .menu-home-desc { color: #777; font-size: 12px; }
@@ -191,18 +92,9 @@ header .counter .dot { width: 8px; height: 8px; background: #00ff88; border-radi
 .menu-home.disabled::after { content: "🔧"; opacity: 1; font-size: 22px; }
 .menu-home.admin-view { border-color: rgba(255,215,0,0.5); opacity: 1; cursor: pointer; }
 .menu-home.admin-view::after { content: "👑"; opacity: 1; font-size: 22px; }
-.maintenance-badge {
-  display: inline-block; background: linear-gradient(135deg, #ffc800, #ff9500);
-  color: #000; font-size: 9px; font-weight: bold; padding: 3px 10px;
-  border-radius: 10px; margin-top: 6px; letter-spacing: 0.5px;
-}
+.maintenance-badge { display: inline-block; background: linear-gradient(135deg, #ffc800, #ff9500); color: #000; font-size: 9px; font-weight: bold; padding: 3px 10px; border-radius: 10px; margin-top: 6px; letter-spacing: 0.5px; }
 
-/* PENGUMUMAN */
-.pengumuman {
-  background: linear-gradient(145deg, rgba(255,200,0,0.08), rgba(255,150,0,0.03));
-  border: 1px solid rgba(255,200,0,0.25); border-left: 4px solid #ffc800;
-  border-radius: 14px; padding: 16px 18px; margin-bottom: 22px;
-}
+.pengumuman { background: linear-gradient(145deg, rgba(255,200,0,0.08), rgba(255,150,0,0.03)); border: 1px solid rgba(255,200,0,0.25); border-left: 4px solid #ffc800; border-radius: 14px; padding: 16px 18px; margin-bottom: 22px; }
 .pengumuman-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
 .pengumuman-title { color: #ffc800; font-size: 13px; font-weight: bold; letter-spacing: 1px; }
 .pengumuman-text { color: #bbb; font-size: 12px; line-height: 1.7; margin-bottom: 8px; }
@@ -216,12 +108,7 @@ header .counter .dot { width: 8px; height: 8px; background: #00ff88; border-radi
 .pengumuman.admin-preview-info { background: linear-gradient(145deg, rgba(255,215,0,0.1), rgba(255,150,0,0.05)); border: 1px solid rgba(255,215,0,0.4); border-left: 4px solid #ffd700; text-align: center; }
 .pengumuman.admin-preview-info .pengumuman-title { color: #ffd700; font-size: 15px; }
 
-/* ADMIN PANEL */
-.admin-panel {
-  background: linear-gradient(145deg, rgba(255,215,0,0.08), rgba(255,150,0,0.03));
-  border: 2px solid rgba(255,215,0,0.4); border-radius: 16px;
-  padding: 20px; margin-bottom: 22px;
-}
+.admin-panel { background: linear-gradient(145deg, rgba(255,215,0,0.08), rgba(255,150,0,0.03)); border: 2px solid rgba(255,215,0,0.4); border-radius: 16px; padding: 20px; margin-bottom: 22px; }
 .admin-panel-header { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
 .admin-panel-title { color: #ffd700; font-size: 15px; font-weight: bold; letter-spacing: 1px; }
 .admin-panel-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -229,26 +116,16 @@ header .counter .dot { width: 8px; height: 8px; background: #00ff88; border-radi
 .admin-stat-value { color: #ffd700; font-size: 20px; font-weight: bold; }
 .admin-stat-label { color: #888; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 3px; }
 
-/* PRODUK CARD */
 .produk-list { display: flex; flex-direction: column; gap: 14px; }
 .produk-list.grid-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.produk-card {
-  background: linear-gradient(145deg, rgba(15,25,20,0.9), rgba(13,13,21,0.9));
-  border: 1px solid #1e2e26; border-radius: 16px; padding: 18px 16px;
-  transition: 0.4s cubic-bezier(0.175,0.885,0.32,1.275); position: relative; overflow: hidden;
-}
-.produk-card::before {
-  content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-  background: linear-gradient(90deg, transparent, #00ff88, transparent); opacity: 0;
-  transition: 0.3s;
-}
+.produk-card { background: linear-gradient(145deg, rgba(15,25,20,0.9), rgba(13,13,21,0.9)); border: 1px solid #1e2e26; border-radius: 16px; padding: 18px 16px; transition: 0.4s cubic-bezier(0.175,0.885,0.32,1.275); position: relative; overflow: hidden; }
+.produk-card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, #00ff88, transparent); opacity: 0; transition: 0.3s; }
 .produk-card:hover::before { opacity: 1; }
 .produk-card:hover { border-color: #00ff88; box-shadow: 0 15px 40px rgba(0,255,136,0.2); transform: translateY(-4px); }
 .produk-card.disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; border-color: #333; }
 .produk-card.admin-preview { border-color: rgba(255,215,0,0.6); opacity: 1; cursor: pointer; }
 .produk-card.admin-preview:hover { border-color: #ffd700; box-shadow: 0 15px 40px rgba(255,215,0,0.3); }
 .produk-card.admin-preview .btn-order { background: linear-gradient(135deg, #ffd700, #ff9500); color: #000; }
-.produk-card.admin-preview .btn-order:hover { box-shadow: 0 8px 30px rgba(255,215,0,0.5); }
 .produk-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
 .produk-icon { font-size: 36px; flex-shrink: 0; filter: drop-shadow(0 0 10px rgba(0,255,136,0.3)); }
 .produk-title-block { flex: 1; min-width: 0; }
@@ -260,30 +137,13 @@ header .counter .dot { width: 8px; height: 8px; background: #00ff88; border-radi
 .produk-harga-label { color: #555; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
 .produk-harga { color: #00ff88; font-size: 17px; font-weight: bold; text-shadow: 0 0 15px rgba(0,255,136,0.3); }
 .produk-harga span { font-size: 12px; color: #777; font-weight: normal; }
-.btn-order {
-  background: linear-gradient(135deg, #00ff88, #00cc6a); color: #000; border: none;
-  padding: 12px 24px; border-radius: 12px; font-weight: bold; font-size: 13px;
-  cursor: pointer; white-space: nowrap; transition: 0.3s;
-  box-shadow: 0 5px 20px rgba(0,255,136,0.3);
-}
+.btn-order { background: linear-gradient(135deg, #00ff88, #00cc6a); color: #000; border: none; padding: 12px 24px; border-radius: 12px; font-weight: bold; font-size: 13px; cursor: pointer; white-space: nowrap; transition: 0.3s; box-shadow: 0 5px 20px rgba(0,255,136,0.3); }
 .btn-order:hover { transform: scale(1.05); box-shadow: 0 8px 30px rgba(0,255,136,0.5); }
 .btn-order:disabled { background: #333; color: #666; cursor: not-allowed; box-shadow: none; }
-.badge-hot {
-  position: absolute; top: 12px; right: 12px;
-  background: linear-gradient(135deg, #ff2b2b, #ff6b6b); color: #fff;
-  font-size: 9px; font-weight: bold; padding: 3px 8px; border-radius: 10px;
-  letter-spacing: 0.5px; box-shadow: 0 0 15px rgba(255,43,43,0.5);
-  animation: pulseBadge 2s infinite;
-}
+.badge-hot { position: absolute; top: 12px; right: 12px; background: linear-gradient(135deg, #ff2b2b, #ff6b6b); color: #fff; font-size: 9px; font-weight: bold; padding: 3px 8px; border-radius: 10px; letter-spacing: 0.5px; box-shadow: 0 0 15px rgba(255,43,43,0.5); animation: pulseBadge 2s infinite; }
 @keyframes pulseBadge { 0%,100% { transform: scale(1); } 50% { transform: scale(1.05); } }
-.badge-admin-preview {
-  position: absolute; top: 12px; right: 12px;
-  background: linear-gradient(135deg, #ffd700, #ff9500); color: #000;
-  font-size: 9px; font-weight: bold; padding: 3px 8px; border-radius: 10px;
-  letter-spacing: 0.5px; box-shadow: 0 0 15px rgba(255,215,0,0.5);
-}
+.badge-admin-preview { position: absolute; top: 12px; right: 12px; background: linear-gradient(135deg, #ffd700, #ff9500); color: #000; font-size: 9px; font-weight: bold; padding: 3px 8px; border-radius: 10px; letter-spacing: 0.5px; box-shadow: 0 0 15px rgba(255,215,0,0.5); }
 
-/* GRID 2COL ADJUSTMENTS */
 .produk-list.grid-2col .produk-card { padding: 15px 12px; display: flex; flex-direction: column; justify-content: space-between; min-height: 160px; margin: 0; }
 .produk-list.grid-2col .produk-header { flex-direction: column; align-items: flex-start; gap: 6px; margin-bottom: 8px; }
 .produk-list.grid-2col .produk-icon { font-size: 34px; }
@@ -296,38 +156,12 @@ header .counter .dot { width: 8px; height: 8px; background: #00ff88; border-radi
 .produk-list.grid-2col .produk-harga { font-size: 13px; text-align: center; }
 .produk-list.grid-2col .btn-order { padding: 8px 10px; font-size: 11px; width: 100%; text-align: center; }
 
-/* TESTIMONI */
-.testi-section { padding: 40px 20px; max-width: 1100px; margin: auto; position: relative; z-index: 5; }
-.testi-section h2 { text-align: center; font-size: 26px; color: #fff; margin-bottom: 6px; font-weight: 800; }
-.testi-cards { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 25px; }
-.testi-card {
-  background: linear-gradient(145deg, rgba(15,25,20,0.9), rgba(13,13,21,0.9));
-  border: 1px solid #1e2e26; border-radius: 16px; padding: 20px;
-  transition: 0.3s;
-}
-.testi-card:hover { border-color: #00ff88; transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,255,136,0.15); }
-.testi-stars { color: #ffd700; font-size: 15px; margin-bottom: 10px; letter-spacing: 2px; }
-.testi-text { color: #ccc; font-size: 13px; line-height: 1.6; font-style: italic; margin-bottom: 12px; }
-.testi-name { color: #00ff88; font-size: 12px; font-weight: bold; text-align: right; }
-
-/* MODAL */
 .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); backdrop-filter: blur(8px); z-index: 400; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; }
 .modal-overlay.show { display: flex; }
-.modal-box {
-  background: linear-gradient(145deg, #0f1a14, #0d0d15); border: 1px solid #1e2e26;
-  border-radius: 22px; padding: 28px 24px; width: 100%; max-width: 440px;
-  position: relative; animation: slideUp 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
-  max-height: 90vh; overflow-y: auto; box-shadow: 0 30px 80px rgba(0,0,0,0.8);
-}
+.modal-box { background: linear-gradient(145deg, #0f1a14, #0d0d15); border: 1px solid #1e2e26; border-radius: 22px; padding: 28px 24px; width: 100%; max-width: 440px; position: relative; animation: slideUp 0.4s cubic-bezier(0.175,0.885,0.32,1.275); max-height: 90vh; overflow-y: auto; box-shadow: 0 30px 80px rgba(0,0,0,0.8); }
 @keyframes slideUp { from { opacity:0; transform: translateY(40px) scale(0.95); } to { opacity:1; transform: translateY(0) scale(1); } }
 .modal-box::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #00ff88, #00cc6a, #00ff88); border-radius: 22px 22px 0 0; }
-.modal-close {
-  position: absolute; top: -12px; right: -12px; background: #ff2b2b; border: 3px solid #0d0d15;
-  color: #fff; font-size: 24px; cursor: pointer; width: 46px; height: 46px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 5px 25px rgba(255,43,43,0.6); font-weight: bold; line-height: 1; z-index: 10;
-  transition: 0.3s;
-}
+.modal-close { position: absolute; top: -12px; right: -12px; background: #ff2b2b; border: 3px solid #0d0d15; color: #fff; font-size: 24px; cursor: pointer; width: 46px; height: 46px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 25px rgba(255,43,43,0.6); font-weight: bold; line-height: 1; z-index: 10; transition: 0.3s; }
 .modal-close:hover { background: #ff5555; transform: scale(1.1) rotate(90deg); }
 .steps-indicator { display: flex; justify-content: space-between; margin-bottom: 25px; position: relative; }
 .steps-indicator::before { content: ""; position: absolute; top: 15px; left: 15%; right: 15%; height: 2px; background: #1e2e26; z-index: 1; }
@@ -363,12 +197,7 @@ header .counter .dot { width: 8px; height: 8px; background: #00ff88; border-radi
 .total-row.bonus { background: rgba(0,255,136,0.08); border-radius: 8px; padding: 7px 10px; margin-top: 5px; }
 .total-row.bonus .label { color: #00ff88; font-weight: bold; }
 .total-row.bonus .value { color: #00ff88; }
-.btn-next {
-  width: 100%; background: linear-gradient(135deg, #00ff88, #00cc6a); color: #000; border: none;
-  padding: 16px; border-radius: 14px; font-weight: bold; font-size: 15px; cursor: pointer;
-  display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 8px;
-  transition: 0.3s; box-shadow: 0 8px 30px rgba(0,255,136,0.3); font-family: inherit;
-}
+.btn-next { width: 100%; background: linear-gradient(135deg, #00ff88, #00cc6a); color: #000; border: none; padding: 16px; border-radius: 14px; font-weight: bold; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 8px; transition: 0.3s; box-shadow: 0 8px 30px rgba(0,255,136,0.3); font-family: inherit; }
 .btn-next:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0,255,136,0.5); }
 .btn-next:disabled { background: #222; color: #555; cursor: not-allowed; box-shadow: none; }
 .qris-box { text-align: center; margin: 15px 0; }
@@ -387,25 +216,11 @@ header .counter .dot { width: 8px; height: 8px; background: #00ff88; border-radi
 .term-text a { color: #00ff88; text-decoration: none; }
 footer { text-align: center; padding: 30px 20px; color: #444; font-size: 12px; border-top: 1px solid #15151c; margin-top: 40px; position: relative; z-index: 5; }
 
-/* STICKY BACK - VERSI BARU: TOMBOL PANAH KECIL DI POJOK KIRI ATAS */
-.back-sticky {
-  position: sticky; top: 0; z-index: 100;
-  background: linear-gradient(180deg, #08080d 0%, rgba(8,8,13,0.95) 100%);
-  padding: 12px 20px;
-  margin: -35px -20px 15px -20px;
-  border-bottom: 1px solid #1e2e26;
-}
-.btn-back {
-  background: rgba(0,255,136,0.1); border: 2px solid #00ff88;
-  color: #00ff88; width: 48px; height: 48px; border-radius: 12px;
-  font-size: 24px; font-weight: bold; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: 0.3s; font-family: inherit;
-}
+.back-sticky { position: sticky; top: 0; z-index: 100; background: linear-gradient(180deg, #08080d 0%, rgba(8,8,13,0.95) 100%); padding: 12px 20px; margin: -35px -20px 15px -20px; border-bottom: 1px solid #1e2e26; }
+.btn-back { background: rgba(0,255,136,0.1); border: 2px solid #00ff88; color: #00ff88; width: 48px; height: 48px; border-radius: 12px; font-size: 24px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.3s; font-family: inherit; }
 .btn-back:hover { background: rgba(0,255,136,0.25); transform: scale(1.05); }
 .btn-back:active { transform: scale(0.95); }
 
-/* MUSIC */
 .music-player { position: fixed; bottom: 85px; right: 12px; width: 220px; max-width: calc(100% - 24px); background: rgba(15,26,20,0.95); backdrop-filter: blur(10px); border: 1px solid #1e2e26; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.7); z-index: 300; overflow: hidden; }
 .music-mini { display: flex; align-items: center; gap: 8px; padding: 8px 10px; cursor: pointer; }
 .music-cover { width: 32px; height: 32px; border-radius: 7px; background: #08080d; display: flex; align-items: center; justify-content: center; flex-shrink: 0; position: relative; overflow: hidden; }
@@ -437,8 +252,6 @@ footer { text-align: center; padding: 30px 20px; color: #444; font-size: 12px; b
 .music-list::-webkit-scrollbar { width: 3px; }
 .music-list::-webkit-scrollbar-thumb { background: #00ff88; border-radius: 2px; }
 
-@media (min-width: 600px) { .testi-cards { grid-template-columns: 1fr 1fr 1fr; } }
-
 @media (max-width: 480px) {
   header h1 { font-size: 34px; }
   .produk-icon { font-size: 28px; }
@@ -446,9 +259,8 @@ footer { text-align: center; padding: 30px 20px; color: #444; font-size: 12px; b
   .nav-item .nav-icon { font-size: 18px; }
   .music-player { bottom: 80px; right: 10px; width: 200px; }
   .modal-close { top: -10px; right: -10px; width: 42px; height: 42px; font-size: 22px; }
-  .chat-admin-float { width: 44px; height: 44px; font-size: 22px; top: 12px; right: 12px; }
-  .chat-admin-tooltip { display: none; }
-  .admin-badge-float { top: 12px; right: 62px; font-size: 10px; padding: 6px 10px; }
+  .chat-admin-float { width: 42px; height: 42px; font-size: 20px; top: 10px; right: 10px; }
+  .admin-badge-float { top: 10px; right: 60px; font-size: 10px; padding: 6px 10px; }
 }
 </style>
 </head>
@@ -460,9 +272,7 @@ footer { text-align: center; padding: 30px 20px; color: #444; font-size: 12px; b
   <div class="loading-bar"><div class="loading-bar-fill"></div></div>
 </div>
 
-<!-- CHAT ADMIN FLOATING - KANAN ATAS -->
 <a href="https://wa.me/6283898669427?text=Halo%20Admin%20Jimzz%20Store%2C%20saya%20mau%20tanya..." target="_blank" class="chat-admin-float" title="Chat Admin">💬</a>
-<div class="chat-admin-tooltip">Chat Admin</div>
 
 <div class="admin-badge-float" id="adminBadge" onclick="adminLogout()">
   👑 ADMIN <span class="logout-x">×</span>
@@ -485,7 +295,6 @@ footer { text-align: center; padding: 30px 20px; color: #444; font-size: 12px; b
   <header>
     <div class="header-top">
       <span class="logo-text" id="secretLogo" onclick="secretClick()">💚 JIMZZ STORE</span>
-      <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🎨</button>
     </div>
     <div class="hero-badge">⚡ TRUSTED SINCE 2025</div>
     <h1><span class="gradient-text">Jimzz Store</span></h1>
@@ -505,22 +314,10 @@ footer { text-align: center; padding: 30px 20px; color: #444; font-size: 12px; b
         <span class="admin-panel-title">ADMIN DASHBOARD</span>
       </div>
       <div class="admin-panel-stats">
-        <div class="admin-stat">
-          <div class="admin-stat-value" id="adminTotalOrder">0</div>
-          <div class="admin-stat-label">Total Order</div>
-        </div>
-        <div class="admin-stat">
-          <div class="admin-stat-value" id="adminTotalRevenue">Rp 0</div>
-          <div class="admin-stat-label">Pendapatan</div>
-        </div>
-        <div class="admin-stat">
-          <div class="admin-stat-value" id="adminProdukMT">5</div>
-          <div class="admin-stat-label">Produk MT</div>
-        </div>
-        <div class="admin-stat">
-          <div class="admin-stat-value" id="adminStatus">Online</div>
-          <div class="admin-stat-label">Status Web</div>
-        </div>
+        <div class="admin-stat"><div class="admin-stat-value" id="adminTotalOrder">0</div><div class="admin-stat-label">Total Order</div></div>
+        <div class="admin-stat"><div class="admin-stat-value" id="adminTotalRevenue">Rp 0</div><div class="admin-stat-label">Pendapatan</div></div>
+        <div class="admin-stat"><div class="admin-stat-value" id="adminProdukMT">5</div><div class="admin-stat-label">Produk MT</div></div>
+        <div class="admin-stat"><div class="admin-stat-value" id="adminStatus">Online</div><div class="admin-stat-label">Status Web</div></div>
       </div>
     </div>
   </section>
@@ -563,48 +360,16 @@ footer { text-align: center; padding: 30px 20px; color: #444; font-size: 12px; b
     </div>
   </section>
 
-  <section class="testi-section">
-    <h2>⭐ <span class="accent">Testimoni</span></h2>
-    <p class="sub">Bukti nyata dari pelanggan setia</p>
-    <div class="testi-cards">
-      <div class="testi-card">
-        <div class="testi-stars">⭐⭐⭐⭐⭐</div>
-        <p class="testi-text">"Cepet banget prosesnya, baru 5 menit langsung masuk. Recommended!"</p>
-        <p class="testi-name">— Andi, Jakarta</p>
-      </div>
-      <div class="testi-card">
-        <div class="testi-stars">⭐⭐⭐⭐⭐</div>
-        <p class="testi-text">"Harga termurah dibanding yang lain, aman gak ada banned. Mantap!"</p>
-        <p class="testi-name">— Bilzz, Surabaya</p>
-      </div>
-      <div class="testi-card">
-        <div class="testi-stars">⭐⭐⭐⭐⭐</div>
-        <p class="testi-text">"Adminnya ramah, fast respon, ordernya cepat selesai. Lanjut order lagi!"</p>
-        <p class="testi-name">— Rani, Bandung</p>
-      </div>
-    </div>
-  </section>
-
   <footer><p>© 2025 Jimzz Store — All Rights Reserved 😈</p></footer>
 </div>
 
 <div class="tab-page" id="page-topup">
   <section class="kategori">
-    <div class="back-sticky">
-      <button class="btn-back" onclick="switchTab('home')">←</button>
-    </div>
-    
+    <div class="back-sticky"><button class="btn-back" onclick="switchTab('home')">←</button></div>
     <div class="pengumuman maintenance" id="topupMaintenanceInfo">
-      <div class="pengumuman-header" style="justify-content:center;">
-        <span style="font-size:20px;">🔧</span>
-        <span class="pengumuman-title">SEDANG MAINTENANCE</span>
-      </div>
-      <p class="pengumuman-text" style="text-align:center;">
-        Fitur <b>Top Up Game</b> sedang dalam perbaikan.<br>
-        Silakan coba lagi nanti ya! 🙏
-      </p>
+      <div class="pengumuman-header" style="justify-content:center;"><span style="font-size:20px;">🔧</span><span class="pengumuman-title">SEDANG MAINTENANCE</span></div>
+      <p class="pengumuman-text" style="text-align:center;">Fitur <b>Top Up Game</b> sedang dalam perbaikan.<br>Silakan coba lagi nanti ya! 🙏</p>
     </div>
-    
     <h2>🎮 Top Up <span class="accent">Game</span></h2>
     <p class="sub">Pilih game yang mau kamu top up</p>
     <div class="produk-list grid-2col" id="gameList"></div>
@@ -625,36 +390,17 @@ footer { text-align: center; padding: 30px 20px; color: #444; font-size: 12px; b
   <section class="kategori">
     <h2>📱 Suntik <span class="accent">All Sosmed</span></h2>
     <p class="sub">Pilih layanan yang kamu butuhkan</p>
-    
     <div class="pengumuman">
-      <div class="pengumuman-header">
-        <span class="pengumuman-icon">📢</span>
-        <span class="pengumuman-title">PENGUMUMAN PENTING</span>
-      </div>
-      <p class="pengumuman-text">
-        Jika jumlah <b>like</b> atau <b>followers</b> Instagram, TikTok, dan sosial media lainnya <b>tiba-tiba menurun</b> — itu adalah hal <b>NORMAL</b>.
-      </p>
-      <p class="pengumuman-text">
-        Instagram, TikTok, dan platform lainnya <b>rutin melakukan pembersihan akun bot/fake secara otomatis</b>. Ini bukan karena layanan kami gagal, tapi karena sistem keamanan platform tersebut.
-      </p>
-      <p class="pengumuman-text">
-        💡 Saran: Order jumlah <b>sedikit</b> terlebih dahulu untuk mengetes layanan kami.
-      </p>
+      <div class="pengumuman-header"><span class="pengumuman-icon">📢</span><span class="pengumuman-title">PENGUMUMAN PENTING</span></div>
+      <p class="pengumuman-text">Jika jumlah <b>like</b> atau <b>followers</b> Instagram, TikTok, dan sosial media lainnya <b>tiba-tiba menurun</b> — itu adalah hal <b>NORMAL</b>.</p>
+      <p class="pengumuman-text">Instagram, TikTok, dan platform lainnya <b>rutin melakukan pembersihan akun bot/fake secara otomatis</b>. Ini bukan karena layanan kami gagal, tapi karena sistem keamanan platform tersebut.</p>
+      <p class="pengumuman-text">💡 Saran: Order jumlah <b>sedikit</b> terlebih dahulu untuk mengetes layanan kami.</p>
     </div>
-
     <div class="pengumuman refund">
-      <div class="pengumuman-header">
-        <span class="pengumuman-icon">💰</span>
-        <span class="pengumuman-title">JAMINAN REFUND</span>
-      </div>
-      <p class="pengumuman-text">
-        Jika kalian membeli <b>suntik sosmed apapun</b> dan pesanan <b>tidak masuk sama sekali</b>, kalian berhak mendapatkan <b>REFUND 100%</b>.
-      </p>
-      <p class="pengumuman-text">
-        Silakan hubungi <b>chat admin</b> untuk proses refund. Kami akan memprosesnya secepat mungkin. 🙏
-      </p>
+      <div class="pengumuman-header"><span class="pengumuman-icon">💰</span><span class="pengumuman-title">JAMINAN REFUND</span></div>
+      <p class="pengumuman-text">Jika kalian membeli <b>suntik sosmed apapun</b> dan pesanan <b>tidak masuk sama sekali</b>, kalian berhak mendapatkan <b>REFUND 100%</b>.</p>
+      <p class="pengumuman-text">Silakan hubungi <b>chat admin</b> untuk proses refund. Kami akan memprosesnya secepat mungkin. 🙏</p>
     </div>
-    
     <div class="produk-list" id="sosmed"></div>
   </section>
   <footer><p>© 2025 Jimzz Store — All Rights Reserved 😈</p></footer>
@@ -670,26 +416,11 @@ footer { text-align: center; padding: 30px 20px; color: #444; font-size: 12px; b
 </div>
 
 <div class="bottom-nav">
-  <button class="nav-item" data-tab="suntik" onclick="switchTab('suntik')">
-    <span class="nav-icon">📱</span>
-    <span class="nav-label">Suntik All</span>
-  </button>
-  <button class="nav-item" data-tab="topup" onclick="switchTab('topup')">
-    <span class="nav-icon">🎮</span>
-    <span class="nav-label">Top Up</span>
-  </button>
-  <button class="nav-item active" data-tab="home" onclick="switchTab('home')">
-    <span class="nav-icon">🏠</span>
-    <span class="nav-label">Home</span>
-  </button>
-  <button class="nav-item" data-tab="apk" onclick="switchTab('apk')">
-    <span class="nav-icon">📦</span>
-    <span class="nav-label">Jual APK</span>
-  </button>
-  <button class="nav-item" data-tab="jpm" onclick="switchTab('jpm')">
-    <span class="nav-icon">🚀</span>
-    <span class="nav-label">Lainnya</span>
-  </button>
+  <button class="nav-item" data-tab="suntik" onclick="switchTab('suntik')"><span class="nav-icon">📱</span><span class="nav-label">Suntik All</span></button>
+  <button class="nav-item" data-tab="topup" onclick="switchTab('topup')"><span class="nav-icon">🎮</span><span class="nav-label">Top Up</span></button>
+  <button class="nav-item active" data-tab="home" onclick="switchTab('home')"><span class="nav-icon">🏠</span><span class="nav-label">Home</span></button>
+  <button class="nav-item" data-tab="apk" onclick="switchTab('apk')"><span class="nav-icon">📦</span><span class="nav-label">Jual APK</span></button>
+  <button class="nav-item" data-tab="jpm" onclick="switchTab('jpm')"><span class="nav-icon">🚀</span><span class="nav-label">Lainnya</span></button>
 </div>
 
 <div class="modal-overlay" id="orderModal" onclick="if(event.target===this)tutupOrder()">
@@ -700,7 +431,6 @@ footer { text-align: center; padding: 30px 20px; color: #444; font-size: 12px; b
       <div class="step-dot" id="dot2">2</div>
       <div class="step-dot" id="dot3">3</div>
     </div>
-
     <div class="step-content active" id="step1">
       <div class="modal-title-block">
         <div class="modal-label" id="modalLabel">LAYANAN</div>
@@ -710,7 +440,6 @@ footer { text-align: center; padding: 30px 20px; color: #444; font-size: 12px; b
       <label class="jumlah-label" for="jumlahInput">Jumlah <span class="minmax" id="minmaxText">Min: 100 - Max: 20.000</span></label>
       <input type="number" id="jumlahInput" class="jumlah-input" placeholder="# Masukkan jumlah" oninput="hitungTotal()">
       <div class="jumlah-hint" id="jumlahHint">Sistem otomatis hitung harga sesuai jumlah.</div>
-
       <div class="total-box">
         <div class="total-row"><span class="label">Harga Satuan</span><span class="value" id="hargaSatuan">Rp 0</span></div>
         <div class="total-row"><span class="label">Jumlah Order</span><span class="value" id="jumlahDisplay">0</span></div>
@@ -718,11 +447,9 @@ footer { text-align: center; padding: 30px 20px; color: #444; font-size: 12px; b
         <div class="total-row bonus" id="totalDapatRow" style="display:none;"><span class="label">📊 Total Diterima</span><span class="value" id="totalDapat">0</span></div>
         <div class="total-row big"><span class="label">Total Harga</span><span class="value" id="totalHarga">Rp 0</span></div>
       </div>
-
       <button class="btn-next" id="btnPesan" onclick="keStep2()" disabled>💬 Lanjut ke Pembayaran →</button>
       <div class="term-text">Dengan memesan, Anda menyetujui <a href="#">Syarat & Ketentuan</a> kami.</div>
     </div>
-
     <div class="step-content" id="step2">
       <div class="modal-title-block">
         <div class="modal-label">LANGKAH 2 DARI 3</div>
@@ -742,39 +469,27 @@ footer { text-align: center; padding: 30px 20px; color: #444; font-size: 12px; b
       <div class="form-note">📌 Nomor konfirmasi pesanan.</div>
       <button class="btn-next" onclick="keStep3()">Lanjut ke QRIS →</button>
     </div>
-
     <div class="step-content" id="step3">
       <div class="modal-title-block">
         <div class="modal-label">LANGKAH 3 DARI 3</div>
         <div class="modal-title">💳 Scan QRIS & Bayar</div>
       </div>
-      
       <div id="qrisLoading" style="text-align:center; padding:30px 0;">
         <div class="loading-spinner" style="width:36px;height:36px;border:3px solid #1e2e26;border-top-color:#00ff88;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 10px;"></div>
         <p style="color:#00ff88; font-size:13px;">⏳ Membuat QRIS...</p>
       </div>
-      
       <div class="qris-box" id="qrisBox" style="display:none;">
         <img id="qrisImage" src="" alt="QRIS">
-        <button id="qrisDownload" onclick="downloadQris()" style="display:inline-flex; align-items:center; justify-content:center; gap:6px; margin:12px auto 0; background:transparent; border:2px solid #00ff88; color:#00ff88; padding:10px 20px; border-radius:10px; font-weight:bold; font-size:13px; cursor:pointer; font-family:inherit;">
-          ⬇️ Download QRIS
-        </button>
+        <button id="qrisDownload" onclick="downloadQris()" style="display:inline-flex; align-items:center; justify-content:center; gap:6px; margin:12px auto 0; background:transparent; border:2px solid #00ff88; color:#00ff88; padding:10px 20px; border-radius:10px; font-weight:bold; font-size:13px; cursor:pointer; font-family:inherit;">⬇️ Download QRIS</button>
         <div class="qris-nominal" id="qrisNominal">💳 Silahkan bayar QRIS ini sebesar Rp 0</div>
       </div>
-      
-      <button class="btn-subtle" id="btnSayaBayar" onclick="userKonfirmasiBayar()" style="display:none;">
-        ✅ Saya Sudah Bayar
-      </button>
-      
+      <button class="btn-subtle" id="btnSayaBayar" onclick="userKonfirmasiBayar()" style="display:none;">✅ Saya Sudah Bayar</button>
       <div class="waiting-box" id="waitingBox" style="display:none;">
         <div class="loading-spinner"></div>
         <p>⏳ Menunggu Konfirmasi Admin</p>
         <p class="sub-wait">Admin akan segera memproses pesanan kamu.</p>
       </div>
-      
-      <div class="info-note">
-        📌 <b>Bayar sesuai nominal</b>. Setelah bayar, klik <b>"Saya Sudah Bayar"</b>.
-      </div>
+      <div class="info-note">📌 <b>Bayar sesuai nominal</b>. Setelah bayar, klik <b>"Saya Sudah Bayar"</b>.</div>
     </div>
   </div>
 </div>
@@ -783,7 +498,7 @@ footer { text-align: center; padding: 30px 20px; color: #444; font-size: 12px; b
   <div class="music-mini" onclick="toggleExpand()">
     <div class="music-cover paused" id="musicCover"></div>
     <div class="music-mini-info">
-      <div class="music-mini-title" id="miniTitle">Pilih Lagu</div>
+      <div class="music-mini-title" id="miniTitle">Lagu 1</div>
       <div class="music-mini-artist" id="miniArtist">Klik untuk buka</div>
     </div>
     <div class="music-mini-controls" onclick="event.stopPropagation()">
@@ -797,32 +512,24 @@ footer { text-align: center; padding: 30px 20px; color: #444; font-size: 12px; b
     <div class="music-list-header"><span>🎧 Playlist</span><span class="close-x" onclick="event.stopPropagation(); toggleExpand();">×</span></div>
     <div class="music-list" id="musicList"></div>
   </div>
-  <audio id="audioPlayer" loop></audio>
+  <audio id="audioPlayer"></audio>
 </div>
 
 <script>
-// ============================================
-// ADMIN SYSTEM
-// ============================================
 const ADMIN_PASSWORD = "jimzzadmin2025";
 let isAdmin = false;
 let secretClickCount = 0;
 let secretClickTimer = null;
-
-if (localStorage.getItem('jimzz_admin') === 'true') {
-  isAdmin = true;
-}
+if (localStorage.getItem('jimzz_admin') === 'true') isAdmin = true;
 
 function secretClick() {
   secretClickCount++;
   clearTimeout(secretClickTimer);
   secretClickTimer = setTimeout(() => { secretClickCount = 0; }, 1500);
-  
   if (secretClickCount >= 5) {
     secretClickCount = 0;
-    if (isAdmin) {
-      adminLogout();
-    } else {
+    if (isAdmin) { adminLogout(); }
+    else {
       document.getElementById('adminLoginModal').classList.add('show');
       document.getElementById('adminPasswordInput').value = '';
       document.getElementById('adminLoginError').classList.remove('show');
@@ -834,7 +541,6 @@ function secretClick() {
 function adminLogin() {
   const input = document.getElementById('adminPasswordInput').value;
   const error = document.getElementById('adminLoginError');
-  
   if (input === ADMIN_PASSWORD) {
     isAdmin = true;
     localStorage.setItem('jimzz_admin', 'true');
@@ -859,7 +565,6 @@ function applyAdminUI() {
   const adminPanel = document.getElementById('adminPanelSection');
   const menuTopup = document.getElementById('menuTopup');
   const topupMaintenanceInfo = document.getElementById('topupMaintenanceInfo');
-  
   if (isAdmin) {
     adminBadge.classList.add('show');
     adminPanel.style.display = 'block';
@@ -867,16 +572,7 @@ function applyAdminUI() {
     menuTopup.classList.add('admin-view');
     if (topupMaintenanceInfo) {
       topupMaintenanceInfo.className = 'pengumuman admin-preview-info';
-      topupMaintenanceInfo.innerHTML = `
-        <div class="pengumuman-header" style="justify-content:center;">
-          <span style="font-size:20px;">👑</span>
-          <span class="pengumuman-title">MODE ADMIN — TEST ORDER</span>
-        </div>
-        <p class="pengumuman-text" style="text-align:center;">
-          Kamu bisa <b>test order</b> produk yang masih maintenance.<br>
-          User biasa nggak bisa akses halaman ini.
-        </p>
-      `;
+      topupMaintenanceInfo.innerHTML = `<div class="pengumuman-header" style="justify-content:center;"><span style="font-size:20px;">👑</span><span class="pengumuman-title">MODE ADMIN — TEST ORDER</span></div><p class="pengumuman-text" style="text-align:center;">Kamu bisa <b>test order</b> produk yang masih maintenance.<br>User biasa nggak bisa akses halaman ini.</p>`;
     }
   } else {
     adminBadge.classList.remove('show');
@@ -885,33 +581,17 @@ function applyAdminUI() {
     menuTopup.classList.remove('admin-view');
     if (topupMaintenanceInfo) {
       topupMaintenanceInfo.className = 'pengumuman maintenance';
-      topupMaintenanceInfo.innerHTML = `
-        <div class="pengumuman-header" style="justify-content:center;">
-          <span style="font-size:20px;">🔧</span>
-          <span class="pengumuman-title">SEDANG MAINTENANCE</span>
-        </div>
-        <p class="pengumuman-text" style="text-align:center;">
-          Fitur <b>Top Up Game</b> sedang dalam perbaikan.<br>
-          Silakan coba lagi nanti ya! 🙏
-        </p>
-      `;
+      topupMaintenanceInfo.innerHTML = `<div class="pengumuman-header" style="justify-content:center;"><span style="font-size:20px;">🔧</span><span class="pengumuman-title">SEDANG MAINTENANCE</span></div><p class="pengumuman-text" style="text-align:center;">Fitur <b>Top Up Game</b> sedang dalam perbaikan.<br>Silakan coba lagi nanti ya! 🙏</p>`;
     }
   }
-  
   renderGameList();
 }
 
 function handleTopupClick() {
-  if (isAdmin) {
-    switchTab('topup');
-  } else {
-    alert('⚠️ Top Up Game sedang MAINTENANCE.\n\nSilakan coba lagi nanti.');
-  }
+  if (isAdmin) switchTab('topup');
+  else alert('⚠️ Top Up Game sedang MAINTENANCE.\n\nSilakan coba lagi nanti.');
 }
 
-// ============================================
-// START APP
-// ============================================
 function startApp() {
   initCanvas();
   initData();
@@ -978,61 +658,32 @@ const produkApk = [
 
 const produkTopUp = [
   { icon: "🔥", nama: "Free Fire", desc: "Top up Diamond Free Fire murah & cepat", unit: "diamond", hot: true, status: "maintenance", paket: [
-    { nominal: "5 Diamond", harga: 900 },
-    { nominal: "12 Diamond", harga: 1950 },
-    { nominal: "20 Diamond", harga: 3400 },
-    { nominal: "30 Diamond", harga: 5100 },
-    { nominal: "50 Diamond", harga: 8500 },
-    { nominal: "70 Diamond", harga: 11900 },
-    { nominal: "100 Diamond", harga: 17000 },
-    { nominal: "140 Diamond", harga: 23800 },
-    { nominal: "200 Diamond", harga: 34000 },
+    { nominal: "5 Diamond", harga: 900 }, { nominal: "12 Diamond", harga: 1950 }, { nominal: "20 Diamond", harga: 3400 },
+    { nominal: "30 Diamond", harga: 5100 }, { nominal: "50 Diamond", harga: 8500 }, { nominal: "70 Diamond", harga: 11900 },
+    { nominal: "100 Diamond", harga: 17000 }, { nominal: "140 Diamond", harga: 23800 }, { nominal: "200 Diamond", harga: 34000 },
     { nominal: "355 Diamond", harga: 60300 }
   ]},
   { icon: "⚔️", nama: "Mobile Legends", desc: "Top up Diamond Mobile Legends murah & cepat", unit: "diamond", hot: true, status: "maintenance", paket: [
-    { nominal: "11 Diamond", harga: 3800 },
-    { nominal: "22 Diamond", harga: 7500 },
-    { nominal: "44 Diamond", harga: 15000 },
-    { nominal: "86 Diamond", harga: 28500 },
-    { nominal: "172 Diamond", harga: 57000 },
-    { nominal: "355 Diamond", harga: 116000 },
-    { nominal: "720 Diamond", harga: 237000 },
-    { nominal: "1000 Diamond", harga: 322000 },
-    { nominal: "1440 Diamond", harga: 462000 },
+    { nominal: "11 Diamond", harga: 3800 }, { nominal: "22 Diamond", harga: 7500 }, { nominal: "44 Diamond", harga: 15000 },
+    { nominal: "86 Diamond", harga: 28500 }, { nominal: "172 Diamond", harga: 57000 }, { nominal: "355 Diamond", harga: 116000 },
+    { nominal: "720 Diamond", harga: 237000 }, { nominal: "1000 Diamond", harga: 322000 }, { nominal: "1440 Diamond", harga: 462000 },
     { nominal: "2000 Diamond", harga: 644000 }
   ]},
   { icon: "🔫", nama: "PUBG Mobile", desc: "Top up UC PUBG Mobile murah & cepat", unit: "UC", hot: true, status: "maintenance", paket: [
-    { nominal: "60 UC", harga: 17500 },
-    { nominal: "120 UC", harga: 35000 },
-    { nominal: "180 UC", harga: 52500 },
-    { nominal: "325 UC", harga: 86000 },
-    { nominal: "660 UC", harga: 165000 },
-    { nominal: "1800 UC", harga: 445000 },
-    { nominal: "3850 UC", harga: 930000 },
-    { nominal: "8100 UC", harga: 1920000 },
-    { nominal: "16200 UC", harga: 3840000 },
+    { nominal: "60 UC", harga: 17500 }, { nominal: "120 UC", harga: 35000 }, { nominal: "180 UC", harga: 52500 },
+    { nominal: "325 UC", harga: 86000 }, { nominal: "660 UC", harga: 165000 }, { nominal: "1800 UC", harga: 445000 },
+    { nominal: "3850 UC", harga: 930000 }, { nominal: "8100 UC", harga: 1920000 }, { nominal: "16200 UC", harga: 3840000 },
     { nominal: "24300 UC", harga: 5760000 }
   ]},
   { icon: "🎮", nama: "Genshin Impact", desc: "Top up Crystal Genshin Impact murah & cepat", unit: "crystal", hot: false, status: "maintenance", paket: [
-    { nominal: "60 Crystal", harga: 17000 },
-    { nominal: "300 Crystal", harga: 82000 },
-    { nominal: "980 Crystal", harga: 258000 },
-    { nominal: "1980 Crystal", harga: 518000 },
-    { nominal: "3280 Crystal", harga: 854000 },
-    { nominal: "6480 Crystal", harga: 1672000 },
-    { nominal: "10000 Crystal", harga: 2556000 },
-    { nominal: "15000 Crystal", harga: 3800000 }
+    { nominal: "60 Crystal", harga: 17000 }, { nominal: "300 Crystal", harga: 82000 }, { nominal: "980 Crystal", harga: 258000 },
+    { nominal: "1980 Crystal", harga: 518000 }, { nominal: "3280 Crystal", harga: 854000 }, { nominal: "6480 Crystal", harga: 1672000 },
+    { nominal: "10000 Crystal", harga: 2556000 }, { nominal: "15000 Crystal", harga: 3800000 }
   ]},
   { icon: "🏆", nama: "Call of Duty Mobile", desc: "Top up CP COD Mobile murah & cepat", unit: "CP", hot: false, status: "maintenance", paket: [
-    { nominal: "80 CP", harga: 17500 },
-    { nominal: "160 CP", harga: 35000 },
-    { nominal: "240 CP", harga: 52500 },
-    { nominal: "420 CP", harga: 81000 },
-    { nominal: "800 CP", harga: 152000 },
-    { nominal: "1600 CP", harga: 303000 },
-    { nominal: "2400 CP", harga: 453000 },
-    { nominal: "4000 CP", harga: 725000 },
-    { nominal: "8000 CP", harga: 1450000 },
+    { nominal: "80 CP", harga: 17500 }, { nominal: "160 CP", harga: 35000 }, { nominal: "240 CP", harga: 52500 },
+    { nominal: "420 CP", harga: 81000 }, { nominal: "800 CP", harga: 152000 }, { nominal: "1600 CP", harga: 303000 },
+    { nominal: "2400 CP", harga: 453000 }, { nominal: "4000 CP", harga: 725000 }, { nominal: "8000 CP", harga: 1450000 },
     { nominal: "12000 CP", harga: 2175000 }
   ]}
 ];
@@ -1058,10 +709,7 @@ function renderProduk(target, data, kategori) {
       ${p.hot ? '<div class="badge-hot">🔥 TERLARIS</div>' : ''}
       <div class="produk-header">
         <div class="produk-icon">${p.icon}</div>
-        <div class="produk-title-block">
-          <div class="produk-label">${kategori}</div>
-          <div class="produk-nama">${p.nama}</div>
-        </div>
+        <div class="produk-title-block"><div class="produk-label">${kategori}</div><div class="produk-nama">${p.nama}</div></div>
       </div>
       <div class="produk-desc">${p.desc}</div>
       <div class="produk-bottom">
@@ -1079,38 +727,19 @@ function renderGameList() {
   const el = document.getElementById('gameList');
   if (!el) return;
   el.className = 'produk-list grid-2col';
-  
   el.innerHTML = produkTopUp.map((g, i) => {
-    if (g.status === 'maintenance' && !isAdmin) {
-      return '';
-    }
-    
+    if (g.status === 'maintenance' && !isAdmin) return '';
     const isMaintenance = g.status === 'maintenance';
-    const badge = isMaintenance && isAdmin 
-      ? '<div class="badge-admin-preview">👑 ADMIN PREVIEW</div>' 
-      : (g.hot ? '<div class="badge-hot">🔥</div>' : '');
-    
-    const cardClass = isMaintenance && isAdmin 
-      ? 'produk-card admin-preview' 
-      : (isMaintenance ? 'produk-card disabled' : 'produk-card');
-    
-    const btnText = isMaintenance 
-      ? (isAdmin ? '👑 Test Order' : 'Maintenance') 
-      : 'Pilih →';
-    
-    const clickHandler = (isMaintenance && !isAdmin) 
-      ? `onclick="alert('⚠️ Fitur Top Up Game sedang MAINTENANCE.')"` 
-      : `onclick="bukaGameDetail(${i})"`;
-    
+    const badge = isMaintenance && isAdmin ? '<div class="badge-admin-preview">👑 ADMIN PREVIEW</div>' : (g.hot ? '<div class="badge-hot">🔥</div>' : '');
+    const cardClass = isMaintenance && isAdmin ? 'produk-card admin-preview' : (isMaintenance ? 'produk-card disabled' : 'produk-card');
+    const btnText = isMaintenance ? (isAdmin ? '👑 Test Order' : 'Maintenance') : 'Pilih →';
+    const clickHandler = (isMaintenance && !isAdmin) ? `onclick="alert('⚠️ Fitur Top Up Game sedang MAINTENANCE.')"` : `onclick="bukaGameDetail(${i})"`;
     return `
       <div class="${cardClass}" ${clickHandler}>
         ${badge}
         <div class="produk-header">
           <div class="produk-icon">${g.icon}</div>
-          <div class="produk-title-block">
-            <div class="produk-label">TOP UP</div>
-            <div class="produk-nama">${g.nama}</div>
-          </div>
+          <div class="produk-title-block"><div class="produk-label">TOP UP</div><div class="produk-nama">${g.nama}</div></div>
         </div>
         <div class="produk-bottom">
           <div class="produk-harga-info">
@@ -1129,7 +758,6 @@ function bukaGameDetail(index) {
     alert('⚠️ Fitur Top Up Game sedang MAINTENANCE.');
     return;
   }
-  
   gameAktif = produkTopUp[index];
   const paketList = gameAktif.paket.map((p, i) => {
     const populer = i === 0 || i === 4;
@@ -1144,20 +772,15 @@ function bukaGameDetail(index) {
         </div>
       </div>
       <div class="produk-bottom" style="flex-direction:column; gap:6px; align-items:stretch;">
-        <div class="produk-harga-info" style="text-align:center;">
-          <div class="produk-harga" style="font-size:14px;">Rp ${p.harga.toLocaleString('id-ID')}</div>
-        </div>
+        <div class="produk-harga-info" style="text-align:center;"><div class="produk-harga" style="font-size:14px;">Rp ${p.harga.toLocaleString('id-ID')}</div></div>
         <button class="btn-order" style="width:100%; padding:8px;">Order</button>
       </div>
     </div>
   `;
   }).join('');
-  
   document.getElementById('page-topup').innerHTML = `
     <section class="kategori">
-      <div class="back-sticky">
-        <button class="btn-back" onclick="backToGameList()">←</button>
-      </div>
+      <div class="back-sticky"><button class="btn-back" onclick="backToGameList()">←</button></div>
       <h2>${gameAktif.icon} ${gameAktif.nama}</h2>
       <p class="sub">Pilih nominal ${gameAktif.unit} yang mau kamu top up</p>
       <div class="produk-list grid-2col">${paketList}</div>
@@ -1169,32 +792,11 @@ function bukaGameDetail(index) {
 
 function backToGameList() {
   const maintenanceInfo = isAdmin 
-    ? `<div class="pengumuman admin-preview-info" id="topupMaintenanceInfo">
-        <div class="pengumuman-header" style="justify-content:center;">
-          <span style="font-size:20px;">👑</span>
-          <span class="pengumuman-title">MODE ADMIN — TEST ORDER</span>
-        </div>
-        <p class="pengumuman-text" style="text-align:center;">
-          Kamu bisa <b>test order</b> produk yang masih maintenance.<br>
-          User biasa nggak bisa akses halaman ini.
-        </p>
-      </div>` 
-    : `<div class="pengumuman maintenance" id="topupMaintenanceInfo">
-        <div class="pengumuman-header" style="justify-content:center;">
-          <span style="font-size:20px;">🔧</span>
-          <span class="pengumuman-title">SEDANG MAINTENANCE</span>
-        </div>
-        <p class="pengumuman-text" style="text-align:center;">
-          Fitur <b>Top Up Game</b> sedang dalam perbaikan.<br>
-          Silakan coba lagi nanti ya! 🙏
-        </p>
-      </div>`;
-  
+    ? `<div class="pengumuman admin-preview-info" id="topupMaintenanceInfo"><div class="pengumuman-header" style="justify-content:center;"><span style="font-size:20px;">👑</span><span class="pengumuman-title">MODE ADMIN — TEST ORDER</span></div><p class="pengumuman-text" style="text-align:center;">Kamu bisa <b>test order</b> produk yang masih maintenance.<br>User biasa nggak bisa akses halaman ini.</p></div>` 
+    : `<div class="pengumuman maintenance" id="topupMaintenanceInfo"><div class="pengumuman-header" style="justify-content:center;"><span style="font-size:20px;">🔧</span><span class="pengumuman-title">SEDANG MAINTENANCE</span></div><p class="pengumuman-text" style="text-align:center;">Fitur <b>Top Up Game</b> sedang dalam perbaikan.<br>Silakan coba lagi nanti ya! 🙏</p></div>`;
   document.getElementById('page-topup').innerHTML = `
     <section class="kategori">
-      <div class="back-sticky">
-        <button class="btn-back" onclick="switchTab('home')">←</button>
-      </div>
+      <div class="back-sticky"><button class="btn-back" onclick="switchTab('home')">←</button></div>
       ${maintenanceInfo}
       <h2>🎮 Top Up <span class="accent">Game</span></h2>
       <p class="sub">Pilih game yang mau kamu top up</p>
@@ -1211,15 +813,8 @@ function pilihPaket(index) {
     icon: gameAktif.icon,
     nama: gameAktif.nama + ' - ' + paketAktif.nominal,
     desc: 'Top up ' + paketAktif.nominal + ' ke ID ' + gameAktif.nama,
-    harga: paketAktif.harga,
-    unit: gameAktif.unit,
-    kategori: 'TOP UP GAME',
-    isApk: true,
-    isTopUp: true,
-    inputLabel: '🎮 User ID ' + gameAktif.nama,
-    inputPlaceholder: 'Contoh: 123456789 (cek di profil game)',
-    inputValidasi: '',
-    inputError: ''
+    harga: paketAktif.harga, unit: gameAktif.unit, kategori: 'TOP UP GAME', isApk: true, isTopUp: true,
+    inputLabel: '🎮 User ID ' + gameAktif.nama, inputPlaceholder: 'Contoh: 123456789 (cek di profil game)', inputValidasi: '', inputError: ''
   };
   document.getElementById('modalLabel').innerText = 'TOP UP GAME';
   document.getElementById('modalTitle').innerText = produkAktif.nama;
@@ -1316,9 +911,7 @@ function hitungTotal() {
   const hargaPerUnit = produkAktif.isApk ? produkAktif.harga : produkAktif.hargaPerUnit;
   const total = jumlah * hargaPerUnit;
   let bonus = 0;
-  if (!produkAktif.isApk && produkAktif.bonusMinTotal && total >= produkAktif.bonusMinTotal) {
-    bonus = produkAktif.bonusUnit || 0;
-  }
+  if (!produkAktif.isApk && produkAktif.bonusMinTotal && total >= produkAktif.bonusMinTotal) bonus = produkAktif.bonusUnit || 0;
   document.getElementById('jumlahDisplay').innerText = jumlah.toLocaleString('id-ID') + ' ' + (produkAktif.unit || 'pcs');
   document.getElementById('totalHarga').innerText = "Rp " + total.toLocaleString('id-ID');
   const bonusRow = document.getElementById('bonusRow');
@@ -1347,12 +940,8 @@ function keStep2() {
   const hargaPerUnit = produkAktif.isApk ? produkAktif.harga : produkAktif.hargaPerUnit;
   const total = jumlah * hargaPerUnit;
   let bonus = 0;
-  if (!produkAktif.isApk && produkAktif.bonusMinTotal && total >= produkAktif.bonusMinTotal) {
-    bonus = produkAktif.bonusUnit || 0;
-  }
-  dataPemesan.jumlah = jumlah;
-  dataPemesan.total = total;
-  dataPemesan.bonus = bonus;
+  if (!produkAktif.isApk && produkAktif.bonusMinTotal && total >= produkAktif.bonusMinTotal) bonus = produkAktif.bonusUnit || 0;
+  dataPemesan.jumlah = jumlah; dataPemesan.total = total; dataPemesan.bonus = bonus;
   setStep(2);
 }
 
@@ -1364,36 +953,13 @@ async function keStep3() {
   const errorEl = document.getElementById('inputError');
   const hpErrorEl = document.getElementById('hpError');
   clearError();
-  if (!link) {
-    inputEl.classList.add('error');
-    errorEl.innerText = produkAktif.isApk ? '❌ Isi nama dulu ya!' : '❌ Isi ' + (produkAktif.inputLabel || 'link') + ' dulu ya!';
-    errorEl.classList.add('show');
-    return;
-  }
-  if (!produkAktif.isApk && produkAktif.inputValidasi) {
-    if (!link.toLowerCase().includes(produkAktif.inputValidasi)) {
-      inputEl.classList.add('error');
-      errorEl.innerText = '❌ ' + (produkAktif.inputError || 'Link tidak valid!');
-      errorEl.classList.add('show');
-      return;
-    }
-  }
-  if (!hp) {
-    hpEl.classList.add('error');
-    hpErrorEl.innerText = '❌ Isi no WhatsApp dulu ya!';
-    hpErrorEl.classList.add('show');
-    return;
-  }
+  if (!link) { inputEl.classList.add('error'); errorEl.innerText = produkAktif.isApk ? '❌ Isi nama dulu ya!' : '❌ Isi ' + (produkAktif.inputLabel || 'link') + ' dulu ya!'; errorEl.classList.add('show'); return; }
+  if (!produkAktif.isApk && produkAktif.inputValidasi && !link.toLowerCase().includes(produkAktif.inputValidasi)) { inputEl.classList.add('error'); errorEl.innerText = '❌ ' + (produkAktif.inputError || 'Link tidak valid!'); errorEl.classList.add('show'); return; }
+  if (!hp) { hpEl.classList.add('error'); hpErrorEl.innerText = '❌ Isi no WhatsApp dulu ya!'; hpErrorEl.classList.add('show'); return; }
   const hpClean = hp.replace(/[\s\-\+]/g, '');
   const hpValid = /^(62|0)8[0-9]{8,13}$/.test(hpClean);
-  if (!hpValid) {
-    hpEl.classList.add('error');
-    hpErrorEl.innerText = '❌ No WA tidak valid!';
-    hpErrorEl.classList.add('show');
-    return;
-  }
-  dataPemesan.link = link;
-  dataPemesan.hp = hp;
+  if (!hpValid) { hpEl.classList.add('error'); hpErrorEl.innerText = '❌ No WA tidak valid!'; hpErrorEl.classList.add('show'); return; }
+  dataPemesan.link = link; dataPemesan.hp = hp;
   setStep(3);
   document.getElementById('qrisLoading').style.display = 'block';
   document.getElementById('qrisBox').style.display = 'none';
@@ -1401,15 +967,8 @@ async function keStep3() {
   document.getElementById('waitingBox').style.display = 'none';
   try {
     const res = await fetch(BACKEND_URL + '/api/create-order', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        amount: dataPemesan.total,
-        customerPhone: dataPemesan.hp,
-        productName: produkAktif.nama,
-        productDetail: dataPemesan.jumlah + ' ' + (produkAktif.unit || 'pcs'),
-        link: dataPemesan.link
-      })
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ amount: dataPemesan.total, customerPhone: dataPemesan.hp, productName: produkAktif.nama, productDetail: dataPemesan.jumlah + ' ' + (produkAktif.unit || 'pcs'), link: dataPemesan.link })
     });
     const result = await res.json();
     if (!result.success) throw new Error(result.error || 'Gagal generate QRIS');
@@ -1429,26 +988,21 @@ async function keStep3() {
 async function downloadQris() {
   const btn = document.getElementById('qrisDownload');
   const originalText = btn.innerText;
-  btn.innerText = '⏳ Mendownload...';
-  btn.disabled = true;
+  btn.innerText = '⏳ Mendownload...'; btn.disabled = true;
   try {
     const qrImageUrl = document.getElementById('qrisImage').src;
     const response = await fetch(qrImageUrl);
     const blob = await response.blob();
     const blobUrl = URL.createObjectURL(blob);
     const link = document.createElement('a');
-    link.href = blobUrl;
-    link.download = 'QRIS-JimzzStore.png';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    link.href = blobUrl; link.download = 'QRIS-JimzzStore.png';
+    document.body.appendChild(link); link.click(); document.body.removeChild(link);
     URL.revokeObjectURL(blobUrl);
     btn.innerText = '✅ Berhasil! Cek Galeri';
     setTimeout(() => { btn.innerText = originalText; btn.disabled = false; }, 3000);
   } catch (err) {
     window.open(document.getElementById('qrisImage').src, '_blank');
-    btn.innerText = originalText;
-    btn.disabled = false;
+    btn.innerText = originalText; btn.disabled = false;
   }
 }
 
@@ -1457,15 +1011,8 @@ async function userKonfirmasiBayar() {
   document.getElementById('btnSayaBayar').innerText = '⏳ Mengirim konfirmasi...';
   try {
     await fetch(BACKEND_URL + '/api/confirm-payment', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        totalAmount: dataPemesan.totalAmount,
-        customerPhone: dataPemesan.hp,
-        productName: produkAktif.nama,
-        productDetail: dataPemesan.jumlah + ' ' + (produkAktif.unit || 'pcs'),
-        link: dataPemesan.link
-      })
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ totalAmount: dataPemesan.totalAmount, customerPhone: dataPemesan.hp, productName: produkAktif.nama, productDetail: dataPemesan.jumlah + ' ' + (produkAktif.unit || 'pcs'), link: dataPemesan.link })
     });
   } catch (err) { console.error('Confirm error:', err); }
   document.getElementById('btnSayaBayar').style.display = 'none';
@@ -1481,18 +1028,14 @@ function switchTab(tab) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-function toggleTheme() {
-  document.body.classList.toggle('mode-2');
-}
-
 // ============================================
-// MUSIC PLAYLIST - 4 LAGU PIXABAY YANG BERFUNGSI
+// MUSIC - PAKAI FILE MP3 LOKAL
 // ============================================
 const playlist = [
-  { judul: "Uplifting Cinematic Flow", artis: "RoyaltyFreeMusicStudio", cover: "🎬", src: "https://cdn.pixabay.com/audio/2026/01/29/audio_6a8f5e4b2c.mp3" },
-  { judul: "Cinematic Open Future", artis: "RoyaltyFreeMusicStudio", cover: "🚀", src: "https://cdn.pixabay.com/audio/2026/05/07/audio_3e8a2f9d1b.mp3" },
-  { judul: "Feel Good Upbeat", artis: "RoyaltyFreeMusicStudio", cover: "😊", src: "https://cdn.pixabay.com/audio/2026/01/28/audio_7c4d8e2a5f.mp3" },
-  { judul: "Corporate Background", artis: "JoyInSound", cover: "💼", src: "https://cdn.pixabay.com/audio/2026/03/16/audio_9b1f4c7e3a.mp3" }
+  { judul: "Lagu 1", artis: "Jimzz Playlist", cover: "🔥", src: "lagu1.mp3" },
+  { judul: "Lagu 2", artis: "Jimzz Playlist", cover: "💀", src: "lagu2.mp3" },
+  { judul: "Lagu 3", artis: "Jimzz Playlist", cover: "🌆", src: "lagu3.mp3" },
+  { judul: "Lagu 4", artis: "Jimzz Playlist", cover: "🌊", src: "lagu4.mp3" }
 ];
 
 let currentSong = 0;
@@ -1525,17 +1068,21 @@ function initMusicEvents() {
   });
   audio.addEventListener('play', updateUI);
   audio.addEventListener('pause', updateUI);
-  audio.addEventListener('error', () => { console.log('Audio error, skip ke lagu berikutnya'); nextSong(); });
-  audio.addEventListener('ended', nextSong);
+  audio.addEventListener('ended', () => { nextSong(); });
+  audio.addEventListener('error', (e) => {
+    console.log('Gagal load:', playlist[currentSong].src);
+  });
 }
 
 function playSong(i) {
   currentSong = i;
   audio.src = playlist[i].src;
   audio.loop = false;
-  audio.play().catch(err => console.log('Autoplay diblokir'));
-  updateUI();
-  renderPlaylist();
+  audio.play().then(() => { updateUI(); renderPlaylist(); }).catch(err => {
+    console.log('Play error:', err);
+    updateUI();
+    renderPlaylist();
+  });
 }
 
 function updateUI() {
@@ -1554,8 +1101,12 @@ function updateUI() {
 }
 
 function togglePlay() {
-  if (!audio || !audio.src) { playSong(0); return; }
-  if (audio.paused) audio.play();
+  if (!audio) audio = document.getElementById('audioPlayer');
+  if (!audio.src || audio.src === '' || audio.src === window.location.href) {
+    playSong(0);
+    return;
+  }
+  if (audio.paused) audio.play().catch(err => console.log('Play error:', err));
   else audio.pause();
   setTimeout(updateUI, 100);
 }
@@ -1563,7 +1114,6 @@ function togglePlay() {
 function nextSong() { currentSong = (currentSong + 1) % playlist.length; playSong(currentSong); }
 function prevSong() { currentSong = (currentSong - 1 + playlist.length) % playlist.length; playSong(currentSong); }
 function toggleExpand() { document.getElementById('musicPlayer').classList.toggle('open'); }
-
 function seekAudio(e) {
   const bar = document.getElementById('progressBar');
   const rect = bar.getBoundingClientRect();
