@@ -266,6 +266,30 @@ header .counter .dot { width: 8px; height: 8px; background: #00ff88; border-radi
 .order-item-unlock button:disabled { background: #333; color: #666; cursor: not-allowed; }
 .order-queue-empty { text-align: center; color: #666; font-size: 12px; padding: 30px; font-style: italic; }
 
+/* === TOMBOL SELESAIKAN ORDER === */
+.btn-complete-order {
+  width: 100%;
+  background: linear-gradient(135deg, #00ff88, #00cc6a);
+  color: #000;
+  border: none;
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  font-family: inherit;
+  transition: 0.3s;
+  letter-spacing: 0.3px;
+  box-shadow: 0 5px 20px rgba(0,255,136,0.3);
+}
+.btn-complete-order:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0,255,136,0.5);
+}
+.btn-complete-order:active {
+  transform: scale(0.97);
+}
+
 .produk-list { display: flex; flex-direction: column; gap: 16px; }
 .produk-list.grid-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .produk-card { background: linear-gradient(145deg, rgba(15,25,20,0.92), rgba(13,13,21,0.92)); border: 1px solid #1e2e26; border-radius: 18px; padding: 20px 18px; transition: 0.4s cubic-bezier(0.175,0.885,0.32,1.275); position: relative; overflow: hidden; }
@@ -1112,36 +1136,30 @@ async function loadOrders() {
           📱 WA: <b>${o.customer_phone}</b><br>
           💰 Rp ${o.total_amount.toLocaleString('id-ID')}
         </div>
-        <div class="order-item-unlock">
-          <input type="text" maxlength="6" placeholder="000000" id="unlock-${o.order_id}">
-          <button onclick="unlockOrder('${o.order_id}')">🔓 Unlock</button>
-        </div>
+        <button class="btn-complete-order" onclick="completeOrder('${o.order_id}')">
+          ✅ Selesaikan Order
+        </button>
       </div>
     `).join('');
   } catch (err) { console.log('Load orders error:', err); }
 }
 
-async function unlockOrder(orderId) {
-  const input = document.getElementById('unlock-' + orderId);
-  const code = input.value.trim();
-  if (!/^\d{6}$/.test(code)) {
-    showToast('Kode harus 6 digit angka!', 'warning');
-    return;
-  }
+async function completeOrder(orderId) {
+  if (!confirm('Yakin mau selesaikan order ' + orderId + '?')) return;
   try {
-    const res = await fetch(BACKEND_URL + '/api/unlock-order', {
+    const res = await fetch(BACKEND_URL + '/api/complete-order', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ orderId: orderId, unlockCode: code })
+      body: JSON.stringify({ orderId: orderId })
     });
     const data = await res.json();
     if (data.success) {
-      showToast('✅ Order ' + orderId + ' berhasil di-unlock!', 'success');
+      showToast('✅ Order ' + orderId + ' selesai!', 'success');
       loadOrders();
       loadCounters();
       loadStats();
     } else {
-      showToast('Gagal unlock: ' + (data.error || 'Unknown error'), 'error');
+      showToast('Gagal: ' + (data.error || 'Unknown error'), 'error');
     }
   } catch (err) {
     showToast('Error: ' + err.message, 'error');
@@ -1954,4 +1972,4 @@ if ('serviceWorker' in navigator) {
 startApp();
 </script>
 </body>
-</html> 
+</html>
