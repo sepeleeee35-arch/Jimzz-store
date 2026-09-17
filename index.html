@@ -69,10 +69,11 @@ body::after {
 .toast.info { border-color: #00c8ff; box-shadow: 0 10px 40px rgba(0,200,255,0.3); }
 .toast.warning { border-color: #ffc800; box-shadow: 0 10px 40px rgba(255,200,0,0.3); }
 
-.share-row { display: flex; justify-content: center; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
-.share-btn { display: flex; align-items: center; justify-content: center; width: 46px; height: 46px; border-radius: 50%; border: none; cursor: pointer; font-size: 22px; color: #fff; transition: 0.3s; text-decoration: none; }
+.share-row { display: flex; justify-content: center; gap: 14px; margin-top: 20px; flex-wrap: wrap; }
+.share-btn { display: flex; align-items: center; justify-content: center; width: 50px; height: 50px; border-radius: 50%; border: none; cursor: pointer; font-size: 24px; color: #fff; transition: 0.3s; text-decoration: none; }
 .share-btn:hover { transform: translateY(-3px) scale(1.08); }
 .share-btn.wa { background: linear-gradient(135deg, #25D366, #1da851); box-shadow: 0 5px 20px rgba(37,211,102,0.5); }
+.share-btn.tg { background: linear-gradient(135deg, #229ED9, #1a7fb0); box-shadow: 0 5px 20px rgba(34,158,217,0.5); }
 .share-btn.copy { background: linear-gradient(135deg, #ffd700, #ff9500); box-shadow: 0 5px 20px rgba(255,215,0,0.5); }
 
 .scroll-top { position: fixed; bottom: 90px; left: 12px; z-index: 500; width: 46px; height: 46px; border-radius: 50%; background: linear-gradient(135deg, #00ff88, #00cc6a); color: #000; border: none; font-size: 22px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 25px rgba(0,255,136,0.5); opacity: 0; transform: translateY(20px); pointer-events: none; transition: 0.3s; }
@@ -135,12 +136,6 @@ header .counter .dot { width: 8px; height: 8px; background: #00ff88; border-radi
 .trust-item { display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.03); border: 1px solid #222; padding: 8px 16px; border-radius: 20px; font-size: 11px; color: #aaa; font-weight: 600; transition: 0.3s; }
 .trust-item:hover { border-color: #00ff88; color: #00ff88; background: rgba(0,255,136,0.05); }
 .trust-item .trust-icon { font-size: 14px; }
-
-.chat-admin-home { text-align: center; margin-top: 35px; padding: 0 20px; max-width: 600px; margin-left: auto; margin-right: auto; }
-.chat-admin-text { color: #888; font-size: 13px; margin-bottom: 14px; line-height: 1.6; }
-.chat-admin-btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; background: linear-gradient(135deg, #25D366, #1da851); color: #fff; text-decoration: none; padding: 15px 30px; border-radius: 30px; font-size: 14px; font-weight: 800; box-shadow: 0 5px 25px rgba(37,211,102,0.5); transition: 0.3s; width: 100%; max-width: 400px; letter-spacing: 0.3px; }
-.chat-admin-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 40px rgba(37,211,102,0.7); }
-.chat-admin-btn:active { transform: scale(0.98); }
 
 .tab-page { display: none; animation: fadeIn 0.4s ease; }
 .tab-page.active { display: block; }
@@ -520,14 +515,9 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
       <div class="trust-item"><span class="trust-icon">💰</span> Harga Murah</div>
     </div>
     <div class="share-row">
-      <a class="share-btn wa" href="#" onclick="shareTo('wa');return false;" title="Share ke WhatsApp">💬</a>
+      <a class="share-btn wa" href="https://wa.me/6283898669427?text=Halo%20Admin%20Jimzz%20Store%2C%20saya%20mau%20tanya..." target="_blank" title="Chat WhatsApp">💬</a>
+      <a class="share-btn tg" href="https://t.me/jimzzstore" target="_blank" title="Chat Telegram">✈️</a>
       <button class="share-btn copy" onclick="copyLink()" title="Copy Link">🔗</button>
-    </div>
-    <div class="chat-admin-home">
-      <p class="chat-admin-text">Jika ada kendala masalah silakan chat admin</p>
-      <a href="https://wa.me/6283898669427?text=Halo%20Admin%20Jimzz%20Store%2C%20saya%20mau%20tanya..." target="_blank" class="chat-admin-btn">
-        💬 Chat Admin — 6283898669427
-      </a>
     </div>
     <button class="bg-toggle" id="bgToggle" onclick="toggleBgMode()">
       <span class="bg-icon">🎨</span>
@@ -788,7 +778,7 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
       <div class="success-box" id="successBox" style="display:none;">
         <div class="success-icon">✅</div>
         <p class="success-title">PESANAN SELESAI!</p>
-        <p class="success-text">Admin telat mengirim produk ke nomor yang kamu kirim.</p>
+        <p class="success-text">Admin telah mengirim produk ke nomor yang kamu kirim.</p>
         <p class="success-sub">Silakan cek WhatsApp kamu secara berkala.</p>
       </div>
 
