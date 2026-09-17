@@ -290,8 +290,8 @@ header .counter .dot { width: 8px; height: 8px; background: #00ff88; border-radi
 .produk-list.grid-2col .produk-harga-label { font-size: 8px; }
 .produk-list.grid-2col .produk-harga { font-size: 14px; text-align: center; }
 .produk-list.grid-2col .btn-order { padding: 9px 12px; font-size: 11px; width: 100%; text-align: center; }
-.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); backdrop-filter: blur(15px); z-index: 400; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; }
-.modal-overlay.show { display: flex; }
+.modal-overlay { display: none !important; position: fixed; inset: 0; background: rgba(0,0,0,0.92); backdrop-filter: blur(15px); z-index: 400; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; }
+.modal-overlay.show { display: flex !important; }
 .modal-box { background: linear-gradient(145deg, #0f1a14, #0d0d15); border: 1px solid rgba(0,255,136,0.25); border-radius: 24px; padding: 30px 26px; width: 100%; max-width: 440px; position: relative; animation: slideUp 0.4s cubic-bezier(0.175,0.885,0.32,1.275); max-height: 90vh; overflow-y: auto; box-shadow: 0 30px 80px rgba(0,0,0,0.9), 0 0 60px rgba(0,255,136,0.1); }
 @keyframes slideUp { from { opacity:0; transform: translateY(40px) scale(0.95); } to { opacity:1; transform: translateY(0) scale(1); } }
 .modal-box::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #00ff88, #00cc6a, #00ff88); background-size: 200% 100%; animation: shimmer 3s linear infinite; border-radius: 24px 24px 0 0; }
@@ -698,8 +698,8 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
         <div class="modal-title" id="modalTitle">-</div>
         <div class="modal-subtitle" id="modalSubtitle">-</div>
       </div>
-      <label class="jumlah-label" for="jumlahInput">Jumlah <span class="minmax" id="minmaxText">Min: 1.000 - Max: 20.000</span></label>
-      <input type="number" id="jumlahInput" class="jumlah-input" placeholder="# Masukkan jumlah" oninput="hitungTotal()">
+      <label class="jumlah-label" for="jumlahInput">Jumlah <span class="minmax" id="minmaxText">Min: 1.000 - Max: 1.000.000</span></label>
+      <input type="number" id="jumlahInput" class="jumlah-input" placeholder="# Masukkan jumlah" oninput="hitungTotal()" onkeypress="if(this.value.length >= 7) event.preventDefault()" max="1000000">
       <div class="jumlah-hint" id="jumlahHint">Sistem otomatis hitung harga sesuai jumlah.</div>
       <div class="coin-toggle-box" id="coinToggleBox" style="display:none;">
         <div class="coin-toggle-info">
@@ -1707,6 +1707,10 @@ function pilihPaket(index) {
   document.body.style.overflow = 'hidden';
 }
 function bukaOrder(kategoriId, index) {
+  // Reset body overflow dulu (fix bug tombol Order gak bisa diklik)
+  document.body.style.overflow = 'auto';
+  document.body.style.pointerEvents = 'auto';
+  
   // Reset state dulu
   useCoinMode = false;
   const sw = document.getElementById('coinToggleSwitch');
@@ -1756,13 +1760,27 @@ function bukaOrder(kategoriId, index) {
   document.body.style.overflow = 'hidden';
 }
 function tutupOrder() {
-  document.getElementById('orderModal').classList.remove('show');
+  const modal = document.getElementById('orderModal');
+  modal.classList.remove('show');
+  modal.style.display = 'none';
+  
   document.body.style.overflow = 'auto';
+  document.body.style.pointerEvents = 'auto';
+  document.documentElement.style.overflow = 'auto';
+  
   if (orderPollingInterval) { clearInterval(orderPollingInterval); orderPollingInterval = null; }
   produkAktif = null;
   useCoinMode = false;
   const sw = document.getElementById('coinToggleSwitch');
   if (sw) sw.classList.remove('active');
+  
+  // Force reset setelah animasi (untuk jaga-jaga)
+  setTimeout(() => {
+    modal.classList.remove('show');
+    modal.style.display = 'none';
+    document.body.style.overflow = 'auto';
+    document.body.style.pointerEvents = 'auto';
+  }, 300);
 }
 function setStep(num) {
   document.querySelectorAll('.step-content').forEach(s => s.classList.remove('active'));
@@ -1782,7 +1800,16 @@ function clearError() {
 }
 function hitungTotal() {
   if (!produkAktif) return;
-  const jumlah = parseInt(document.getElementById('jumlahInput').value) || 0;
+  let jumlah = parseInt(document.getElementById('jumlahInput').value) || 0;
+  
+  // Batasi max 1 juta biar gak overflow
+  const maxJumlah = parseInt(document.getElementById('jumlahInput').max) || 1000000;
+  if (jumlah > maxJumlah) {
+    jumlah = maxJumlah;
+    document.getElementById('jumlahInput').value = maxJumlah;
+  }
+  if (jumlah < 0) jumlah = 0;
+  
   const hargaPerUnit = produkAktif.isApk ? produkAktif.harga : produkAktif.hargaPerUnit;
   const subtotal = jumlah * hargaPerUnit;
   let bonus = 0;
