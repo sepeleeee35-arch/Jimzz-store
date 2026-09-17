@@ -1459,15 +1459,20 @@ let dataPemesan = { link: "", hp: "", jumlah: 0, total: 0, bonus: 0, totalAmount
 function applySort(target, mode) {
   let data;
   let kategori;
-  if (target === 'sosmed') { data = [...produkSosmed]; kategori = 'SUNTIK ALL'; }
-  else if (target === 'jpm') { data = [...produkJpm]; kategori = 'LAYANAN LAINNYA'; }
-  else { data = [...produkApk]; kategori = 'JUAL APK'; }
+  let originalData;
+  if (target === 'sosmed') { originalData = produkSosmed; kategori = 'SUNTIK ALL'; }
+  else if (target === 'jpm') { originalData = produkJpm; kategori = 'LAYANAN LAINNYA'; }
+  else { originalData = produkApk; kategori = 'JUAL APK'; }
+  
+  // Simpen referensi ke index ASLI sebelum di-sort
+  data = originalData.map((p, i) => ({ ...p, _originalIndex: i }));
+  
   if (mode === 'termurah') data.sort((a,b) => (a.harga || a.hargaPerUnit) - (b.harga || b.hargaPerUnit));
   else if (mode === 'termahal') data.sort((a,b) => (b.harga || b.hargaPerUnit) - (a.harga || a.hargaPerUnit));
   else if (mode === 'terlaris') data.sort((a,b) => (b.baseOrder || 0) - (a.baseOrder || 0));
+  
   renderProduk(target, data, kategori);
-}
-
+  }
 // ============================================
 // RENDER PRODUK
 // ============================================
@@ -1480,9 +1485,11 @@ function renderProduk(target, data, kategori) {
   const el = document.getElementById(target);
   if (!el) return;
   const withCounts = data.map((p, i) => {
-    const realOrder = getProdukOrderCount(target, i);
+    // Pakai _originalIndex kalau ada (dari applySort), kalau gak ada pakai i
+    const realIndex = (typeof p._originalIndex !== 'undefined') ? p._originalIndex : i;
+    const realOrder = getProdukOrderCount(target, realIndex);
     const totalOrder = (p.baseOrder || 0) + realOrder;
-    return { ...p, _index: i, _totalOrder: totalOrder };
+    return { ...p, _index: realIndex, _totalOrder: totalOrder };
   });
   const maxOrder = Math.max(...withCounts.map(p => p._totalOrder));
   const topSellerIndex = withCounts.findIndex(p => p._totalOrder === maxOrder);
@@ -1509,7 +1516,7 @@ function renderProduk(target, data, kategori) {
     </div>
   `;
   }).join('');
-}
+  }
 function renderGameList() {
   const el = document.getElementById('gameList');
   if (!el) return;
