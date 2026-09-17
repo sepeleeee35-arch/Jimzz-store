@@ -306,6 +306,7 @@ header .counter .dot { width: 8px; height: 8px; background: #00ff88; border-radi
 .jumlah-input { width: 100%; background: #030306; border: 1.5px solid #1e2e26; color: #fff; padding: 16px 17px; border-radius: 12px; font-size: 16px; font-weight: 800; outline: none; transition: 0.3s; }
 .jumlah-input:focus { border-color: #00ff88; box-shadow: 0 0 25px rgba(0,255,136,0.25); }
 .jumlah-input:disabled { background: #13131a; color: #555; }
+.jumlah-input.error { border-color: #ff2b2b; box-shadow: 0 0 25px rgba(255,43,43,0.4); }
 .jumlah-hint { color: #666; font-size: 11px; margin-top: 8px; line-height: 1.5; }
 .total-box { background: #030306; border: 1px dashed #1e2e26; border-radius: 16px; padding: 18px; margin: 20px 0; }
 .total-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; font-size: 13px; }
@@ -680,7 +681,7 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
         <div class="modal-subtitle" id="modalSubtitle">-</div>
       </div>
       <label class="jumlah-label" for="jumlahInput">Jumlah <span class="minmax" id="minmaxText">Min: 1.000 - Max: 20.000</span></label>
-      <input type="number" id="jumlahInput" class="jumlah-input" placeholder="# Masukkan jumlah" oninput="hitungTotal()">
+      <input type="number" id="jumlahInput" class="jumlah-input" placeholder="# Masukkan jumlah" oninput="hitungTotal()" onblur="validasiJumlah()">
       <div class="jumlah-hint" id="jumlahHint">Sistem otomatis hitung harga sesuai jumlah.</div>
       <div class="total-box">
         <div class="total-row"><span class="label">Harga Satuan</span><span class="value" id="hargaSatuan">Rp 0</span></div>
@@ -791,6 +792,7 @@ const TELEGRAM_BOT_TOKEN = "8680818829:AAGxdsor3_uUToeJu6Tb_looQOfzKg9_mkA";
 const TELEGRAM_CHAT_ID = "8086577869";
 const MIN_BAYAR_QRIS = 1000;
 const MIN_PEMBELIAN = 1000;
+const MAX_SUNTIK = 9999999; // 🔥 max baru untuk semua produk suntik
 
 // ============================================
 // TELEGRAM NOTIF
@@ -1386,11 +1388,11 @@ function startApp() {
 // PRODUK DATA
 // ============================================
 const produkSosmed = [
-  { icon: "📱", nama: "Suntik Saluran WA", desc: "Tambah pengikut saluran WhatsApp kamu secara aman & cepat.", hargaPerUnit: 10, unit: "pengikut", min: 100, max: 1000000, baseOrder: 324, inputLabel: "🔗 Link Saluran WA", inputPlaceholder: "Contoh: https://whatsapp.com/channel/xxxxx", inputValidasi: "whatsapp.com/channel", inputError: "Link harus link SALURAN WhatsApp" },
-  { icon: "😀", nama: "Suntik Random Emoji Reaction", desc: "Tambah reaction emoji random ke postingan kamu.", hargaPerUnit: 1, unit: "reaction", min: 1000, max: 1000000, baseOrder: 187, inputLabel: "🔗 Link Postingan", inputPlaceholder: "Contoh: https://www.tiktok.com/@user/video/xxx", inputValidasi: "tiktok.com", inputError: "Link harus link postingan TikTok" },
-  { icon: "📊", nama: "Suntik Polling Vote", desc: "Tambah vote ke polling kamu secara aman & cepat.", hargaPerUnit: 20, unit: "vote", min: 50, max: 1000000, baseOrder: 92, inputLabel: "🔗 Link Polling", inputPlaceholder: "Contoh: link polling", inputValidasi: "", inputError: "" },
-  { icon: "❤️", nama: "Suntik Like TikTok", desc: "Tambah like video TikTok kamu secara aman & cepat.", hargaPerUnit: 10, unit: "like", min: 100, max: 1000000, baseOrder: 256, inputLabel: "🔗 Link Video TikTok", inputPlaceholder: "Contoh: https://www.tiktok.com/@user/video/xxx", inputValidasi: "tiktok.com", inputError: "Link harus link video TikTok" },
-  { icon: "👁️", nama: "Suntik Views TikTok", desc: "Tambah views video TikTok kamu secara aman & cepat.", hargaPerUnit: 1, unit: "views", min: 1000, max: 1000000, baseOrder: 143, inputLabel: "🔗 Link Video TikTok", inputPlaceholder: "Contoh: https://www.tiktok.com/@user/video/xxx", inputValidasi: "tiktok.com", inputError: "Link harus link video TikTok" }
+  { icon: "📱", nama: "Suntik Saluran WA", desc: "Tambah pengikut saluran WhatsApp kamu secara aman & cepat.", hargaPerUnit: 10, unit: "pengikut", min: 100, max: MAX_SUNTIK, baseOrder: 324, inputLabel: "🔗 Link Saluran WA", inputPlaceholder: "Contoh: https://whatsapp.com/channel/xxxxx", inputValidasi: "whatsapp.com/channel", inputError: "Link harus link SALURAN WhatsApp" },
+  { icon: "😀", nama: "Suntik Random Emoji Reaction", desc: "Tambah reaction emoji random ke postingan kamu.", hargaPerUnit: 1, unit: "reaction", min: 1000, max: MAX_SUNTIK, baseOrder: 187, inputLabel: "🔗 Link Postingan", inputPlaceholder: "Contoh: https://www.tiktok.com/@user/video/xxx", inputValidasi: "tiktok.com", inputError: "Link harus link postingan TikTok" },
+  { icon: "📊", nama: "Suntik Polling Vote", desc: "Tambah vote ke polling kamu secara aman & cepat.", hargaPerUnit: 20, unit: "vote", min: 50, max: MAX_SUNTIK, baseOrder: 92, inputLabel: "🔗 Link Polling", inputPlaceholder: "Contoh: link polling", inputValidasi: "", inputError: "" },
+  { icon: "❤️", nama: "Suntik Like TikTok", desc: "Tambah like video TikTok kamu secara aman & cepat.", hargaPerUnit: 10, unit: "like", min: 100, max: MAX_SUNTIK, baseOrder: 256, inputLabel: "🔗 Link Video TikTok", inputPlaceholder: "Contoh: https://www.tiktok.com/@user/video/xxx", inputValidasi: "tiktok.com", inputError: "Link harus link video TikTok" },
+  { icon: "👁️", nama: "Suntik Views TikTok", desc: "Tambah views video TikTok kamu secara aman & cepat.", hargaPerUnit: 1, unit: "views", min: 1000, max: MAX_SUNTIK, baseOrder: 143, inputLabel: "🔗 Link Video TikTok", inputPlaceholder: "Contoh: https://www.tiktok.com/@user/video/xxx", inputValidasi: "tiktok.com", inputError: "Link harus link video TikTok" }
 ];
 
 const produkJpm = [
@@ -1460,7 +1462,7 @@ function applySort(target, mode) {
 }
 
 // ============================================
-// RENDER PRODUK
+// RENDER PRODUK (🔥 FIXED BADGE TERLARIS)
 // ============================================
 function initData() {
   renderProduk('sosmed', produkSosmed, 'SUNTIK ALL');
@@ -1476,10 +1478,20 @@ function renderProduk(target, data, kategori) {
     const totalOrder = (p.baseOrder || 0) + realOrder;
     return { ...p, _index: realIndex, _totalOrder: totalOrder };
   });
-  const maxOrder = Math.max(...withCounts.map(p => p._totalOrder));
-  const topSellerIndex = withCounts.findIndex(p => p._totalOrder === maxOrder);
-  el.innerHTML = withCounts.map((p, i) => {
-    const isTopSeller = i === topSellerIndex;
+
+  // 🔥 FIX: cari top seller dari SEMUA data (berdasarkan _index asli), bukan posisi di array yang udah di-sort
+  let maxOrder = -1;
+  let topSellerRealIndex = -1;
+  withCounts.forEach(p => {
+    if (p._totalOrder > maxOrder) {
+      maxOrder = p._totalOrder;
+      topSellerRealIndex = p._index;
+    }
+  });
+
+  el.innerHTML = withCounts.map((p) => {
+    // 🔥 FIX: badge nempel ke produk berdasarkan _index asli
+    const isTopSeller = p._index === topSellerRealIndex;
     const wished = isWishlisted(p.nama);
     return `
     <div class="produk-card">
@@ -1676,10 +1688,40 @@ function clearError() {
   document.getElementById('hpPemesan').classList.remove('error');
   document.getElementById('hpError').classList.remove('show');
 }
+
+// 🔥 VALIDASI JUMLAH - auto coret kalau lebih dari max
+function validasiJumlah() {
+  if (!produkAktif || produkAktif.isApk) return;
+  const input = document.getElementById('jumlahInput');
+  let val = parseInt(input.value) || 0;
+  const min = parseInt(input.min) || 1;
+  const max = parseInt(input.max) || MAX_SUNTIK;
+  if (val > max) {
+    input.value = max;
+    showToast(`⚠️ Maksimal ${max.toLocaleString('id-ID')}! Udah auto diset ke max.`, 'warning');
+    hitungTotal();
+  } else if (val < min && val > 0) {
+    input.value = min;
+    showToast(`⚠️ Minimal ${min.toLocaleString('id-ID')}! Udah auto diset ke min.`, 'warning');
+    hitungTotal();
+  }
+}
+
 function hitungTotal() {
   if (!produkAktif) return;
-  const jumlah = parseInt(document.getElementById('jumlahInput').value) || 0;
+  let jumlah = parseInt(document.getElementById('jumlahInput').value) || 0;
   const hargaPerUnit = produkAktif.isApk ? produkAktif.harga : produkAktif.hargaPerUnit;
+  
+  // 🔥 Auto coret kalau jumlah > max (real-time)
+  if (!produkAktif.isApk) {
+    const max = parseInt(document.getElementById('jumlahInput').max) || MAX_SUNTIK;
+    const min = parseInt(document.getElementById('jumlahInput').min) || 1;
+    if (jumlah > max) {
+      jumlah = max;
+      document.getElementById('jumlahInput').value = max;
+    }
+  }
+  
   const subtotal = jumlah * hargaPerUnit;
   let bonus = 0;
   if (!produkAktif.isApk && produkAktif.bonusMinTotal && subtotal >= produkAktif.bonusMinTotal) bonus = produkAktif.bonusUnit || 0;
@@ -1698,7 +1740,7 @@ function hitungTotal() {
   const validTotal = subtotal >= MIN_BAYAR_QRIS && subtotal >= MIN_PEMBELIAN;
   document.getElementById('btnPesan').disabled = !(validJumlah && validTotal);
   const hintEl = document.getElementById('jumlahHint');
-  if (!validJumlah) { hintEl.innerHTML = `⚠️ Jumlah tidak valid.`; hintEl.style.color = '#ff6b6b'; }
+  if (!validJumlah) { hintEl.innerHTML = `⚠️ Jumlah tidak valid. Min: ${parseInt(document.getElementById('jumlahInput').min).toLocaleString('id-ID')} - Max: ${parseInt(document.getElementById('jumlahInput').max).toLocaleString('id-ID')}`; hintEl.style.color = '#ff6b6b'; }
   else if (subtotal < MIN_PEMBELIAN) { hintEl.innerHTML = `⚠️ Minimal pembelian <b style="color:#ff6b6b">Rp ${MIN_PEMBELIAN.toLocaleString('id-ID')}</b>.`; hintEl.style.color = '#ff6b6b'; }
   else if (!validTotal) { hintEl.innerHTML = `⚠️ Bayar minimal <b style="color:#ff6b6b">Rp ${MIN_BAYAR_QRIS.toLocaleString('id-ID')}</b>.`; hintEl.style.color = '#ff6b6b'; }
   else if (bonus > 0) { hintEl.innerHTML = `🎁 <b style="color:#00ff88">BONUS +${bonus} ${produkAktif.unit}</b> aktif!`; hintEl.style.color = '#00ff88'; }
