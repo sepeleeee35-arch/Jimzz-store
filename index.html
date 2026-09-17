@@ -60,20 +60,16 @@ body::after { content: ""; position: fixed; top: 0; left: 0; width: 100vw; heigh
 .share-btn.wa { background: linear-gradient(135deg, #25D366, #1da851); box-shadow: 0 5px 20px rgba(37,211,102,0.5); }
 .share-btn.tg { background: linear-gradient(135deg, #229ED9, #1a7fb0); box-shadow: 0 5px 20px rgba(34,158,217,0.5); }
 .share-btn.copy { background: linear-gradient(135deg, #ffd700, #ff9500); box-shadow: 0 5px 20px rgba(255,215,0,0.5); }
-.coin-display { display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, rgba(255,215,0,0.15), rgba(255,150,0,0.05)); border: 1px solid rgba(255,215,0,0.4); color: #ffd700; padding: 8px 18px; border-radius: 20px; font-size: 12px; font-weight: 700; margin-top: 12px; cursor: pointer; transition: 0.3s; }
-.coin-display:hover { background: linear-gradient(135deg, rgba(255,215,0,0.25), rgba(255,150,0,0.1)); transform: translateY(-2px); box-shadow: 0 5px 20px rgba(255,215,0,0.3); }
+.coin-display { display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, rgba(255,215,0,0.15), rgba(255,150,0,0.05)); border: 1px solid rgba(255,215,0,0.4); color: #ffd700; padding: 8px 18px; border-radius: 20px; font-size: 12px; font-weight: 700; margin-top: 12px; cursor: default; transition: 0.3s; }
 .coin-display .coin-icon { font-size: 16px; }
 .coin-display .coin-value { color: #fff; font-weight: 800; font-size: 14px; }
-.coin-toggle-box { background: linear-gradient(145deg, rgba(255,215,0,0.1), rgba(255,150,0,0.05)); border: 1.5px solid rgba(255,215,0,0.4); border-radius: 14px; padding: 14px 16px; margin-bottom: 18px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-.coin-toggle-box.disabled { opacity: 0.5; pointer-events: none; }
-.coin-toggle-info { flex: 1; }
-.coin-toggle-title { color: #ffd700; font-size: 13px; font-weight: 800; margin-bottom: 2px; }
-.coin-toggle-desc { color: #888; font-size: 11px; }
-.coin-toggle-desc.warning { color: #ff6b6b; font-weight: 700; }
-.coin-toggle-switch { position: relative; width: 50px; height: 28px; background: #1e2e26; border-radius: 20px; cursor: pointer; transition: 0.3s; flex-shrink: 0; }
-.coin-toggle-switch.active { background: linear-gradient(135deg, #ffd700, #ff9500); }
-.coin-toggle-switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; background: #fff; border-radius: 50%; transition: 0.3s; }
-.coin-toggle-switch.active::after { left: 25px; }
+.coin-header-toggle { display: inline-flex; align-items: center; gap: 6px; margin-left: 8px; padding-left: 10px; border-left: 1px solid rgba(255,215,0,0.3); cursor: pointer; user-select: none; }
+.coin-header-label { font-size: 10px; font-weight: 800; color: #ff6b6b; letter-spacing: 0.5px; min-width: 30px; text-align: right; transition: 0.3s; }
+.coin-header-label.active { color: #00ff88; }
+.coin-header-switch { position: relative; width: 36px; height: 20px; background: #1e2e26; border-radius: 20px; transition: 0.3s; flex-shrink: 0; }
+.coin-header-switch.active { background: linear-gradient(135deg, #ffd700, #ff9500); }
+.coin-header-switch::after { content: ""; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; background: #fff; border-radius: 50%; transition: 0.3s; }
+.coin-header-switch.active::after { left: 18px; }
 .scroll-top { position: fixed; bottom: 90px; left: 12px; z-index: 500; width: 46px; height: 46px; border-radius: 50%; background: linear-gradient(135deg, #00ff88, #00cc6a); color: #000; border: none; font-size: 22px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 25px rgba(0,255,136,0.5); opacity: 0; transform: translateY(20px); pointer-events: none; transition: 0.3s; }
 .scroll-top.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
 .scroll-top:hover { transform: translateY(-3px) scale(1.08); }
@@ -469,10 +465,14 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
     <h1 class="jimzz-clickable" onclick="secretClick()"><span class="gradient-text">Jimzz Store</span></h1>
     <p class="tagline">Top Up Game, Sosmed & Digital Produk Terlengkap</p>
     <div class="counter"><span class="dot"></span>🔥 <span id="viewCount">1.375</span> orang sudah order</div>
-    <div class="coin-display" onclick="showToast('⭐ 1 koin = Rp 1 • Dapet 1 koin per Rp 50 belanja', 'info')">
+    <div class="coin-display">
       <span class="coin-icon">⭐</span>
       <span>Koin Kamu:</span>
       <span class="coin-value" id="coinBalance">0</span>
+      <div class="coin-header-toggle" id="coinHeaderToggle" onclick="toggleCoinHeader()">
+        <span class="coin-header-label" id="coinHeaderLabel">OFF</span>
+        <div class="coin-header-switch" id="coinHeaderSwitch"></div>
+      </div>
     </div>
     <div class="trust-row">
       <div class="trust-item"><span class="trust-icon">⚡</span> Proses Cepat</div>
@@ -717,13 +717,6 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
       <label class="jumlah-label" for="jumlahInput">Jumlah <span class="minmax" id="minmaxText">Min: 1.000 - Max: 20.000</span></label>
       <input type="number" id="jumlahInput" class="jumlah-input" placeholder="# Masukkan jumlah" oninput="hitungTotal()" onblur="validasiJumlah()">
       <div class="jumlah-hint" id="jumlahHint">Sistem otomatis hitung harga sesuai jumlah.</div>
-      <div class="coin-toggle-box" id="coinToggleBox" style="display:none;">
-        <div class="coin-toggle-info">
-          <div class="coin-toggle-title">⭐ Pakai Koin?</div>
-          <div class="coin-toggle-desc" id="coinToggleDesc">Saldo: <span id="coinAvailable">0</span> koin</div>
-        </div>
-        <div class="coin-toggle-switch" id="coinToggleSwitch" onclick="toggleCoinUse()"></div>
-      </div>
       <div class="total-box">
         <div class="total-row"><span class="label">Harga Satuan</span><span class="value" id="hargaSatuan">Rp 0</span></div>
         <div class="total-row"><span class="label">Jumlah Order</span><span class="value" id="jumlahDisplay">0</span></div>
@@ -887,16 +880,29 @@ function addPoints(amount) {
   localStorage.setItem('jimzz_points', (current + earned).toString());
   return earned;
 }
-function usePoints(amount) {
-  const current = getPoints();
-  const maxUse = Math.min(current, amount);
-  if (maxUse <= 0) return 0;
-  localStorage.setItem('jimzz_points', (current - maxUse).toString());
-  return maxUse;
-}
 function renderCoinBalance() {
   const el = document.getElementById('coinBalance');
   if (el) el.innerText = getPoints().toLocaleString('id-ID');
+}
+
+// Setting pakai koin — disimpen di localStorage, gak reset pas refresh
+let useCoinMode = localStorage.getItem('jimzz_use_coin') === 'true';
+
+function toggleCoinHeader() {
+  useCoinMode = !useCoinMode;
+  localStorage.setItem('jimzz_use_coin', useCoinMode.toString());
+  renderCoinHeaderToggle();
+  if (produkAktif) hitungTotal();
+  showToast(useCoinMode ? '⭐ Koin AKTIF — otomatis dipakai di setiap order' : '❌ Koin NONAKTIF — gak dipakai di order', useCoinMode ? 'success' : 'info');
+}
+
+function renderCoinHeaderToggle() {
+  const sw = document.getElementById('coinHeaderSwitch');
+  const label = document.getElementById('coinHeaderLabel');
+  if (sw && label) {
+    if (useCoinMode) { sw.classList.add('active'); label.classList.add('active'); label.innerText = 'ON'; }
+    else { sw.classList.remove('active'); label.classList.remove('active'); label.innerText = 'OFF'; }
+  }
 }
 
 // ============================================
@@ -1493,6 +1499,7 @@ function startApp() {
   updateBgLabel();
   pingVisitor();
   renderCoinBalance();
+  renderCoinHeaderToggle();
   setTimeout(() => document.getElementById('loadingScreen').classList.add('hide'), 1400);
 }
 
@@ -1556,15 +1563,6 @@ let gameAktif = null;
 let paketAktif = null;
 let produkAktif = null;
 let dataPemesan = { link: "", hp: "", jumlah: 0, total: 0, bonus: 0, totalAmount: 0, orderId: "" };
-let useCoinMode = false;
-
-function toggleCoinUse() {
-  useCoinMode = !useCoinMode;
-  const sw = document.getElementById('coinToggleSwitch');
-  if (useCoinMode) sw.classList.add('active');
-  else sw.classList.remove('active');
-  hitungTotal();
-}
 
 // ============================================
 // SORT & FILTER
@@ -1736,8 +1734,6 @@ function pilihPaket(index) {
   document.getElementById('qrisLoading').style.display = 'none';
   document.getElementById('successBox').style.display = 'none';
   document.getElementById('failedBox').style.display = 'none';
-  useCoinMode = false;
-  document.getElementById('coinToggleSwitch').classList.remove('active');
   clearError();
   hitungTotal();
   setStep(1);
@@ -1783,8 +1779,6 @@ function bukaOrder(kategoriId, index) {
   document.getElementById('qrisLoading').style.display = 'none';
   document.getElementById('successBox').style.display = 'none';
   document.getElementById('failedBox').style.display = 'none';
-  useCoinMode = false;
-  document.getElementById('coinToggleSwitch').classList.remove('active');
   clearError();
   hitungTotal();
   setStep(1);
@@ -1796,7 +1790,6 @@ function tutupOrder() {
   document.body.style.overflow = 'auto';
   if (orderPollingInterval) { clearInterval(orderPollingInterval); orderPollingInterval = null; }
   produkAktif = null;
-  useCoinMode = false;
 }
 function setStep(num) {
   document.querySelectorAll('.step-content').forEach(s => s.classList.remove('active'));
@@ -1848,36 +1841,10 @@ function hitungTotal() {
   if (!produkAktif.isApk && produkAktif.bonusMinTotal && subtotal >= produkAktif.bonusMinTotal) bonus = produkAktif.bonusUnit || 0;
   document.getElementById('jumlahDisplay').innerText = jumlah.toLocaleString('id-ID') + ' ' + (produkAktif.unit || 'pcs');
   
-  // LOGIC PAKAI KOIN
   const saldoKoin = getPoints();
-  const coinToggleBox = document.getElementById('coinToggleBox');
-  const coinAvailable = document.getElementById('coinAvailable');
-  const coinToggleDesc = document.getElementById('coinToggleDesc');
   const coinDiscountRow = document.getElementById('coinDiscountRow');
   const coinDiscount = document.getElementById('coinDiscount');
-  
   const maxPotongKoin = subtotal - MIN_BAYAR_QRIS;
-  
-  if (saldoKoin > 0 && subtotal > 0) {
-    coinToggleBox.style.display = 'flex';
-    coinAvailable.innerText = saldoKoin.toLocaleString('id-ID');
-    
-    if (maxPotongKoin <= 0) {
-      coinToggleBox.classList.add('disabled');
-      coinToggleDesc.innerHTML = `⚠️ Koin gak bisa dipakai. Minimal bayar Rp ${MIN_BAYAR_QRIS.toLocaleString('id-ID')}`;
-      coinToggleDesc.classList.add('warning');
-      useCoinMode = false;
-      document.getElementById('coinToggleSwitch').classList.remove('active');
-    } else {
-      coinToggleBox.classList.remove('disabled');
-      const maxPakai = Math.min(saldoKoin, maxPotongKoin);
-      coinToggleDesc.innerHTML = `Saldo: <b>${saldoKoin.toLocaleString('id-ID')}</b> koin • Max pakai: <b style="color:#ffd700">${maxPakai.toLocaleString('id-ID')}</b>`;
-      coinToggleDesc.classList.remove('warning');
-    }
-  } else {
-    coinToggleBox.style.display = 'none';
-    useCoinMode = false;
-  }
   
   let potonganKoin = 0;
   if (useCoinMode && saldoKoin > 0 && maxPotongKoin > 0) {
@@ -1941,11 +1908,12 @@ async function keStep3() {
   document.getElementById('successBox').style.display = 'none';
   document.getElementById('failedBox').style.display = 'none';
   
-  // Hitung potongan koin
   let potonganKoinActual = 0;
   if (useCoinMode) {
     const maxPotong = dataPemesan.total - MIN_BAYAR_QRIS;
-    potonganKoinActual = Math.min(getPoints(), Math.max(0, maxPotong));
+    if (maxPotong > 0) {
+      potonganKoinActual = Math.min(getPoints(), maxPotong);
+    }
   }
   const totalBayar = dataPemesan.total - potonganKoinActual;
   
@@ -1973,10 +1941,8 @@ async function keStep3() {
     document.getElementById('qrisBox').style.display = 'block';
     document.getElementById('waitingBox').style.display = 'block';
 
-    // Mulai polling — koin baru dapet SETELAH admin konfirmasi
     startOrderPolling(result.orderId, totalBayar);
     
-    // POTONG KOIN SEKARANG
     if (potonganKoinActual > 0) {
       const currentPoints = getPoints();
       localStorage.setItem('jimzz_points', (currentPoints - potonganKoinActual).toString());
@@ -1986,7 +1952,6 @@ async function keStep3() {
       }, 2000);
     }
     
-    // NOTIF TELEGRAM
     sendToTelegram(`<b>🛒 ORDER BARU MASUK!</b>
 
 <b>📦 Produk:</b> ${produkAktif.nama}
