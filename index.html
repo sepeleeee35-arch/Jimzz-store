@@ -101,8 +101,8 @@ body::after { content: ""; position: fixed; top: 0; left: 0; width: 100vw; heigh
 .admin-badge-float { position: fixed; top: 12px; right: 12px; z-index: 999; background: linear-gradient(135deg, #ffd700, #ff9500); color: #000; padding: 8px 14px; border-radius: 20px; font-size: 11px; font-weight: 800; box-shadow: 0 5px 25px rgba(255,215,0,0.6); display: none; align-items: center; gap: 6px; cursor: pointer; letter-spacing: 0.5px; }
 .admin-badge-float.show { display: flex; }
 .admin-badge-float .logout-x { color: #000; font-weight: 900; margin-left: 5px; }
-#adminLoginModal { position: fixed; inset: 0; background: rgba(0,0,0,0.95); backdrop-filter: blur(20px); z-index: 5000; display: none; align-items: center; justify-content: center; padding: 20px; }
-#adminLoginModal.show { display: flex; }
+#adminLoginModal { position: fixed; inset: 0; background: rgba(0,0,0,0.95); backdrop-filter: blur(20px); z-index: 5000; display: none; align-items: center; justify-content: center; padding: 20px; pointer-events: none; }
+#adminLoginModal.show { display: flex; pointer-events: auto; }
 .admin-login-box { background: linear-gradient(145deg, rgba(15,26,20,0.98), rgba(13,13,21,0.98)); border: 1px solid rgba(0,255,136,0.3); border-radius: 22px; padding: 35px 28px; max-width: 400px; width: 100%; text-align: center; box-shadow: 0 30px 80px rgba(0,0,0,0.8), 0 0 60px rgba(0,255,136,0.15); position: relative; animation: slideUp 0.4s cubic-bezier(0.175,0.885,0.32,1.275); }
 .admin-login-box::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #00ff88, #00cc6a, #00ff88); background-size: 200% 100%; animation: shimmer 3s linear infinite; border-radius: 22px 22px 0 0; }
 .admin-login-icon { font-size: 50px; margin-bottom: 15px; filter: drop-shadow(0 0 20px rgba(0,255,136,0.6)); }
@@ -290,8 +290,8 @@ header .counter .dot { width: 8px; height: 8px; background: #00ff88; border-radi
 .produk-list.grid-2col .produk-harga-label { font-size: 8px; }
 .produk-list.grid-2col .produk-harga { font-size: 14px; text-align: center; }
 .produk-list.grid-2col .btn-order { padding: 9px 12px; font-size: 11px; width: 100%; text-align: center; }
-.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); backdrop-filter: blur(15px); z-index: 400; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; }
-.modal-overlay.show { display: flex; }
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); backdrop-filter: blur(15px); z-index: 400; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; pointer-events: none; }
+.modal-overlay.show { display: flex; pointer-events: auto; }
 .modal-box { background: linear-gradient(145deg, #0f1a14, #0d0d15); border: 1px solid rgba(0,255,136,0.25); border-radius: 24px; padding: 30px 26px; width: 100%; max-width: 440px; position: relative; animation: slideUp 0.4s cubic-bezier(0.175,0.885,0.32,1.275); max-height: 90vh; overflow-y: auto; box-shadow: 0 30px 80px rgba(0,0,0,0.9), 0 0 60px rgba(0,255,136,0.1); }
 @keyframes slideUp { from { opacity:0; transform: translateY(40px) scale(0.95); } to { opacity:1; transform: translateY(0) scale(1); } }
 .modal-box::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #00ff88, #00cc6a, #00ff88); background-size: 200% 100%; animation: shimmer 3s linear infinite; border-radius: 24px 24px 0 0; }
@@ -1100,7 +1100,6 @@ function startOrderPolling(orderId) {
         showConfetti();
         showToast('Pesanan kamu selesai!', 'success');
         
-        // 🎁 BARU DAPET KOIN SETELAH ORDER SUKSES
         const totalAmount = data.totalAmount || 0;
         const earned = addPoints(totalAmount);
         renderCoinBalance();
@@ -1378,7 +1377,9 @@ function adminLogin() {
   if (input === ADMIN_PASSWORD) {
     isAdmin = true;
     localStorage.setItem('jimzz_admin', 'true');
-    document.getElementById('adminLoginModal').classList.remove('show');
+    const modal = document.getElementById('adminLoginModal');
+    modal.classList.remove('show');
+    modal.style.display = 'none';
     applyAdminUI();
   } else {
     error.classList.add('show');
@@ -1428,7 +1429,12 @@ function applyAdminUI() {
   }
   renderGameList();
 }
-function handleTopupClick() { if (isAdmin) switchTab('topup'); else showToast('Top Up Game sedang MAINTENANCE', 'warning'); }
+function handleTopupClick() { 
+  document.body.style.removeProperty('pointer-events');
+  document.body.style.removeProperty('overflow');
+  if (isAdmin) switchTab('topup'); 
+  else showToast('Top Up Game sedang MAINTENANCE', 'warning'); 
+}
 
 function startApp() {
   applyBgMode();
@@ -1527,7 +1533,6 @@ function applySort(target, mode) {
   
   let data = originalData.map((p, i) => ({ ...p, _originalIndex: i }));
   
-  // Hitung total order ASLI dulu sebelum sort
   data = data.map(p => {
     const realOrder = getProdukOrderCount(target, p._originalIndex);
     return { ...p, _totalOrder: (p.baseOrder || 0) + realOrder };
@@ -1567,7 +1572,6 @@ function renderProdukSorted(target, data, kategori) {
 }
 
 function renderProdukCards(el, withCounts, kategori, target) {
-  // Hitung TOP SELLER dari total order
   const maxOrder = Math.max(...withCounts.map(p => p._totalOrder));
   const topSellerNames = withCounts.filter(p => p._totalOrder === maxOrder).map(p => p.nama);
   
@@ -1707,11 +1711,20 @@ function pilihPaket(index) {
   document.body.style.overflow = 'hidden';
 }
 function bukaOrder(kategoriId, index) {
-  // Reset body overflow dulu (fix bug tombol Order gak bisa diklik)
+  // 🔥 RESET TOTAL BODY STATE DULU
   document.body.style.removeProperty('pointer-events');
-  document.body.style.overflow = 'auto';
+  document.body.style.removeProperty('overflow');
+  document.body.style.overflow = '';
   
-  // Reset state dulu
+  // 🔥 Pastikan modal sebelumnya benar2 tertutup
+  const oldModal = document.getElementById('orderModal');
+  if (oldModal) {
+    oldModal.classList.remove('show');
+    oldModal.style.display = 'none';
+    setTimeout(() => { if (oldModal) oldModal.style.display = ''; }, 50);
+  }
+  
+  // Reset state
   useCoinMode = false;
   const sw = document.getElementById('coinToggleSwitch');
   if (sw) sw.classList.remove('active');
@@ -1762,14 +1775,28 @@ function bukaOrder(kategoriId, index) {
 function tutupOrder() {
   const modal = document.getElementById('orderModal');
   modal.classList.remove('show');
+  modal.style.display = 'none';
   modal.style.removeProperty('display');
+  
+  // 🔥 RESET BODY TOTAL
   document.body.style.removeProperty('pointer-events');
-  document.body.style.overflow = 'auto';
+  document.body.style.removeProperty('overflow');
+  document.body.style.overflow = '';
+  document.body.classList.remove('modal-open');
+  
   if (orderPollingInterval) { clearInterval(orderPollingInterval); orderPollingInterval = null; }
   produkAktif = null;
   useCoinMode = false;
   const sw = document.getElementById('coinToggleSwitch');
   if (sw) sw.classList.remove('active');
+  
+  // 🔥 RESET INPUT
+  const jumlahInput = document.getElementById('jumlahInput');
+  if (jumlahInput) { jumlahInput.value = ''; jumlahInput.disabled = false; }
+  
+  setTimeout(() => {
+    if (modal) modal.style.display = '';
+  }, 50);
 }
 function setStep(num) {
   document.querySelectorAll('.step-content').forEach(s => s.classList.remove('active'));
@@ -1790,12 +1817,25 @@ function clearError() {
 function hitungTotal() {
   if (!produkAktif) return;
   
-  // 🔥 SANITASI INPUT
   const inputEl = document.getElementById('jumlahInput');
   if (!inputEl) return;
   let rawVal = inputEl.value;
   rawVal = String(rawVal).replace(/[^0-9]/g, '');
   if (rawVal.length > 7) { rawVal = rawVal.substring(0, 7); inputEl.value = rawVal; }
+  
+  // 🔥 Handle input kosong
+  if (rawVal === '' || rawVal === '0') {
+    document.getElementById('totalHarga').innerText = 'Rp 0';
+    document.getElementById('jumlahDisplay').innerText = '0 ' + (produkAktif.unit || 'pcs');
+    document.getElementById('btnPesan').disabled = true;
+    document.getElementById('jumlahHint').innerText = 'Masukkan jumlah dulu ya.';
+    document.getElementById('jumlahHint').style.color = '#888';
+    document.getElementById('coinToggleBox').style.display = 'none';
+    document.getElementById('coinDiscountRow').style.display = 'none';
+    document.getElementById('bonusRow').style.display = 'none';
+    document.getElementById('totalDapatRow').style.display = 'none';
+    return;
+  }
   
   let jumlah = parseInt(rawVal) || 0;
   if (jumlah > 1000000) { jumlah = 1000000; inputEl.value = 1000000; }
@@ -1804,7 +1844,6 @@ function hitungTotal() {
   const hargaPerUnit = produkAktif.isApk ? produkAktif.harga : produkAktif.hargaPerUnit;
   const subtotal = jumlah * hargaPerUnit;
   
-  // 🔥 CEK OVERFLOW
   if (!isFinite(subtotal) || isNaN(subtotal)) {
     document.getElementById('totalHarga').innerText = 'Rp 0';
     document.getElementById('btnPesan').disabled = true;
@@ -1815,7 +1854,6 @@ function hitungTotal() {
   if (!produkAktif.isApk && produkAktif.bonusMinTotal && subtotal >= produkAktif.bonusMinTotal) bonus = produkAktif.bonusUnit || 0;
   document.getElementById('jumlahDisplay').innerText = jumlah.toLocaleString('id-ID') + ' ' + (produkAktif.unit || 'pcs');
   
-  // ⭐ LOGIC PAKAI KOIN
   const saldoKoin = getPoints();
   const coinToggleBox = document.getElementById('coinToggleBox');
   const coinAvailable = document.getElementById('coinAvailable');
@@ -1951,7 +1989,6 @@ async function keStep3() {
     document.getElementById('waitingBox').style.display = 'block';
     startOrderPolling(result.orderId);
 
-    // ⭐ POTONG KOIN (langsung dipotong saat order dibuat)
     let potonganKoinActual = 0;
     if (useCoinMode) {
       const maxPotong = dataPemesan.total - MIN_BAYAR_QRIS;
@@ -1961,7 +1998,6 @@ async function keStep3() {
       if (sw) sw.classList.remove('active');
     }
     
-    // 🔔 NOTIF TELEGRAM (order masuk)
     sendToTelegram(`<b>🛒 ORDER BARU MASUK!</b>
 
 <b>📦 Produk:</b> ${produkAktif.nama}
@@ -1974,7 +2010,6 @@ async function keStep3() {
 
 ⏳ Status: Menunggu pembayaran...`);
     
-    // 💾 BACKUP ORDER
     backupOrder({ order_id: result.orderId, produk: produkAktif.nama, jumlah: dataPemesan.jumlah, total: result.totalAmount, hp: dataPemesan.hp, status: 'pending' });
   } catch (err) {
     console.error('QRIS error:', err);
@@ -2006,14 +2041,21 @@ async function downloadQris() {
 // RIWAYAT ORDER
 // ============================================
 function bukaRiwayat() {
-  document.getElementById('historyModal').classList.add('show');
+  const modal = document.getElementById('historyModal');
+  modal.classList.add('show');
+  modal.style.display = 'flex';
   document.body.style.overflow = 'hidden';
   document.getElementById('historyResult').innerHTML = '';
   document.getElementById('historyHp').value = '';
 }
 function tutupRiwayat() {
-  document.getElementById('historyModal').classList.remove('show');
-  document.body.style.overflow = 'auto';
+  const modal = document.getElementById('historyModal');
+  modal.classList.remove('show');
+  modal.style.display = 'none';
+  document.body.style.removeProperty('overflow');
+  document.body.style.overflow = '';
+  document.body.style.removeProperty('pointer-events');
+  setTimeout(() => { modal.style.display = ''; }, 50);
 }
 async function loadHistory() {
   const hp = document.getElementById('historyHp').value.trim();
@@ -2050,10 +2092,18 @@ async function loadHistory() {
 // SWITCH TAB
 // ============================================
 function switchTab(tab) {
+  document.body.style.removeProperty('pointer-events');
+  document.body.style.removeProperty('overflow');
+  document.body.style.overflow = '';
+  
   document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
-  document.getElementById('page-' + tab).classList.add('active');
+  const page = document.getElementById('page-' + tab);
+  if (page) page.classList.add('active');
+  
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  document.querySelector(`.nav-item[data-tab="${tab}"]`).classList.add('active');
+  const nav = document.querySelector(`.nav-item[data-tab="${tab}"]`);
+  if (nav) nav.classList.add('active');
+  
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
