@@ -236,13 +236,18 @@ header .counter .dot { width: 8px; height: 8px; background: #00ff88; border-radi
 .order-item-status.pending { background: rgba(255,100,0,0.2); color: #ff9500; border: 1px solid rgba(255,100,0,0.4); }
 .order-item-status.success { background: rgba(0,255,136,0.2); color: #00ff88; border: 1px solid rgba(0,255,136,0.4); }
 .order-item-status.cancel { background: rgba(255,43,43,0.2); color: #ff2b2b; border: 1px solid rgba(255,43,43,0.4); }
+.order-item-status.failed { background: rgba(255,43,43,0.2); color: #ff2b2b; border: 1px solid rgba(255,43,43,0.4); }
 .order-item-detail { color: #bbb; font-size: 11px; line-height: 1.5; margin-bottom: 10px; }
 .order-item-detail b { color: #fff; }
 .order-item-detail a { color: #00c8ff; text-decoration: none; }
-.order-queue-empty { text-align: center; color: #666; font-size: 12px; padding: 30px; font-style: italic; }
-.btn-complete-order { width: 100%; background: linear-gradient(135deg, #00ff88, #00cc6a); color: #000; border: none; padding: 12px 16px; border-radius: 10px; font-size: 13px; font-weight: 800; cursor: pointer; font-family: inherit; transition: 0.3s; letter-spacing: 0.3px; box-shadow: 0 5px 20px rgba(0,255,136,0.3); }
+.order-item-buttons { display: flex; gap: 8px; }
+.btn-complete-order { flex: 1; background: linear-gradient(135deg, #00ff88, #00cc6a); color: #000; border: none; padding: 12px 16px; border-radius: 10px; font-size: 13px; font-weight: 800; cursor: pointer; font-family: inherit; transition: 0.3s; letter-spacing: 0.3px; box-shadow: 0 5px 20px rgba(0,255,136,0.3); }
 .btn-complete-order:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,255,136,0.5); }
 .btn-complete-order:active { transform: scale(0.97); }
+.btn-fail-order { flex: 1; background: linear-gradient(135deg, #ff2b2b, #cc0000); color: #fff; border: none; padding: 12px 16px; border-radius: 10px; font-size: 13px; font-weight: 800; cursor: pointer; font-family: inherit; transition: 0.3s; letter-spacing: 0.3px; box-shadow: 0 5px 20px rgba(255,43,43,0.3); }
+.btn-fail-order:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(255,43,43,0.5); }
+.btn-fail-order:active { transform: scale(0.97); }
+.order-queue-empty { text-align: center; color: #666; font-size: 12px; padding: 30px; font-style: italic; }
 .produk-list { display: flex; flex-direction: column; gap: 16px; }
 .produk-list.grid-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .produk-card { background: linear-gradient(145deg, rgba(15,25,20,0.92), rgba(13,13,21,0.92)); border: 1px solid #1e2e26; border-radius: 18px; padding: 20px 18px; transition: 0.4s cubic-bezier(0.175,0.885,0.32,1.275); position: relative; overflow: hidden; }
@@ -353,6 +358,11 @@ header .counter .dot { width: 8px; height: 8px; background: #00ff88; border-radi
 .success-title { color: #00ff88; font-size: 20px; font-weight: 900; letter-spacing: 1px; margin-bottom: 10px; }
 .success-text { color: #fff; font-size: 14px; font-weight: 700; margin-bottom: 8px; line-height: 1.5; }
 .success-sub { color: #888; font-size: 12px; line-height: 1.6; }
+.failed-box { background: linear-gradient(145deg, rgba(255,43,43,0.1), rgba(200,0,0,0.05)); border: 2px solid #ff2b2b; border-radius: 18px; padding: 30px 20px; text-align: center; margin-top: 18px; animation: successPop 0.5s cubic-bezier(0.175,0.885,0.32,1.275); }
+.failed-icon { font-size: 60px; margin-bottom: 12px; filter: drop-shadow(0 0 20px rgba(255,43,43,0.8)); }
+.failed-title { color: #ff2b2b; font-size: 20px; font-weight: 900; letter-spacing: 1px; margin-bottom: 10px; }
+.failed-text { color: #fff; font-size: 14px; font-weight: 700; margin-bottom: 8px; line-height: 1.5; }
+.failed-sub { color: #888; font-size: 12px; line-height: 1.6; }
 .info-note { background: rgba(0,255,136,0.08); border-left: 3px solid #00ff88; padding: 14px 16px; border-radius: 12px; font-size: 11px; color: #bbb; margin-top: 16px; line-height: 1.6; }
 .info-note b { color: #00ff88; }
 .term-text { color: #666; font-size: 11px; text-align: center; margin-top: 16px; line-height: 1.5; }
@@ -768,6 +778,13 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
         <p class="success-sub">Silakan cek WhatsApp kamu secara berkala.</p>
       </div>
 
+      <div class="failed-box" id="failedBox" style="display:none;">
+        <div class="failed-icon">❌</div>
+        <p class="failed-title">PESANAN GAGAL!</p>
+        <p class="failed-text">Pesanan kamu tidak dapat diproses oleh admin.</p>
+        <p class="failed-sub">Silakan hubungi admin untuk info lebih lanjut atau refund.</p>
+      </div>
+
       <div class="info-note">📌 <b>Bayar sesuai nominal</b>. Setelah bayar, <b>tunggu di halaman ini</b>. Admin akan segera kirim produk ke WA kamu.</div>
     </div>
   </div>
@@ -857,7 +874,7 @@ function toggleWishlist(produkName) {
 function isWishlisted(name) { return getWishlist().includes(name); }
 
 // ============================================
-// LOYALTY POINT (KOIN) — cuma DISPLAY dulu
+// LOYALTY POINT (KOIN)
 // ============================================
 function getPoints() { try { return parseInt(localStorage.getItem('jimzz_points') || '0'); } catch { return 0; } }
 function addPoints(amount) {
@@ -1080,29 +1097,61 @@ setInterval(pingVisitor, 30000);
 setInterval(loadVisitors, 10000);
 
 // ============================================
-// ORDER POLLING
+// ORDER POLLING (KOIN DAPET SETELAH ADMIN KONFIRMASI)
 // ============================================
 let orderPollingInterval = null;
-function startOrderPolling(orderId) {
+function startOrderPolling(orderId, totalBayar) {
   if (orderPollingInterval) clearInterval(orderPollingInterval);
   orderPollingInterval = setInterval(async () => {
     try {
       const res = await fetch(BACKEND_URL + '/api/check-order?orderId=' + encodeURIComponent(orderId));
       const data = await res.json();
-      if (data.success && data.status === 'success') {
+      if (!data.success) return;
+
+      // 🔥 STATUS SUKSES → dapet koin
+      if (data.status === 'success') {
         clearInterval(orderPollingInterval);
         orderPollingInterval = null;
         document.getElementById('qrisBox').style.display = 'none';
         document.getElementById('waitingBox').style.display = 'none';
+        document.getElementById('failedBox').style.display = 'none';
         document.getElementById('successBox').style.display = 'block';
         showConfetti();
         showToast('Pesanan kamu selesai!', 'success');
+
+        // 🎁 DAPET KOIN SETELAH ADMIN KONFIRMASI
+        if (totalBayar && totalBayar > 0) {
+          const earned = addPoints(totalBayar);
+          renderCoinBalance();
+          if (earned > 0) {
+            setTimeout(() => {
+              showToast(`🎁 +${earned.toLocaleString('id-ID')} koin! Total: ${getPoints().toLocaleString('id-ID')} koin`, 'success');
+            }, 1500);
+          }
+        }
+
         sendToTelegram(`<b>✅ ORDER SELESAI!</b>
 
 <b>🎫 Order ID:</b> <code>${orderId}</code>
 <b>🕐 Waktu:</b> ${new Date().toLocaleString('id-ID')}
 
 💰 Orderan sudah dibayar & diproses!`);
+      }
+      // 🔥 STATUS GAGAL → koin gak dapet, tampil box gagal
+      else if (data.status === 'failed' || data.status === 'cancel') {
+        clearInterval(orderPollingInterval);
+        orderPollingInterval = null;
+        document.getElementById('qrisBox').style.display = 'none';
+        document.getElementById('waitingBox').style.display = 'none';
+        document.getElementById('successBox').style.display = 'none';
+        document.getElementById('failedBox').style.display = 'block';
+        showToast('❌ Pesanan kamu GAGAL diproses admin!', 'error');
+        sendToTelegram(`<b>❌ ORDER GAGAL!</b>
+
+<b>🎫 Order ID:</b> <code>${orderId}</code>
+<b>🕐 Waktu:</b> ${new Date().toLocaleString('id-ID')}
+
+Orderan ditandai gagal oleh admin.`);
       }
     } catch (err) { console.log('Polling error:', err); }
   }, 5000);
@@ -1133,15 +1182,16 @@ async function loadOrders() {
           📱 WA: <b>${o.customer_phone}</b><br>
           💰 Rp ${o.total_amount.toLocaleString('id-ID')}
         </div>
-        <button class="btn-complete-order" onclick="completeOrder('${o.order_id}')">
-          ✅ Selesaikan Order
-        </button>
+        <div class="order-item-buttons">
+          <button class="btn-complete-order" onclick="completeOrder('${o.order_id}')">✅ Selesaikan</button>
+          <button class="btn-fail-order" onclick="failOrder('${o.order_id}')">❌ Gagal</button>
+        </div>
       </div>
     `).join('');
   } catch (err) { console.log('Load orders error:', err); }
 }
 async function completeOrder(orderId) {
-  if (!confirm('Yakin mau selesaikan order ' + orderId + '?')) return;
+  if (!confirm('Yakin mau SELESAIKAN order ' + orderId + '?')) return;
   try {
     const res = await fetch(BACKEND_URL + '/api/complete-order', {
       method: 'POST',
@@ -1153,6 +1203,24 @@ async function completeOrder(orderId) {
       showToast('✅ Order ' + orderId + ' selesai!', 'success');
       loadOrders();
       loadCounters();
+      loadStats();
+    } else {
+      showToast('Gagal: ' + (data.error || 'Unknown error'), 'error');
+    }
+  } catch (err) { showToast('Error: ' + err.message, 'error'); }
+}
+async function failOrder(orderId) {
+  if (!confirm('Yakin mau tandai GAGAL order ' + orderId + '?')) return;
+  try {
+    const res = await fetch(BACKEND_URL + '/api/fail-order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ orderId: orderId })
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast('❌ Order ' + orderId + ' ditandai gagal!', 'warning');
+      loadOrders();
       loadStats();
     } else {
       showToast('Gagal: ' + (data.error || 'Unknown error'), 'error');
@@ -1661,6 +1729,7 @@ function pilihPaket(index) {
   document.getElementById('qrisBox').style.display = 'none';
   document.getElementById('qrisLoading').style.display = 'none';
   document.getElementById('successBox').style.display = 'none';
+  document.getElementById('failedBox').style.display = 'none';
   clearError();
   hitungTotal();
   setStep(1);
@@ -1705,6 +1774,7 @@ function bukaOrder(kategoriId, index) {
   document.getElementById('qrisBox').style.display = 'none';
   document.getElementById('qrisLoading').style.display = 'none';
   document.getElementById('successBox').style.display = 'none';
+  document.getElementById('failedBox').style.display = 'none';
   clearError();
   hitungTotal();
   setStep(1);
@@ -1815,6 +1885,7 @@ async function keStep3() {
   document.getElementById('qrisBox').style.display = 'none';
   document.getElementById('waitingBox').style.display = 'none';
   document.getElementById('successBox').style.display = 'none';
+  document.getElementById('failedBox').style.display = 'none';
   
   const totalBayar = dataPemesan.total;
   
@@ -1841,11 +1912,9 @@ async function keStep3() {
     document.getElementById('qrisLoading').style.display = 'none';
     document.getElementById('qrisBox').style.display = 'block';
     document.getElementById('waitingBox').style.display = 'block';
-    startOrderPolling(result.orderId);
 
-    // 🎁 DAPET KOIN BARU (tapi belum dipakai buat potong)
-    const earned = addPoints(totalBayar);
-    renderCoinBalance();
+    // 🔥 Mulai polling — koin baru dapet SETELAH admin konfirmasi
+    startOrderPolling(result.orderId, totalBayar);
     
     // 🔔 NOTIF TELEGRAM
     sendToTelegram(`<b>🛒 ORDER BARU MASUK!</b>
@@ -1859,12 +1928,6 @@ async function keStep3() {
 <b>🕐 Waktu:</b> ${new Date().toLocaleString('id-ID')}
 
 ⏳ Status: Menunggu pembayaran...`);
-    
-    if (earned > 0) {
-      setTimeout(() => {
-        showToast(`🎁 +${earned.toLocaleString('id-ID')} koin! Total: ${getPoints().toLocaleString('id-ID')} koin`, 'success');
-      }, 2500);
-    }
     
     backupOrder({ order_id: result.orderId, produk: produkAktif.nama, jumlah: dataPemesan.jumlah, total: result.totalAmount, hp: dataPemesan.hp, status: 'pending' });
   } catch (err) {
