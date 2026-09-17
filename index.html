@@ -60,6 +60,20 @@ body::after { content: ""; position: fixed; top: 0; left: 0; width: 100vw; heigh
 .share-btn.wa { background: linear-gradient(135deg, #25D366, #1da851); box-shadow: 0 5px 20px rgba(37,211,102,0.5); }
 .share-btn.tg { background: linear-gradient(135deg, #229ED9, #1a7fb0); box-shadow: 0 5px 20px rgba(34,158,217,0.5); }
 .share-btn.copy { background: linear-gradient(135deg, #ffd700, #ff9500); box-shadow: 0 5px 20px rgba(255,215,0,0.5); }
+.coin-display { display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, rgba(255,215,0,0.15), rgba(255,150,0,0.05)); border: 1px solid rgba(255,215,0,0.4); color: #ffd700; padding: 8px 18px; border-radius: 20px; font-size: 12px; font-weight: 700; margin-top: 12px; cursor: pointer; transition: 0.3s; }
+.coin-display:hover { background: linear-gradient(135deg, rgba(255,215,0,0.25), rgba(255,150,0,0.1)); transform: translateY(-2px); box-shadow: 0 5px 20px rgba(255,215,0,0.3); }
+.coin-display .coin-icon { font-size: 16px; }
+.coin-display .coin-value { color: #fff; font-weight: 800; font-size: 14px; }
+.coin-toggle-box { background: linear-gradient(145deg, rgba(255,215,0,0.1), rgba(255,150,0,0.05)); border: 1.5px solid rgba(255,215,0,0.4); border-radius: 14px; padding: 14px 16px; margin-bottom: 18px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.coin-toggle-box.disabled { opacity: 0.5; pointer-events: none; }
+.coin-toggle-info { flex: 1; }
+.coin-toggle-title { color: #ffd700; font-size: 13px; font-weight: 800; margin-bottom: 2px; }
+.coin-toggle-desc { color: #888; font-size: 11px; }
+.coin-toggle-desc.warning { color: #ff6b6b; font-weight: 700; }
+.coin-toggle-switch { position: relative; width: 50px; height: 28px; background: #1e2e26; border-radius: 20px; cursor: pointer; transition: 0.3s; flex-shrink: 0; }
+.coin-toggle-switch.active { background: linear-gradient(135deg, #ffd700, #ff9500); }
+.coin-toggle-switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; background: #fff; border-radius: 50%; transition: 0.3s; }
+.coin-toggle-switch.active::after { left: 25px; }
 .scroll-top { position: fixed; bottom: 90px; left: 12px; z-index: 500; width: 46px; height: 46px; border-radius: 50%; background: linear-gradient(135deg, #00ff88, #00cc6a); color: #000; border: none; font-size: 22px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 25px rgba(0,255,136,0.5); opacity: 0; transform: translateY(20px); pointer-events: none; transition: 0.3s; }
 .scroll-top.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
 .scroll-top:hover { transform: translateY(-3px) scale(1.08); }
@@ -259,6 +273,8 @@ header .counter .dot { width: 8px; height: 8px; background: #00ff88; border-radi
 .btn-order:hover { transform: scale(1.05); box-shadow: 0 8px 35px rgba(0,255,136,0.55); }
 .btn-order:disabled { background: #333; color: #666; cursor: not-allowed; box-shadow: none; }
 .badge-hot { position: absolute; top: 14px; right: 14px; background: linear-gradient(135deg, #ff2b2b, #ff6b6b); color: #fff; font-size: 9px; font-weight: 800; padding: 4px 10px; border-radius: 10px; letter-spacing: 0.5px; box-shadow: 0 0 20px rgba(255,43,43,0.6); animation: pulseBadge 2s infinite; }
+.badge-cheap { position: absolute; top: 14px; right: 14px; background: linear-gradient(135deg, #00c8ff, #0096ff); color: #fff; font-size: 9px; font-weight: 800; padding: 4px 10px; border-radius: 10px; letter-spacing: 0.5px; box-shadow: 0 0 20px rgba(0,200,255,0.6); animation: pulseBadge 2s infinite; }
+.badge-expensive { position: absolute; top: 14px; right: 14px; background: linear-gradient(135deg, #ffd700, #ff9500); color: #000; font-size: 9px; font-weight: 800; padding: 4px 10px; border-radius: 10px; letter-spacing: 0.5px; box-shadow: 0 0 20px rgba(255,215,0,0.6); animation: pulseBadge 2s infinite; }
 @keyframes pulseBadge { 0%,100% { transform: scale(1); box-shadow: 0 0 20px rgba(255,43,43,0.6); } 50% { transform: scale(1.08); box-shadow: 0 0 30px rgba(255,43,43,0.9); } }
 .badge-admin-preview { position: absolute; top: 14px; right: 14px; background: linear-gradient(135deg, #ffd700, #ff9500); color: #000; font-size: 9px; font-weight: 800; padding: 4px 10px; border-radius: 10px; letter-spacing: 0.5px; box-shadow: 0 0 20px rgba(255,215,0,0.5); }
 .btn-wishlist { position: absolute; top: 14px; left: 14px; width: 32px; height: 32px; border-radius: 50%; background: rgba(0,0,0,0.6); border: 1.5px solid rgba(255,215,0,0.4); color: #ffd700; font-size: 16px; cursor: pointer; z-index: 5; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
@@ -318,6 +334,9 @@ header .counter .dot { width: 8px; height: 8px; background: #00ff88; border-radi
 .total-row.bonus { background: rgba(0,255,136,0.08); border-radius: 8px; padding: 8px 12px; margin-top: 5px; }
 .total-row.bonus .label { color: #00ff88; font-weight: 700; }
 .total-row.bonus .value { color: #00ff88; }
+.total-row.coin-row { background: rgba(255,215,0,0.08); border-radius: 8px; padding: 8px 12px; margin-top: 5px; }
+.total-row.coin-row .label { color: #ffd700; font-weight: 700; }
+.total-row.coin-row .value { color: #ffd700; }
 .btn-next { width: 100%; background: linear-gradient(135deg, #00ff88, #00cc6a); color: #000; border: none; padding: 17px; border-radius: 14px; font-weight: 800; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 10px; transition: 0.3s; box-shadow: 0 8px 35px rgba(0,255,136,0.35); font-family: inherit; letter-spacing: 0.3px; position: relative; overflow: hidden; }
 .btn-next::before { content: ""; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); transition: 0.6s; }
 .btn-next:hover:not(:disabled)::before { left: 100%; }
@@ -440,6 +459,11 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
     <h1 class="jimzz-clickable" onclick="secretClick()"><span class="gradient-text">Jimzz Store</span></h1>
     <p class="tagline">Top Up Game, Sosmed & Digital Produk Terlengkap</p>
     <div class="counter"><span class="dot"></span>🔥 <span id="viewCount">1.375</span> orang sudah order</div>
+    <div class="coin-display" onclick="showToast('⭐ 1 koin = Rp 1 • Dapet 1 koin per Rp 50 belanja', 'info')">
+      <span class="coin-icon">⭐</span>
+      <span>Koin Kamu:</span>
+      <span class="coin-value" id="coinBalance">0</span>
+    </div>
     <div class="trust-row">
       <div class="trust-item"><span class="trust-icon">⚡</span> Proses Cepat</div>
       <div class="trust-item"><span class="trust-icon">🔒</span> Aman & Terpercaya</div>
@@ -683,11 +707,19 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
       <label class="jumlah-label" for="jumlahInput">Jumlah <span class="minmax" id="minmaxText">Min: 1.000 - Max: 20.000</span></label>
       <input type="number" id="jumlahInput" class="jumlah-input" placeholder="# Masukkan jumlah" oninput="hitungTotal()" onblur="validasiJumlah()">
       <div class="jumlah-hint" id="jumlahHint">Sistem otomatis hitung harga sesuai jumlah.</div>
+      <div class="coin-toggle-box" id="coinToggleBox" style="display:none;">
+        <div class="coin-toggle-info">
+          <div class="coin-toggle-title">⭐ Pakai Koin?</div>
+          <div class="coin-toggle-desc" id="coinToggleDesc">Saldo: <span id="coinAvailable">0</span> koin</div>
+        </div>
+        <div class="coin-toggle-switch" id="coinToggleSwitch" onclick="toggleCoinUse()"></div>
+      </div>
       <div class="total-box">
         <div class="total-row"><span class="label">Harga Satuan</span><span class="value" id="hargaSatuan">Rp 0</span></div>
         <div class="total-row"><span class="label">Jumlah Order</span><span class="value" id="jumlahDisplay">0</span></div>
         <div class="total-row bonus" id="bonusRow" style="display:none;"><span class="label">🎁 Bonus</span><span class="value" id="bonusValue">+0</span></div>
         <div class="total-row bonus" id="totalDapatRow" style="display:none;"><span class="label">📊 Total Diterima</span><span class="value" id="totalDapat">0</span></div>
+        <div class="total-row coin-row" id="coinDiscountRow" style="display:none;"><span class="label">⭐ Potongan Koin</span><span class="value" id="coinDiscount">-Rp 0</span></div>
         <div class="total-row big"><span class="label">Total Harga</span><span class="value" id="totalHarga">Rp 0</span></div>
       </div>
       <button class="btn-next" id="btnPesan" onclick="keStep2()" disabled>💬 Lanjut ke Pembayaran →</button>
@@ -792,7 +824,9 @@ const TELEGRAM_BOT_TOKEN = "8680818829:AAGxdsor3_uUToeJu6Tb_looQOfzKg9_mkA";
 const TELEGRAM_CHAT_ID = "8086577869";
 const MIN_BAYAR_QRIS = 1000;
 const MIN_PEMBELIAN = 1000;
-const MAX_SUNTIK = 9999999; // 🔥 max baru untuk semua produk suntik
+const MAX_SUNTIK = 9999999;
+const KOIN_PER_RUPIAH = 50;  // 1 koin per Rp 50 belanja
+const NILAI_KOIN = 1;        // 1 koin = Rp 1 potongan
 
 // ============================================
 // TELEGRAM NOTIF
@@ -825,6 +859,29 @@ function toggleWishlist(produkName) {
   initData();
 }
 function isWishlisted(name) { return getWishlist().includes(name); }
+
+// ============================================
+// LOYALTY POINT (KOIN)
+// 1 koin per Rp 50 belanja, 1 koin = Rp 1 potongan
+// ============================================
+function getPoints() { try { return parseInt(localStorage.getItem('jimzz_points') || '0'); } catch { return 0; } }
+function addPoints(amount) {
+  const current = getPoints();
+  const earned = Math.floor(amount / KOIN_PER_RUPIAH);
+  localStorage.setItem('jimzz_points', (current + earned).toString());
+  return earned;
+}
+function usePoints(amount) {
+  const current = getPoints();
+  const maxUse = Math.min(current, amount);
+  if (maxUse <= 0) return 0;
+  localStorage.setItem('jimzz_points', (current - maxUse).toString());
+  return maxUse;
+}
+function renderCoinBalance() {
+  const el = document.getElementById('coinBalance');
+  if (el) el.innerText = getPoints().toLocaleString('id-ID');
+}
 
 // ============================================
 // BACKUP ORDER
@@ -1284,9 +1341,9 @@ async function loadCounters() {
       cachedCounters.produkOrder = data.produkOrder || {};
       updateOrderCounter();
       if (oldTotal !== data.totalOrder) {
-        renderProduk('sosmed', produkSosmed, 'SUNTIK ALL');
-        renderProduk('jpm', produkJpm, 'LAYANAN LAINNYA');
-        renderProduk('apkList', produkApk, 'JUAL APK');
+        renderProduk('sosmed', produkSosmed, 'SUNTIK ALL', 'default');
+        renderProduk('jpm', produkJpm, 'LAYANAN LAINNYA', 'default');
+        renderProduk('apkList', produkApk, 'JUAL APK', 'default');
       }
     }
   } catch (err) { console.log('Gagal load counters:', err); }
@@ -1382,8 +1439,10 @@ function startApp() {
   loadCounters();
   updateBgLabel();
   pingVisitor();
+  renderCoinBalance();
   setTimeout(() => document.getElementById('loadingScreen').classList.add('hide'), 1400);
 }
+
 // ============================================
 // PRODUK DATA
 // ============================================
@@ -1444,6 +1503,15 @@ let gameAktif = null;
 let paketAktif = null;
 let produkAktif = null;
 let dataPemesan = { link: "", hp: "", jumlah: 0, total: 0, bonus: 0, totalAmount: 0, orderId: "" };
+let useCoinMode = false;
+
+function toggleCoinUse() {
+  useCoinMode = !useCoinMode;
+  const sw = document.getElementById('coinToggleSwitch');
+  if (useCoinMode) sw.classList.add('active');
+  else sw.classList.remove('active');
+  hitungTotal();
+}
 
 // ============================================
 // SORT & FILTER
@@ -1458,20 +1526,23 @@ function applySort(target, mode) {
   if (mode === 'termurah') data.sort((a,b) => (a.harga || a.hargaPerUnit) - (b.harga || b.hargaPerUnit));
   else if (mode === 'termahal') data.sort((a,b) => (b.harga || b.hargaPerUnit) - (a.harga || a.hargaPerUnit));
   else if (mode === 'terlaris') data.sort((a,b) => (b.baseOrder || 0) - (a.baseOrder || 0));
-  renderProduk(target, data, kategori);
+  renderProduk(target, data, kategori, mode);
 }
 
 // ============================================
-// RENDER PRODUK (🔥 FIXED BADGE TERLARIS)
+// RENDER PRODUK (🔥 BADGE DINAMIS)
 // ============================================
 function initData() {
-  renderProduk('sosmed', produkSosmed, 'SUNTIK ALL');
-  renderProduk('jpm', produkJpm, 'LAYANAN LAINNYA');
-  renderProduk('apkList', produkApk, 'JUAL APK');
+  renderProduk('sosmed', produkSosmed, 'SUNTIK ALL', 'default');
+  renderProduk('jpm', produkJpm, 'LAYANAN LAINNYA', 'default');
+  renderProduk('apkList', produkApk, 'JUAL APK', 'default');
 }
-function renderProduk(target, data, kategori) {
+
+function renderProduk(target, data, kategori, mode) {
   const el = document.getElementById(target);
   if (!el) return;
+  mode = mode || 'default';
+  
   const withCounts = data.map((p, i) => {
     const realIndex = (typeof p._originalIndex !== 'undefined') ? p._originalIndex : i;
     const realOrder = getProdukOrderCount(target, realIndex);
@@ -1479,23 +1550,18 @@ function renderProduk(target, data, kategori) {
     return { ...p, _index: realIndex, _totalOrder: totalOrder };
   });
 
-  // 🔥 FIX: cari top seller dari SEMUA data (berdasarkan _index asli), bukan posisi di array yang udah di-sort
-  let maxOrder = -1;
-  let topSellerRealIndex = -1;
-  withCounts.forEach(p => {
-    if (p._totalOrder > maxOrder) {
-      maxOrder = p._totalOrder;
-      topSellerRealIndex = p._index;
-    }
-  });
+  let badgeText = '';
+  let badgeClass = '';
+  if (mode === 'terlaris') { badgeText = '🔥 TERLARIS'; badgeClass = 'badge-hot'; }
+  else if (mode === 'termurah') { badgeText = '💰 TERMURAH'; badgeClass = 'badge-cheap'; }
+  else if (mode === 'termahal') { badgeText = '💎 TERMAHAL'; badgeClass = 'badge-expensive'; }
 
-  el.innerHTML = withCounts.map((p) => {
-    // 🔥 FIX: badge nempel ke produk berdasarkan _index asli
-    const isTopSeller = p._index === topSellerRealIndex;
+  el.innerHTML = withCounts.map((p, i) => {
+    const showBadge = i === 0 && badgeText !== '';
     const wished = isWishlisted(p.nama);
     return `
     <div class="produk-card">
-      ${isTopSeller ? '<div class="badge-hot">🔥 TERLARIS</div>' : ''}
+      ${showBadge ? `<div class="${badgeClass}">${badgeText}</div>` : ''}
       <button class="btn-wishlist ${wished ? 'active' : ''}" onclick="event.stopPropagation(); toggleWishlist('${p.nama.replace(/'/g, "\\'")}')">${wished ? '⭐' : '☆'}</button>
       <div class="produk-header">
         <div class="produk-icon">${p.icon}</div>
@@ -1616,6 +1682,8 @@ function pilihPaket(index) {
   document.getElementById('qrisBox').style.display = 'none';
   document.getElementById('qrisLoading').style.display = 'none';
   document.getElementById('successBox').style.display = 'none';
+  useCoinMode = false;
+  document.getElementById('coinToggleSwitch').classList.remove('active');
   clearError();
   hitungTotal();
   setStep(1);
@@ -1660,6 +1728,8 @@ function bukaOrder(kategoriId, index) {
   document.getElementById('qrisBox').style.display = 'none';
   document.getElementById('qrisLoading').style.display = 'none';
   document.getElementById('successBox').style.display = 'none';
+  useCoinMode = false;
+  document.getElementById('coinToggleSwitch').classList.remove('active');
   clearError();
   hitungTotal();
   setStep(1);
@@ -1671,6 +1741,7 @@ function tutupOrder() {
   document.body.style.overflow = 'auto';
   if (orderPollingInterval) { clearInterval(orderPollingInterval); orderPollingInterval = null; }
   produkAktif = null;
+  useCoinMode = false;
 }
 function setStep(num) {
   document.querySelectorAll('.step-content').forEach(s => s.classList.remove('active'));
@@ -1688,8 +1759,6 @@ function clearError() {
   document.getElementById('hpPemesan').classList.remove('error');
   document.getElementById('hpError').classList.remove('show');
 }
-
-// 🔥 VALIDASI JUMLAH - auto coret kalau lebih dari max
 function validasiJumlah() {
   if (!produkAktif || produkAktif.isApk) return;
   const input = document.getElementById('jumlahInput');
@@ -1706,16 +1775,14 @@ function validasiJumlah() {
     hitungTotal();
   }
 }
-
 function hitungTotal() {
   if (!produkAktif) return;
   let jumlah = parseInt(document.getElementById('jumlahInput').value) || 0;
   const hargaPerUnit = produkAktif.isApk ? produkAktif.harga : produkAktif.hargaPerUnit;
   
-  // 🔥 Auto coret kalau jumlah > max (real-time)
+  // Auto coret kalau jumlah > max
   if (!produkAktif.isApk) {
     const max = parseInt(document.getElementById('jumlahInput').max) || MAX_SUNTIK;
-    const min = parseInt(document.getElementById('jumlahInput').min) || 1;
     if (jumlah > max) {
       jumlah = max;
       document.getElementById('jumlahInput').value = max;
@@ -1726,7 +1793,51 @@ function hitungTotal() {
   let bonus = 0;
   if (!produkAktif.isApk && produkAktif.bonusMinTotal && subtotal >= produkAktif.bonusMinTotal) bonus = produkAktif.bonusUnit || 0;
   document.getElementById('jumlahDisplay').innerText = jumlah.toLocaleString('id-ID') + ' ' + (produkAktif.unit || 'pcs');
-  document.getElementById('totalHarga').innerText = "Rp " + subtotal.toLocaleString('id-ID');
+  
+  // ⭐ LOGIC PAKAI KOIN
+  const saldoKoin = getPoints();
+  const coinToggleBox = document.getElementById('coinToggleBox');
+  const coinAvailable = document.getElementById('coinAvailable');
+  const coinToggleDesc = document.getElementById('coinToggleDesc');
+  const coinDiscountRow = document.getElementById('coinDiscountRow');
+  const coinDiscount = document.getElementById('coinDiscount');
+  
+  // Max potong = subtotal - 1.000 (biar bayar tetap >= 1.000)
+  const maxPotongKoin = subtotal - MIN_BAYAR_QRIS;
+  
+  if (saldoKoin > 0 && subtotal > 0) {
+    coinToggleBox.style.display = 'flex';
+    coinAvailable.innerText = saldoKoin.toLocaleString('id-ID');
+    
+    if (maxPotongKoin <= 0) {
+      coinToggleBox.classList.add('disabled');
+      coinToggleDesc.innerHTML = `⚠️ Koin gak bisa dipakai. Minimal bayar Rp ${MIN_BAYAR_QRIS.toLocaleString('id-ID')}`;
+      coinToggleDesc.classList.add('warning');
+      useCoinMode = false;
+      document.getElementById('coinToggleSwitch').classList.remove('active');
+    } else {
+      coinToggleBox.classList.remove('disabled');
+      const maxPakai = Math.min(saldoKoin, maxPotongKoin);
+      coinToggleDesc.innerHTML = `Saldo: <b>${saldoKoin.toLocaleString('id-ID')}</b> koin • Max pakai: <b style="color:#ffd700">${maxPakai.toLocaleString('id-ID')}</b>`;
+      coinToggleDesc.classList.remove('warning');
+    }
+  } else {
+    coinToggleBox.style.display = 'none';
+    useCoinMode = false;
+  }
+  
+  // Hitung potongan koin
+  let potonganKoin = 0;
+  if (useCoinMode && saldoKoin > 0 && maxPotongKoin > 0) {
+    potonganKoin = Math.min(saldoKoin, maxPotongKoin);
+    coinDiscountRow.style.display = 'flex';
+    coinDiscount.innerText = '-Rp ' + potonganKoin.toLocaleString('id-ID');
+  } else {
+    coinDiscountRow.style.display = 'none';
+  }
+  
+  const totalAkhir = subtotal - potonganKoin;
+  document.getElementById('totalHarga').innerText = "Rp " + totalAkhir.toLocaleString('id-ID');
   
   const bonusRow = document.getElementById('bonusRow');
   const totalDapatRow = document.getElementById('totalDapatRow');
@@ -1737,12 +1848,13 @@ function hitungTotal() {
   } else { bonusRow.style.display = 'none'; totalDapatRow.style.display = 'none'; }
   
   const validJumlah = jumlah >= parseInt(document.getElementById('jumlahInput').min) && jumlah <= parseInt(document.getElementById('jumlahInput').max);
-  const validTotal = subtotal >= MIN_BAYAR_QRIS && subtotal >= MIN_PEMBELIAN;
+  const validTotal = totalAkhir >= MIN_BAYAR_QRIS && subtotal >= MIN_PEMBELIAN;
   document.getElementById('btnPesan').disabled = !(validJumlah && validTotal);
   const hintEl = document.getElementById('jumlahHint');
   if (!validJumlah) { hintEl.innerHTML = `⚠️ Jumlah tidak valid. Min: ${parseInt(document.getElementById('jumlahInput').min).toLocaleString('id-ID')} - Max: ${parseInt(document.getElementById('jumlahInput').max).toLocaleString('id-ID')}`; hintEl.style.color = '#ff6b6b'; }
   else if (subtotal < MIN_PEMBELIAN) { hintEl.innerHTML = `⚠️ Minimal pembelian <b style="color:#ff6b6b">Rp ${MIN_PEMBELIAN.toLocaleString('id-ID')}</b>.`; hintEl.style.color = '#ff6b6b'; }
   else if (!validTotal) { hintEl.innerHTML = `⚠️ Bayar minimal <b style="color:#ff6b6b">Rp ${MIN_BAYAR_QRIS.toLocaleString('id-ID')}</b>.`; hintEl.style.color = '#ff6b6b'; }
+  else if (potonganKoin > 0) { hintEl.innerHTML = `⭐ <b style="color:#ffd700">Potong ${potonganKoin.toLocaleString('id-ID')} koin = Rp ${potonganKoin.toLocaleString('id-ID')}</b>`; hintEl.style.color = '#ffd700'; }
   else if (bonus > 0) { hintEl.innerHTML = `🎁 <b style="color:#00ff88">BONUS +${bonus} ${produkAktif.unit}</b> aktif!`; hintEl.style.color = '#00ff88'; }
   else { hintEl.innerText = '✅ Jumlah valid, klik "Lanjut ke Pembayaran".'; hintEl.style.color = '#00ff88'; }
 }
@@ -1776,7 +1888,13 @@ async function keStep3() {
   document.getElementById('waitingBox').style.display = 'none';
   document.getElementById('successBox').style.display = 'none';
   
-  const totalBayar = dataPemesan.total;
+  // Hitung total akhir setelah potong koin
+  let potonganKoin = 0;
+  if (useCoinMode) {
+    const maxPotong = dataPemesan.total - MIN_BAYAR_QRIS;
+    potonganKoin = Math.min(getPoints(), Math.max(0, maxPotong));
+  }
+  const totalBayar = dataPemesan.total - potonganKoin;
   
   try {
     const res = await fetch(BACKEND_URL + '/api/create-order-v2', {
@@ -1802,19 +1920,40 @@ async function keStep3() {
     document.getElementById('qrisBox').style.display = 'block';
     document.getElementById('waitingBox').style.display = 'block';
     startOrderPolling(result.orderId);
+
+    // ⭐ POTONG KOIN & DAPET KOIN BARU
+    let potonganKoinActual = 0;
+    if (useCoinMode) {
+      const maxPotong = dataPemesan.total - MIN_BAYAR_QRIS;
+      potonganKoinActual = usePoints(Math.min(getPoints(), maxPotong));
+      useCoinMode = false;
+      document.getElementById('coinToggleSwitch').classList.remove('active');
+    }
+    const earned = addPoints(totalBayar);
+    renderCoinBalance();
     
     // 🔔 NOTIF TELEGRAM
     sendToTelegram(`<b>🛒 ORDER BARU MASUK!</b>
 
 <b>📦 Produk:</b> ${produkAktif.nama}
 <b>📋 Detail:</b> ${dataPemesan.jumlah} ${produkAktif.unit || 'pcs'}
-<b>💰 Total Bayar:</b> Rp ${result.totalAmount.toLocaleString('id-ID')}
+<b>💰 Total Bayar:</b> Rp ${result.totalAmount.toLocaleString('id-ID')}${potonganKoinActual > 0 ? `\n<b>⭐ Potong Koin:</b> ${potonganKoinActual.toLocaleString('id-ID')} koin` : ''}
 <b>👤 WA Customer:</b> ${dataPemesan.hp}
 <b>🔗 Link:</b> ${dataPemesan.link}
 <b>🎫 Order ID:</b> <code>${result.orderId}</code>
 <b>🕐 Waktu:</b> ${new Date().toLocaleString('id-ID')}
 
 ⏳ Status: Menunggu pembayaran...`);
+    
+    if (earned > 0) {
+      setTimeout(() => {
+        if (potonganKoinActual > 0) {
+          showToast(`⭐ Pakai ${potonganKoinActual.toLocaleString('id-ID')} koin • 🎁 +${earned.toLocaleString('id-ID')} koin baru`, 'success');
+        } else {
+          showToast(`🎁 +${earned.toLocaleString('id-ID')} koin! Total: ${getPoints().toLocaleString('id-ID')} koin`, 'success');
+        }
+      }, 2500);
+    }
     
     // 💾 BACKUP ORDER
     backupOrder({ order_id: result.orderId, produk: produkAktif.nama, jumlah: dataPemesan.jumlah, total: result.totalAmount, hp: dataPemesan.hp, status: 'pending' });
