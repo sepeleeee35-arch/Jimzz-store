@@ -263,6 +263,8 @@ header .counter .dot { width: 8px; height: 8px; background: #00ff88; border-radi
 .produk-nama { color: #fff; font-size: 18px; font-weight: 800; line-height: 1.3; letter-spacing: -0.3px; }
 .produk-desc { color: #777; font-size: 12px; margin-bottom: 12px; line-height: 1.55; }
 .produk-sold { display: inline-block; background: rgba(0,255,136,0.08); border: 1px solid rgba(0,255,136,0.25); color: #00ff88; font-size: 10px; font-weight: 700; padding: 5px 12px; border-radius: 12px; margin-bottom: 14px; letter-spacing: 0.3px; }
+.produk-warn { display: block; background: linear-gradient(135deg, rgba(255,200,0,0.15), rgba(255,150,0,0.05)); border: 1.5px solid rgba(255,200,0,0.5); border-radius: 10px; padding: 8px 12px; font-size: 10px; color: #ffc800; font-weight: 700; margin-bottom: 12px; line-height: 1.4; letter-spacing: 0.3px; }
+.produk-warn b { color: #ff9500; }
 .produk-bottom { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
 .produk-harga-info { flex: 1; }
 .produk-harga-label { color: #555; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
@@ -288,6 +290,7 @@ header .counter .dot { width: 8px; height: 8px; background: #00ff88; border-radi
 .produk-list.grid-2col .produk-nama { font-size: 14px; line-height: 1.25; }
 .produk-list.grid-2col .produk-desc { font-size: 10px; margin-bottom: 8px; }
 .produk-list.grid-2col .produk-sold { font-size: 9px; padding: 3px 8px; margin-bottom: 10px; }
+.produk-list.grid-2col .produk-warn { font-size: 9px; padding: 6px 8px; margin-bottom: 8px; }
 .produk-list.grid-2col .produk-bottom { display: flex; flex-direction: column; gap: 8px; align-items: stretch; }
 .produk-list.grid-2col .produk-harga-info { text-align: center; }
 .produk-list.grid-2col .produk-harga-label { font-size: 8px; }
@@ -714,6 +717,7 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
         <div class="modal-title" id="modalTitle">-</div>
         <div class="modal-subtitle" id="modalSubtitle">-</div>
       </div>
+      <div class="produk-warn" id="modalWarn" style="display:none;"></div>
       <label class="jumlah-label" for="jumlahInput">Jumlah <span class="minmax" id="minmaxText">Min: 1.000 - Max: 20.000</span></label>
       <input type="number" id="jumlahInput" class="jumlah-input" placeholder="# Masukkan jumlah" oninput="hitungTotal()" onblur="validasiJumlah()">
       <div class="jumlah-hint" id="jumlahHint">Sistem otomatis hitung harga sesuai jumlah.</div>
@@ -885,7 +889,6 @@ function renderCoinBalance() {
   if (el) el.innerText = getPoints().toLocaleString('id-ID');
 }
 
-// Setting pakai koin — disimpen di localStorage, gak reset pas refresh
 let useCoinMode = localStorage.getItem('jimzz_use_coin') === 'true';
 
 function toggleCoinHeader() {
@@ -1510,8 +1513,11 @@ const produkSosmed = [
   { icon: "📱", nama: "Suntik Saluran WA", desc: "Tambah pengikut saluran WhatsApp kamu secara aman & cepat.", hargaPerUnit: 10, unit: "pengikut", min: 100, max: MAX_SUNTIK, baseOrder: 324, inputLabel: "🔗 Link Saluran WA", inputPlaceholder: "Contoh: https://whatsapp.com/channel/xxxxx", inputValidasi: "whatsapp.com/channel", inputError: "Link harus link SALURAN WhatsApp" },
   { icon: "😀", nama: "Suntik Random Emoji Reaction", desc: "Tambah reaction emoji random ke postingan kamu.", hargaPerUnit: 1, unit: "reaction", min: 1000, max: MAX_SUNTIK, baseOrder: 187, inputLabel: "🔗 Link Postingan", inputPlaceholder: "Contoh: https://www.tiktok.com/@user/video/xxx", inputValidasi: "tiktok.com", inputError: "Link harus link postingan TikTok" },
   { icon: "📊", nama: "Suntik Polling Vote", desc: "Tambah vote ke polling kamu secara aman & cepat.", hargaPerUnit: 20, unit: "vote", min: 50, max: MAX_SUNTIK, baseOrder: 92, inputLabel: "🔗 Link Polling", inputPlaceholder: "Contoh: link polling", inputValidasi: "", inputError: "" },
+  { icon: "👥", nama: "Suntik Follower TikTok", desc: "Tambah follower akun TikTok kamu secara aman & cepat.", hargaPerUnit: 80, unit: "follower", min: 25, max: 20000, baseOrder: 189, warnText: "⚠️ Proses produk ini SANGAT LAMBAT — mohon bersabar ya!", inputLabel: "🔗 Link Akun TikTok", inputPlaceholder: "Contoh: https://www.tiktok.com/@username", inputValidasi: "tiktok.com", inputError: "Link harus link akun TikTok" },
   { icon: "❤️", nama: "Suntik Like TikTok", desc: "Tambah like video TikTok kamu secara aman & cepat.", hargaPerUnit: 10, unit: "like", min: 100, max: MAX_SUNTIK, baseOrder: 256, inputLabel: "🔗 Link Video TikTok", inputPlaceholder: "Contoh: https://www.tiktok.com/@user/video/xxx", inputValidasi: "tiktok.com", inputError: "Link harus link video TikTok" },
-  { icon: "👁️", nama: "Suntik Views TikTok", desc: "Tambah views video TikTok kamu secara aman & cepat.", hargaPerUnit: 1, unit: "views", min: 1000, max: MAX_SUNTIK, baseOrder: 143, inputLabel: "🔗 Link Video TikTok", inputPlaceholder: "Contoh: https://www.tiktok.com/@user/video/xxx", inputValidasi: "tiktok.com", inputError: "Link harus link video TikTok" }
+  { icon: "👁️", nama: "Suntik Views TikTok", desc: "Tambah views video TikTok kamu secara aman & cepat.", hargaPerUnit: 1, unit: "views", min: 1000, max: MAX_SUNTIK, baseOrder: 143, inputLabel: "🔗 Link Video TikTok", inputPlaceholder: "Contoh: https://www.tiktok.com/@user/video/xxx", inputValidasi: "tiktok.com", inputError: "Link harus link video TikTok" },
+  { icon: "💾", nama: "Suntik Save Video TikTok", desc: "Tambah save video TikTok kamu secara aman & cepat.", hargaPerUnit: 0.5, unit: "save", min: 2000, max: 99999999, baseOrder: 87, inputLabel: "🔗 Link Video TikTok", inputPlaceholder: "Contoh: https://www.tiktok.com/@user/video/xxx", inputValidasi: "tiktok.com", inputError: "Link harus link video TikTok" },
+  { icon: "📤", nama: "Suntik Share Video TikTok", desc: "Tambah share video TikTok kamu secara aman & cepat.", hargaPerUnit: 4, unit: "share", min: 250, max: 99999999, baseOrder: 56, inputLabel: "🔗 Link Video TikTok", inputPlaceholder: "Contoh: https://www.tiktok.com/@user/video/xxx", inputValidasi: "tiktok.com", inputError: "Link harus link video TikTok" }
 ];
 
 const produkJpm = [
@@ -1619,6 +1625,7 @@ function renderProduk(target, data, kategori, mode) {
         <div class="produk-title-block"><div class="produk-label">${kategori}</div><div class="produk-nama">${p.nama}</div></div>
       </div>
       <div class="produk-desc">${p.desc}</div>
+      ${p.warnText ? `<div class="produk-warn">${p.warnText}</div>` : ''}
       <div class="produk-sold">🛒 ${p._totalOrder.toLocaleString('id-ID')} sudah dibeli</div>
       <div class="produk-bottom">
         <div class="produk-harga-info">
@@ -1721,6 +1728,7 @@ function pilihPaket(index) {
   document.getElementById('modalLabel').innerText = 'TOP UP GAME';
   document.getElementById('modalTitle').innerText = produkAktif.nama;
   document.getElementById('modalSubtitle').innerText = produkAktif.desc;
+  document.getElementById('modalWarn').style.display = 'none';
   const jumlahInput = document.getElementById('jumlahInput');
   jumlahInput.value = 1; jumlahInput.min = 1; jumlahInput.max = 1; jumlahInput.disabled = true;
   document.getElementById('minmaxText').innerText = '(otomatis 1)';
@@ -1751,6 +1759,13 @@ function bukaOrder(kategoriId, index) {
   document.getElementById('modalLabel').innerText = kategori;
   document.getElementById('modalTitle').innerText = produkAktif.nama;
   document.getElementById('modalSubtitle').innerText = produkAktif.desc;
+  const modalWarn = document.getElementById('modalWarn');
+  if (produkAktif.warnText) {
+    modalWarn.style.display = 'block';
+    modalWarn.innerHTML = produkAktif.warnText;
+  } else {
+    modalWarn.style.display = 'none';
+  }
   const jumlahInput = document.getElementById('jumlahInput');
   const minmaxText = document.getElementById('minmaxText');
   if (isApk) {
@@ -1836,7 +1851,7 @@ function hitungTotal() {
     }
   }
   
-  const subtotal = jumlah * hargaPerUnit;
+  const subtotal = Math.round(jumlah * hargaPerUnit);
   let bonus = 0;
   if (!produkAktif.isApk && produkAktif.bonusMinTotal && subtotal >= produkAktif.bonusMinTotal) bonus = produkAktif.bonusUnit || 0;
   document.getElementById('jumlahDisplay').innerText = jumlah.toLocaleString('id-ID') + ' ' + (produkAktif.unit || 'pcs');
@@ -1880,7 +1895,7 @@ function hitungTotal() {
 function keStep2() {
   const jumlah = parseInt(document.getElementById('jumlahInput').value) || 0;
   const hargaPerUnit = produkAktif.isApk ? produkAktif.harga : produkAktif.hargaPerUnit;
-  const total = jumlah * hargaPerUnit;
+  const total = Math.round(jumlah * hargaPerUnit);
   let bonus = 0;
   if (!produkAktif.isApk && produkAktif.bonusMinTotal && total >= produkAktif.bonusMinTotal) bonus = produkAktif.bonusUnit || 0;
   dataPemesan.jumlah = jumlah; dataPemesan.total = total; dataPemesan.bonus = bonus;
