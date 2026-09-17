@@ -1099,9 +1099,22 @@ function startOrderPolling(orderId) {
         document.getElementById('successBox').style.display = 'block';
         showConfetti();
         showToast('Pesanan kamu selesai!', 'success');
+        
+        // 🎁 BARU DAPET KOIN SETELAH ORDER SUKSES
+        const totalAmount = data.totalAmount || 0;
+        const earned = addPoints(totalAmount);
+        renderCoinBalance();
+        if (earned > 0) {
+          setTimeout(() => {
+            showToast(`🎁 +${earned.toLocaleString('id-ID')} koin! Total: ${getPoints().toLocaleString('id-ID')} koin`, 'success');
+          }, 1500);
+        }
+        
         sendToTelegram(`<b>✅ ORDER SELESAI!</b>
 
 <b>🎫 Order ID:</b> <code>${orderId}</code>
+<b>💰 Total:</b> Rp ${totalAmount.toLocaleString('id-ID')}
+<b>🎁 Koin didapat:</b> +${earned.toLocaleString('id-ID')}
 <b>🕐 Waktu:</b> ${new Date().toLocaleString('id-ID')}
 
 💰 Orderan sudah dibayar & diproses!`);
@@ -1511,11 +1524,20 @@ function applySort(target, mode) {
   if (target === 'sosmed') { originalData = produkSosmed; kategori = 'SUNTIK ALL'; }
   else if (target === 'jpm') { originalData = produkJpm; kategori = 'LAYANAN LAINNYA'; }
   else { originalData = produkApk; kategori = 'JUAL APK'; }
+  
   let data = originalData.map((p, i) => ({ ...p, _originalIndex: i }));
+  
+  // Hitung total order ASLI dulu sebelum sort
+  data = data.map(p => {
+    const realOrder = getProdukOrderCount(target, p._originalIndex);
+    return { ...p, _totalOrder: (p.baseOrder || 0) + realOrder };
+  });
+  
   if (mode === 'termurah') data.sort((a,b) => (a.harga || a.hargaPerUnit) - (b.harga || b.hargaPerUnit));
   else if (mode === 'termahal') data.sort((a,b) => (b.harga || b.hargaPerUnit) - (a.harga || a.hargaPerUnit));
-  else if (mode === 'terlaris') data.sort((a,b) => (b.baseOrder || 0) - (a.baseOrder || 0));
-  renderProduk(target, data, kategori);
+  else if (mode === 'terlaris') data.sort((a,b) => b._totalOrder - a._totalOrder);
+  
+  renderProdukSorted(target, data, kategori);
 }
 
 // ============================================
@@ -1535,10 +1557,22 @@ function renderProduk(target, data, kategori) {
     const totalOrder = (p.baseOrder || 0) + realOrder;
     return { ...p, _index: realIndex, _totalOrder: totalOrder };
   });
+  renderProdukCards(el, withCounts, kategori, target);
+}
+
+function renderProdukSorted(target, data, kategori) {
+  const el = document.getElementById(target);
+  if (!el) return;
+  renderProdukCards(el, data, kategori, target);
+}
+
+function renderProdukCards(el, withCounts, kategori, target) {
+  // Hitung TOP SELLER dari total order
   const maxOrder = Math.max(...withCounts.map(p => p._totalOrder));
-  const topSellerIndex = withCounts.findIndex(p => p._totalOrder === maxOrder);
+  const topSellerNames = withCounts.filter(p => p._totalOrder === maxOrder).map(p => p.nama);
+  
   el.innerHTML = withCounts.map((p, i) => {
-    const isTopSeller = i === topSellerIndex;
+    const isTopSeller = topSellerNames.includes(p.nama);
     const wished = isWishlisted(p.nama);
     return `
     <div class="produk-card">
@@ -1664,7 +1698,8 @@ function pilihPaket(index) {
   document.getElementById('qrisLoading').style.display = 'none';
   document.getElementById('successBox').style.display = 'none';
   useCoinMode = false;
-  document.getElementById('coinToggleSwitch').classList.remove('active');
+  const sw = document.getElementById('coinToggleSwitch');
+  if (sw) sw.classList.remove('active');
   clearError();
   hitungTotal();
   setStep(1);
@@ -1672,6 +1707,11 @@ function pilihPaket(index) {
   document.body.style.overflow = 'hidden';
 }
 function bukaOrder(kategoriId, index) {
+  // Reset state dulu
+  useCoinMode = false;
+  const sw = document.getElementById('coinToggleSwitch');
+  if (sw) sw.classList.remove('active');
+  
   let data, kategori, isApk;
   if (kategoriId === 'sosmed') { data = produkSosmed; kategori = 'SUNTIK ALL'; isApk = false; }
   else if (kategoriId === 'jpm') { data = produkJpm; kategori = 'LAYANAN LAINNYA'; isApk = false; }
@@ -1709,8 +1749,6 @@ function bukaOrder(kategoriId, index) {
   document.getElementById('qrisBox').style.display = 'none';
   document.getElementById('qrisLoading').style.display = 'none';
   document.getElementById('successBox').style.display = 'none';
-  useCoinMode = false;
-  document.getElementById('coinToggleSwitch').classList.remove('active');
   clearError();
   hitungTotal();
   setStep(1);
@@ -1723,6 +1761,8 @@ function tutupOrder() {
   if (orderPollingInterval) { clearInterval(orderPollingInterval); orderPollingInterval = null; }
   produkAktif = null;
   useCoinMode = false;
+  const sw = document.getElementById('coinToggleSwitch');
+  if (sw) sw.classList.remove('active');
 }
 function setStep(num) {
   document.querySelectorAll('.step-content').forEach(s => s.classList.remove('active'));
@@ -1765,12 +1805,12 @@ function hitungTotal() {
     coinAvailable.innerText = saldoKoin.toLocaleString('id-ID');
     
     if (maxPotongKoin <= 0) {
-      // DISABLE toggle koin
       coinToggleBox.classList.add('disabled');
       coinToggleDesc.innerHTML = `⚠️ Koin gak bisa dipakai. Minimal bayar Rp ${MIN_BAYAR_QRIS.toLocaleString('id-ID')}`;
       coinToggleDesc.classList.add('warning');
       useCoinMode = false;
-      document.getElementById('coinToggleSwitch').classList.remove('active');
+      const sw = document.getElementById('coinToggleSwitch');
+      if (sw) sw.classList.remove('active');
     } else {
       coinToggleBox.classList.remove('disabled');
       const maxPakai = Math.min(saldoKoin, maxPotongKoin);
@@ -1883,14 +1923,11 @@ async function keStep3() {
       const maxPotong = dataPemesan.total - MIN_BAYAR_QRIS;
       potonganKoinActual = usePoints(Math.min(getPoints(), maxPotong));
       useCoinMode = false;
-      document.getElementById('coinToggleSwitch').classList.remove('active');
+      const sw = document.getElementById('coinToggleSwitch');
+      if (sw) sw.classList.remove('active');
     }
     
-    // 🎁 DAPET KOIN BARU
-    const earned = addPoints(totalBayar);
-    renderCoinBalance();
-    
-    // 🔔 NOTIF TELEGRAM
+    // 🔔 NOTIF TELEGRAM (order masuk)
     sendToTelegram(`<b>🛒 ORDER BARU MASUK!</b>
 
 <b>📦 Produk:</b> ${produkAktif.nama}
@@ -1902,16 +1939,6 @@ async function keStep3() {
 <b>🕐 Waktu:</b> ${new Date().toLocaleString('id-ID')}
 
 ⏳ Status: Menunggu pembayaran...`);
-    
-    if (earned > 0) {
-      setTimeout(() => {
-        if (potonganKoinActual > 0) {
-          showToast(`⭐ Pakai ${potonganKoinActual.toLocaleString('id-ID')} koin • 🎁 +${earned.toLocaleString('id-ID')} koin baru`, 'success');
-        } else {
-          showToast(`🎁 +${earned.toLocaleString('id-ID')} koin! Total: ${getPoints().toLocaleString('id-ID')} koin`, 'success');
-        }
-      }, 2500);
-    }
     
     // 💾 BACKUP ORDER
     backupOrder({ order_id: result.orderId, produk: produkAktif.nama, jumlah: dataPemesan.jumlah, total: result.totalAmount, hp: dataPemesan.hp, status: 'pending' });
