@@ -840,7 +840,6 @@ const MIN_BAYAR_QRIS = 1000;
 const MIN_PEMBELIAN = 1000;
 const MAX_SUNTIK = 9999999;
 const KOIN_PER_RUPIAH = 50;
-const NILAI_KOIN = 1;
 
 // ============================================
 // TELEGRAM NOTIF
@@ -1117,50 +1116,113 @@ setInterval(pingVisitor, 30000);
 setInterval(loadVisitors, 10000);
 
 // ============================================
-// ORDER POLLING
+// ORDER POLLING (MODAL + BACKGROUND) — FIXED
 // ============================================
 let orderPollingInterval = null;
-function startOrderPolling(orderId, totalBayar) {
+let backgroundPollingInterval = null;
+const ACTIVE_ORDER_KEY = 'jimzz_active_order';
+
+function simpanOrderAktif(orderId, totalBayar, produkNama) {
+  localStorage.setItem(ACTIVE_ORDER_KEY, JSON.stringify({
+    orderId, totalBayar, produkNama, startedAt: Date.now()
+  }));
+}
+function hapusOrderAktif() { localStorage.removeItem(ACTIVE_ORDER_KEY); }
+function getOrderAktif() {
+  try {
+    const raw = localStorage.getItem(ACTIVE_ORDER_KEY);
+    if (!raw) return null;
+    const data = JSON.parse(raw);
+    if (Date.now() - data.startedAt > 24 * 60 * 60 * 1000) { hapusOrderAktif(); return null; }
+    return data;
+  } catch { return null; }
+}
+
+function handleOrderSuccess(orderId, totalBayar, produkNama) {
+  const processedKey = 'jimzz_processed_' + orderId;
+  if (localStorage.getItem(processedKey) === 'done') return;
+  localStorage.setItem(processedKey, 'done');
+  hapusOrderAktif();
+
+  const modal = document.getElementById('orderModal');
+  if (modal && modal.classList.contains('show')) {
+    document.getElementById('qrisBox').style.display = 'none';
+    document.getElementById('waitingBox').style.display = 'none';
+    document.getElementById('failedBox').style.display = 'none';
+    document.getElementById('successBox').style.display = 'block';
+  }
+  showConfetti();
+  showToast(`✅ Pesanan ${orderId} SELESAI! Admin udah proses.`, 'success');
+
+  if (totalBayar && totalBayar > 0) {
+    const earned = addPoints(totalBayar);
+    renderCoinBalance();
+    if (earned > 0) {
+      setTimeout(() => {
+        showToast(`🎁 +${earned.toLocaleString('id-ID')} koin! Total: ${getPoints().toLocaleString('id-ID')} koin`, 'success');
+      }, 1500);
+    }
+  }
+
+  sendToTelegram(`<b>✅ ORDER SELESAI!</b>\n\n<b>🎫 Order ID:</b> <code>${orderId}</code>\n<b>📦 Produk:</b> ${produkNama || '-'}\n<b>🕐 Waktu:</b> ${new Date().toLocaleString('id-ID')}`);
+}
+
+function handleOrderFailed(orderId, produkNama) {
+  const processedKey = 'jimzz_processed_' + orderId;
+  if (localStorage.getItem(processedKey) === 'done') return;
+  localStorage.setItem(processedKey, 'done');
+  hapusOrderAktif();
+
+  const modal = document.getElementById('orderModal');
+  if (modal && modal.classList.contains('show')) {
+    document.getElementById('qrisBox').style.display = 'none';
+    document.getElementById('waitingBox').style.display = 'none';
+    document.getElementById('successBox').style.display = 'none';
+    document.getElementById('failedBox').style.display = 'block';
+  }
+  showToast(`❌ Pesanan ${orderId} GAGAL/BATAL. Hubungi admin untuk refund.`, 'error');
+}
+
+async function cekStatusOrder(orderId) {
+  try {
+    const res = await fetch(BACKEND_URL + '/api/check-order?orderId=' + encodeURIComponent(orderId));
+    const data = await res.json();
+    if (!data.success) return null;
+    return data.status;
+  } catch (err) { console.log('Cek status error:', err); return null; }
+}
+
+function startOrderPolling(orderId, totalBayar, produkNama) {
   if (orderPollingInterval) clearInterval(orderPollingInterval);
   orderPollingInterval = setInterval(async () => {
-    try {
-      const res = await fetch(BACKEND_URL + '/api/check-order?orderId=' + encodeURIComponent(orderId));
-      const data = await res.json();
-      if (!data.success) return;
-
-      if (data.status === 'success') {
-        clearInterval(orderPollingInterval);
-        orderPollingInterval = null;
-        document.getElementById('qrisBox').style.display = 'none';
-        document.getElementById('waitingBox').style.display = 'none';
-        document.getElementById('failedBox').style.display = 'none';
-        document.getElementById('successBox').style.display = 'block';
-        showConfetti();
-        showToast('Pesanan kamu selesai!', 'success');
-
-        if (totalBayar && totalBayar > 0) {
-          const earned = addPoints(totalBayar);
-          renderCoinBalance();
-          if (earned > 0) {
-            setTimeout(() => {
-              showToast(`🎁 +${earned.toLocaleString('id-ID')} koin! Total: ${getPoints().toLocaleString('id-ID')} koin`, 'success');
-            }, 1500);
-          }
-        }
-
-        sendToTelegram(`<b>✅ ORDER SELESAI!</b>\n\n<b>🎫 Order ID:</b> <code>${orderId}</code>\n<b>🕐 Waktu:</b> ${new Date().toLocaleString('id-ID')}\n\n💰 Orderan sudah dibayar & diproses!`);
-      }
-      else if (data.status === 'failed' || data.status === 'cancel') {
-        clearInterval(orderPollingInterval);
-        orderPollingInterval = null;
-        document.getElementById('qrisBox').style.display = 'none';
-        document.getElementById('waitingBox').style.display = 'none';
-        document.getElementById('successBox').style.display = 'none';
-        document.getElementById('failedBox').style.display = 'block';
-        showToast('❌ Pesanan kamu GAGAL diproses admin!', 'error');
-      }
-    } catch (err) { console.log('Polling error:', err); }
+    const status = await cekStatusOrder(orderId);
+    if (status === 'success') {
+      clearInterval(orderPollingInterval); orderPollingInterval = null;
+      handleOrderSuccess(orderId, totalBayar, produkNama);
+    } else if (status === 'failed' || status === 'cancel') {
+      clearInterval(orderPollingInterval); orderPollingInterval = null;
+      handleOrderFailed(orderId, produkNama);
+    }
   }, 5000);
+}
+
+function startBackgroundPolling() {
+  if (backgroundPollingInterval) clearInterval(backgroundPollingInterval);
+  backgroundPollingInterval = setInterval(async () => {
+    const order = getOrderAktif();
+    if (!order) {
+      clearInterval(backgroundPollingInterval); backgroundPollingInterval = null;
+      return;
+    }
+    const status = await cekStatusOrder(order.orderId);
+    if (status === 'success') {
+      clearInterval(backgroundPollingInterval); backgroundPollingInterval = null;
+      handleOrderSuccess(order.orderId, order.totalBayar, order.produkNama);
+    } else if (status === 'failed' || status === 'cancel') {
+      clearInterval(backgroundPollingInterval); backgroundPollingInterval = null;
+      handleOrderFailed(order.orderId, order.produkNama);
+    }
+  }, 7000);
 }
 
 // ============================================
@@ -1503,6 +1565,27 @@ function startApp() {
   pingVisitor();
   renderCoinBalance();
   renderCoinHeaderToggle();
+
+  // Resume order yang belum kelar (kalau user refresh / tutup web)
+  const orderAktif = getOrderAktif();
+  if (orderAktif) {
+    console.log('🔄 Resume polling order:', orderAktif.orderId);
+    showToast(`🔄 Cek pesanan ${orderAktif.orderId}...`, 'info');
+    startBackgroundPolling();
+  }
+
+  // Bersihin flag processed lama (max 50)
+  try {
+    const keysToRemove = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && key.startsWith('jimzz_processed_')) keysToRemove.push(key);
+    }
+    if (keysToRemove.length > 50) {
+      keysToRemove.slice(0, keysToRemove.length - 50).forEach(k => localStorage.removeItem(k));
+    }
+  } catch(e) {}
+
   setTimeout(() => document.getElementById('loadingScreen').classList.add('hide'), 1400);
 }
 
@@ -1956,28 +2039,17 @@ async function keStep3() {
     document.getElementById('qrisBox').style.display = 'block';
     document.getElementById('waitingBox').style.display = 'block';
 
-    startOrderPolling(result.orderId, totalBayar);
-    
+    startOrderPolling(result.orderId, totalBayar, produkAktif.nama);
+    simpanOrderAktif(result.orderId, totalBayar, produkAktif.nama);
+    startBackgroundPolling();
+
     if (potonganKoinActual > 0) {
-      const currentPoints = getPoints();
-      localStorage.setItem('jimzz_points', (currentPoints - potonganKoinActual).toString());
-      renderCoinBalance();
       setTimeout(() => {
-        showToast(`⭐ Pakai ${potonganKoinActual.toLocaleString('id-ID')} koin untuk diskon!`, 'success');
+        showToast(`⭐ ${potonganKoinActual.toLocaleString('id-ID')} koin akan dipakai kalau pembayaran sukses.`, 'info');
       }, 2000);
     }
     
-    sendToTelegram(`<b>🛒 ORDER BARU MASUK!</b>
-
-<b>📦 Produk:</b> ${produkAktif.nama}
-<b>📋 Detail:</b> ${dataPemesan.jumlah} ${produkAktif.unit || 'pcs'}
-<b>💰 Total Bayar:</b> Rp ${result.totalAmount.toLocaleString('id-ID')}${potonganKoinActual > 0 ? `\n<b>⭐ Potong Koin:</b> ${potonganKoinActual.toLocaleString('id-ID')} koin` : ''}
-<b>👤 WA Customer:</b> ${dataPemesan.hp}
-<b>🔗 Link:</b> ${dataPemesan.link}
-<b>🎫 Order ID:</b> <code>${result.orderId}</code>
-<b>🕐 Waktu:</b> ${new Date().toLocaleString('id-ID')}
-
-⏳ Status: Menunggu pembayaran...`);
+    sendToTelegram(`<b>🛒 ORDER BARU MASUK!</b>\n\n<b>📦 Produk:</b> ${produkAktif.nama}\n<b>📋 Detail:</b> ${dataPemesan.jumlah} ${produkAktif.unit || 'pcs'}\n<b>💰 Total Bayar:</b> Rp ${result.totalAmount.toLocaleString('id-ID')}${potonganKoinActual > 0 ? `\n<b>⭐ Potong Koin:</b> ${potonganKoinActual.toLocaleString('id-ID')} koin` : ''}\n<b>👤 WA Customer:</b> ${dataPemesan.hp}\n<b>🔗 Link:</b> ${dataPemesan.link}\n<b>🎫 Order ID:</b> <code>${result.orderId}</code>\n<b>🕐 Waktu:</b> ${new Date().toLocaleString('id-ID')}\n\n⏳ Status: Menunggu pembayaran...`);
     
     backupOrder({ order_id: result.orderId, produk: produkAktif.nama, jumlah: dataPemesan.jumlah, total: result.totalAmount, hp: dataPemesan.hp, status: 'pending' });
   } catch (err) {
