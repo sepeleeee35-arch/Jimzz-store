@@ -101,8 +101,8 @@ body::after { content: ""; position: fixed; top: 0; left: 0; width: 100vw; heigh
 .admin-badge-float { position: fixed; top: 12px; right: 12px; z-index: 999; background: linear-gradient(135deg, #ffd700, #ff9500); color: #000; padding: 8px 14px; border-radius: 20px; font-size: 11px; font-weight: 800; box-shadow: 0 5px 25px rgba(255,215,0,0.6); display: none; align-items: center; gap: 6px; cursor: pointer; letter-spacing: 0.5px; }
 .admin-badge-float.show { display: flex; }
 .admin-badge-float .logout-x { color: #000; font-weight: 900; margin-left: 5px; }
-#adminLoginModal { position: fixed; inset: 0; background: rgba(0,0,0,0.95); backdrop-filter: blur(20px); z-index: 5000; display: none; align-items: center; justify-content: center; padding: 20px; pointer-events: none; }
-#adminLoginModal.show { display: flex; pointer-events: auto; }
+#adminLoginModal { position: fixed; inset: 0; background: rgba(0,0,0,0.95); backdrop-filter: blur(20px); z-index: 5000; display: none; align-items: center; justify-content: center; padding: 20px; }
+#adminLoginModal.show { display: flex; }
 .admin-login-box { background: linear-gradient(145deg, rgba(15,26,20,0.98), rgba(13,13,21,0.98)); border: 1px solid rgba(0,255,136,0.3); border-radius: 22px; padding: 35px 28px; max-width: 400px; width: 100%; text-align: center; box-shadow: 0 30px 80px rgba(0,0,0,0.8), 0 0 60px rgba(0,255,136,0.15); position: relative; animation: slideUp 0.4s cubic-bezier(0.175,0.885,0.32,1.275); }
 .admin-login-box::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #00ff88, #00cc6a, #00ff88); background-size: 200% 100%; animation: shimmer 3s linear infinite; border-radius: 22px 22px 0 0; }
 .admin-login-icon { font-size: 50px; margin-bottom: 15px; filter: drop-shadow(0 0 20px rgba(0,255,136,0.6)); }
@@ -290,8 +290,8 @@ header .counter .dot { width: 8px; height: 8px; background: #00ff88; border-radi
 .produk-list.grid-2col .produk-harga-label { font-size: 8px; }
 .produk-list.grid-2col .produk-harga { font-size: 14px; text-align: center; }
 .produk-list.grid-2col .btn-order { padding: 9px 12px; font-size: 11px; width: 100%; text-align: center; }
-.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); backdrop-filter: blur(15px); z-index: 400; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; pointer-events: none; }
-.modal-overlay.show { display: flex; pointer-events: auto; }
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); backdrop-filter: blur(15px); z-index: 400; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; }
+.modal-overlay.show { display: flex; }
 .modal-box { background: linear-gradient(145deg, #0f1a14, #0d0d15); border: 1px solid rgba(0,255,136,0.25); border-radius: 24px; padding: 30px 26px; width: 100%; max-width: 440px; position: relative; animation: slideUp 0.4s cubic-bezier(0.175,0.885,0.32,1.275); max-height: 90vh; overflow-y: auto; box-shadow: 0 30px 80px rgba(0,0,0,0.9), 0 0 60px rgba(0,255,136,0.1); }
 @keyframes slideUp { from { opacity:0; transform: translateY(40px) scale(0.95); } to { opacity:1; transform: translateY(0) scale(1); } }
 .modal-box::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #00ff88, #00cc6a, #00ff88); background-size: 200% 100%; animation: shimmer 3s linear infinite; border-radius: 24px 24px 0 0; }
@@ -684,7 +684,7 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
   <button class="nav-item" data-tab="jpm" onclick="switchTab('jpm')"><span class="nav-icon">🚀</span><span class="nav-label">Lainnya</span></button>
 </div>
 
-<div class="modal-overlay" id="orderModal" onclick="if(event.target === this) tutupOrder()">
+<div class="modal-overlay" id="orderModal" onclick="if(event.target===this)tutupOrder()">
   <div class="modal-box">
     <button class="modal-close" onclick="tutupOrder()">×</button>
     <div class="steps-indicator">
@@ -698,8 +698,8 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
         <div class="modal-title" id="modalTitle">-</div>
         <div class="modal-subtitle" id="modalSubtitle">-</div>
       </div>
-      <label class="jumlah-label" for="jumlahInput">Jumlah <span class="minmax" id="minmaxText">Min: 1.000 - Max: 1.000.000</span></label>
-      <input type="number" id="jumlahInput" class="jumlah-input" placeholder="# Masukkan jumlah" oninput="hitungTotal()" inputmode="numeric" maxlength="7">
+      <label class="jumlah-label" for="jumlahInput">Jumlah <span class="minmax" id="minmaxText">Min: 1.000 - Max: 20.000</span></label>
+      <input type="number" id="jumlahInput" class="jumlah-input" placeholder="# Masukkan jumlah" oninput="hitungTotal()">
       <div class="jumlah-hint" id="jumlahHint">Sistem otomatis hitung harga sesuai jumlah.</div>
       <div class="coin-toggle-box" id="coinToggleBox" style="display:none;">
         <div class="coin-toggle-info">
@@ -771,7 +771,7 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
   </div>
 </div>
 
-<div class="modal-overlay" id="historyModal" onclick="if(event.target === this) tutupRiwayat()">
+<div class="modal-overlay" id="historyModal" onclick="if(event.target===this)tutupRiwayat()">
   <div class="modal-box">
     <button class="modal-close" onclick="tutupRiwayat()">×</button>
     <div class="modal-title-block">
@@ -1099,21 +1099,9 @@ function startOrderPolling(orderId) {
         document.getElementById('successBox').style.display = 'block';
         showConfetti();
         showToast('Pesanan kamu selesai!', 'success');
-        
-        const totalAmount = data.totalAmount || 0;
-        const earned = addPoints(totalAmount);
-        renderCoinBalance();
-        if (earned > 0) {
-          setTimeout(() => {
-            showToast(`🎁 +${earned.toLocaleString('id-ID')} koin! Total: ${getPoints().toLocaleString('id-ID')} koin`, 'success');
-          }, 1500);
-        }
-        
         sendToTelegram(`<b>✅ ORDER SELESAI!</b>
 
 <b>🎫 Order ID:</b> <code>${orderId}</code>
-<b>💰 Total:</b> Rp ${totalAmount.toLocaleString('id-ID')}
-<b>🎁 Koin didapat:</b> +${earned.toLocaleString('id-ID')}
 <b>🕐 Waktu:</b> ${new Date().toLocaleString('id-ID')}
 
 💰 Orderan sudah dibayar & diproses!`);
@@ -1377,9 +1365,7 @@ function adminLogin() {
   if (input === ADMIN_PASSWORD) {
     isAdmin = true;
     localStorage.setItem('jimzz_admin', 'true');
-    const modal = document.getElementById('adminLoginModal');
-    modal.classList.remove('show');
-    modal.style.display = 'none';
+    document.getElementById('adminLoginModal').classList.remove('show');
     applyAdminUI();
   } else {
     error.classList.add('show');
@@ -1429,12 +1415,7 @@ function applyAdminUI() {
   }
   renderGameList();
 }
-function handleTopupClick() { 
-  document.body.style.removeProperty('pointer-events');
-  document.body.style.removeProperty('overflow');
-  if (isAdmin) switchTab('topup'); 
-  else showToast('Top Up Game sedang MAINTENANCE', 'warning'); 
-}
+function handleTopupClick() { if (isAdmin) switchTab('topup'); else showToast('Top Up Game sedang MAINTENANCE', 'warning'); }
 
 function startApp() {
   applyBgMode();
@@ -1530,19 +1511,11 @@ function applySort(target, mode) {
   if (target === 'sosmed') { originalData = produkSosmed; kategori = 'SUNTIK ALL'; }
   else if (target === 'jpm') { originalData = produkJpm; kategori = 'LAYANAN LAINNYA'; }
   else { originalData = produkApk; kategori = 'JUAL APK'; }
-  
   let data = originalData.map((p, i) => ({ ...p, _originalIndex: i }));
-  
-  data = data.map(p => {
-    const realOrder = getProdukOrderCount(target, p._originalIndex);
-    return { ...p, _totalOrder: (p.baseOrder || 0) + realOrder };
-  });
-  
   if (mode === 'termurah') data.sort((a,b) => (a.harga || a.hargaPerUnit) - (b.harga || b.hargaPerUnit));
   else if (mode === 'termahal') data.sort((a,b) => (b.harga || b.hargaPerUnit) - (a.harga || a.hargaPerUnit));
-  else if (mode === 'terlaris') data.sort((a,b) => b._totalOrder - a._totalOrder);
-  
-  renderProdukSorted(target, data, kategori);
+  else if (mode === 'terlaris') data.sort((a,b) => (b.baseOrder || 0) - (a.baseOrder || 0));
+  renderProduk(target, data, kategori);
 }
 
 // ============================================
@@ -1562,21 +1535,10 @@ function renderProduk(target, data, kategori) {
     const totalOrder = (p.baseOrder || 0) + realOrder;
     return { ...p, _index: realIndex, _totalOrder: totalOrder };
   });
-  renderProdukCards(el, withCounts, kategori, target);
-}
-
-function renderProdukSorted(target, data, kategori) {
-  const el = document.getElementById(target);
-  if (!el) return;
-  renderProdukCards(el, data, kategori, target);
-}
-
-function renderProdukCards(el, withCounts, kategori, target) {
   const maxOrder = Math.max(...withCounts.map(p => p._totalOrder));
-  const topSellerNames = withCounts.filter(p => p._totalOrder === maxOrder).map(p => p.nama);
-  
+  const topSellerIndex = withCounts.findIndex(p => p._totalOrder === maxOrder);
   el.innerHTML = withCounts.map((p, i) => {
-    const isTopSeller = topSellerNames.includes(p.nama);
+    const isTopSeller = i === topSellerIndex;
     const wished = isWishlisted(p.nama);
     return `
     <div class="produk-card">
@@ -1702,8 +1664,7 @@ function pilihPaket(index) {
   document.getElementById('qrisLoading').style.display = 'none';
   document.getElementById('successBox').style.display = 'none';
   useCoinMode = false;
-  const sw = document.getElementById('coinToggleSwitch');
-  if (sw) sw.classList.remove('active');
+  document.getElementById('coinToggleSwitch').classList.remove('active');
   clearError();
   hitungTotal();
   setStep(1);
@@ -1711,24 +1672,6 @@ function pilihPaket(index) {
   document.body.style.overflow = 'hidden';
 }
 function bukaOrder(kategoriId, index) {
-  // 🔥 RESET TOTAL BODY STATE DULU
-  document.body.style.removeProperty('pointer-events');
-  document.body.style.removeProperty('overflow');
-  document.body.style.overflow = '';
-  
-  // 🔥 Pastikan modal sebelumnya benar2 tertutup
-  const oldModal = document.getElementById('orderModal');
-  if (oldModal) {
-    oldModal.classList.remove('show');
-    oldModal.style.display = 'none';
-    setTimeout(() => { if (oldModal) oldModal.style.display = ''; }, 50);
-  }
-  
-  // Reset state
-  useCoinMode = false;
-  const sw = document.getElementById('coinToggleSwitch');
-  if (sw) sw.classList.remove('active');
-  
   let data, kategori, isApk;
   if (kategoriId === 'sosmed') { data = produkSosmed; kategori = 'SUNTIK ALL'; isApk = false; }
   else if (kategoriId === 'jpm') { data = produkJpm; kategori = 'LAYANAN LAINNYA'; isApk = false; }
@@ -1766,6 +1709,8 @@ function bukaOrder(kategoriId, index) {
   document.getElementById('qrisBox').style.display = 'none';
   document.getElementById('qrisLoading').style.display = 'none';
   document.getElementById('successBox').style.display = 'none';
+  useCoinMode = false;
+  document.getElementById('coinToggleSwitch').classList.remove('active');
   clearError();
   hitungTotal();
   setStep(1);
@@ -1773,30 +1718,11 @@ function bukaOrder(kategoriId, index) {
   document.body.style.overflow = 'hidden';
 }
 function tutupOrder() {
-  const modal = document.getElementById('orderModal');
-  modal.classList.remove('show');
-  modal.style.display = 'none';
-  modal.style.removeProperty('display');
-  
-  // 🔥 RESET BODY TOTAL
-  document.body.style.removeProperty('pointer-events');
-  document.body.style.removeProperty('overflow');
-  document.body.style.overflow = '';
-  document.body.classList.remove('modal-open');
-  
+  document.getElementById('orderModal').classList.remove('show');
+  document.body.style.overflow = 'auto';
   if (orderPollingInterval) { clearInterval(orderPollingInterval); orderPollingInterval = null; }
   produkAktif = null;
   useCoinMode = false;
-  const sw = document.getElementById('coinToggleSwitch');
-  if (sw) sw.classList.remove('active');
-  
-  // 🔥 RESET INPUT
-  const jumlahInput = document.getElementById('jumlahInput');
-  if (jumlahInput) { jumlahInput.value = ''; jumlahInput.disabled = false; }
-  
-  setTimeout(() => {
-    if (modal) modal.style.display = '';
-  }, 50);
 }
 function setStep(num) {
   document.querySelectorAll('.step-content').forEach(s => s.classList.remove('active'));
@@ -1816,44 +1742,14 @@ function clearError() {
 }
 function hitungTotal() {
   if (!produkAktif) return;
-  
-  const inputEl = document.getElementById('jumlahInput');
-  if (!inputEl) return;
-  let rawVal = inputEl.value;
-  rawVal = String(rawVal).replace(/[^0-9]/g, '');
-  if (rawVal.length > 7) { rawVal = rawVal.substring(0, 7); inputEl.value = rawVal; }
-  
-  // 🔥 Handle input kosong
-  if (rawVal === '' || rawVal === '0') {
-    document.getElementById('totalHarga').innerText = 'Rp 0';
-    document.getElementById('jumlahDisplay').innerText = '0 ' + (produkAktif.unit || 'pcs');
-    document.getElementById('btnPesan').disabled = true;
-    document.getElementById('jumlahHint').innerText = 'Masukkan jumlah dulu ya.';
-    document.getElementById('jumlahHint').style.color = '#888';
-    document.getElementById('coinToggleBox').style.display = 'none';
-    document.getElementById('coinDiscountRow').style.display = 'none';
-    document.getElementById('bonusRow').style.display = 'none';
-    document.getElementById('totalDapatRow').style.display = 'none';
-    return;
-  }
-  
-  let jumlah = parseInt(rawVal) || 0;
-  if (jumlah > 1000000) { jumlah = 1000000; inputEl.value = 1000000; }
-  if (jumlah < 0) jumlah = 0;
-  
+  const jumlah = parseInt(document.getElementById('jumlahInput').value) || 0;
   const hargaPerUnit = produkAktif.isApk ? produkAktif.harga : produkAktif.hargaPerUnit;
   const subtotal = jumlah * hargaPerUnit;
-  
-  if (!isFinite(subtotal) || isNaN(subtotal)) {
-    document.getElementById('totalHarga').innerText = 'Rp 0';
-    document.getElementById('btnPesan').disabled = true;
-    return;
-  }
-  
   let bonus = 0;
   if (!produkAktif.isApk && produkAktif.bonusMinTotal && subtotal >= produkAktif.bonusMinTotal) bonus = produkAktif.bonusUnit || 0;
   document.getElementById('jumlahDisplay').innerText = jumlah.toLocaleString('id-ID') + ' ' + (produkAktif.unit || 'pcs');
   
+  // ⭐ LOGIC PAKAI KOIN
   const saldoKoin = getPoints();
   const coinToggleBox = document.getElementById('coinToggleBox');
   const coinAvailable = document.getElementById('coinAvailable');
@@ -1861,6 +1757,7 @@ function hitungTotal() {
   const coinDiscountRow = document.getElementById('coinDiscountRow');
   const coinDiscount = document.getElementById('coinDiscount');
   
+  // Max potong = subtotal - 1.000
   const maxPotongKoin = subtotal - MIN_BAYAR_QRIS;
   
   if (saldoKoin > 0 && subtotal > 0) {
@@ -1868,12 +1765,12 @@ function hitungTotal() {
     coinAvailable.innerText = saldoKoin.toLocaleString('id-ID');
     
     if (maxPotongKoin <= 0) {
+      // DISABLE toggle koin
       coinToggleBox.classList.add('disabled');
       coinToggleDesc.innerHTML = `⚠️ Koin gak bisa dipakai. Minimal bayar Rp ${MIN_BAYAR_QRIS.toLocaleString('id-ID')}`;
       coinToggleDesc.classList.add('warning');
       useCoinMode = false;
-      const sw = document.getElementById('coinToggleSwitch');
-      if (sw) sw.classList.remove('active');
+      document.getElementById('coinToggleSwitch').classList.remove('active');
     } else {
       coinToggleBox.classList.remove('disabled');
       const maxPakai = Math.min(saldoKoin, maxPotongKoin);
@@ -1885,6 +1782,7 @@ function hitungTotal() {
     useCoinMode = false;
   }
   
+  // Hitung potongan koin
   let potonganKoin = 0;
   if (useCoinMode && saldoKoin > 0 && maxPotongKoin > 0) {
     potonganKoin = Math.min(saldoKoin, maxPotongKoin);
@@ -1905,22 +1803,11 @@ function hitungTotal() {
     document.getElementById('totalDapat').innerText = (jumlah + bonus).toLocaleString('id-ID') + ' ' + produkAktif.unit;
   } else { bonusRow.style.display = 'none'; totalDapatRow.style.display = 'none'; }
   
-  const minJumlah = parseInt(inputEl.min) || 1;
-  const maxJumlahCek = parseInt(inputEl.max) || 1000000;
-  const validJumlah = jumlah >= minJumlah && jumlah <= maxJumlahCek;
+  const validJumlah = jumlah >= parseInt(document.getElementById('jumlahInput').min) && jumlah <= parseInt(document.getElementById('jumlahInput').max);
   const validTotal = totalAkhir >= MIN_BAYAR_QRIS && subtotal >= MIN_PEMBELIAN;
-  
   document.getElementById('btnPesan').disabled = !(validJumlah && validTotal);
-  
   const hintEl = document.getElementById('jumlahHint');
-  if (!validJumlah) {
-    if (jumlah < minJumlah) {
-      hintEl.innerHTML = `⚠️ Minimal order <b style="color:#ff6b6b">${minJumlah.toLocaleString('id-ID')}</b> ${produkAktif.unit || ''}.`;
-    } else {
-      hintEl.innerHTML = `⚠️ Max order <b style="color:#ff6b6b">${maxJumlahCek.toLocaleString('id-ID')}</b> ${produkAktif.unit || ''}.`;
-    }
-    hintEl.style.color = '#ff6b6b';
-  }
+  if (!validJumlah) { hintEl.innerHTML = `⚠️ Jumlah tidak valid.`; hintEl.style.color = '#ff6b6b'; }
   else if (subtotal < MIN_PEMBELIAN) { hintEl.innerHTML = `⚠️ Minimal pembelian <b style="color:#ff6b6b">Rp ${MIN_PEMBELIAN.toLocaleString('id-ID')}</b>.`; hintEl.style.color = '#ff6b6b'; }
   else if (!validTotal) { hintEl.innerHTML = `⚠️ Bayar minimal <b style="color:#ff6b6b">Rp ${MIN_BAYAR_QRIS.toLocaleString('id-ID')}</b>.`; hintEl.style.color = '#ff6b6b'; }
   else if (potonganKoin > 0) { hintEl.innerHTML = `⭐ <b style="color:#ffd700">Potong ${potonganKoin.toLocaleString('id-ID')} koin = Rp ${potonganKoin.toLocaleString('id-ID')}</b>`; hintEl.style.color = '#ffd700'; }
@@ -1957,6 +1844,7 @@ async function keStep3() {
   document.getElementById('waitingBox').style.display = 'none';
   document.getElementById('successBox').style.display = 'none';
   
+  // Hitung total akhir setelah potong koin
   let potonganKoin = 0;
   if (useCoinMode) {
     const maxPotong = dataPemesan.total - MIN_BAYAR_QRIS;
@@ -1989,15 +1877,20 @@ async function keStep3() {
     document.getElementById('waitingBox').style.display = 'block';
     startOrderPolling(result.orderId);
 
+    // ⭐ POTONG KOIN
     let potonganKoinActual = 0;
     if (useCoinMode) {
       const maxPotong = dataPemesan.total - MIN_BAYAR_QRIS;
       potonganKoinActual = usePoints(Math.min(getPoints(), maxPotong));
       useCoinMode = false;
-      const sw = document.getElementById('coinToggleSwitch');
-      if (sw) sw.classList.remove('active');
+      document.getElementById('coinToggleSwitch').classList.remove('active');
     }
     
+    // 🎁 DAPET KOIN BARU
+    const earned = addPoints(totalBayar);
+    renderCoinBalance();
+    
+    // 🔔 NOTIF TELEGRAM
     sendToTelegram(`<b>🛒 ORDER BARU MASUK!</b>
 
 <b>📦 Produk:</b> ${produkAktif.nama}
@@ -2010,6 +1903,17 @@ async function keStep3() {
 
 ⏳ Status: Menunggu pembayaran...`);
     
+    if (earned > 0) {
+      setTimeout(() => {
+        if (potonganKoinActual > 0) {
+          showToast(`⭐ Pakai ${potonganKoinActual.toLocaleString('id-ID')} koin • 🎁 +${earned.toLocaleString('id-ID')} koin baru`, 'success');
+        } else {
+          showToast(`🎁 +${earned.toLocaleString('id-ID')} koin! Total: ${getPoints().toLocaleString('id-ID')} koin`, 'success');
+        }
+      }, 2500);
+    }
+    
+    // 💾 BACKUP ORDER
     backupOrder({ order_id: result.orderId, produk: produkAktif.nama, jumlah: dataPemesan.jumlah, total: result.totalAmount, hp: dataPemesan.hp, status: 'pending' });
   } catch (err) {
     console.error('QRIS error:', err);
@@ -2041,21 +1945,14 @@ async function downloadQris() {
 // RIWAYAT ORDER
 // ============================================
 function bukaRiwayat() {
-  const modal = document.getElementById('historyModal');
-  modal.classList.add('show');
-  modal.style.display = 'flex';
+  document.getElementById('historyModal').classList.add('show');
   document.body.style.overflow = 'hidden';
   document.getElementById('historyResult').innerHTML = '';
   document.getElementById('historyHp').value = '';
 }
 function tutupRiwayat() {
-  const modal = document.getElementById('historyModal');
-  modal.classList.remove('show');
-  modal.style.display = 'none';
-  document.body.style.removeProperty('overflow');
-  document.body.style.overflow = '';
-  document.body.style.removeProperty('pointer-events');
-  setTimeout(() => { modal.style.display = ''; }, 50);
+  document.getElementById('historyModal').classList.remove('show');
+  document.body.style.overflow = 'auto';
 }
 async function loadHistory() {
   const hp = document.getElementById('historyHp').value.trim();
@@ -2092,369 +1989,16 @@ async function loadHistory() {
 // SWITCH TAB
 // ============================================
 function switchTab(tab) {
-  document.body.style.removeProperty('pointer-events');
-  document.body.style.removeProperty('overflow');
-  document.body.style.overflow = '';
-  
-  document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
-  const page = document.getElementById('page-' + tab);
-  if (page) page.classList.add('active');
-  
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  const nav = document.querySelector(`.nav-item[data-tab="${tab}"]`);
-  if (nav) nav.classList.add('active');
-  
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-// ============================================
-// MUSIC PLAYER
-// ============================================
-const playlist = [
-  { judul: "Lagu 1", artis: "Jimzz Playlist", cover: "🔥", src: "lagu1.mp3" },
-  { judul: "Lagu 2", artis: "Jimzz Playlist", cover: "💀", src: "lagu2.mp3" },
-  { judul: "Lagu 3", artis: "Jimzz Playlist", cover: "🌆", src: "lagu3.mp3" },
-  { judul: "Lagu 4", artis: "Jimzz Playlist", cover: "🌊", src: "lagu4.mp3" }
-];
-let currentSong = 0;
-let audio;
-function renderPlaylist() {
-  audio = document.getElementById('audioPlayer');
-  const musicList = document.getElementById('musicList');
-  if (!musicList) return;
-  musicList.innerHTML = playlist.map((s, i) => `
-    <div class="music-item ${i === currentSong ? 'active' : ''}" onclick="playSong(${i})">
-      <div class="music-item-thumb">${s.cover}</div>
-function bukaOrder(kategoriId, index) {
-  // 🔥 RESET SEMUA STATE (fix bug tombol Order nyangkut)
-  document.body.style.removeProperty('overflow');
-  document.body.style.removeProperty('pointer-events');
-  document.documentElement.style.removeProperty('overflow');
-  document.documentElement.style.removeProperty('pointer-events');
-  
-  // Pastikan semua modal lain ketutup
-  document.querySelectorAll('.modal-overlay').forEach(m => {
-    m.classList.remove('show');
-    m.style.removeProperty('display');
-    m.style.removeProperty('pointer-events');
-  });
-  
-  useCoinMode = false;
-  const sw = document.getElementById('coinToggleSwitch');
-  if (sw) sw.classList.remove('active');
-  
-  let data, kategori, isApk;
-  if (kategoriId === 'sosmed') { data = produkSosmed; kategori = 'SUNTIK ALL'; isApk = false; }
-  else if (kategoriId === 'jpm') { data = produkJpm; kategori = 'LAYANAN LAINNYA'; isApk = false; }
-  else { data = produkApk; kategori = 'JUAL APK'; isApk = true; }
-  produkAktif = { ...data[index], kategori, isApk };
-  produkAktif._kategoriId = kategoriId;
-  produkAktif._index = index;
-  document.getElementById('modalLabel').innerText = kategori;
-  document.getElementById('modalTitle').innerText = produkAktif.nama;
-  document.getElementById('modalSubtitle').innerText = produkAktif.desc;
-  const jumlahInput = document.getElementById('jumlahInput');
-  const minmaxText = document.getElementById('minmaxText');
-  if (isApk) {
-    jumlahInput.value = 1; jumlahInput.min = 1; jumlahInput.max = 1; jumlahInput.disabled = true;
-    minmaxText.innerText = '(otomatis 1)';
-    document.getElementById('hargaSatuan').innerText = `Rp ${produkAktif.harga.toLocaleString('id-ID')}`;
-  } else {
-    jumlahInput.disabled = false;
-    minmaxText.innerText = `Min: ${produkAktif.min.toLocaleString('id-ID')} - Max: ${produkAktif.max.toLocaleString('id-ID')}`;
-    document.getElementById('hargaSatuan').innerText = `Rp ${produkAktif.hargaPerUnit.toLocaleString('id-ID')}`;
-    jumlahInput.value = produkAktif.min;
-    jumlahInput.min = produkAktif.min;
-    jumlahInput.max = produkAktif.max;
-  }
-  if (isApk) {
-    document.getElementById('inputLabel').innerText = '👤 Nama Lengkap';
-    document.getElementById('linkSaluran').placeholder = 'Contoh: Bilzz';
-  } else {
-    document.getElementById('inputLabel').innerText = produkAktif.inputLabel || '🔗 Link';
-    document.getElementById('linkSaluran').placeholder = produkAktif.inputPlaceholder || 'Contoh: link';
-  }
-  document.getElementById('linkSaluran').value = '';
-  document.getElementById('hpPemesan').value = '';
-  document.getElementById('waitingBox').style.display = 'none';
-  document.getElementById('qrisBox').style.display = 'none';
-  document.getElementById('qrisLoading').style.display = 'none';
-  document.getElementById('successBox').style.display = 'none';
-  clearError();
-  hitungTotal();
-  setStep(1);
-  document.getElementById('orderModal').classList.add('show');
-  document.body.style.overflow = 'hidden';
-}
-function tutupOrder() {
-  const modal = document.getElementById('orderModal');
-  modal.classList.remove('show');
-  modal.style.removeProperty('display');
-  modal.style.removeProperty('pointer-events');
-  
-  document.body.style.removeProperty('overflow');
-  document.body.style.removeProperty('pointer-events');
-  document.documentElement.style.removeProperty('overflow');
-  document.documentElement.style.removeProperty('pointer-events');
-  
-  if (orderPollingInterval) { clearInterval(orderPollingInterval); orderPollingInterval = null; }
-  produkAktif = null;
-  useCoinMode = false;
-  const sw = document.getElementById('coinToggleSwitch');
-  if (sw) sw.classList.remove('active');
-}
-function setStep(num) {
-  document.querySelectorAll('.step-content').forEach(s => s.classList.remove('active'));
-  document.getElementById('step' + num).classList.add('active');
-  document.querySelectorAll('.step-dot').forEach(d => d.classList.remove('active','done'));
-  for (let i = 1; i <= 3; i++) {
-    const dot = document.getElementById('dot' + i);
-    if (i < num) dot.classList.add('done');
-    else if (i === num) dot.classList.add('active');
-  }
-}
-function clearError() {
-  document.getElementById('linkSaluran').classList.remove('error');
-  document.getElementById('inputError').classList.remove('show');
-  document.getElementById('hpPemesan').classList.remove('error');
-  document.getElementById('hpError').classList.remove('show');
-}
-function hitungTotal() {
-  if (!produkAktif) return;
-  const inputEl = document.getElementById('jumlahInput');
-  if (!inputEl) return;
-  let rawVal = inputEl.value;
-  rawVal = String(rawVal).replace(/[^0-9]/g, '');
-  if (rawVal.length > 7) { rawVal = rawVal.substring(0, 7); inputEl.value = rawVal; }
-  let jumlah = parseInt(rawVal) || 0;
-  if (jumlah > 1000000) { jumlah = 1000000; inputEl.value = 1000000; }
-  if (jumlah < 0) jumlah = 0;
-  const hargaPerUnit = produkAktif.isApk ? produkAktif.harga : produkAktif.hargaPerUnit;
-  const subtotal = jumlah * hargaPerUnit;
-  if (!isFinite(subtotal) || isNaN(subtotal)) {
-    document.getElementById('totalHarga').innerText = 'Rp 0';
-    document.getElementById('btnPesan').disabled = true;
-    return;
-  }
-  let bonus = 0;
-  if (!produkAktif.isApk && produkAktif.bonusMinTotal && subtotal >= produkAktif.bonusMinTotal) bonus = produkAktif.bonusUnit || 0;
-  document.getElementById('jumlahDisplay').innerText = jumlah.toLocaleString('id-ID') + ' ' + (produkAktif.unit || 'pcs');
-  const saldoKoin = getPoints();
-  const coinToggleBox = document.getElementById('coinToggleBox');
-  const coinAvailable = document.getElementById('coinAvailable');
-  const coinToggleDesc = document.getElementById('coinToggleDesc');
-  const coinDiscountRow = document.getElementById('coinDiscountRow');
-  const coinDiscount = document.getElementById('coinDiscount');
-  const maxPotongKoin = subtotal - MIN_BAYAR_QRIS;
-  if (saldoKoin > 0 && subtotal > 0) {
-    coinToggleBox.style.display = 'flex';
-    coinAvailable.innerText = saldoKoin.toLocaleString('id-ID');
-    if (maxPotongKoin <= 0) {
-      coinToggleBox.classList.add('disabled');
-      coinToggleDesc.innerHTML = `⚠️ Koin gak bisa dipakai. Minimal bayar Rp ${MIN_BAYAR_QRIS.toLocaleString('id-ID')}`;
-      coinToggleDesc.classList.add('warning');
-      useCoinMode = false;
-      const sw = document.getElementById('coinToggleSwitch');
-      if (sw) sw.classList.remove('active');
-    } else {
-      coinToggleBox.classList.remove('disabled');
-      const maxPakai = Math.min(saldoKoin, maxPotongKoin);
-      coinToggleDesc.innerHTML = `Saldo: <b>${saldoKoin.toLocaleString('id-ID')}</b> koin • Max pakai: <b style="color:#ffd700">${maxPakai.toLocaleString('id-ID')}</b>`;
-      coinToggleDesc.classList.remove('warning');
-    }
-  } else {
-    coinToggleBox.style.display = 'none';
-    useCoinMode = false;
-  }
-  let potonganKoin = 0;
-  if (useCoinMode && saldoKoin > 0 && maxPotongKoin > 0) {
-    potonganKoin = Math.min(saldoKoin, maxPotongKoin);
-    coinDiscountRow.style.display = 'flex';
-    coinDiscount.innerText = '-Rp ' + potonganKoin.toLocaleString('id-ID');
-  } else {
-    coinDiscountRow.style.display = 'none';
-  }
-  const totalAkhir = subtotal - potonganKoin;
-  document.getElementById('totalHarga').innerText = "Rp " + totalAkhir.toLocaleString('id-ID');
-  const bonusRow = document.getElementById('bonusRow');
-  const totalDapatRow = document.getElementById('totalDapatRow');
-  if (bonus > 0) {
-    bonusRow.style.display = 'flex'; totalDapatRow.style.display = 'flex';
-    document.getElementById('bonusValue').innerText = '+' + bonus + ' ' + produkAktif.unit;
-    document.getElementById('totalDapat').innerText = (jumlah + bonus).toLocaleString('id-ID') + ' ' + produkAktif.unit;
-  } else { bonusRow.style.display = 'none'; totalDapatRow.style.display = 'none'; }
-  const minJumlah = parseInt(inputEl.min) || 1;
-  const maxJumlahCek = parseInt(inputEl.max) || 1000000;
-  const validJumlah = jumlah >= minJumlah && jumlah <= maxJumlahCek;
-  const validTotal = totalAkhir >= MIN_BAYAR_QRIS && subtotal >= MIN_PEMBELIAN;
-  document.getElementById('btnPesan').disabled = !(validJumlah && validTotal);
-  const hintEl = document.getElementById('jumlahHint');
-  if (!validJumlah) {
-    if (jumlah < minJumlah) hintEl.innerHTML = `⚠️ Minimal order <b style="color:#ff6b6b">${minJumlah.toLocaleString('id-ID')}</b> ${produkAktif.unit || ''}.`;
-    else hintEl.innerHTML = `⚠️ Max order <b style="color:#ff6b6b">${maxJumlahCek.toLocaleString('id-ID')}</b> ${produkAktif.unit || ''}.`;
-    hintEl.style.color = '#ff6b6b';
-  }
-  else if (subtotal < MIN_PEMBELIAN) { hintEl.innerHTML = `⚠️ Minimal pembelian <b style="color:#ff6b6b">Rp ${MIN_PEMBELIAN.toLocaleString('id-ID')}</b>.`; hintEl.style.color = '#ff6b6b'; }
-  else if (!validTotal) { hintEl.innerHTML = `⚠️ Bayar minimal <b style="color:#ff6b6b">Rp ${MIN_BAYAR_QRIS.toLocaleString('id-ID')}</b>.`; hintEl.style.color = '#ff6b6b'; }
-  else if (potonganKoin > 0) { hintEl.innerHTML = `⭐ <b style="color:#ffd700">Potong ${potonganKoin.toLocaleString('id-ID')} koin = Rp ${potonganKoin.toLocaleString('id-ID')}</b>`; hintEl.style.color = '#ffd700'; }
-  else if (bonus > 0) { hintEl.innerHTML = `🎁 <b style="color:#00ff88">BONUS +${bonus} ${produkAktif.unit}</b> aktif!`; hintEl.style.color = '#00ff88'; }
-  else { hintEl.innerText = '✅ Jumlah valid, klik "Lanjut ke Pembayaran".'; hintEl.style.color = '#00ff88'; }
-}
-function keStep2() {
-  const jumlah = parseInt(document.getElementById('jumlahInput').value) || 0;
-  const hargaPerUnit = produkAktif.isApk ? produkAktif.harga : produkAktif.hargaPerUnit;
-  const total = jumlah * hargaPerUnit;
-  let bonus = 0;
-  if (!produkAktif.isApk && produkAktif.bonusMinTotal && total >= produkAktif.bonusMinTotal) bonus = produkAktif.bonusUnit || 0;
-  dataPemesan.jumlah = jumlah; dataPemesan.total = total; dataPemesan.bonus = bonus;
-  setStep(2);
-}
-async function keStep3() {
-  const link = document.getElementById('linkSaluran').value.trim();
-  const hp = document.getElementById('hpPemesan').value.trim();
-  const inputEl = document.getElementById('linkSaluran');
-  const hpEl = document.getElementById('hpPemesan');
-  const errorEl = document.getElementById('inputError');
-  const hpErrorEl = document.getElementById('hpError');
-  clearError();
-  if (!link) { inputEl.classList.add('error'); errorEl.innerText = produkAktif.isApk ? '❌ Isi nama dulu ya!' : '❌ Isi ' + (produkAktif.inputLabel || 'link') + ' dulu ya!'; errorEl.classList.add('show'); return; }
-  if (!produkAktif.isApk && produkAktif.inputValidasi && !link.toLowerCase().includes(produkAktif.inputValidasi)) { inputEl.classList.add('error'); errorEl.innerText = '❌ ' + (produkAktif.inputError || 'Link tidak valid!'); errorEl.classList.add('show'); return; }
-  if (!hp) { hpEl.classList.add('error'); hpErrorEl.innerText = '❌ Isi no WhatsApp dulu ya!'; hpErrorEl.classList.add('show'); return; }
-  const hpClean = hp.replace(/[\s\-\+]/g, '');
-  const hpValid = /^(62|0)8[0-9]{8,13}$/.test(hpClean);
-  if (!hpValid) { hpEl.classList.add('error'); hpErrorEl.innerText = '❌ No WA tidak valid!'; hpErrorEl.classList.add('show'); return; }
-  dataPemesan.link = link; dataPemesan.hp = hp;
-  setStep(3);
-  document.getElementById('qrisLoading').style.display = 'block';
-  document.getElementById('qrisBox').style.display = 'none';
-  document.getElementById('waitingBox').style.display = 'none';
-  document.getElementById('successBox').style.display = 'none';
-  let potonganKoin = 0;
-  if (useCoinMode) {
-    const maxPotong = dataPemesan.total - MIN_BAYAR_QRIS;
-    potonganKoin = Math.min(getPoints(), Math.max(0, maxPotong));
-  }
-  const totalBayar = dataPemesan.total - potonganKoin;
-  try {
-    const res = await fetch(BACKEND_URL + '/api/create-order-v2', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ 
-        amount: totalBayar, 
-        customerPhone: dataPemesan.hp, 
-        productName: produkAktif.nama, 
-        productDetail: dataPemesan.jumlah + ' ' + (produkAktif.unit || 'pcs'), 
-        link: dataPemesan.link,
-        kategoriId: produkAktif._kategoriId,
-        index: produkAktif._index
-      })
-    });
-    const result = await res.json();
-    if (!result.success) throw new Error(result.error || 'Gagal generate QRIS');
-    dataPemesan.totalAmount = result.totalAmount;
-    dataPemesan.orderId = result.orderId;
-    const qrImageUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' + encodeURIComponent(result.qrisString);
-    document.getElementById('qrisImage').src = qrImageUrl;
-    document.getElementById('qrisNominal').innerText = '💳 Silahkan bayar QRIS ini sebesar Rp ' + result.totalAmount.toLocaleString('id-ID');
-    document.getElementById('qrisLoading').style.display = 'none';
-    document.getElementById('qrisBox').style.display = 'block';
-    document.getElementById('waitingBox').style.display = 'block';
-    startOrderPolling(result.orderId);
-    let potonganKoinActual = 0;
-    if (useCoinMode) {
-      const maxPotong = dataPemesan.total - MIN_BAYAR_QRIS;
-      potonganKoinActual = usePoints(Math.min(getPoints(), maxPotong));
-      useCoinMode = false;
-      const sw = document.getElementById('coinToggleSwitch');
-      if (sw) sw.classList.remove('active');
-    }
-    sendToTelegram(`<b>🛒 ORDER BARU MASUK!</b>
-
-<b>📦 Produk:</b> ${produkAktif.nama}
-<b>📋 Detail:</b> ${dataPemesan.jumlah} ${produkAktif.unit || 'pcs'}
-<b>💰 Total Bayar:</b> Rp ${result.totalAmount.toLocaleString('id-ID')}${potonganKoinActual > 0 ? `\n<b>⭐ Potong Koin:</b> ${potonganKoinActual.toLocaleString('id-ID')} koin` : ''}
-<b>👤 WA Customer:</b> ${dataPemesan.hp}
-<b>🔗 Link:</b> ${dataPemesan.link}
-<b>🎫 Order ID:</b> <code>${result.orderId}</code>
-<b>🕐 Waktu:</b> ${new Date().toLocaleString('id-ID')}
-
-⏳ Status: Menunggu pembayaran...`);
-    backupOrder({ order_id: result.orderId, produk: produkAktif.nama, jumlah: dataPemesan.jumlah, total: result.totalAmount, hp: dataPemesan.hp, status: 'pending' });
-  } catch (err) {
-    console.error('QRIS error:', err);
-    document.getElementById('qrisLoading').innerHTML = '<p style="color:#ff6b6b; font-size:13px;">❌ Gagal membuat QRIS</p><p style="color:#888; font-size:11px; margin-top:5px;">' + err.message + '</p>';
-  }
-}
-async function downloadQris() {
-  const btn = document.getElementById('qrisDownload');
-  const originalText = btn.innerText;
-  btn.innerText = '⏳ Mendownload...'; btn.disabled = true;
-  try {
-    const qrImageUrl = document.getElementById('qrisImage').src;
-    const response = await fetch(qrImageUrl);
-    const blob = await response.blob();
-    const blobUrl = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = blobUrl; link.download = 'QRIS-JimzzStore.png';
-    document.body.appendChild(link); link.click(); document.body.removeChild(link);
-    URL.revokeObjectURL(blobUrl);
-    btn.innerText = '✅ Berhasil! Cek Galeri';
-    setTimeout(() => { btn.innerText = originalText; btn.disabled = false; }, 3000);
-  } catch (err) {
-    window.open(document.getElementById('qrisImage').src, '_blank');
-    btn.innerText = originalText; btn.disabled = false;
-  }
-}
-function bukaRiwayat() {
-  document.getElementById('historyModal').classList.add('show');
-  document.body.style.overflow = 'hidden';
-  document.getElementById('historyResult').innerHTML = '';
-  document.getElementById('historyHp').value = '';
-}
-function tutupRiwayat() {
-  document.getElementById('historyModal').classList.remove('show');
-  document.getElementById('historyModal').style.removeProperty('display');
-  document.body.style.removeProperty('overflow');
-  document.body.style.removeProperty('pointer-events');
-  document.documentElement.style.removeProperty('overflow');
-  document.documentElement.style.removeProperty('pointer-events');
-}
-async function loadHistory() {
-  const hp = document.getElementById('historyHp').value.trim();
-  if (!hp) { showToast('Isi no WA dulu!', 'warning'); return; }
-  const resultEl = document.getElementById('historyResult');
-  resultEl.innerHTML = '<div class="visitor-empty">⏳ Mencari...</div>';
-  try {
-    const res = await fetch(BACKEND_URL + '/api/orders-history?phone=' + encodeURIComponent(hp));
-    const data = await res.json();
-    if (!data.success || !data.orders || data.orders.length === 0) {
-      resultEl.innerHTML = '<div class="visitor-empty">Tidak ada order dengan no ini</div>';
-      return;
-    }
-    resultEl.innerHTML = data.orders.map(o => `
-      <div class="order-item" style="margin-bottom:10px;">
-        <div class="order-item-header">
-          <span class="order-item-id">${o.order_id}</span>
-          <span class="order-item-status ${o.status}">${o.status.toUpperCase()}</span>
-        </div>
-        <div class="order-item-detail">
-          📦 <b>${o.product_name}</b><br>
-          📋 ${o.product_detail}<br>
-          💰 Rp ${o.total_amount.toLocaleString('id-ID')}<br>
-          🕐 ${new Date(o.created_at).toLocaleString('id-ID')}
-        </div>
-      </div>
-    `).join('');
-  } catch (err) {
-    resultEl.innerHTML = '<div class="visitor-empty">❌ Gagal load riwayat</div>';
-  }
-}
-function switchTab(tab) {
   document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-' + tab).classList.add('active');
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.querySelector(`.nav-item[data-tab="${tab}"]`).classList.add('active');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
+
+// ============================================
+// MUSIC PLAYER
+// ============================================
 const playlist = [
   { judul: "Lagu 1", artis: "Jimzz Playlist", cover: "🔥", src: "lagu1.mp3" },
   { judul: "Lagu 2", artis: "Jimzz Playlist", cover: "💀", src: "lagu2.mp3" },
@@ -2528,17 +2072,29 @@ function seekAudio(e) {
   const percent = (e.clientX - rect.left) / rect.width;
   if (audio && audio.duration) audio.currentTime = percent * audio.duration;
 }
+
+// ============================================
+// ADMIN PANEL UPDATE
+// ============================================
 setInterval(() => {
   if (isAdmin) {
     document.getElementById('adminTotalOrder').innerText = cachedCounters.totalOrder;
     document.getElementById('adminTotalRevenue').innerText = 'Rp ' + (cachedCounters.totalOrder * 5).toLocaleString('id-ID') + 'k';
   }
 }, 5000);
+
+// ============================================
+// SERVICE WORKER
+// ============================================
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('sw.js').catch(err => console.log('SW error:', err));
   });
 }
+
+// ============================================
+// START APP
+// ============================================
 startApp();
 </script>
 </body>
