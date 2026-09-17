@@ -290,8 +290,8 @@ header .counter .dot { width: 8px; height: 8px; background: #00ff88; border-radi
 .produk-list.grid-2col .produk-harga-label { font-size: 8px; }
 .produk-list.grid-2col .produk-harga { font-size: 14px; text-align: center; }
 .produk-list.grid-2col .btn-order { padding: 9px 12px; font-size: 11px; width: 100%; text-align: center; }
-.modal-overlay { display: none !important; position: fixed; inset: 0; background: rgba(0,0,0,0.92); backdrop-filter: blur(15px); z-index: 400; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; }
-.modal-overlay.show { display: flex !important; }
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); backdrop-filter: blur(15px); z-index: 400; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; }
+.modal-overlay.show { display: flex; }
 .modal-box { background: linear-gradient(145deg, #0f1a14, #0d0d15); border: 1px solid rgba(0,255,136,0.25); border-radius: 24px; padding: 30px 26px; width: 100%; max-width: 440px; position: relative; animation: slideUp 0.4s cubic-bezier(0.175,0.885,0.32,1.275); max-height: 90vh; overflow-y: auto; box-shadow: 0 30px 80px rgba(0,0,0,0.9), 0 0 60px rgba(0,255,136,0.1); }
 @keyframes slideUp { from { opacity:0; transform: translateY(40px) scale(0.95); } to { opacity:1; transform: translateY(0) scale(1); } }
 .modal-box::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #00ff88, #00cc6a, #00ff88); background-size: 200% 100%; animation: shimmer 3s linear infinite; border-radius: 24px 24px 0 0; }
@@ -684,7 +684,7 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
   <button class="nav-item" data-tab="jpm" onclick="switchTab('jpm')"><span class="nav-icon">🚀</span><span class="nav-label">Lainnya</span></button>
 </div>
 
-<div class="modal-overlay" id="orderModal" onclick="if(event.target===this)tutupOrder()">
+<div class="modal-overlay" id="orderModal" onclick="if(event.target === this) tutupOrder()">
   <div class="modal-box">
     <button class="modal-close" onclick="tutupOrder()">×</button>
     <div class="steps-indicator">
@@ -699,7 +699,7 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
         <div class="modal-subtitle" id="modalSubtitle">-</div>
       </div>
       <label class="jumlah-label" for="jumlahInput">Jumlah <span class="minmax" id="minmaxText">Min: 1.000 - Max: 1.000.000</span></label>
-      <input type="number" id="jumlahInput" class="jumlah-input" placeholder="# Masukkan jumlah" oninput="hitungTotal()" onkeypress="if(this.value.length >= 7) event.preventDefault()" max="1000000">
+      <input type="number" id="jumlahInput" class="jumlah-input" placeholder="# Masukkan jumlah" oninput="hitungTotal()" inputmode="numeric" maxlength="7">
       <div class="jumlah-hint" id="jumlahHint">Sistem otomatis hitung harga sesuai jumlah.</div>
       <div class="coin-toggle-box" id="coinToggleBox" style="display:none;">
         <div class="coin-toggle-info">
@@ -771,7 +771,7 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
   </div>
 </div>
 
-<div class="modal-overlay" id="historyModal" onclick="if(event.target===this)tutupRiwayat()">
+<div class="modal-overlay" id="historyModal" onclick="if(event.target === this) tutupRiwayat()">
   <div class="modal-box">
     <button class="modal-close" onclick="tutupRiwayat()">×</button>
     <div class="modal-title-block">
@@ -1708,8 +1708,8 @@ function pilihPaket(index) {
 }
 function bukaOrder(kategoriId, index) {
   // Reset body overflow dulu (fix bug tombol Order gak bisa diklik)
+  document.body.style.removeProperty('pointer-events');
   document.body.style.overflow = 'auto';
-  document.body.style.pointerEvents = 'auto';
   
   // Reset state dulu
   useCoinMode = false;
@@ -1762,25 +1762,14 @@ function bukaOrder(kategoriId, index) {
 function tutupOrder() {
   const modal = document.getElementById('orderModal');
   modal.classList.remove('show');
-  modal.style.display = 'none';
-  
+  modal.style.removeProperty('display');
+  document.body.style.removeProperty('pointer-events');
   document.body.style.overflow = 'auto';
-  document.body.style.pointerEvents = 'auto';
-  document.documentElement.style.overflow = 'auto';
-  
   if (orderPollingInterval) { clearInterval(orderPollingInterval); orderPollingInterval = null; }
   produkAktif = null;
   useCoinMode = false;
   const sw = document.getElementById('coinToggleSwitch');
   if (sw) sw.classList.remove('active');
-  
-  // Force reset setelah animasi (untuk jaga-jaga)
-  setTimeout(() => {
-    modal.classList.remove('show');
-    modal.style.display = 'none';
-    document.body.style.overflow = 'auto';
-    document.body.style.pointerEvents = 'auto';
-  }, 300);
 }
 function setStep(num) {
   document.querySelectorAll('.step-content').forEach(s => s.classList.remove('active'));
@@ -1800,18 +1789,28 @@ function clearError() {
 }
 function hitungTotal() {
   if (!produkAktif) return;
-  let jumlah = parseInt(document.getElementById('jumlahInput').value) || 0;
   
-  // Batasi max 1 juta biar gak overflow
-  const maxJumlah = parseInt(document.getElementById('jumlahInput').max) || 1000000;
-  if (jumlah > maxJumlah) {
-    jumlah = maxJumlah;
-    document.getElementById('jumlahInput').value = maxJumlah;
-  }
+  // 🔥 SANITASI INPUT
+  const inputEl = document.getElementById('jumlahInput');
+  if (!inputEl) return;
+  let rawVal = inputEl.value;
+  rawVal = String(rawVal).replace(/[^0-9]/g, '');
+  if (rawVal.length > 7) { rawVal = rawVal.substring(0, 7); inputEl.value = rawVal; }
+  
+  let jumlah = parseInt(rawVal) || 0;
+  if (jumlah > 1000000) { jumlah = 1000000; inputEl.value = 1000000; }
   if (jumlah < 0) jumlah = 0;
   
   const hargaPerUnit = produkAktif.isApk ? produkAktif.harga : produkAktif.hargaPerUnit;
   const subtotal = jumlah * hargaPerUnit;
+  
+  // 🔥 CEK OVERFLOW
+  if (!isFinite(subtotal) || isNaN(subtotal)) {
+    document.getElementById('totalHarga').innerText = 'Rp 0';
+    document.getElementById('btnPesan').disabled = true;
+    return;
+  }
+  
   let bonus = 0;
   if (!produkAktif.isApk && produkAktif.bonusMinTotal && subtotal >= produkAktif.bonusMinTotal) bonus = produkAktif.bonusUnit || 0;
   document.getElementById('jumlahDisplay').innerText = jumlah.toLocaleString('id-ID') + ' ' + (produkAktif.unit || 'pcs');
@@ -1824,7 +1823,6 @@ function hitungTotal() {
   const coinDiscountRow = document.getElementById('coinDiscountRow');
   const coinDiscount = document.getElementById('coinDiscount');
   
-  // Max potong = subtotal - 1.000
   const maxPotongKoin = subtotal - MIN_BAYAR_QRIS;
   
   if (saldoKoin > 0 && subtotal > 0) {
@@ -1849,7 +1847,6 @@ function hitungTotal() {
     useCoinMode = false;
   }
   
-  // Hitung potongan koin
   let potonganKoin = 0;
   if (useCoinMode && saldoKoin > 0 && maxPotongKoin > 0) {
     potonganKoin = Math.min(saldoKoin, maxPotongKoin);
@@ -1870,11 +1867,22 @@ function hitungTotal() {
     document.getElementById('totalDapat').innerText = (jumlah + bonus).toLocaleString('id-ID') + ' ' + produkAktif.unit;
   } else { bonusRow.style.display = 'none'; totalDapatRow.style.display = 'none'; }
   
-  const validJumlah = jumlah >= parseInt(document.getElementById('jumlahInput').min) && jumlah <= parseInt(document.getElementById('jumlahInput').max);
+  const minJumlah = parseInt(inputEl.min) || 1;
+  const maxJumlahCek = parseInt(inputEl.max) || 1000000;
+  const validJumlah = jumlah >= minJumlah && jumlah <= maxJumlahCek;
   const validTotal = totalAkhir >= MIN_BAYAR_QRIS && subtotal >= MIN_PEMBELIAN;
+  
   document.getElementById('btnPesan').disabled = !(validJumlah && validTotal);
+  
   const hintEl = document.getElementById('jumlahHint');
-  if (!validJumlah) { hintEl.innerHTML = `⚠️ Jumlah tidak valid.`; hintEl.style.color = '#ff6b6b'; }
+  if (!validJumlah) {
+    if (jumlah < minJumlah) {
+      hintEl.innerHTML = `⚠️ Minimal order <b style="color:#ff6b6b">${minJumlah.toLocaleString('id-ID')}</b> ${produkAktif.unit || ''}.`;
+    } else {
+      hintEl.innerHTML = `⚠️ Max order <b style="color:#ff6b6b">${maxJumlahCek.toLocaleString('id-ID')}</b> ${produkAktif.unit || ''}.`;
+    }
+    hintEl.style.color = '#ff6b6b';
+  }
   else if (subtotal < MIN_PEMBELIAN) { hintEl.innerHTML = `⚠️ Minimal pembelian <b style="color:#ff6b6b">Rp ${MIN_PEMBELIAN.toLocaleString('id-ID')}</b>.`; hintEl.style.color = '#ff6b6b'; }
   else if (!validTotal) { hintEl.innerHTML = `⚠️ Bayar minimal <b style="color:#ff6b6b">Rp ${MIN_BAYAR_QRIS.toLocaleString('id-ID')}</b>.`; hintEl.style.color = '#ff6b6b'; }
   else if (potonganKoin > 0) { hintEl.innerHTML = `⭐ <b style="color:#ffd700">Potong ${potonganKoin.toLocaleString('id-ID')} koin = Rp ${potonganKoin.toLocaleString('id-ID')}</b>`; hintEl.style.color = '#ffd700'; }
@@ -1911,7 +1919,6 @@ async function keStep3() {
   document.getElementById('waitingBox').style.display = 'none';
   document.getElementById('successBox').style.display = 'none';
   
-  // Hitung total akhir setelah potong koin
   let potonganKoin = 0;
   if (useCoinMode) {
     const maxPotong = dataPemesan.total - MIN_BAYAR_QRIS;
@@ -1944,7 +1951,7 @@ async function keStep3() {
     document.getElementById('waitingBox').style.display = 'block';
     startOrderPolling(result.orderId);
 
-    // ⭐ POTONG KOIN
+    // ⭐ POTONG KOIN (langsung dipotong saat order dibuat)
     let potonganKoinActual = 0;
     if (useCoinMode) {
       const maxPotong = dataPemesan.total - MIN_BAYAR_QRIS;
