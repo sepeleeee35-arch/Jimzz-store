@@ -611,37 +611,96 @@ body::after{background:radial-gradient(600px circle at var(--mouse-x,50%) var(--
 @media(max-width:480px){
   .anime-character{transform:translateX(-50%) scale(.78)!important}
 }
+
+/* ===== JIMZZ CINEMATIC ANIME INTRO v2 ===== */
+.jimzz-cinematic-intro{
+  position:fixed!important;inset:0!important;z-index:99999!important;overflow:hidden!important;
+  background:#030305!important;color:#fff!important;display:block!important;
+  opacity:1;transition:opacity .8s ease!important;
+}
+.jimzz-cinematic-intro.hide{opacity:0!important;pointer-events:none!important}
+.intro-scene{position:absolute;inset:0;overflow:hidden;opacity:0;transform:scale(1.04)}
+.intro-scene::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.18),rgba(0,0,0,.72))}
+.scene-1{background:radial-gradient(circle at 50% 45%,#24323d 0,#090c12 34%,#020204 72%)}
+.scene-1{animation:introScene1 4s ease both}
+.scene-noise{position:absolute;inset:0;opacity:.12;background:repeating-linear-gradient(0deg,transparent 0 3px,#fff 4px);mix-blend-mode:overlay}
+.scene-line{position:absolute;left:8%;right:8%;top:50%;height:1px;background:linear-gradient(90deg,transparent,#fff,transparent);box-shadow:0 0 25px #fff;opacity:.5}
+.scene-copy{position:absolute;left:9%;bottom:18%;display:flex;flex-direction:column;gap:8px;letter-spacing:3px;text-shadow:0 4px 20px #000}
+.scene-copy span{font-size:10px;color:#aeb7c3;font-weight:800}
+.scene-copy b{font-size:clamp(20px,6vw,42px);font-weight:900}
+.scene-2{background:radial-gradient(circle at 50% 48%,#7d250d 0,#170b0b 36%,#020204 72%);animation:introScene2 18.5s ease both}
+.anime-face{position:absolute;width:62vw;height:45vw;max-width:560px;max-height:400px;left:50%;top:48%;transform:translate(-50%,-50%) rotate(-4deg);border-radius:48% 52% 42% 58%;filter:drop-shadow(0 25px 50px rgba(0,0,0,.8))}
+.face-orange{background:linear-gradient(135deg,#261311,#080809 55%,#35110c);box-shadow:inset 35px 0 80px rgba(255,120,35,.12)}
+.anime-eye{position:absolute;left:50%;top:47%;width:43vw;max-width:360px;height:13vw;max-height:105px;transform:translate(-50%,-50%) rotate(-7deg);border-radius:70% 30% 65% 35%;z-index:3}
+.anime-eye::before{content:"";position:absolute;inset:10% 3%;border-radius:inherit;background:#07070a;box-shadow:0 0 35px currentColor}
+.anime-eye::after{content:"";position:absolute;width:24%;height:70%;left:38%;top:15%;border-radius:50%;background:radial-gradient(circle at 50% 42%,#fff 0 7%,currentColor 10% 35%,#07070a 63%);box-shadow:0 0 30px currentColor}
+.eye-orange{color:#ff7a24}
+.eye-red{color:#ff2638}
+.eye-blue{color:#36bfff}
+.face-blue{background:linear-gradient(135deg,#101b27,#05070b 58%,#0b2032);box-shadow:inset 0 0 100px rgba(40,170,255,.1)}
+.anime-hair-silhouette{position:absolute;left:50%;top:18%;width:70vw;height:70vw;max-width:700px;max-height:700px;transform:translateX(-50%);background:linear-gradient(135deg,#020203,#11141b 42%,#020204);clip-path:polygon(0 0,25% 14%,39% 4%,50% 19%,62% 2%,75% 17%,100% 0,88% 100%,13% 100%);filter:drop-shadow(0 0 30px rgba(255,50,45,.18))}
+.scene-flare{position:absolute;left:-20%;top:52%;width:140%;height:3px;background:linear-gradient(90deg,transparent,#fff,#ff6b2b,transparent);box-shadow:0 0 30px #ff4d25;transform:rotate(-8deg);animation:flareMove 2.6s ease-in-out infinite}
+.scene-slash{position:absolute;left:-20%;top:58%;width:140%;height:5px;background:linear-gradient(90deg,transparent,#ffddd0,#ff3b30,transparent);transform:rotate(-12deg);box-shadow:0 0 25px #ff3025;animation:slashIn 1.5s ease both}
+.scene-particles{position:absolute;inset:0;background-image:radial-gradient(circle,#fff 0 1px,transparent 2px);background-size:55px 55px;opacity:.25;animation:particleDrift 5s linear infinite}
+.scene-caption{position:absolute;left:0;right:0;bottom:13%;text-align:center;font-size:10px;letter-spacing:5px;font-weight:800;color:rgba(255,255,255,.72);text-shadow:0 3px 18px #000}
+.scene-3{background:radial-gradient(circle at 50% 45%,#301015 0,#0b070a 38%,#020204 75%);animation:introScene3 18.5s ease both}
+.scene-4{background:radial-gradient(circle at 50% 46%,#0d334c 0,#061018 38%,#020305 76%);animation:introScene4 18.5s ease both}
+.intro-final{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;opacity:0;animation:introFinal 18.5s ease both;z-index:10}
+.final-kicker{font-size:9px;letter-spacing:4px;color:#ffb45c;font-weight:900;margin-bottom:16px;text-shadow:0 0 18px rgba(255,120,30,.7)}
+.final-logo{font-size:clamp(42px,12vw,78px);font-weight:900;letter-spacing:-3px;text-shadow:0 0 35px rgba(255,255,255,.18)}
+.final-logo span{color:#ff4a2e;text-shadow:0 0 30px rgba(255,60,35,.7)}
+.final-sub{margin-top:10px;font-size:10px;letter-spacing:5px;color:#b8c1ca;font-weight:700}
+.final-line{width:180px;height:2px;margin-top:22px;background:linear-gradient(90deg,transparent,#ff4a2e,#ffbd55,transparent);box-shadow:0 0 20px rgba(255,80,35,.7)}
+.intro-progress{position:absolute;left:8%;right:8%;bottom:7%;height:2px;background:rgba(255,255,255,.13);z-index:20}
+.intro-progress div{height:100%;width:0;background:linear-gradient(90deg,#ff3b2f,#ffad35,#fff);box-shadow:0 0 12px #ff6a32;animation:introProgress 18s linear forwards}
+.intro-skip{position:absolute;right:7%;bottom:9%;z-index:30;background:rgba(0,0,0,.45);border:1px solid rgba(255,190,100,.55);color:#ffe2b8;border-radius:20px;padding:8px 13px;font-size:9px;font-weight:900;letter-spacing:1px;backdrop-filter:blur(8px)}
+@keyframes introScene1{0%,19%{opacity:1;transform:scale(1)}22%,100%{opacity:0;transform:scale(1.08)}}
+@keyframes introScene2{0%,19%{opacity:0}22%,38%{opacity:1;transform:scale(1)}44%,100%{opacity:0;transform:scale(1.1)}}
+@keyframes introScene3{0%,42%{opacity:0}46%,63%{opacity:1;transform:scale(1)}68%,100%{opacity:0;transform:scale(1.08)}}
+@keyframes introScene4{0%,62%{opacity:0}66%,82%{opacity:1;transform:scale(1)}87%,100%{opacity:0;transform:scale(1.1)}}
+@keyframes introFinal{0%,80%{opacity:0;transform:scale(1.06)}86%,96%{opacity:1;transform:scale(1)}100%{opacity:1}}
+@keyframes introProgress{to{width:100%}}
+@keyframes flareMove{0%,100%{transform:translateX(-10%) rotate(-8deg);opacity:.1}50%{transform:translateX(10%) rotate(-8deg);opacity:1}}
+@keyframes slashIn{0%{transform:translateX(-80%) rotate(-12deg);opacity:0}100%{transform:translateX(0) rotate(-12deg);opacity:.9}}
+@keyframes particleDrift{to{background-position:55px 110px}}
+@media(max-width:600px){.anime-eye{width:58vw;height:17vw}.anime-face{width:80vw;height:58vw}.scene-caption{letter-spacing:3px}.intro-skip{bottom:10%;right:6%}}
+
 </style>
 </head>
 <body>
 
-<div id="loadingScreen">
-  <div class="anime-bg">
-    <div class="anime-moon"></div>
-    <div class="anime-cloud cloud-a"></div>
-    <div class="anime-cloud cloud-b"></div>
-    <div class="anime-petal petal-a">✦</div>
-    <div class="anime-petal petal-b">✧</div>
-    <div class="anime-petal petal-c">✦</div>
-    <div class="anime-city"></div>
-    <div class="anime-character" aria-hidden="true">
-      <div class="anime-head"></div>
-      <div class="anime-hair"></div>
-      <div class="anime-body"></div>
-      <div class="anime-sword"></div>
-    </div>
+<div id="loadingScreen" class="jimzz-cinematic-intro">
+  <div class="intro-scene scene-1">
+    <div class="scene-noise"></div>
+    <div class="scene-line"></div>
+    <div class="scene-copy"><span>JIMZZ PROJECT</span><b>ENTER THE DIGITAL WORLD</b></div>
   </div>
-  <div class="loading-wrap anime-intro">
-    <div class="anime-kicker">✦ ORIGINAL ANIME THEME ✦</div>
-    <div class="loading-logo">JIMZZ <span class="loading-accent">STORE</span></div>
-    <div class="anime-title">夜 • DIGITAL WORLD</div>
-    <div class="loading-status"><span>●</span> Menyiapkan toko...</div>
-    <div class="loading-bar"><div class="loading-bar-fill"></div></div>
-    <div class="loading-actions">
-      <button class="loading-skip" onclick="skipLoadingScreen()">SKIP INTRO</button>
-    </div>
-    <div class="loading-dots"><i></i><i></i><i></i></div>
+  <div class="intro-scene scene-2">
+    <div class="anime-eye eye-orange"></div>
+    <div class="anime-face face-orange"></div>
+    <div class="scene-flare"></div>
+    <div class="scene-caption">THE NIGHT AWAKENS</div>
   </div>
+  <div class="intro-scene scene-3">
+    <div class="anime-eye eye-red"></div>
+    <div class="anime-hair-silhouette"></div>
+    <div class="scene-slash"></div>
+    <div class="scene-caption">NO SIGNAL. NO LIMIT.</div>
+  </div>
+  <div class="intro-scene scene-4">
+    <div class="anime-eye eye-blue"></div>
+    <div class="anime-face face-blue"></div>
+    <div class="scene-particles"></div>
+    <div class="scene-caption">WELCOME TO</div>
+  </div>
+  <div class="intro-final">
+    <div class="final-kicker">✦ ORIGINAL ANIME-STYLE INTRO ✦</div>
+    <div class="final-logo">JIMZZ <span>STORE</span></div>
+    <div class="final-sub">DIGITAL • GAME • SOCIAL</div>
+    <div class="final-line"></div>
+  </div>
+  <div class="intro-progress"><div></div></div>
+  <button class="intro-skip" onclick="skipLoadingScreen()">SKIP INTRO</button>
 </div>
 
 <div class="toast-container" id="toastContainer"></div>
@@ -1786,7 +1845,7 @@ function startApp() {
     }
   } catch(e) {}
 
-  setTimeout(skipLoadingScreen, 9000);
+  setTimeout(skipLoadingScreen, 18500);
 }
 
 // ============================================
