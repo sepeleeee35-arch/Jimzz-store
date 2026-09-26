@@ -496,18 +496,70 @@ body::after{background:radial-gradient(600px circle at var(--mouse-x,50%) var(--
 @keyframes introSweep{0%,20%{transform:translateX(-110%)}70%,100%{transform:translateX(110%)}}
 @keyframes loadingSpin{to{transform:rotate(360deg)}}
 @keyframes loadingDot{0%,100%{opacity:.25;transform:translateY(0)}50%{opacity:1;transform:translateY(-3px)}}
+
+/* ===== JIMZZ ANIME INTRO v1 ===== */
+#loadingScreen{background:#05030b}
+.anime-bg{position:absolute;inset:0;overflow:hidden;background:
+  radial-gradient(circle at 76% 20%,rgba(255,130,196,.18),transparent 16%),
+  linear-gradient(180deg,#120a26 0%,#090719 52%,#03030a 100%)}
+.anime-bg::before{content:"";position:absolute;inset:0;background:
+  linear-gradient(125deg,transparent 0 42%,rgba(183,115,255,.07) 43%,transparent 44%),
+  linear-gradient(35deg,transparent 0 58%,rgba(255,116,194,.05) 59%,transparent 60%);
+  animation:animeLight 7s ease-in-out infinite alternate}
+.anime-moon{position:absolute;width:150px;height:150px;border-radius:50%;right:12%;top:10%;
+  background:radial-gradient(circle at 35% 32%,#fff 0,#ffdff2 24%,#e6a8ff 58%,rgba(181,101,255,.18) 72%,transparent 73%);
+  box-shadow:0 0 70px rgba(255,177,226,.28)}
+.anime-cloud{position:absolute;width:42%;height:30px;border-radius:50%;background:rgba(203,153,255,.07);filter:blur(7px)}
+.cloud-a{top:24%;left:-8%;transform:rotate(-5deg)}.cloud-b{top:38%;right:-12%;transform:rotate(4deg)}
+.anime-petal{position:absolute;color:#ffb5df;font-size:18px;text-shadow:0 0 14px #ff65b7;animation:petalFloat 5s ease-in-out infinite}
+.petal-a{left:18%;top:22%}.petal-b{right:23%;top:55%;animation-delay:1.5s}.petal-c{left:72%;top:34%;animation-delay:3s}
+.anime-city{position:absolute;left:0;right:0;bottom:0;height:28%;opacity:.7;
+  background:linear-gradient(135deg,transparent 0 6%,#070611 6% 18%,transparent 18% 21%,#090714 21% 36%,transparent 36% 40%,#06050f 40% 62%,transparent 62% 66%,#080611 66% 82%,transparent 82%);
+  clip-path:polygon(0 55%,8% 42%,13% 58%,19% 28%,25% 51%,31% 35%,38% 60%,45% 22%,51% 48%,57% 30%,64% 58%,72% 36%,80% 52%,88% 25%,94% 48%,100% 38%,100% 100%,0 100%)}
+.anime-character{position:absolute;bottom:-10px;left:50%;width:190px;height:360px;transform:translateX(-50%);filter:drop-shadow(0 0 28px rgba(174,93,255,.22))}
+.anime-head{position:absolute;width:82px;height:82px;border-radius:48% 48% 44% 44%;left:54px;top:62px;background:linear-gradient(145deg,#30203c,#110c1b);border:1px solid rgba(255,180,225,.18)}
+.anime-hair{position:absolute;width:112px;height:115px;left:39px;top:38px;background:linear-gradient(145deg,#2a1640,#08050d);clip-path:polygon(50% 0,78% 20%,100% 60%,79% 52%,87% 92%,62% 68%,50% 100%,35% 68%,8% 91%,18% 55%,0 64%,23% 19%);filter:drop-shadow(0 0 9px rgba(190,100,255,.28))}
+.anime-body{position:absolute;width:120px;height:210px;left:35px;top:138px;background:linear-gradient(90deg,#09070f,#26183a 48%,#07050c);clip-path:polygon(35% 0,65% 0,82% 13%,100% 100%,63% 100%,50% 54%,37% 100%,0 100%,18% 13%)}
+.anime-sword{position:absolute;width:8px;height:235px;left:151px;top:102px;background:linear-gradient(90deg,#b8a9ff,#fff,#a47cff);transform:rotate(15deg);border-radius:8px;box-shadow:0 0 16px rgba(180,150,255,.45)}
+.anime-intro{background:linear-gradient(145deg,rgba(12,8,24,.58),rgba(5,4,12,.42));border-color:rgba(218,145,255,.22);box-shadow:0 30px 100px rgba(0,0,0,.62),0 0 90px rgba(155,75,255,.16);backdrop-filter:blur(12px)}
+.anime-kicker{color:#d99aff;font-size:8px;font-weight:900;letter-spacing:2px;margin-bottom:10px;text-shadow:0 0 12px rgba(218,145,255,.5)}
+.anime-title{margin-top:7px;color:#bca9d5;font-size:9px;font-weight:800;letter-spacing:3px}
+.anime-intro .loading-logo{font-size:32px}.anime-intro .loading-accent{color:#e18cff}
+.anime-intro .loading-status span{color:#ff8bcf}.anime-intro .loading-bar-fill{background:linear-gradient(90deg,#8e45d0,#ff77c8,#9f63e8)}
+.anime-intro .loading-skip{border-color:rgba(226,146,255,.35);background:rgba(190,108,255,.08);color:#e5d4ef}
+.anime-intro .loading-skip:hover{background:rgba(190,108,255,.18);transform:translateY(-1px)}
+@keyframes animeLight{from{transform:translateX(-2%)}to{transform:translateX(2%)}}
+@keyframes petalFloat{0%,100%{transform:translate(0,0) rotate(0);opacity:.35}50%{transform:translate(20px,28px) rotate(20deg);opacity:.9}}
+@media(max-width:480px){.anime-moon{width:105px;height:105px;right:8%;top:8%}.anime-character{transform:translateX(-50%) scale(.78);transform-origin:bottom center}.anime-intro{width:min(88vw,340px)}}
 </style>
 </head>
 <body>
 
 <div id="loadingScreen">
-  <div class="loading-wrap">
-    <div class="loading-mark">💚</div>
+  <div class="anime-bg">
+    <div class="anime-moon"></div>
+    <div class="anime-cloud cloud-a"></div>
+    <div class="anime-cloud cloud-b"></div>
+    <div class="anime-petal petal-a">✦</div>
+    <div class="anime-petal petal-b">✧</div>
+    <div class="anime-petal petal-c">✦</div>
+    <div class="anime-city"></div>
+    <div class="anime-character" aria-hidden="true">
+      <div class="anime-head"></div>
+      <div class="anime-hair"></div>
+      <div class="anime-body"></div>
+      <div class="anime-sword"></div>
+    </div>
+  </div>
+  <div class="loading-wrap anime-intro">
+    <div class="anime-kicker">✦ ORIGINAL ANIME THEME ✦</div>
     <div class="loading-logo">JIMZZ <span class="loading-accent">STORE</span></div>
-    <div class="loading-tagline">DIGITAL STORE</div>
+    <div class="anime-title">夜 • DIGITAL WORLD</div>
     <div class="loading-status"><span>●</span> Menyiapkan toko...</div>
     <div class="loading-bar"><div class="loading-bar-fill"></div></div>
-    <div class="loading-actions"><button class="loading-skip" onclick="skipLoadingScreen()">SKIP INTRO</button></div>
+    <div class="loading-actions">
+      <button class="loading-skip" onclick="skipLoadingScreen()">SKIP INTRO</button>
+    </div>
     <div class="loading-dots"><i></i><i></i><i></i></div>
   </div>
 </div>
@@ -1754,10 +1806,23 @@ function renderProduk(target, data, kategori, mode) {
 
   el.innerHTML = withCounts.map((p, i) => {
     const price = Number(p.harga ?? p.hargaPerUnit ?? 0);
+    const isCheapest = price === minPrice;
+    const isMostExpensive = price === maxPrice && maxPrice !== minPrice;
+    const isTopSeller = i === topSellerIndex && maxOrders > 0;
     const badges = [];
-    if (price === minPrice) badges.push('<span class="product-badge badge-cheap">💰 TERMURAH</span>');
-    if (price === maxPrice && maxPrice !== minPrice) badges.push('<span class="product-badge badge-expensive">💎 TERMAHAL</span>');
-    if (i === topSellerIndex && maxOrders > 0) badges.push('<span class="product-badge badge-hot">🔥 TERLARIS</span>');
+
+    // Kalau 2 status jatuh ke produk yang sama, gabungkan jadi SATU badge.
+    if (isMostExpensive && isTopSeller) {
+      badges.push('<span class="product-badge badge-combo">💎 TERMAHAL <b>•</b> 🔥 TERLARIS</span>');
+    } else if (isCheapest && isTopSeller) {
+      badges.push('<span class="product-badge badge-combo badge-combo-cheap">💰 TERMURAH <b>•</b> 🔥 TERLARIS</span>');
+    } else if (isMostExpensive) {
+      badges.push('<span class="product-badge badge-expensive">💎 TERMAHAL</span>');
+    } else if (isCheapest) {
+      badges.push('<span class="product-badge badge-cheap">💰 TERMURAH</span>');
+    } else if (isTopSeller) {
+      badges.push('<span class="product-badge badge-hot">🔥 TERLARIS</span>');
+    }
     const badgeHtml = badges.join('');
     const wished = isWishlisted(p.nama);
     return `
