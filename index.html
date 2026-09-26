@@ -1761,7 +1761,7 @@ function renderProduk(target, data, kategori, mode) {
     const badgeHtml = badges.join('');
     const wished = isWishlisted(p.nama);
     return `
-    <div class="produk-card">
+    <div class="produk-card${badgeHtml ? ' has-badges' : ''}">
       ${badgeHtml ? '<div class="product-badges">'+badgeHtml+'</div>' : ''}
       <button class="btn-wishlist ${wished ? 'active' : ''}" onclick="event.stopPropagation(); toggleWishlist('${p.nama.replace(/'/g, "\\'")}')">${wished ? '⭐' : '☆'}</button>
       <div class="produk-header">
