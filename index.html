@@ -440,6 +440,14 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
 #page-home footer{max-width:760px;margin-left:auto;margin-right:auto}
 @media(max-width:480px){#page-home header{margin:10px 10px 22px;padding:32px 14px 24px;border-radius:24px}#page-home header h1{font-size:42px}#page-home .trust-row{gap:6px}#page-home .trust-item{font-size:9px}#page-home .menu-home{margin-left:4px;margin-right:4px}}
 
+
+/* Product badges: cheapest / most expensive / best selling */
+.product-badges{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px;position:relative;z-index:3}
+.product-badge{display:inline-flex;align-items:center;padding:5px 9px;border-radius:999px;font-size:9px;font-weight:900;letter-spacing:.35px;border:1px solid}
+.badge-cheap{color:#00ff88;background:rgba(0,255,136,.10);border-color:rgba(0,255,136,.32)}
+.badge-expensive{color:#d8a7ff;background:rgba(150,70,255,.12);border-color:rgba(180,100,255,.35)}
+.badge-hot{color:#ff9d35;background:rgba(255,120,0,.12);border-color:rgba(255,150,50,.35)}
+
 </style>
 </head>
 <body>
@@ -663,14 +671,6 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
   <section class="kategori">
     <h2>🚀 Layanan <span class="accent">Lainnya</span></h2>
     <p class="sub">Pilih layanan yang kamu butuhkan</p>
-    <div class="filter-bar">
-      <select id="sortJpm" onchange="applySort('jpm', this.value)">
-        <option value="default">Urutkan: Default</option>
-        <option value="termurah">💰 Termurah</option>
-        <option value="termahal">💎 Termahal</option>
-        <option value="terlaris">🔥 Terlaris</option>
-      </select>
-    </div>
     <div class="produk-list" id="jpm"></div>
   </section>
   <footer><p>© 2025 Jimzz Store — All Rights Reserved 😈</p></footer>
@@ -680,14 +680,6 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
   <section class="kategori">
     <h2>📱 Suntik <span class="accent">All Sosmed</span></h2>
     <p class="sub">Pilih layanan yang kamu butuhkan</p>
-    <div class="filter-bar">
-      <select id="sortSuntik" onchange="applySort('sosmed', this.value)">
-        <option value="default">Urutkan: Default</option>
-        <option value="termurah">💰 Termurah</option>
-        <option value="termahal">💎 Termahal</option>
-        <option value="terlaris">🔥 Terlaris</option>
-      </select>
-    </div>
     <div class="pengumuman">
       <div class="pengumuman-header"><span class="pengumuman-icon">📢</span><span class="pengumuman-title">PENGUMUMAN PENTING</span></div>
       <p class="pengumuman-text">Jika jumlah <b>like</b> atau <b>followers</b> Instagram, TikTok, dan sosial media lainnya <b>tiba-tiba menurun</b> — itu adalah hal <b>NORMAL</b>.</p>
@@ -708,14 +700,6 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
   <section class="kategori">
     <h2>📦 Jual <span class="accent">APK</span></h2>
     <p class="sub">Aplikasi premium murah & aman</p>
-    <div class="filter-bar">
-      <select id="sortApk" onchange="applySort('apkList', this.value)">
-        <option value="default">Urutkan: Default</option>
-        <option value="termurah">💰 Termurah</option>
-        <option value="termahal">💎 Termahal</option>
-        <option value="terlaris">🔥 Terlaris</option>
-      </select>
-    </div>
     <div class="produk-list" id="apkList"></div>
   </section>
   <footer><p>© 2025 Jimzz Store — All Rights Reserved 😈</p></footer>
@@ -1680,23 +1664,8 @@ let produkAktif = null;
 let dataPemesan = { link: "", hp: "", jumlah: 0, total: 0, bonus: 0, totalAmount: 0, orderId: "" };
 
 // ============================================
-// SORT & FILTER
-// ============================================
-function applySort(target, mode) {
-  let originalData;
-  let kategori;
-  if (target === 'sosmed') { originalData = produkSosmed; kategori = 'SUNTIK ALL'; }
-  else if (target === 'jpm') { originalData = produkJpm; kategori = 'LAYANAN LAINNYA'; }
-  else { originalData = produkApk; kategori = 'JUAL APK'; }
-  let data = originalData.map((p, i) => ({ ...p, _originalIndex: i }));
-  if (mode === 'termurah') data.sort((a,b) => (a.harga || a.hargaPerUnit) - (b.harga || b.hargaPerUnit));
-  else if (mode === 'termahal') data.sort((a,b) => (b.harga || b.hargaPerUnit) - (a.harga || a.hargaPerUnit));
-  else if (mode === 'terlaris') data.sort((a,b) => (b.baseOrder || 0) - (a.baseOrder || 0));
-  renderProduk(target, data, kategori, mode);
-}
-
-// ============================================
 // RENDER PRODUK (BADGE DINAMIS)
+// ============================================
 // ============================================
 function initData() {
   renderProduk('sosmed', produkSosmed, 'SUNTIK ALL', 'default');
@@ -1716,18 +1685,22 @@ function renderProduk(target, data, kategori, mode) {
     return { ...p, _index: realIndex, _totalOrder: totalOrder };
   });
 
-  let badgeText = '';
-  let badgeClass = '';
-  if (mode === 'terlaris') { badgeText = '🔥 TERLARIS'; badgeClass = 'badge-hot'; }
-  else if (mode === 'termurah') { badgeText = '💰 TERMURAH'; badgeClass = 'badge-cheap'; }
-  else if (mode === 'termahal') { badgeText = '💎 TERMAHAL'; badgeClass = 'badge-expensive'; }
+  const prices = withCounts.map(x => Number(x.harga ?? x.hargaPerUnit ?? 0));
+  const maxOrders = Math.max(0, ...withCounts.map(x => Number(x._totalOrder || 0)));
+  const minPrice = prices.length ? Math.min(...prices) : 0;
+  const maxPrice = prices.length ? Math.max(...prices) : 0;
 
   el.innerHTML = withCounts.map((p, i) => {
-    const showBadge = i === 0 && badgeText !== '';
+    const price = Number(p.harga ?? p.hargaPerUnit ?? 0);
+    const badges = [];
+    if (price === minPrice) badges.push('<span class="product-badge badge-cheap">💰 TERMURAH</span>');
+    if (price === maxPrice && maxPrice !== minPrice) badges.push('<span class="product-badge badge-expensive">💎 TERMAHAL</span>');
+    if (Number(p._totalOrder || 0) === maxOrders && maxOrders > 0) badges.push('<span class="product-badge badge-hot">🔥 TERLARIS</span>');
+    const badgeHtml = badges.join('');
     const wished = isWishlisted(p.nama);
     return `
     <div class="produk-card">
-      ${showBadge ? `<div class="${badgeClass}">${badgeText}</div>` : ''}
+      ${badgeHtml ? '<div class="product-badges">'+badgeHtml+'</div>' : ''}
       <button class="btn-wishlist ${wished ? 'active' : ''}" onclick="event.stopPropagation(); toggleWishlist('${p.nama.replace(/'/g, "\\'")}')">${wished ? '⭐' : '☆'}</button>
       <div class="produk-header">
         <div class="produk-icon">${p.icon}</div>
