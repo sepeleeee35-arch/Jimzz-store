@@ -531,6 +531,86 @@ body::after{background:radial-gradient(600px circle at var(--mouse-x,50%) var(--
 @keyframes animeLight{from{transform:translateX(-2%)}to{transform:translateX(2%)}}
 @keyframes petalFloat{0%,100%{transform:translate(0,0) rotate(0);opacity:.35}50%{transform:translate(20px,28px) rotate(20deg);opacity:.9}}
 @media(max-width:480px){.anime-moon{width:105px;height:105px;right:8%;top:8%}.anime-character{transform:translateX(-50%) scale(.78);transform-origin:bottom center}.anime-intro{width:min(88vw,340px)}}
+
+/* ===== JIMZZ BANNER + CINEMATIC ANIME INTRO v2 ===== */
+/* Badge berada di kanan, besar, terang, dan tidak bertabrakan dengan wishlist. */
+.product-badges{
+  top:12px!important;right:12px!important;left:auto!important;
+  width:auto!important;max-width:calc(100% - 58px)!important;
+  display:flex!important;justify-content:flex-end!important;align-items:center!important;
+  flex-wrap:nowrap!important;gap:6px!important;z-index:8!important;
+}
+.product-badge{
+  min-height:26px!important;padding:6px 10px!important;border-radius:9px!important;
+  font-size:10px!important;font-weight:900!important;letter-spacing:.25px!important;
+  border-width:1.5px!important;text-shadow:0 1px 4px rgba(0,0,0,.5)!important;
+  box-shadow:0 5px 18px rgba(0,0,0,.28)!important;
+}
+.badge-cheap{color:#fff!important;background:linear-gradient(135deg,#008f5a,#00d084)!important;border-color:#2dffc0!important;box-shadow:0 5px 18px rgba(0,255,160,.25)!important}
+.badge-expensive{color:#fff!important;background:linear-gradient(135deg,#c45b00,#ff9d00)!important;border-color:#ffd166!important;box-shadow:0 5px 18px rgba(255,150,0,.28)!important}
+.badge-hot{color:#fff!important;background:linear-gradient(135deg,#d71920,#ff4b1f)!important;border-color:#ff8a65!important;box-shadow:0 5px 20px rgba(255,45,45,.32)!important}
+.badge-combo,.badge-combo-cheap{
+  color:#fff!important;
+  background:linear-gradient(135deg,#8f1118,#e43f18 48%,#ff9d00)!important;
+  border-color:#ffb84d!important;
+  box-shadow:0 6px 22px rgba(255,75,20,.34)!important;
+}
+.badge-combo b{margin:0 3px;color:#ffe7a3}
+.produk-card.has-badges{padding-top:58px!important}
+@media(max-width:480px){
+  .product-badges{top:10px!important;right:10px!important;max-width:calc(100% - 48px)!important;gap:4px!important}
+  .product-badge{min-height:28px!important;padding:6px 8px!important;font-size:9px!important;border-radius:8px!important}
+  .produk-card.has-badges{padding-top:58px!important}
+}
+
+/* Cinematic original anime intro: red / black / gold, not purple. */
+#loadingScreen{background:#020205!important}
+.anime-bg{
+  background:
+    radial-gradient(circle at 78% 18%,rgba(255,190,70,.24),transparent 13%),
+    radial-gradient(circle at 20% 70%,rgba(190,20,25,.20),transparent 25%),
+    linear-gradient(180deg,#09080a 0%,#16090b 52%,#030305 100%)!important;
+}
+.anime-bg::before{
+  background:
+    linear-gradient(112deg,transparent 0 43%,rgba(255,200,80,.09) 44%,transparent 45%),
+    linear-gradient(68deg,transparent 0 62%,rgba(255,35,35,.10) 63%,transparent 64%)!important;
+}
+.anime-moon{
+  background:radial-gradient(circle at 35% 32%,#fff9d7 0,#ffd978 28%,#ff9b2f 58%,rgba(255,70,20,.12) 72%,transparent 73%)!important;
+  box-shadow:0 0 75px rgba(255,160,50,.34)!important;
+}
+.anime-cloud{background:rgba(255,210,130,.08)!important}
+.anime-petal{color:#ffb34d!important;text-shadow:0 0 14px #ff4b1f!important}
+.anime-city{background:linear-gradient(135deg,transparent 0 6%,#050506 6% 18%,transparent 18% 21%,#090607 21% 36%,transparent 36% 40%,#040405 40% 62%,transparent 62% 66%,#080607 66% 82%,transparent 82%)!important}
+.anime-character{filter:drop-shadow(0 0 30px rgba(255,70,25,.30))!important}
+.anime-head{background:linear-gradient(145deg,#3a211d,#0c0808)!important;border-color:rgba(255,190,100,.22)!important}
+.anime-hair{background:linear-gradient(145deg,#3b090b,#080506)!important;filter:drop-shadow(0 0 10px rgba(255,50,30,.38))!important}
+.anime-body{background:linear-gradient(90deg,#050505,#291111 48%,#040304)!important}
+.anime-sword{
+  background:linear-gradient(90deg,#fff1b0,#fff,#ff9d3d)!important;
+  box-shadow:0 0 18px rgba(255,160,50,.65)!important;
+}
+.anime-intro{
+  background:linear-gradient(145deg,rgba(14,8,8,.78),rgba(5,4,5,.58))!important;
+  border-color:rgba(255,164,65,.30)!important;
+  box-shadow:0 30px 100px rgba(0,0,0,.72),0 0 90px rgba(255,65,25,.14)!important;
+}
+.anime-kicker{color:#ffb34d!important;text-shadow:0 0 14px rgba(255,120,30,.6)!important}
+.anime-title{color:#ffd98a!important}
+.anime-intro .loading-accent{color:#ff5a36!important}
+.anime-intro .loading-status span{color:#ffb02e!important}
+.anime-intro .loading-bar-fill{background:linear-gradient(90deg,#9b111e,#ff3b20,#ffb52e)!important;animation-duration:8.7s!important}
+.anime-intro .loading-skip{border-color:rgba(255,175,70,.42)!important;background:rgba(255,80,20,.10)!important;color:#ffe2b0!important}
+.anime-intro .loading-skip:hover{background:rgba(255,90,20,.22)!important}
+#loadingScreen::after{
+  background:linear-gradient(120deg,transparent 0%,rgba(255,80,35,.055) 45%,transparent 55%)!important;
+  animation:introSweep 4.5s ease-in-out infinite!important;
+}
+@keyframes animeLight{from{transform:translateX(-3%)}to{transform:translateX(3%)}}
+@media(max-width:480px){
+  .anime-character{transform:translateX(-50%) scale(.78)!important}
+}
 </style>
 </head>
 <body>
@@ -1706,7 +1786,7 @@ function startApp() {
     }
   } catch(e) {}
 
-  setTimeout(skipLoadingScreen, 2200);
+  setTimeout(skipLoadingScreen, 9000);
 }
 
 // ============================================
