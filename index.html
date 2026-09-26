@@ -441,38 +441,59 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
 @media(max-width:480px){#page-home header{margin:10px 10px 22px;padding:32px 14px 24px;border-radius:24px}#page-home header h1{font-size:42px}#page-home .trust-row{gap:6px}#page-home .trust-item{font-size:9px}#page-home .menu-home{margin-left:4px;margin-right:4px}}
 
 
-/* ===== PRODUCT BADGES v2 ===== */
-.product-badges{display:flex;align-items:center;flex-wrap:wrap;gap:5px;margin:0 0 9px;position:relative;z-index:3;min-width:0;max-width:100%}
-.product-badge{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;white-space:nowrap;line-height:1;padding:4px 7px;border-radius:7px;font-size:8px;font-weight:800;letter-spacing:.15px;border:1px solid;box-shadow:none}
-.badge-cheap{color:#72e8ad;background:rgba(0,255,136,.045);border-color:rgba(0,255,136,.18)}
-.badge-expensive{color:#c9a6e8;background:rgba(150,70,255,.045);border-color:rgba(180,100,255,.18)}
-.badge-hot{color:#ffbd72;background:rgba(255,120,0,.045);border-color:rgba(255,150,50,.18)}
+/* ===== JIMZZ VISUAL POLISH v3 ===== */
+/* Softer purple/dark visual inspired by the reference app */
+body{background:#080611;color:#eee}
+body::after{background:radial-gradient(600px circle at var(--mouse-x,50%) var(--mouse-y,50%),rgba(151,76,255,.055),transparent 42%)}
+#bgContainer{background:radial-gradient(ellipse at 50% 0%,#1a0d2b 0%,#0c0716 42%,#05040a 100%)}
+#bgSimple{background:radial-gradient(circle at 20% 20%,rgba(132,61,255,.12),transparent 32%),radial-gradient(circle at 80% 70%,rgba(66,40,130,.10),transparent 35%),linear-gradient(180deg,#12091f,#07050d)}
+#bgSimple canvas{opacity:.18}
+#bgNeon{background:radial-gradient(ellipse at 50% 0%,#1b0d2d 0%,#0a0712 72%)}
+#bgNeon .neon-grid,#bgNeon .neon-horizon,#bgNeon .wave,#bgNeon .laser,#bgNeon .neon-ring{opacity:.18}
+.produk-card{background:linear-gradient(145deg,rgba(25,16,39,.94),rgba(12,10,20,.96));border-color:rgba(170,112,255,.14)}
+.produk-card::before{background:linear-gradient(90deg,transparent,#a66cff,transparent)}
+.produk-card::after{background:linear-gradient(135deg,rgba(166,108,255,.22),transparent,rgba(100,70,170,.08))}
+.produk-card:hover{border-color:rgba(166,108,255,.35);box-shadow:0 20px 50px rgba(100,55,180,.16)}
+.produk-icon{filter:drop-shadow(0 0 10px rgba(166,108,255,.18))}
+.produk-label{color:#b58cff}
+.product-badges{position:absolute;top:11px;left:12px;right:54px;display:flex;align-items:center;flex-wrap:wrap;gap:4px;margin:0;z-index:4;min-width:0;max-width:calc(100% - 66px);pointer-events:none}
+.product-badge{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;max-width:100%;white-space:nowrap;line-height:1;padding:4px 7px;border-radius:6px;font-size:7.5px;font-weight:800;letter-spacing:.08px;border:1px solid;box-shadow:none}
+.badge-cheap{color:#79ddb0;background:rgba(0,255,136,.035);border-color:rgba(0,255,136,.16)}
+.badge-expensive{color:#c4a4df;background:rgba(160,100,255,.035);border-color:rgba(190,140,255,.16)}
+.badge-hot{color:#ffc07c;background:rgba(255,130,20,.035);border-color:rgba(255,160,70,.16)}
+.produk-card.has-badges{padding-top:47px}
 @media(max-width:480px){
-  .product-badges{gap:4px;margin-bottom:8px}
-  .product-badge{padding:4px 6px;font-size:7.5px;border-radius:6px;letter-spacing:.05px}
+ .product-badges{top:10px;left:10px;right:50px;max-width:calc(100% - 60px);gap:3px}
+ .product-badge{padding:4px 6px;font-size:7px;border-radius:5px}
+ .produk-card.has-badges{padding-top:45px}
 }
 
-/* ===== LOADING SCREEN v2 ===== */
-#loadingScreen{position:fixed;inset:0;background:#020305;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;transition:opacity .45s ease,visibility .45s ease}
-#loadingScreen::before{content:"";position:absolute;inset:-30%;background:radial-gradient(circle at 50% 42%,rgba(0,255,136,.12),transparent 28%),radial-gradient(circle at 20% 80%,rgba(0,190,255,.06),transparent 24%);animation:loadingAura 5s ease-in-out infinite alternate}
-#loadingScreen::after{content:"";position:absolute;inset:0;background:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);background-size:34px 34px;mask-image:linear-gradient(to bottom,transparent,#000 20%,#000 80%,transparent)}
+/* Reference-style skip-able intro loading */
+#loadingScreen{position:fixed;inset:0;background:#07040d;z-index:9999;display:flex;align-items:center;justify-content:center;overflow:hidden;transition:opacity .5s ease,visibility .5s ease}
+#loadingScreen::before{content:"";position:absolute;inset:-20%;background:radial-gradient(circle at 50% 38%,rgba(168,93,255,.24),transparent 25%),radial-gradient(circle at 15% 85%,rgba(88,45,150,.16),transparent 28%),radial-gradient(circle at 90% 15%,rgba(208,132,255,.08),transparent 25%);animation:introGlow 6s ease-in-out infinite alternate}
+#loadingScreen::after{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent 0%,rgba(255,255,255,.025) 45%,transparent 55%);transform:translateX(-100%);animation:introSweep 3.2s ease-in-out infinite}
 #loadingScreen.hide{opacity:0;visibility:hidden;pointer-events:none}
-.loading-wrap{position:relative;z-index:2;width:min(86vw,330px);text-align:center}
-.loading-mark{width:72px;height:72px;margin:0 auto 18px;border:1px solid rgba(0,255,136,.22);border-radius:22px;background:rgba(0,255,136,.045);display:flex;align-items:center;justify-content:center;box-shadow:0 0 45px rgba(0,255,136,.10),inset 0 0 25px rgba(0,255,136,.04);position:relative}
-.loading-mark::before{content:"";position:absolute;inset:7px;border:1px solid rgba(0,255,136,.14);border-radius:17px;animation:loadingSpin 8s linear infinite}
-.loading-mark::after{content:"";position:absolute;width:7px;height:7px;top:5px;right:9px;border-radius:50%;background:#00ff88;box-shadow:0 0 12px #00ff88}
-.loading-logo{font-size:28px;font-weight:900;color:#fff;letter-spacing:-1px;text-shadow:0 0 24px rgba(0,255,136,.28);margin:0}
-.loading-logo .loading-accent{color:#00ff88}
-.loading-tagline{color:#68736d;font-size:10px;margin-top:7px;letter-spacing:2.5px;text-transform:uppercase;font-weight:700}
-.loading-status{margin-top:22px;color:#a1aaa5;font-size:11px;font-weight:600;letter-spacing:.3px}
-.loading-status span{color:#00d979}
-.loading-bar{width:100%;height:4px;background:#101519;border:1px solid #18221e;border-radius:99px;margin-top:10px;overflow:hidden}
-.loading-bar-fill{height:100%;width:0%;background:linear-gradient(90deg,#00b968,#00ff88);border-radius:99px;animation:loadBar 1s ease-out forwards}
-.loading-dots{margin-top:11px;display:flex;justify-content:center;gap:5px}
-.loading-dots i{width:4px;height:4px;border-radius:50%;background:#2c3b34;animation:loadingDot 1s ease-in-out infinite}
+.loading-wrap{position:relative;z-index:2;width:min(88vw,360px);text-align:center;padding:28px 22px;border:1px solid rgba(180,120,255,.16);border-radius:28px;background:linear-gradient(145deg,rgba(24,13,39,.58),rgba(8,6,14,.48));backdrop-filter:blur(14px);box-shadow:0 30px 100px rgba(0,0,0,.55),0 0 80px rgba(130,65,210,.12)}
+.loading-mark{width:82px;height:82px;margin:0 auto 18px;border:1px solid rgba(190,130,255,.3);border-radius:25px;background:linear-gradient(145deg,rgba(150,80,255,.14),rgba(50,25,80,.12));display:flex;align-items:center;justify-content:center;font-size:36px;box-shadow:0 0 45px rgba(160,90,255,.16),inset 0 0 28px rgba(190,130,255,.05);position:relative}
+.loading-mark::before{content:"";position:absolute;inset:7px;border:1px solid rgba(195,140,255,.18);border-radius:19px;animation:loadingSpin 7s linear infinite}
+.loading-mark::after{content:"";position:absolute;width:6px;height:6px;top:6px;right:10px;border-radius:50%;background:#bd86ff;box-shadow:0 0 12px #bd86ff}
+.loading-logo{font-size:30px;font-weight:900;color:#fff;letter-spacing:-1px;text-shadow:0 0 25px rgba(180,110,255,.32);margin:0}
+.loading-logo .loading-accent{color:#b77aff}
+.loading-tagline{color:#857b91;font-size:9px;margin-top:8px;letter-spacing:3px;text-transform:uppercase;font-weight:800}
+.loading-status{margin-top:22px;color:#b4aabb;font-size:11px;font-weight:600}
+.loading-status span{color:#b77aff}
+.loading-bar{width:100%;height:4px;background:#17101f;border:1px solid #2b1c39;border-radius:99px;margin-top:10px;overflow:hidden}
+.loading-bar-fill{height:100%;width:0%;background:linear-gradient(90deg,#7540b5,#bd7cff,#8b52d2);border-radius:99px;animation:loadBar 2.1s ease-out forwards}
+.loading-actions{display:flex;justify-content:center;margin-top:16px}
+.loading-skip{border:1px solid rgba(190,130,255,.3);background:rgba(190,130,255,.07);color:#d6c5e6;padding:8px 16px;border-radius:999px;font:800 10px Inter,Arial,sans-serif;letter-spacing:1px;cursor:pointer;transition:.2s}
+.loading-skip:active{transform:scale(.96);background:rgba(190,130,255,.14)}
+.loading-skip:hover{border-color:rgba(205,155,255,.55);color:#fff}
+.loading-dots{margin-top:12px;display:flex;justify-content:center;gap:5px}
+.loading-dots i{width:4px;height:4px;border-radius:50%;background:#49355d;animation:loadingDot 1s ease-in-out infinite}
 .loading-dots i:nth-child(2){animation-delay:.15s}.loading-dots i:nth-child(3){animation-delay:.3s}
 @keyframes loadBar{to{width:100%}}
-@keyframes loadingAura{from{transform:scale(1)}to{transform:scale(1.12) translate(1%,-1%)}}
+@keyframes introGlow{from{transform:scale(1) rotate(0deg)}to{transform:scale(1.12) rotate(4deg)}}
+@keyframes introSweep{0%,20%{transform:translateX(-110%)}70%,100%{transform:translateX(110%)}}
 @keyframes loadingSpin{to{transform:rotate(360deg)}}
 @keyframes loadingDot{0%,100%{opacity:.25;transform:translateY(0)}50%{opacity:1;transform:translateY(-3px)}}
 </style>
@@ -486,6 +507,7 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
     <div class="loading-tagline">DIGITAL STORE</div>
     <div class="loading-status"><span>●</span> Menyiapkan toko...</div>
     <div class="loading-bar"><div class="loading-bar-fill"></div></div>
+    <div class="loading-actions"><button class="loading-skip" onclick="skipLoadingScreen()">SKIP INTRO</button></div>
     <div class="loading-dots"><i></i><i></i><i></i></div>
   </div>
 </div>
@@ -1593,6 +1615,10 @@ function applyAdminUI() {
 }
 function handleTopupClick() { if (isAdmin) switchTab('topup'); else showToast('Top Up Game sedang MAINTENANCE', 'warning'); }
 
+function skipLoadingScreen() {
+  const screen = document.getElementById('loadingScreen');
+  if (screen) screen.classList.add('hide');
+}
 function startApp() {
   applyBgMode();
   if (currentBgMode === 'simple') initCanvasSimple(); else initCanvasNeon();
@@ -1628,7 +1654,7 @@ function startApp() {
     }
   } catch(e) {}
 
-  setTimeout(() => document.getElementById('loadingScreen').classList.add('hide'), 1050);
+  setTimeout(skipLoadingScreen, 2200);
 }
 
 // ============================================
@@ -1719,6 +1745,10 @@ function renderProduk(target, data, kategori, mode) {
 
   const prices = withCounts.map(x => Number(x.harga ?? x.hargaPerUnit ?? 0));
   const maxOrders = Math.max(0, ...withCounts.map(x => Number(x._totalOrder || 0)));
+  const topSellerIndex = withCounts.reduce((best, item, idx, arr) => {
+    if (Number(item._totalOrder || 0) > Number(arr[best]?._totalOrder || 0)) return idx;
+    return best;
+  }, 0);
   const minPrice = prices.length ? Math.min(...prices) : 0;
   const maxPrice = prices.length ? Math.max(...prices) : 0;
 
@@ -1727,7 +1757,7 @@ function renderProduk(target, data, kategori, mode) {
     const badges = [];
     if (price === minPrice) badges.push('<span class="product-badge badge-cheap">💰 TERMURAH</span>');
     if (price === maxPrice && maxPrice !== minPrice) badges.push('<span class="product-badge badge-expensive">💎 TERMAHAL</span>');
-    if (Number(p._totalOrder || 0) === maxOrders && maxOrders > 0) badges.push('<span class="product-badge badge-hot">🔥 TERLARIS</span>');
+    if (i === topSellerIndex && maxOrders > 0) badges.push('<span class="product-badge badge-hot">🔥 TERLARIS</span>');
     const badgeHtml = badges.join('');
     const wished = isWishlisted(p.nama);
     return `
