@@ -632,9 +632,14 @@ body::after{background:radial-gradient(600px circle at var(--mouse-x,50%) var(--
 .jimzz-cinematic-intro{
   position:fixed!important;inset:0!important;z-index:99999!important;overflow:hidden!important;
   background:#050609!important;color:#fff!important;display:block!important;
-  opacity:1;transition:opacity .65s ease!important;
+  opacity:1;pointer-events:auto!important;transition:opacity .65s ease!important;
+  animation:introEmergencyHide 9s forwards!important;
 }
-.jimzz-cinematic-intro.hide{opacity:0!important;pointer-events:none!important}
+.jimzz-cinematic-intro.hide{opacity:0!important;pointer-events:none!important;visibility:hidden!important}
+@keyframes introEmergencyHide{
+  0%,94%{opacity:1;pointer-events:auto;visibility:visible}
+  100%{opacity:0;pointer-events:none;visibility:hidden}
+}
 
 .intro-scene{position:absolute;inset:0;overflow:hidden;opacity:0;transform:scale(1.03)}
 .intro-scene::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.12),rgba(0,0,0,.68));z-index:2}
