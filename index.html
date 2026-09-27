@@ -1743,7 +1743,7 @@ function startBackgroundPolling() {
 async function loadOrders() {
   if (!isAdmin) return;
   try {
-    const res = await fetch(BACKEND_URL + '/api/orders-list');
+    const res = await fetch(BACKEND_URL + '/api/orders-list', { headers: { Authorization: 'Bearer ' + getAccountToken() } });
     const data = await res.json();
     if (!data.success) return;
     const listEl = document.getElementById('orderQueueList');
@@ -1775,7 +1775,7 @@ async function completeOrder(orderId) {
   try {
     const res = await fetch(BACKEND_URL + '/api/complete-order', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + getAccountToken() },
       body: JSON.stringify({ orderId: orderId })
     });
     const data = await res.json();
@@ -1794,7 +1794,7 @@ async function failOrder(orderId) {
   try {
     const res = await fetch(BACKEND_URL + '/api/fail-order', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + getAccountToken() },
       body: JSON.stringify({ orderId: orderId })
     });
     const data = await res.json();
@@ -2549,7 +2549,7 @@ async function keStep3() {
   
   try {
     const res = await fetch(BACKEND_URL + '/api/create-order-v2', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      method: 'POST', headers: { 'Content-Type': 'application/json', ...(getAccountToken() ? { Authorization: 'Bearer ' + getAccountToken() } : {}) },
       body: JSON.stringify({ 
         amount: totalBayar, 
         customerPhone: dataPemesan.hp, 
