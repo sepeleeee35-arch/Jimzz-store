@@ -95,17 +95,23 @@ body::after { content: ""; position: fixed; top: 0; left: 0; width: 100vw; heigh
 @keyframes shimmer { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
 @keyframes pulseGlow { 0%,100% { opacity:1; transform: scale(1); } 50% { opacity:0.7; transform: scale(0.97); } }
 /* ===== ACCOUNT ===== */
-.account-btn{display:inline-flex;align-items:center;gap:8px;margin-top:12px;background:rgba(0,255,136,.08);border:1.5px solid rgba(0,255,136,.4);color:#00ff88;padding:12px 22px;border-radius:30px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;transition:.3s}
-.account-btn:hover{background:rgba(0,255,136,.18);transform:translateY(-2px)}
-.account-badge{display:inline-flex;align-items:center;gap:7px;margin-top:12px;padding:9px 14px;border-radius:22px;background:rgba(255,255,255,.04);border:1px solid rgba(0,255,136,.25);color:#dfffea;font-size:11px;font-weight:800}
-.account-badge button{border:0;background:transparent;color:#ff7777;font:inherit;cursor:pointer}
-#accountModal{position:fixed;inset:0;background:rgba(0,0,0,.88);backdrop-filter:blur(18px);z-index:7000;display:none;align-items:center;justify-content:center;padding:18px}
+#accountArea{position:fixed;top:max(10px,env(safe-area-inset-top));left:10px;z-index:7500}
+.account-btn{display:inline-flex;align-items:center;gap:6px;margin:0;background:rgba(7,12,10,.88);border:1px solid rgba(0,255,136,.38);color:#dfffea;padding:8px 11px;border-radius:12px;font-size:11px;font-weight:800;cursor:pointer;font-family:inherit;transition:.2s;backdrop-filter:blur(14px);box-shadow:0 8px 24px rgba(0,0,0,.28)}
+.account-btn:hover{border-color:#00ff88;background:rgba(0,255,136,.12)}
+.account-badge{display:inline-flex;align-items:center;gap:6px;margin:0;padding:8px 10px;border-radius:12px;background:rgba(7,12,10,.9);border:1px solid rgba(0,255,136,.28);color:#dfffea;font-size:10px;font-weight:800;backdrop-filter:blur(14px);box-shadow:0 8px 24px rgba(0,0,0,.28)}
+.account-badge button{border:0;background:transparent;color:#ff7777;font:inherit;cursor:pointer;padding:0}
+#accountModal{position:fixed;inset:0;background:transparent;backdrop-filter:none;z-index:7000;display:none;align-items:flex-start;justify-content:flex-start;padding:52px 10px 10px;pointer-events:none}
 #accountModal.show{display:flex}
-.account-box{width:min(92vw,410px);background:linear-gradient(145deg,#101914,#0d0d15);border:1px solid rgba(0,255,136,.28);border-radius:22px;padding:25px 20px;box-shadow:0 30px 90px rgba(0,0,0,.8);position:relative}
-.account-box h2{color:#00ff88;font-size:23px;margin-bottom:5px}.account-box p{color:#7d8790;font-size:11px;margin-bottom:18px}
-.account-close{position:absolute;right:14px;top:10px;background:transparent;border:0;color:#888;font-size:28px;cursor:pointer}
-.account-tabs{display:flex;gap:7px;margin-bottom:16px}.account-tab{flex:1;padding:10px;border-radius:10px;border:1px solid #26332d;background:#080b09;color:#777;font-weight:800;cursor:pointer}.account-tab.active{border-color:#00ff88;color:#00ff88;background:rgba(0,255,136,.07)}
-.account-form{display:none}.account-form.active{display:block}.account-form input{width:100%;padding:13px 14px;margin-bottom:10px;background:#050607;border:1px solid #26332d;border-radius:11px;color:#fff;outline:none;font-family:inherit}.account-form input:focus{border-color:#00ff88}.account-submit{width:100%;padding:13px;border:0;border-radius:11px;background:linear-gradient(135deg,#00ff88,#00cc6a);color:#031008;font-weight:900;cursor:pointer}.account-note{margin-top:12px!important;color:#89918b!important;font-size:10px!important;line-height:1.5}.account-bonus{padding:10px;border:1px solid rgba(255,215,0,.25);background:rgba(255,215,0,.06);border-radius:11px;color:#ffd75a;font-size:11px;font-weight:800;margin-bottom:12px}
+.account-box{width:min(92vw,350px);max-height:calc(100vh - 65px);overflow:auto;background:linear-gradient(145deg,#101914,#0d0d15);border:1px solid rgba(0,255,136,.28);border-radius:16px;padding:18px 16px;box-shadow:0 24px 70px rgba(0,0,0,.72);position:relative;pointer-events:auto}
+.account-box h2{color:#00ff88;font-size:19px;margin-bottom:4px}.account-box p{color:#7d8790;font-size:10px;margin-bottom:14px}
+.account-close{position:absolute;right:10px;top:7px;background:transparent;border:0;color:#888;font-size:25px;cursor:pointer}
+.account-tabs{display:flex;gap:6px;margin-bottom:13px}.account-tab{flex:1;padding:9px;border-radius:9px;border:1px solid #26332d;background:#080b09;color:#777;font-weight:800;cursor:pointer}.account-tab.active{border-color:#00ff88;color:#00ff88;background:rgba(0,255,136,.07)}
+.account-form{display:none}.account-form.active{display:block}.account-form input{width:100%;padding:11px 12px;margin-bottom:8px;background:#050607;border:1px solid #26332d;border-radius:9px;color:#fff;outline:none;font-family:inherit}.account-form input:focus{border-color:#00ff88}.account-submit{width:100%;padding:11px;border:0;border-radius:9px;background:linear-gradient(135deg,#00ff88,#00cc6a);color:#031008;font-weight:900;cursor:pointer}.account-note{margin-top:10px!important;color:#89918b!important;font-size:9px!important;line-height:1.45}.account-bonus{padding:9px;border:1px solid rgba(255,215,0,.25);background:rgba(255,215,0,.06);border-radius:9px;color:#ffd75a;font-size:10px;font-weight:800;margin-bottom:9px}
+.banner-stack{position:absolute;top:10px;right:10px;display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end;max-width:75%;z-index:4}
+.product-banner{display:inline-flex;align-items:center;gap:3px;padding:4px 7px;border-radius:8px;font-size:8px;font-weight:900;letter-spacing:.25px;line-height:1;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.28)}
+.product-banner.hot{background:linear-gradient(135deg,#ff2b2b,#ff6b6b);color:#fff}
+.product-banner.expensive{background:linear-gradient(135deg,#ffd700,#ff9500);color:#000}
+.product-banner.cheap{background:linear-gradient(135deg,#00c8ff,#0096ff);color:#fff}
 
 .admin-badge-float { position: fixed; top: 12px; right: 12px; z-index: 999; background: linear-gradient(135deg, #ffd700, #ff9500); color: #000; padding: 8px 14px; border-radius: 20px; font-size: 11px; font-weight: 800; box-shadow: 0 5px 25px rgba(255,215,0,0.6); display: none; align-items: center; gap: 6px; cursor: pointer; letter-spacing: 0.5px; }
 .admin-badge-float.show { display: flex; }
@@ -523,7 +529,7 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
     <div>
       <button class="btn-history" onclick="bukaRiwayat()">📋 Riwayat Order</button>
     <div id="accountArea">
-      <button class="account-btn" onclick="openAccountModal()">👤 Gunakan Akun</button>
+      <button class="account-btn" onclick="openAccountModal()">👤 Akun</button>
     </div>
     </div>
     <button class="bg-toggle" id="bgToggle" onclick="toggleBgMode()">
@@ -673,14 +679,7 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
   <section class="kategori">
     <h2>🚀 Layanan <span class="accent">Lainnya</span></h2>
     <p class="sub">Pilih layanan yang kamu butuhkan</p>
-    <div class="filter-bar">
-      <select id="sortJpm" onchange="applySort('jpm', this.value)">
-        <option value="default">Urutkan: Default</option>
-        <option value="termurah">💰 Termurah</option>
-        <option value="termahal">💎 Termahal</option>
-        <option value="terlaris">🔥 Terlaris</option>
-      </select>
-    </div>
+    
     <div class="produk-list" id="jpm"></div>
   </section>
   <footer><p>© 2025 Jimzz Store — All Rights Reserved 😈</p></footer>
@@ -690,14 +689,7 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
   <section class="kategori">
     <h2>📱 Suntik <span class="accent">All Sosmed</span></h2>
     <p class="sub">Pilih layanan yang kamu butuhkan</p>
-    <div class="filter-bar">
-      <select id="sortSuntik" onchange="applySort('sosmed', this.value)">
-        <option value="default">Urutkan: Default</option>
-        <option value="termurah">💰 Termurah</option>
-        <option value="termahal">💎 Termahal</option>
-        <option value="terlaris">🔥 Terlaris</option>
-      </select>
-    </div>
+    
     <div class="pengumuman">
       <div class="pengumuman-header"><span class="pengumuman-icon">📢</span><span class="pengumuman-title">PENGUMUMAN PENTING</span></div>
       <p class="pengumuman-text">Jika jumlah <b>like</b> atau <b>followers</b> Instagram, TikTok, dan sosial media lainnya <b>tiba-tiba menurun</b> — itu adalah hal <b>NORMAL</b>.</p>
@@ -718,14 +710,7 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
   <section class="kategori">
     <h2>📦 Jual <span class="accent">APK</span></h2>
     <p class="sub">Aplikasi premium murah & aman</p>
-    <div class="filter-bar">
-      <select id="sortApk" onchange="applySort('apkList', this.value)">
-        <option value="default">Urutkan: Default</option>
-        <option value="termurah">💰 Termurah</option>
-        <option value="termahal">💎 Termahal</option>
-        <option value="terlaris">🔥 Terlaris</option>
-      </select>
-    </div>
+    
     <div class="produk-list" id="apkList"></div>
   </section>
   <footer><p>© 2025 Jimzz Store — All Rights Reserved 😈</p></footer>
@@ -1635,9 +1620,9 @@ async function loadCounters() {
       cachedCounters.produkOrder = data.produkOrder || {};
       updateOrderCounter();
       if (oldTotal !== data.totalOrder) {
-        renderProduk('sosmed', produkSosmed, 'SUNTIK ALL', 'default');
-        renderProduk('jpm', produkJpm, 'LAYANAN LAINNYA', 'default');
-        renderProduk('apkList', produkApk, 'JUAL APK', 'default');
+        renderProduk('sosmed', produkSosmed, 'SUNTIK ALL');
+        renderProduk('jpm', produkJpm, 'LAYANAN LAINNYA');
+        renderProduk('apkList', produkApk, 'JUAL APK');
       }
     }
   } catch (err) { console.log('Gagal load counters:', err); }
@@ -1824,54 +1809,52 @@ let produkAktif = null;
 let dataPemesan = { link: "", hp: "", jumlah: 0, total: 0, bonus: 0, totalAmount: 0, orderId: "" };
 
 // ============================================
-// SORT & FILTER
+// AUTOMATIC PRODUCT BANNERS
 // ============================================
-function applySort(target, mode) {
-  let originalData;
-  let kategori;
-  if (target === 'sosmed') { originalData = produkSosmed; kategori = 'SUNTIK ALL'; }
-  else if (target === 'jpm') { originalData = produkJpm; kategori = 'LAYANAN LAINNYA'; }
-  else { originalData = produkApk; kategori = 'JUAL APK'; }
-  let data = originalData.map((p, i) => ({ ...p, _originalIndex: i }));
-  if (mode === 'termurah') data.sort((a,b) => (a.harga || a.hargaPerUnit) - (b.harga || b.hargaPerUnit));
-  else if (mode === 'termahal') data.sort((a,b) => (b.harga || b.hargaPerUnit) - (a.harga || a.hargaPerUnit));
-  else if (mode === 'terlaris') data.sort((a,b) => (b.baseOrder || 0) - (a.baseOrder || 0));
-  renderProduk(target, data, kategori, mode);
-}
-
-// ============================================
-// RENDER PRODUK (BADGE DINAMIS)
-// ============================================
-function initData() {
-  renderProduk('sosmed', produkSosmed, 'SUNTIK ALL', 'default');
-  renderProduk('jpm', produkJpm, 'LAYANAN LAINNYA', 'default');
-  renderProduk('apkList', produkApk, 'JUAL APK', 'default');
-}
-
-function renderProduk(target, data, kategori, mode) {
-  const el = document.getElementById(target);
-  if (!el) return;
-  mode = mode || 'default';
-  
-  const withCounts = data.map((p, i) => {
+function getBannerMeta(products, target) {
+  if (!products.length) return [];
+  const items = products.map((p, i) => {
     const realIndex = (typeof p._originalIndex !== 'undefined') ? p._originalIndex : i;
     const realOrder = getProdukOrderCount(target, realIndex);
     const totalOrder = (p.baseOrder || 0) + realOrder;
-    return { ...p, _index: realIndex, _totalOrder: totalOrder };
+    const price = Number(p.harga || p.hargaPerUnit || 0);
+    return { ...p, _index: realIndex, _totalOrder: totalOrder, _price: price };
   });
 
-  let badgeText = '';
-  let badgeClass = '';
-  if (mode === 'terlaris') { badgeText = '🔥 TERLARIS'; badgeClass = 'badge-hot'; }
-  else if (mode === 'termurah') { badgeText = '💰 TERMURAH'; badgeClass = 'badge-cheap'; }
-  else if (mode === 'termahal') { badgeText = '💎 TERMAHAL'; badgeClass = 'badge-expensive'; }
+  const bestSellerIndex = items.reduce((best, p, i) =>
+    p._totalOrder > items[best]._totalOrder ? i : best, 0);
+  const expensiveIndex = items.reduce((best, p, i) =>
+    p._price > items[best]._price ? i : best, 0);
+  const cheapIndex = items.reduce((best, p, i) =>
+    p._price < items[best]._price ? i : best, 0);
 
-  el.innerHTML = withCounts.map((p, i) => {
-    const showBadge = i === 0 && badgeText !== '';
+  return items.map((p, i) => {
+    const banners = [];
+    if (i === bestSellerIndex && p._totalOrder > 0) banners.push({ text:'🔥 TERLARIS', cls:'hot' });
+    if (i === expensiveIndex && p._price > 0) banners.push({ text:'💎 TERMAHAL', cls:'expensive' });
+    if (i === cheapIndex && p._price > 0) banners.push({ text:'💰 TERMURAH', cls:'cheap' });
+    return { ...p, _banners: banners };
+  });
+}
+
+function initData() {
+  renderProduk('sosmed', produkSosmed, 'SUNTIK ALL');
+  renderProduk('jpm', produkJpm, 'LAYANAN LAINNYA');
+  renderProduk('apkList', produkApk, 'JUAL APK');
+}
+
+function renderProduk(target, data, kategori) {
+  const el = document.getElementById(target);
+  if (!el) return;
+
+  const withCounts = getBannerMeta(data, target);
+
+  el.innerHTML = withCounts.map((p) => {
     const wished = isWishlisted(p.nama);
+    const banners = p._banners || [];
     return `
     <div class="produk-card">
-      ${showBadge ? `<div class="${badgeClass}">${badgeText}</div>` : ''}
+      ${banners.length ? `<div class="banner-stack">${banners.map(b => `<span class="product-banner ${b.cls}">${b.text}</span>`).join('')}</div>` : ''}
       <button class="btn-wishlist ${wished ? 'active' : ''}" onclick="event.stopPropagation(); toggleWishlist('${p.nama.replace(/'/g, "\\'")}')">${wished ? '⭐' : '☆'}</button>
       <div class="produk-header">
         <div class="produk-icon">${p.icon}</div>
@@ -1883,7 +1866,7 @@ function renderProduk(target, data, kategori, mode) {
       <div class="produk-bottom">
         <div class="produk-harga-info">
           <div class="produk-harga-label">Harga ${p.unit ? 'per ' + p.unit : ''}</div>
-          <div class="produk-harga">Rp ${(p.harga || p.hargaPerUnit).toLocaleString('id-ID')} ${p.unit ? '<span>/ ' + p.unit + '</span>' : ''}</div>
+          <div class="produk-harga">Rp ${p._price.toLocaleString('id-ID')} ${p.unit ? '<span>/ ' + p.unit + '</span>' : ''}</div>
         </div>
         <button class="btn-order" onclick="bukaOrder('${target}', ${p._index})">Order</button>
       </div>
