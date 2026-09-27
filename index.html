@@ -1370,7 +1370,7 @@ async function syncAccountMe(){
     return true;
   }catch(e){console.log('Account sync error',e);return false;}
 }
-async async function changeAccountPassword(){
+async function changeAccountPassword(){
   const currentPassword=prompt('Masukkan password lama:');
   if(currentPassword===null)return;
   const newPassword=prompt('Masukkan password baru (min 8, huruf + angka):');
