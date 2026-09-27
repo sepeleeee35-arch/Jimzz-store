@@ -1316,7 +1316,12 @@ async function accountLogin(){
     const raw=await res.text();
     let data;
     try{data=JSON.parse(raw);}catch{throw new Error('HTTP '+res.status+' — respons backend bukan JSON');}
-    if(!res.ok || !data.success){showToast(data.error||('Login gagal (HTTP '+res.status+')'),'error');return;}
+    if(!res.ok || !data.success){
+  const msg = [data.error, data.detail].filter(Boolean).join(' — ') || ('Login gagal (HTTP '+res.status+')');
+  showToast(msg,'error');
+  console.error('LOGIN BACKEND ERROR:', {status:res.status, data});
+  return;
+}
     setAccountSession(data.token,data.user);
     localStorage.setItem('jimzz_points',String(data.user.points||0));
     closeAccountModal(); renderCoinBalance();
