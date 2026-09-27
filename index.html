@@ -1655,29 +1655,7 @@ function handleOrderSuccess(orderId, totalBayar, produkNama) {
   showConfetti();
   showToast(`✅ Pesanan ${orderId} SELESAI! Admin udah proses.`, 'success');
 
-  if (totalBayar && totalBayar > 0) {
-    const user = getAccountUser();
-    if (user && getAccountToken()) {
-      addPointsToAccount(totalBayar).then(result => {
-        if (result?.success) {
-          const updated = {...getAccountUser(), points:Number(result.totalPoints||0)};
-          setAccountSession(getAccountToken(),updated);
-          localStorage.setItem('jimzz_points',String(updated.points||0));
-          renderCoinBalance();
-          if (result.earned > 0) setTimeout(() => showToast(`🎁 +${Number(result.earned).toLocaleString('id-ID')} koin! Total: ${Number(result.totalPoints).toLocaleString('id-ID')} koin`,'success'),1500);
-        } else {
-          showToast('Koin akun belum tersinkron. Coba buka akun lagi.','warning');
-        }
-      });
-    } else {
-      const earned = addPoints(totalBayar);
-      renderCoinBalance();
-      if (earned > 0) setTimeout(() => showToast(`🎁 +${earned.toLocaleString('id-ID')} koin! Total: ${getPoints().toLocaleString('id-ID')} koin`,'success'),1500);
-    }
-  }
-
-  sendToTelegram(`<b>✅ ORDER SELESAI!</b>\n\n<b>🎫 Order ID:</b> <code>${orderId}</code>\n<b>📦 Produk:</b> ${produkNama || '-'}\n<b>🕐 Waktu:</b> ${new Date().toLocaleString('id-ID')}`);
-}
+  // Koin diberikan server-side saat admin mengonfirmasi order.
 
 function handleOrderFailed(orderId, produkNama) {
   const processedKey = 'jimzz_processed_' + orderId;
