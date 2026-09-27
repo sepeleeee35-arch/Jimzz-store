@@ -2126,6 +2126,7 @@ function applyAdminUI() {
     loadVisitors();
     loadOrders();
     loadStats();
+    loadAdminUsers();
     menuTopup.classList.remove('disabled');
     menuTopup.classList.add('admin-view');
     if (topupMaintenanceInfo) {
@@ -2707,7 +2708,7 @@ async function loadHistory() {
   const resultEl = document.getElementById('historyResult');
   resultEl.innerHTML = '<div class="visitor-empty">⏳ Mencari...</div>';
   try {
-    const res = await fetch(BACKEND_URL + '/api/orders-history', {headers: token ? {Authorization:'Bearer '+token} : {}});
+    const res = await fetch(BACKEND_URL + '/api/orders-history' + (token ? '' : '?phone=' + encodeURIComponent(hp)), {headers: token ? {Authorization:'Bearer '+token} : {}});
     const data = await res.json();
     if (!data.success || !data.orders || data.orders.length === 0) {
       resultEl.innerHTML = '<div class="visitor-empty">Tidak ada order dengan no ini</div>';
