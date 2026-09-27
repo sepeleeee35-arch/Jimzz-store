@@ -11,7 +11,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
 * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter','Segoe UI',Arial,sans-serif; -webkit-tap-highlight-color:transparent; }
-body { position:relative; z-index:0; background: #030306; color: #e6e6e6; line-height: 1.6; padding-bottom: 100px; overflow-x: hidden; scrollbar-width: thin; scrollbar-color: #00ff88 #030306; }
+body { background: #030306; color: #e6e6e6; line-height: 1.6; padding-bottom: 100px; overflow-x: hidden; scrollbar-width: thin; scrollbar-color: #00ff88 #030306; }
 body::-webkit-scrollbar { width: 8px; }
 body::-webkit-scrollbar-track { background: #030306; }
 body::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #00ff88, #00cc6a); border-radius: 4px; }
@@ -84,7 +84,9 @@ body::after { content: ""; position: fixed; top: 0; left: 0; width: 100vw; heigh
 .bg-toggle .mode-label { font-size: 11px; color: #fff; background: rgba(0,255,136,0.15); padding: 4px 10px; border-radius: 10px; border: 1px solid rgba(0,255,136,0.3); }
 .btn-history { display: inline-flex; align-items: center; gap: 8px; background: rgba(0,200,255,0.08); border: 1.5px solid rgba(0,200,255,0.4); color: #00c8ff; padding: 12px 22px; border-radius: 30px; font-size: 13px; font-weight: 800; cursor: pointer; font-family: inherit; margin-top: 12px; transition: 0.3s; }
 .btn-history:hover { background: rgba(0,200,255,0.2); transform: translateY(-2px); }
-.btn-history:active { transform: scale(0.97); }#loadingScreen.hide { opacity: 0; pointer-events: none; }
+.btn-history:active { transform: scale(0.97); }
+#loadingScreen { position: fixed; inset: 0; background: #030306; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.5s ease; }
+#loadingScreen.hide { opacity: 0; pointer-events: none; }
 .loading-logo { font-size: 48px; font-weight: 900; color: #00ff88; text-shadow: 0 0 30px rgba(0,255,136,0.8); animation: pulseGlow 1.5s ease-in-out infinite; letter-spacing: -1px; }
 .loading-tagline { color: #666; font-size: 12px; margin-top: 10px; letter-spacing: 3px; text-transform: uppercase; font-weight: 600; }
 .loading-bar { width: 200px; height: 3px; background: #1a1a24; border-radius: 2px; margin-top: 25px; overflow: hidden; }
@@ -92,22 +94,6 @@ body::after { content: ""; position: fixed; top: 0; left: 0; width: 100vw; heigh
 @keyframes loadBar { to { width: 100%; } }
 @keyframes shimmer { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
 @keyframes pulseGlow { 0%,100% { opacity:1; transform: scale(1); } 50% { opacity:0.7; transform: scale(0.97); } }
-
-/* ===== ACCOUNT ===== */
-.account-top-left{position:fixed;top:12px;left:12px;z-index:1000;margin:0}.account-top-left .account-btn{margin:0;box-shadow:0 8px 30px rgba(0,0,0,.35)}.account-top-left .account-badge{margin:0;background:rgba(3,6,3,.92);backdrop-filter:blur(12px)}
-
-.account-btn{display:inline-flex;align-items:center;gap:8px;margin-top:12px;background:rgba(0,255,136,.08);border:1.5px solid rgba(0,255,136,.4);color:#00ff88;padding:12px 22px;border-radius:30px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;transition:.3s}
-.account-btn:hover{background:rgba(0,255,136,.18);transform:translateY(-2px)}
-.account-badge{display:inline-flex;align-items:center;gap:7px;margin-top:12px;padding:9px 14px;border-radius:22px;background:rgba(255,255,255,.04);border:1px solid rgba(0,255,136,.25);color:#dfffea;font-size:11px;font-weight:800}
-.account-badge button{border:0;background:transparent;color:#ff7777;font:inherit;cursor:pointer}
-#accountModal{position:fixed;inset:0;background:rgba(0,0,0,.88);backdrop-filter:blur(18px);z-index:7000;display:none;align-items:center;justify-content:center;padding:18px}
-#accountModal.show{display:flex}
-.account-box{width:min(92vw,410px);background:linear-gradient(145deg,#101914,#0d0d15);border:1px solid rgba(0,255,136,.28);border-radius:22px;padding:25px 20px;box-shadow:0 30px 90px rgba(0,0,0,.8);position:relative}
-.account-box h2{color:#00ff88;font-size:23px;margin-bottom:5px}.account-box p{color:#7d8790;font-size:11px;margin-bottom:18px}
-.account-close{position:absolute;right:14px;top:10px;background:transparent;border:0;color:#888;font-size:28px;cursor:pointer}
-.account-tabs{display:flex;gap:7px;margin-bottom:16px}.account-tab{flex:1;padding:10px;border-radius:10px;border:1px solid #26332d;background:#080b09;color:#777;font-weight:800;cursor:pointer}.account-tab.active{border-color:#00ff88;color:#00ff88;background:rgba(0,255,136,.07)}
-.account-form{display:none}.account-form.active{display:block}.account-form input{width:100%;padding:13px 14px;margin-bottom:10px;background:#050607;border:1px solid #26332d;border-radius:11px;color:#fff;outline:none;font-family:inherit}.account-form input:focus{border-color:#00ff88}.account-submit{width:100%;padding:13px;border:0;border-radius:11px;background:linear-gradient(135deg,#00ff88,#00cc6a);color:#031008;font-weight:900;cursor:pointer}.account-note{margin-top:12px!important;color:#89918b!important;font-size:10px!important;line-height:1.5}.account-bonus{padding:10px;border:1px solid rgba(255,215,0,.25);background:rgba(255,215,0,.06);border-radius:11px;color:#ffd75a;font-size:11px;font-weight:800;margin-bottom:12px}
-
 .admin-badge-float { position: fixed; top: 12px; right: 12px; z-index: 999; background: linear-gradient(135deg, #ffd700, #ff9500); color: #000; padding: 8px 14px; border-radius: 20px; font-size: 11px; font-weight: 800; box-shadow: 0 5px 25px rgba(255,215,0,0.6); display: none; align-items: center; gap: 6px; cursor: pointer; letter-spacing: 0.5px; }
 .admin-badge-float.show { display: flex; }
 .admin-badge-float .logout-x { color: #000; font-weight: 900; margin-left: 5px; }
@@ -454,291 +440,25 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
 #page-home footer{max-width:760px;margin-left:auto;margin-right:auto}
 @media(max-width:480px){#page-home header{margin:10px 10px 22px;padding:32px 14px 24px;border-radius:24px}#page-home header h1{font-size:42px}#page-home .trust-row{gap:6px}#page-home .trust-item{font-size:9px}#page-home .menu-home{margin-left:4px;margin-right:4px}}
 
-
-/* ===== JIMZZ VISUAL POLISH v3 ===== */
-/* Softer purple/dark visual inspired by the reference app */
-body{background:#080611;color:#eee}
-body::after{background:radial-gradient(600px circle at var(--mouse-x,50%) var(--mouse-y,50%),rgba(151,76,255,.055),transparent 42%)}
-#bgContainer{background:radial-gradient(ellipse at 50% 0%,#1a0d2b 0%,#0c0716 42%,#05040a 100%)}
-#bgSimple{background:radial-gradient(circle at 20% 20%,rgba(132,61,255,.12),transparent 32%),radial-gradient(circle at 80% 70%,rgba(66,40,130,.10),transparent 35%),linear-gradient(180deg,#12091f,#07050d)}
-#bgSimple canvas{opacity:.18}
-#bgNeon{background:radial-gradient(ellipse at 50% 0%,#1b0d2d 0%,#0a0712 72%)}
-#bgNeon .neon-grid,#bgNeon .neon-horizon,#bgNeon .wave,#bgNeon .laser,#bgNeon .neon-ring{opacity:.18}
-.produk-card{background:linear-gradient(145deg,rgba(25,16,39,.94),rgba(12,10,20,.96));border-color:rgba(170,112,255,.14)}
-.produk-card::before{background:linear-gradient(90deg,transparent,#a66cff,transparent)}
-.produk-card::after{background:linear-gradient(135deg,rgba(166,108,255,.22),transparent,rgba(100,70,170,.08))}
-.produk-card:hover{border-color:rgba(166,108,255,.35);box-shadow:0 20px 50px rgba(100,55,180,.16)}
-.produk-icon{filter:drop-shadow(0 0 10px rgba(166,108,255,.18))}
-.produk-label{color:#b58cff}
-.product-badges{position:absolute;top:11px;left:12px;right:54px;display:flex;align-items:center;flex-wrap:wrap;gap:4px;margin:0;z-index:4;min-width:0;max-width:calc(100% - 66px);pointer-events:none}
-.product-badge{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;max-width:100%;white-space:nowrap;line-height:1;padding:4px 7px;border-radius:6px;font-size:7.5px;font-weight:800;letter-spacing:.08px;border:1px solid;box-shadow:none}
-.badge-cheap{color:#79ddb0;background:rgba(0,255,136,.035);border-color:rgba(0,255,136,.16)}
-.badge-expensive{color:#c4a4df;background:rgba(160,100,255,.035);border-color:rgba(190,140,255,.16)}
-.badge-hot{color:#ffc07c;background:rgba(255,130,20,.035);border-color:rgba(255,160,70,.16)}
-.produk-card.has-badges{padding-top:47px}
-@media(max-width:480px){
- .product-badges{top:10px;left:10px;right:50px;max-width:calc(100% - 60px);gap:3px}
- .product-badge{padding:4px 6px;font-size:7px;border-radius:5px}
- .produk-card.has-badges{padding-top:45px}
-}
-
-/* Reference-style skip-able intro loading */#loadingScreen::before{content:"";position:absolute;inset:-20%;background:radial-gradient(circle at 50% 38%,rgba(168,93,255,.24),transparent 25%),radial-gradient(circle at 15% 85%,rgba(88,45,150,.16),transparent 28%),radial-gradient(circle at 90% 15%,rgba(208,132,255,.08),transparent 25%);animation:introGlow 6s ease-in-out infinite alternate}#loadingScreen.hide{opacity:0;visibility:hidden;pointer-events:none}
-.loading-wrap{position:relative;z-index:2;width:min(88vw,360px);text-align:center;padding:28px 22px;border:1px solid rgba(180,120,255,.16);border-radius:28px;background:linear-gradient(145deg,rgba(24,13,39,.58),rgba(8,6,14,.48));backdrop-filter:blur(14px);box-shadow:0 30px 100px rgba(0,0,0,.55),0 0 80px rgba(130,65,210,.12)}
-.loading-mark{width:82px;height:82px;margin:0 auto 18px;border:1px solid rgba(190,130,255,.3);border-radius:25px;background:linear-gradient(145deg,rgba(150,80,255,.14),rgba(50,25,80,.12));display:flex;align-items:center;justify-content:center;font-size:36px;box-shadow:0 0 45px rgba(160,90,255,.16),inset 0 0 28px rgba(190,130,255,.05);position:relative}
-.loading-mark::before{content:"";position:absolute;inset:7px;border:1px solid rgba(195,140,255,.18);border-radius:19px;animation:loadingSpin 7s linear infinite}
-.loading-mark::after{content:"";position:absolute;width:6px;height:6px;top:6px;right:10px;border-radius:50%;background:#bd86ff;box-shadow:0 0 12px #bd86ff}
-.loading-logo{font-size:30px;font-weight:900;color:#fff;letter-spacing:-1px;text-shadow:0 0 25px rgba(180,110,255,.32);margin:0}
-.loading-logo .loading-accent{color:#b77aff}
-.loading-tagline{color:#857b91;font-size:9px;margin-top:8px;letter-spacing:3px;text-transform:uppercase;font-weight:800}
-.loading-status{margin-top:22px;color:#b4aabb;font-size:11px;font-weight:600}
-.loading-status span{color:#b77aff}
-.loading-bar{width:100%;height:4px;background:#17101f;border:1px solid #2b1c39;border-radius:99px;margin-top:10px;overflow:hidden}
-.loading-bar-fill{height:100%;width:0%;background:linear-gradient(90deg,#7540b5,#bd7cff,#8b52d2);border-radius:99px;animation:loadBar 2.1s ease-out forwards}
-.loading-actions{display:flex;justify-content:center;margin-top:16px}
-.loading-skip{border:1px solid rgba(190,130,255,.3);background:rgba(190,130,255,.07);color:#d6c5e6;padding:8px 16px;border-radius:999px;font:800 10px Inter,Arial,sans-serif;letter-spacing:1px;cursor:pointer;transition:.2s}
-.loading-skip:active{transform:scale(.96);background:rgba(190,130,255,.14)}
-.loading-skip:hover{border-color:rgba(205,155,255,.55);color:#fff}
-.loading-dots{margin-top:12px;display:flex;justify-content:center;gap:5px}
-.loading-dots i{width:4px;height:4px;border-radius:50%;background:#49355d;animation:loadingDot 1s ease-in-out infinite}
-.loading-dots i:nth-child(2){animation-delay:.15s}.loading-dots i:nth-child(3){animation-delay:.3s}
-@keyframes loadBar{to{width:100%}}
-@keyframes introGlow{from{transform:scale(1) rotate(0deg)}to{transform:scale(1.12) rotate(4deg)}}
-@keyframes introSweep{0%,20%{transform:translateX(-110%)}70%,100%{transform:translateX(110%)}}
-@keyframes loadingSpin{to{transform:rotate(360deg)}}
-@keyframes loadingDot{0%,100%{opacity:.25;transform:translateY(0)}50%{opacity:1;transform:translateY(-3px)}}
-
-/* ===== JIMZZ ANIME INTRO v1 ===== */.anime-bg{position:absolute;inset:0;overflow:hidden;background:
-  radial-gradient(circle at 76% 20%,rgba(255,130,196,.18),transparent 16%),
-  linear-gradient(180deg,#120a26 0%,#090719 52%,#03030a 100%)}
-.anime-bg::before{content:"";position:absolute;inset:0;background:
-  linear-gradient(125deg,transparent 0 42%,rgba(183,115,255,.07) 43%,transparent 44%),
-  linear-gradient(35deg,transparent 0 58%,rgba(255,116,194,.05) 59%,transparent 60%);
-  animation:animeLight 7s ease-in-out infinite alternate}
-.anime-moon{position:absolute;width:150px;height:150px;border-radius:50%;right:12%;top:10%;
-  background:radial-gradient(circle at 35% 32%,#fff 0,#ffdff2 24%,#e6a8ff 58%,rgba(181,101,255,.18) 72%,transparent 73%);
-  box-shadow:0 0 70px rgba(255,177,226,.28)}
-.anime-cloud{position:absolute;width:42%;height:30px;border-radius:50%;background:rgba(203,153,255,.07);filter:blur(7px)}
-.cloud-a{top:24%;left:-8%;transform:rotate(-5deg)}.cloud-b{top:38%;right:-12%;transform:rotate(4deg)}
-.anime-petal{position:absolute;color:#ffb5df;font-size:18px;text-shadow:0 0 14px #ff65b7;animation:petalFloat 5s ease-in-out infinite}
-.petal-a{left:18%;top:22%}.petal-b{right:23%;top:55%;animation-delay:1.5s}.petal-c{left:72%;top:34%;animation-delay:3s}
-.anime-city{position:absolute;left:0;right:0;bottom:0;height:28%;opacity:.7;
-  background:linear-gradient(135deg,transparent 0 6%,#070611 6% 18%,transparent 18% 21%,#090714 21% 36%,transparent 36% 40%,#06050f 40% 62%,transparent 62% 66%,#080611 66% 82%,transparent 82%);
-  clip-path:polygon(0 55%,8% 42%,13% 58%,19% 28%,25% 51%,31% 35%,38% 60%,45% 22%,51% 48%,57% 30%,64% 58%,72% 36%,80% 52%,88% 25%,94% 48%,100% 38%,100% 100%,0 100%)}
-.anime-character{position:absolute;bottom:-10px;left:50%;width:190px;height:360px;transform:translateX(-50%);filter:drop-shadow(0 0 28px rgba(174,93,255,.22))}
-.anime-head{position:absolute;width:82px;height:82px;border-radius:48% 48% 44% 44%;left:54px;top:62px;background:linear-gradient(145deg,#30203c,#110c1b);border:1px solid rgba(255,180,225,.18)}
-.anime-hair{position:absolute;width:112px;height:115px;left:39px;top:38px;background:linear-gradient(145deg,#2a1640,#08050d);clip-path:polygon(50% 0,78% 20%,100% 60%,79% 52%,87% 92%,62% 68%,50% 100%,35% 68%,8% 91%,18% 55%,0 64%,23% 19%);filter:drop-shadow(0 0 9px rgba(190,100,255,.28))}
-.anime-body{position:absolute;width:120px;height:210px;left:35px;top:138px;background:linear-gradient(90deg,#09070f,#26183a 48%,#07050c);clip-path:polygon(35% 0,65% 0,82% 13%,100% 100%,63% 100%,50% 54%,37% 100%,0 100%,18% 13%)}
-.anime-sword{position:absolute;width:8px;height:235px;left:151px;top:102px;background:linear-gradient(90deg,#b8a9ff,#fff,#a47cff);transform:rotate(15deg);border-radius:8px;box-shadow:0 0 16px rgba(180,150,255,.45)}.anime-kicker{color:#d99aff;font-size:8px;font-weight:900;letter-spacing:2px;margin-bottom:10px;text-shadow:0 0 12px rgba(218,145,255,.5)}
-.anime-title{margin-top:7px;color:#bca9d5;font-size:9px;font-weight:800;letter-spacing:3px}.anime-intro .loading-status span{color:#ff8bcf}.anime-intro .loading-bar-fill{background:linear-gradient(90deg,#8e45d0,#ff77c8,#9f63e8)}.anime-intro .loading-skip:hover{background:rgba(190,108,255,.18);transform:translateY(-1px)}
-@keyframes animeLight{from{transform:translateX(-2%)}to{transform:translateX(2%)}}
-@keyframes petalFloat{0%,100%{transform:translate(0,0) rotate(0);opacity:.35}50%{transform:translate(20px,28px) rotate(20deg);opacity:.9}}
-/* ===== JIMZZ BANNER + CINEMATIC ANIME INTRO v2 ===== */
-/* Badge berada di kanan, besar, terang, dan tidak bertabrakan dengan wishlist. */
-.product-badges{
-  top:12px!important;right:12px!important;left:auto!important;
-  width:auto!important;max-width:calc(100% - 58px)!important;
-  display:flex!important;justify-content:flex-end!important;align-items:center!important;
-  flex-wrap:nowrap!important;gap:6px!important;z-index:8!important;
-}
-.product-badge{
-  min-height:26px!important;padding:6px 10px!important;border-radius:9px!important;
-  font-size:10px!important;font-weight:900!important;letter-spacing:.25px!important;
-  border-width:1.5px!important;text-shadow:0 1px 4px rgba(0,0,0,.5)!important;
-  box-shadow:0 5px 18px rgba(0,0,0,.28)!important;
-}
-.badge-cheap{color:#fff!important;background:linear-gradient(135deg,#008f5a,#00d084)!important;border-color:#2dffc0!important;box-shadow:0 5px 18px rgba(0,255,160,.25)!important}
-.badge-expensive{color:#fff!important;background:linear-gradient(135deg,#c45b00,#ff9d00)!important;border-color:#ffd166!important;box-shadow:0 5px 18px rgba(255,150,0,.28)!important}
-.badge-hot{color:#fff!important;background:linear-gradient(135deg,#d71920,#ff4b1f)!important;border-color:#ff8a65!important;box-shadow:0 5px 20px rgba(255,45,45,.32)!important}
-.badge-combo,.badge-combo-cheap{
-  color:#fff!important;
-  background:linear-gradient(135deg,#8f1118,#e43f18 48%,#ff9d00)!important;
-  border-color:#ffb84d!important;
-  box-shadow:0 6px 22px rgba(255,75,20,.34)!important;
-}
-.badge-combo b{margin:0 3px;color:#ffe7a3}
-.produk-card.has-badges{padding-top:58px!important}
-@media(max-width:480px){
-  .product-badges{top:10px!important;right:10px!important;max-width:calc(100% - 48px)!important;gap:4px!important}
-  .product-badge{min-height:28px!important;padding:6px 8px!important;font-size:9px!important;border-radius:8px!important}
-  .produk-card.has-badges{padding-top:58px!important}
-}
-
-/* Cinematic original anime intro: red / black / gold, not purple. */.anime-bg{
-  background:
-    radial-gradient(circle at 78% 18%,rgba(255,190,70,.24),transparent 13%),
-    radial-gradient(circle at 20% 70%,rgba(190,20,25,.20),transparent 25%),
-    linear-gradient(180deg,#09080a 0%,#16090b 52%,#030305 100%)!important;
-}
-.anime-bg::before{
-  background:
-    linear-gradient(112deg,transparent 0 43%,rgba(255,200,80,.09) 44%,transparent 45%),
-    linear-gradient(68deg,transparent 0 62%,rgba(255,35,35,.10) 63%,transparent 64%)!important;
-}
-.anime-moon{
-  background:radial-gradient(circle at 35% 32%,#fff9d7 0,#ffd978 28%,#ff9b2f 58%,rgba(255,70,20,.12) 72%,transparent 73%)!important;
-  box-shadow:0 0 75px rgba(255,160,50,.34)!important;
-}
-.anime-cloud{background:rgba(255,210,130,.08)!important}
-.anime-petal{color:#ffb34d!important;text-shadow:0 0 14px #ff4b1f!important}
-.anime-city{background:linear-gradient(135deg,transparent 0 6%,#050506 6% 18%,transparent 18% 21%,#090607 21% 36%,transparent 36% 40%,#040405 40% 62%,transparent 62% 66%,#080607 66% 82%,transparent 82%)!important}
-.anime-character{filter:drop-shadow(0 0 30px rgba(255,70,25,.30))!important}
-.anime-head{background:linear-gradient(145deg,#3a211d,#0c0808)!important;border-color:rgba(255,190,100,.22)!important}
-.anime-hair{background:linear-gradient(145deg,#3b090b,#080506)!important;filter:drop-shadow(0 0 10px rgba(255,50,30,.38))!important}
-.anime-body{background:linear-gradient(90deg,#050505,#291111 48%,#040304)!important}
-.anime-sword{
-  background:linear-gradient(90deg,#fff1b0,#fff,#ff9d3d)!important;
-  box-shadow:0 0 18px rgba(255,160,50,.65)!important;
-}  background:linear-gradient(145deg,rgba(14,8,8,.78),rgba(5,4,5,.58))!important;
-  border-color:rgba(255,164,65,.30)!important;
-  box-shadow:0 30px 100px rgba(0,0,0,.72),0 0 90px rgba(255,65,25,.14)!important;
-}
-.anime-kicker{color:#ffb34d!important;text-shadow:0 0 14px rgba(255,120,30,.6)!important}
-.anime-title{color:#ffd98a!important}.anime-intro .loading-status span{color:#ffb02e!important}.anime-intro .loading-skip{border-color:rgba(255,175,70,.42)!important;background:rgba(255,80,20,.10)!important;color:#ffe2b0!important}  animation:introSweep 4.5s ease-in-out infinite!important;
-}
-@keyframes animeLight{from{transform:translateX(-3%)}to{transform:translateX(3%)}}
-@media(max-width:480px){
-  .anime-character{transform:translateX(-50%) scale(.78)!important}
-}
-
-/* ===== JIMZZ STORE SELLING INTRO ===== */  position:fixed!important;inset:0!important;z-index:99999!important;overflow:hidden!important;
-  background:#050609!important;color:#fff!important;display:block!important;
-  opacity:1;transition:opacity .65s ease!important;
-  /* Intro hanya visual. Semua tombol halaman di bawah tetap bisa disentuh. */
-  pointer-events:none!important;  pointer-events:auto!important;
-  position:relative!important;
-  z-index:100000!important;
-}
-.intro-scene::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.12),rgba(0,0,0,.68));z-index:2}
-.scene-1{
-  background:
-    radial-gradient(circle at 20% 20%,rgba(0,255,136,.20),transparent 30%),
-    radial-gradient(circle at 80% 80%,rgba(0,190,255,.15),transparent 34%),
-    #050609;
-  animation:introScene1 8.5s ease both;
-}
-.scene-1::after{
-  content:"";position:absolute;inset:0;
-  background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
-  background-size:42px 42px;
-  transform:perspective(500px) rotateX(55deg) scale(1.5) translateY(28%);
-  transform-origin:center bottom;
-  opacity:.55;
-}  position:absolute;width:55vw;height:55vw;max-width:520px;max-height:520px;
-  left:50%;top:48%;transform:translate(-50%,-50%);
-  border-radius:50%;
-  background:radial-gradient(circle,rgba(0,255,136,.18),transparent 68%);
-  filter:blur(12px);animation:storePulse 2.8s ease-in-out infinite alternate;
-}  position:absolute;left:50%;top:24%;transform:translateX(-50%);
-  padding:7px 13px;border:1px solid rgba(0,255,136,.38);
-  border-radius:30px;background:rgba(0,255,136,.07);
-  color:#8dffbf;font-size:9px;font-weight:900;letter-spacing:3px;
-  backdrop-filter:blur(10px);white-space:nowrap;
-}  position:absolute;left:50%;top:36%;transform:translateX(-50%);
-  width:92%;text-align:center;font-size:clamp(34px,11vw,72px);
-  font-weight:900;letter-spacing:-3px;line-height:1;
-  text-shadow:0 0 35px rgba(0,255,136,.35);
-}  background:linear-gradient(135deg,#fff 10%,#8dffc1 48%,#00ff88 90%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-}  position:absolute;left:50%;top:50%;transform:translateX(-50%);
-  width:90%;text-align:center;color:#8b919d;font-size:11px;font-weight:600;
-  letter-spacing:2px;
-}  position:absolute;left:50%;top:61%;transform:translateX(-50%);
-  padding:13px 25px;border-radius:30px;
-  border:1px solid rgba(0,255,136,.55);
-  background:linear-gradient(135deg,#00ff88,#00c96b);
-  color:#031008;font-size:11px;font-weight:900;letter-spacing:1px;
-  box-shadow:0 10px 35px rgba(0,255,136,.28);
-}  position:absolute;left:50%;bottom:14%;transform:translateX(-50%);
-  display:flex;gap:9px;width:92%;justify-content:center;flex-wrap:wrap;
-}  padding:7px 10px;border:1px solid rgba(255,255,255,.10);
-  border-radius:20px;background:rgba(255,255,255,.035);
-  color:#aeb4bf;font-size:8px;font-weight:800;letter-spacing:.5px;
-  backdrop-filter:blur(8px);
-}
-
-.scene-2{
-  background:
-    radial-gradient(circle at 18% 30%,rgba(0,200,255,.18),transparent 28%),
-    radial-gradient(circle at 82% 70%,rgba(0,255,136,.13),transparent 30%),
-    #06080d;
-  animation:introScene2 8.5s ease both;
-}
-.scene-3{
-  background:
-    radial-gradient(circle at 50% 35%,rgba(0,255,136,.13),transparent 28%),
-    linear-gradient(135deg,#05070b,#091219 55%,#040608);
-  animation:introScene3 8.5s ease both;
-}
-.scene-4{
-  background:
-    radial-gradient(circle at 50% 45%,rgba(0,200,255,.16),transparent 34%),
-    #05070b;
-  animation:introScene4 8.5s ease both;
-}
-
-.store-panel{
-  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
-  width:min(88vw,390px);padding:22px;border:1px solid rgba(255,255,255,.10);
-  border-radius:22px;background:linear-gradient(145deg,rgba(16,20,25,.88),rgba(7,9,13,.72));
-  box-shadow:0 25px 80px rgba(0,0,0,.55),0 0 50px rgba(0,255,136,.08);
-  backdrop-filter:blur(18px);z-index:4;
-}
-.store-panel-kicker{color:#00ff88;font-size:9px;font-weight:900;letter-spacing:2px;margin-bottom:10px}
-.store-panel h2{font-size:clamp(22px,7vw,32px);line-height:1.1;margin-bottom:8px}
-.store-panel p{color:#7f8792;font-size:11px;line-height:1.6}
-.store-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:18px}
-.store-mini{padding:12px 7px;text-align:center;border-radius:14px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07)}
-.store-mini b{display:block;font-size:19px;margin-bottom:4px}
-.store-mini span{font-size:8px;color:#8d949f;font-weight:700}
-
-.scene-2 .store-panel{animation:panelUp .7s ease .15s both}
-.scene-3 .store-panel{animation:panelUp .7s ease .15s both}
-.scene-4 .store-panel{animation:panelUp .7s ease .15s both}
-
-.scene-caption{
-  position:absolute;left:50%;bottom:13%;transform:translateX(-50%);
-  color:#858d98;font-size:9px;font-weight:900;letter-spacing:3px;text-align:center;
-  z-index:5;white-space:nowrap;
-}
-.scene-line{
-  position:absolute;left:8%;right:8%;top:18%;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(0,255,136,.55),transparent);
-  box-shadow:0 0 20px rgba(0,255,136,.35);
-}
-.final-kicker{font-size:9px;letter-spacing:4px;color:#ffb45c;font-weight:900;margin-bottom:16px;text-shadow:0 0 18px rgba(255,120,30,.7)}
-.final-logo{font-size:clamp(42px,12vw,78px);font-weight:900;letter-spacing:-3px;text-shadow:0 0 35px rgba(255,255,255,.18)}
-.final-logo span{color:#ff4a2e;text-shadow:0 0 30px rgba(255,60,35,.7)}
-.final-sub{margin-top:10px;font-size:10px;letter-spacing:5px;color:#b8c1ca;font-weight:700}
-.final-line{width:180px;height:2px;margin-top:22px;background:linear-gradient(90deg,transparent,#ff4a2e,#ffbd55,transparent);box-shadow:0 0 20px rgba(255,80,35,.7)}
-.intro-progress div{height:100%;width:0;background:linear-gradient(90deg,#00ff88,#00c8ff,#fff);box-shadow:0 0 12px #00ff88;animation:introProgress 8.5s linear forwards}  position:absolute;right:7%;bottom:9%;z-index:30;
-  background:rgba(0,0,0,.45);border:1px solid rgba(0,255,136,.45);
-  color:#b9ffd7;border-radius:20px;padding:8px 13px;font-size:9px;
-  font-weight:900;letter-spacing:1px;backdrop-filter:blur(8px)
-}
-@keyframes introScene1{0%,22%{opacity:1;transform:scale(1)}27%,100%{opacity:0;transform:scale(1.05)}}
-@keyframes introScene2{0%,20%{opacity:0}25%,45%{opacity:1;transform:scale(1)}50%,100%{opacity:0;transform:scale(1.05)}}
-@keyframes introScene3{0%,43%{opacity:0}48%,68%{opacity:1;transform:scale(1)}73%,100%{opacity:0;transform:scale(1.05)}}
-@keyframes introScene4{0%,66%{opacity:0}71%,83%{opacity:1;transform:scale(1)}88%,100%{opacity:0;transform:scale(1.05)}}
-@keyframes introFinal{0%,82%{opacity:0;transform:scale(1.04)}88%,96%{opacity:1;transform:scale(1)}100%{opacity:1}}  .store-panel{width:86vw;padding:18px}}
-
-
-/* ===== CLICK SAFETY =====
-   Tidak ada overlay global di atas Store. Elemen UI utama selalu menerima tap.
-*/
-#bgContainer, #bgContainer * { pointer-events:none !important; }
-.tab-page, #page-home, #page-home *, .bottom-nav, .bottom-nav * { pointer-events:auto; }
-button, a, input, select, textarea, [onclick] { touch-action:manipulation; }
 </style>
 </head>
 <body>
+
+<div id="loadingScreen">
+  <div class="loading-logo">💚 JIMZZ</div>
+  <div class="loading-tagline">Digital Store</div>
+  <div class="loading-bar"><div class="loading-bar-fill"></div></div>
+</div>
 
 <div class="toast-container" id="toastContainer"></div>
 <div class="confetti-container" id="confettiContainer"></div>
 <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
-<div class="admin-badge-float" id="adminBadge"><span onclick="openAdminPanel()">👑 ADMIN PANEL</span><span class="logout-x" onclick="accountLogout()">×</span></div>
+<div class="admin-badge-float" id="adminBadge" onclick="adminLogout()">
+  👑 ADMIN <span class="logout-x">×</span>
+</div>
 
-<div id="adminLoginModal" style="display:none!important;">
+<div id="adminLoginModal">
   <div class="admin-login-box">
     <div class="admin-login-icon">👑</div>
     <h2>Admin Login</h2>
@@ -771,7 +491,7 @@ button, a, input, select, textarea, [onclick] { touch-action:manipulation; }
 
 <div class="tab-page active" id="page-home">
   <header>
-    <h1><span class="gradient-text">Jimzz Store</span></h1>
+    <h1 class="jimzz-clickable" onclick="secretClick()"><span class="gradient-text">Jimzz Store</span></h1>
     <p class="tagline">Top Up Game, Sosmed & Digital Produk Terlengkap</p>
     <div class="counter"><span class="dot"></span>🔥 <span id="viewCount">1.375</span> orang sudah order</div>
     <div class="coin-display">
@@ -795,9 +515,6 @@ button, a, input, select, textarea, [onclick] { touch-action:manipulation; }
     </div>
     <div>
       <button class="btn-history" onclick="bukaRiwayat()">📋 Riwayat Order</button>
-    </div>
-    <div id="accountArea" class="account-top-left">
-      <button class="account-btn" onclick="openAccountModal()">👤 Gunakan Akun</button>
     </div>
     <button class="bg-toggle" id="bgToggle" onclick="toggleBgMode()">
       <span class="bg-icon">🎨</span>
@@ -888,13 +605,6 @@ button, a, input, select, textarea, [onclick] { touch-action:manipulation; }
         <div class="admin-stat"><div class="admin-stat-value" id="adminProdukMT">5</div><div class="admin-stat-label">Produk MT</div></div>
         <div class="admin-stat"><div class="admin-stat-value" id="adminStatus">Online</div><div class="admin-stat-label">Status Web</div></div>
       </div>
-      <div style="margin-top:16px;padding:16px;border:1px solid rgba(255,215,0,.2);border-radius:16px;background:rgba(255,215,0,.03)">
-        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
-          <div><b style="color:#ffd700">👥 MANAJEMEN AKUN</b><div style="font-size:10px;color:#777;margin-top:3px">Lihat akun dan naik/turunkan akses admin.</div></div>
-          <button onclick="loadAdminUsers()" style="border:1px solid #ffd700;background:rgba(255,215,0,.08);color:#ffd700;padding:9px 12px;border-radius:10px;font-weight:800">🔄 Muat Akun</button>
-        </div>
-        <div id="adminUsersList" style="margin-top:12px"><div style="color:#777;font-size:11px">Klik Muat Akun.</div></div>
-      </div>
     </div>
   </section>
 
@@ -953,6 +663,14 @@ button, a, input, select, textarea, [onclick] { touch-action:manipulation; }
   <section class="kategori">
     <h2>🚀 Layanan <span class="accent">Lainnya</span></h2>
     <p class="sub">Pilih layanan yang kamu butuhkan</p>
+    <div class="filter-bar">
+      <select id="sortJpm" onchange="applySort('jpm', this.value)">
+        <option value="default">Urutkan: Default</option>
+        <option value="termurah">💰 Termurah</option>
+        <option value="termahal">💎 Termahal</option>
+        <option value="terlaris">🔥 Terlaris</option>
+      </select>
+    </div>
     <div class="produk-list" id="jpm"></div>
   </section>
   <footer><p>© 2025 Jimzz Store — All Rights Reserved 😈</p></footer>
@@ -962,6 +680,14 @@ button, a, input, select, textarea, [onclick] { touch-action:manipulation; }
   <section class="kategori">
     <h2>📱 Suntik <span class="accent">All Sosmed</span></h2>
     <p class="sub">Pilih layanan yang kamu butuhkan</p>
+    <div class="filter-bar">
+      <select id="sortSuntik" onchange="applySort('sosmed', this.value)">
+        <option value="default">Urutkan: Default</option>
+        <option value="termurah">💰 Termurah</option>
+        <option value="termahal">💎 Termahal</option>
+        <option value="terlaris">🔥 Terlaris</option>
+      </select>
+    </div>
     <div class="pengumuman">
       <div class="pengumuman-header"><span class="pengumuman-icon">📢</span><span class="pengumuman-title">PENGUMUMAN PENTING</span></div>
       <p class="pengumuman-text">Jika jumlah <b>like</b> atau <b>followers</b> Instagram, TikTok, dan sosial media lainnya <b>tiba-tiba menurun</b> — itu adalah hal <b>NORMAL</b>.</p>
@@ -982,6 +708,14 @@ button, a, input, select, textarea, [onclick] { touch-action:manipulation; }
   <section class="kategori">
     <h2>📦 Jual <span class="accent">APK</span></h2>
     <p class="sub">Aplikasi premium murah & aman</p>
+    <div class="filter-bar">
+      <select id="sortApk" onchange="applySort('apkList', this.value)">
+        <option value="default">Urutkan: Default</option>
+        <option value="termurah">💰 Termurah</option>
+        <option value="termahal">💎 Termahal</option>
+        <option value="terlaris">🔥 Terlaris</option>
+      </select>
+    </div>
     <div class="produk-list" id="apkList"></div>
   </section>
   <footer><p>© 2025 Jimzz Store — All Rights Reserved 😈</p></footer>
@@ -993,33 +727,6 @@ button, a, input, select, textarea, [onclick] { touch-action:manipulation; }
   <button class="nav-item active" data-tab="home" onclick="switchTab('home')"><span class="nav-icon">🏠</span><span class="nav-label">Home</span></button>
   <button class="nav-item" data-tab="apk" onclick="switchTab('apk')"><span class="nav-icon">📦</span><span class="nav-label">Jual APK</span></button>
   <button class="nav-item" data-tab="jpm" onclick="switchTab('jpm')"><span class="nav-icon">🚀</span><span class="nav-label">Lainnya</span></button>
-</div>
-
-
-<div class="modal-overlay" id="accountModal" onclick="if(event.target===this)closeAccountModal()">
-  <div class="account-box">
-    <button class="account-close" onclick="closeAccountModal()">×</button>
-    <h2>👤 Akun Jimzz</h2>
-    <p>Simpan koin dan akses akunmu dari perangkat ini.</p>
-    <div class="account-tabs">
-      <button class="account-tab active" id="accountLoginTab" onclick="showAccountForm('login')">Login</button>
-      <button class="account-tab" id="accountRegisterTab" onclick="showAccountForm('register')">Register</button>
-    </div>
-    <div class="account-form active" id="accountLoginForm">
-      <input id="accountLoginUsername" autocomplete="username" placeholder="Username">
-      <input id="accountLoginPassword" type="password" autocomplete="current-password" placeholder="Password">
-      <button class="account-submit" onclick="accountLogin()">Login</button>
-      <div class="account-note">Lupa password? Hubungi admin untuk bantuan. Tidak ada reset password otomatis.</div>
-    </div>
-    <div class="account-form" id="accountRegisterForm">
-      <div class="account-bonus">⭐ Bonus pendaftaran: 500 koin untuk akun pertama di perangkat ini.</div>
-      <input id="accountRegUsername" autocomplete="username" placeholder="Username (min. 4 karakter)">
-      <input id="accountRegPassword" type="password" autocomplete="new-password" placeholder="Password (min. 6 karakter)">
-      <input id="accountRegConfirm" type="password" autocomplete="new-password" placeholder="Ulangi password">
-      <button class="account-submit" onclick="accountRegister()">Buat Akun</button>
-    </div>
-    <p class="account-note">Guest tetap bisa belanja tanpa akun. Jika kamu punya koin Guest, koin itu akan dipindahkan saat membuat akun.</p>
-  </div>
 </div>
 
 <div class="modal-overlay" id="orderModal" onclick="if(event.target===this)tutupOrder()">
@@ -1152,6 +859,7 @@ button, a, input, select, textarea, [onclick] { touch-action:manipulation; }
 // 🔧 KONFIGURASI
 // ============================================
 const BACKEND_URL = "https://jimzz-backend.vercel.app";
+const ADMIN_PASSWORD = "jimzzadmin2025";
 const TELEGRAM_BOT_TOKEN = "8680818829:AAGxdsor3_uUToeJu6Tb_looQOfzKg9_mkA";
 const TELEGRAM_CHAT_ID = "8086577869";
 const MIN_BAYAR_QRIS = 1000;
@@ -1201,182 +909,6 @@ function addPoints(amount) {
   localStorage.setItem('jimzz_points', (current + earned).toString());
   return earned;
 }
-
-function getAccountToken(){ return localStorage.getItem('jimzz_account_token') || ''; }
-function getAccountUser(){ try{return JSON.parse(localStorage.getItem('jimzz_account_user')||'null')}catch{return null} }
-function setAccountSession(token,user){
-  if(token) localStorage.setItem('jimzz_account_token',token); else localStorage.removeItem('jimzz_account_token');
-  if(user) localStorage.setItem('jimzz_account_user',JSON.stringify(user)); else localStorage.removeItem('jimzz_account_user');
-  isAdmin=!!(user && user.isAdmin && token);
-  localStorage.removeItem('jimzz_admin');
-  renderAccountArea();
-  if(document.readyState!=='loading') applyAdminUI();
-}
-function accountDeviceId(){
-  let id=localStorage.getItem('jimzz_device_id');
-  if(!id){ id='dev_'+cryptoRandomId(); localStorage.setItem('jimzz_device_id',id); }
-  return id;
-}
-function cryptoRandomId(){
-  if(window.crypto?.getRandomValues){const a=new Uint32Array(4);crypto.getRandomValues(a);return Array.from(a).map(x=>x.toString(36)).join('');}
-  return Date.now().toString(36)+'_'+Math.random().toString(36).slice(2);
-}
-function openAccountModal(){document.getElementById('accountModal')?.classList.add('show');}
-function closeAccountModal(){document.getElementById('accountModal')?.classList.remove('show');}
-function showAccountForm(mode){
-  document.getElementById('accountLoginForm').classList.toggle('active',mode==='login');
-  document.getElementById('accountRegisterForm').classList.toggle('active',mode==='register');
-  document.getElementById('accountLoginTab').classList.toggle('active',mode==='login');
-  document.getElementById('accountRegisterTab').classList.toggle('active',mode==='register');
-}
-function renderAccountArea(){
-  const el=document.getElementById('accountArea'); if(!el)return;
-  const user=getAccountUser();
-  if(user){
-    const adminBtn=user.isAdmin ? '<button onclick="openAdminPanel()" style="color:#ffd700">👑 Admin</button>' : '';
-    el.innerHTML='<div class="account-badge">👤 '+escapeHtml(user.username)+' • ⭐ '+Number(user.points||0).toLocaleString('id-ID')+' <button onclick="showAccountProfile()">Profil</button><button onclick="changeAccountPassword()">PW</button><button onclick="showAccountSessions()">Sesi</button> '+adminBtn+' <button onclick="accountLogout()">Keluar</button></div>';
-  }else{
-    el.innerHTML='<button class="account-btn" onclick="openAccountModal()">👤 Gunakan Akun</button>';
-  }
-  renderCoinBalance();
-}
-function escapeHtml(s){return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
-async function syncAccountMe(){
-  const token=getAccountToken(); if(!token)return false;
-  try{
-    const res=await fetch(BACKEND_URL+'/api/auth?action=me',{headers:{Authorization:'Bearer '+token}});
-    const data=await res.json();
-    if(!data.success || !data.user){setAccountSession();return false;}
-    setAccountSession(token,data.user);
-    localStorage.setItem('jimzz_points',String(data.user.points||0));
-    return true;
-  }catch(e){console.log('Account sync error',e);return false;}
-}
-async function changeAccountPassword(){
-  const currentPassword=prompt('Masukkan password lama:');
-  if(currentPassword===null)return;
-  const newPassword=prompt('Masukkan password baru (min 8, huruf + angka):');
-  if(newPassword===null)return;
-  const confirmPassword=prompt('Ulangi password baru:');
-  if(confirmPassword===null)return;
-  try{
-    const res=await fetch(BACKEND_URL+'/api/auth?action=change-password',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+getAccountToken()},body:JSON.stringify({currentPassword,newPassword,confirmPassword})});
-    const data=await res.json(); showToast(data.success?'✅ Password berhasil diubah':('❌ '+(data.error||'Gagal ubah password')),data.success?'success':'error');
-  }catch(e){showToast('Gagal terhubung ke server','error');}
-}
-async function showAccountProfile(){
-  try{
-    const res=await fetch(BACKEND_URL+'/api/auth?action=profile',{headers:{Authorization:'Bearer '+getAccountToken()}});
-    const data=await res.json();
-    if(!data.success) return showToast(data.error||'Gagal memuat profil','error');
-    const orders=data.orders||[];
-    alert('👤 '+data.user.username+'\n⭐ Koin: '+Number(data.user.points||0).toLocaleString('id-ID')+'\n🛒 Total order: '+orders.length+'\n📅 Bergabung: '+new Date(data.user.created_at).toLocaleDateString('id-ID'));
-  }catch(e){showToast('Gagal memuat profil','error');}
-}
-async function showAccountSessions(){
-  try{
-    const res=await fetch(BACKEND_URL+'/api/auth?action=sessions',{headers:{Authorization:'Bearer '+getAccountToken()}});
-    const data=await res.json();
-    if(!data.success) return showToast(data.error||'Gagal memuat sesi','error');
-    const text=(data.sessions||[]).map((s,i)=>(i+1)+'. '+s.deviceLabel+' — '+new Date(s.createdAt).toLocaleString('id-ID')+(s.current?' (PERANGKAT INI)':'')).join('\n');
-    if(confirm('📱 Sesi akun:\n\n'+(text||'Tidak ada')+'\n\nTekan OK untuk logout semua perangkat lain.')) logoutAllDevices();
-  }catch(e){showToast('Gagal memuat sesi','error');}
-}
-async function logoutAllDevices(){
-  if(!confirm('Logout semua perangkat lain?'))return;
-  const res=await fetch(BACKEND_URL+'/api/auth?action=logout-all',{method:'POST',headers:{Authorization:'Bearer '+getAccountToken()}});
-  const data=await res.json(); showToast(data.success?'✅ Perangkat lain sudah logout':('❌ '+(data.error||'Gagal')),data.success?'success':'error');
-}
-async function loadAdminUsers(){
-  if(!isAdmin)return;
-  const el=document.getElementById('adminUsersList'); if(!el)return;
-  el.innerHTML='<div style="color:#ffd700;font-size:11px">⏳ Memuat akun...</div>';
-  try{
-    const res=await fetch(BACKEND_URL+'/api/auth?action=admin-users',{headers:{Authorization:'Bearer '+getAccountToken()}});
-    const data=await res.json();
-    if(!data.success) throw new Error(data.error||'Gagal');
-    el.innerHTML=(data.users||[]).map(u=>'<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid #20251f"><div><b>'+escapeHtml(u.username)+'</b><div style="font-size:9px;color:#777">⭐ '+Number(u.points||0).toLocaleString('id-ID')+' • login '+Number(u.login_count||0)+'x</div></div><button onclick="toggleUserAdmin(\''+u.id+'\','+(!u.isAdmin)+')" style="border:1px solid '+(u.isAdmin?'#ff7777':'#00ff88')+';background:transparent;color:'+(u.isAdmin?'#ff7777':'#00ff88')+';padding:6px 9px;border-radius:8px;font-size:10px;font-weight:800">'+(u.isAdmin?'Turunkan':'Jadikan Admin')+'</button></div>').join('')||'<div style="color:#777">Belum ada akun.</div>';
-  }catch(e){el.innerHTML='<div style="color:#ff7777;font-size:11px">❌ '+escapeHtml(e.message)+'</div>';}
-}
-async function toggleUserAdmin(userId,makeAdmin){
-  if(!confirm(makeAdmin?'Jadikan akun ini ADMIN?':'Turunkan akun ini dari ADMIN?'))return;
-  const res=await fetch(BACKEND_URL+'/api/auth?action=set-admin',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+getAccountToken()},body:JSON.stringify({userId,makeAdmin})});
-  const data=await res.json(); if(data.success){showToast(makeAdmin?'👑 Akun jadi admin':'Admin diturunkan','success');loadAdminUsers();}else showToast(data.error||'Gagal','error');
-}
-async function accountLogin(){
-  const username=document.getElementById('accountLoginUsername').value.trim();
-  const password=document.getElementById('accountLoginPassword').value;
-  if(!username||!password){showToast('Username dan password wajib diisi','warning');return;}
-  try{
-    const res=await fetch(BACKEND_URL+'/api/auth?action=login',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({username,password})
-    });
-    const raw=await res.text();
-    let data;
-    try{data=JSON.parse(raw);}catch{throw new Error('HTTP '+res.status+' — respons backend bukan JSON');}
-    if(!res.ok || !data.success){
-  const msg = [data.error, data.detail].filter(Boolean).join(' — ') || ('Login gagal (HTTP '+res.status+')');
-  showToast(msg,'error');
-  console.error('LOGIN BACKEND ERROR:', {status:res.status, data});
-  return;
-}
-    setAccountSession(data.token,data.user);
-    localStorage.setItem('jimzz_points',String(data.user.points||0));
-    closeAccountModal(); renderCoinBalance();
-    if(data.user.isAdmin){showToast('👑 Login admin berhasil','success');openAdminPanel();}
-    else showToast('✅ Login berhasil sebagai '+data.user.username,'success');
-  }catch(e){console.error('Login error:',e);showToast(e.message||'Gagal terhubung ke server','error');}
-}
-async function accountRegister(){
-  const username=document.getElementById('accountRegUsername').value.trim();
-  const password=document.getElementById('accountRegPassword').value;
-  const confirmPassword=document.getElementById('accountRegConfirm').value;
-  if(!username||!password||!confirmPassword){showToast('Semua data register wajib diisi','warning');return;}
-  if(password!==confirmPassword){showToast('Konfirmasi password tidak cocok','error');return;}
-  const deviceId=accountDeviceId();
-  const alreadyBonus=localStorage.getItem('jimzz_bonus_claimed_device')==='true';
-  const guestPoints=getPoints();
-  if(password.length < 8 || !/[A-Za-z]/.test(password) || !/[0-9]/.test(password)){showToast('Password minimal 8 karakter dan harus berisi huruf + angka','warning');return;}
-  try{
-    const res=await fetch(BACKEND_URL+'/api/auth?action=register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username,password,confirmPassword,deviceId})});
-    const raw=await res.text();
-    let data; try{data=JSON.parse(raw);}catch{throw new Error('HTTP '+res.status+' — respons backend bukan JSON');}
-    if(!data.success){showToast(data.error||'Registrasi gagal','error');return;}
-    setAccountSession(data.token,data.user);
-    let totalPoints=Number(data.user.points||0);
-    if(!alreadyBonus){
-      const bonus=await addPointsToAccount(25000);
-      if(bonus?.success) totalPoints=Number(bonus.totalPoints||totalPoints);
-      localStorage.setItem('jimzz_bonus_claimed_device','true');
-    }
-    if(guestPoints>0){
-      const migrated=await addPointsToAccount(guestPoints*KOIN_PER_RUPIAH);
-      if(migrated?.success) totalPoints=Number(migrated.totalPoints||totalPoints);
-      localStorage.setItem('jimzz_points','0');
-    }
-    const fresh={...data.user,points:totalPoints};
-    setAccountSession(data.token,fresh); localStorage.setItem('jimzz_points',String(totalPoints));
-    closeAccountModal(); renderCoinBalance();
-    showConfetti();
-    showToast('🎉 Akun dibuat! Koin berhasil disiapkan.','success');
-  }catch(e){showToast('Gagal terhubung ke server','error');}
-}
-async function addPointsToAccount(amountRupiah){
-  const token=getAccountToken(); if(!token)return null;
-  try{
-    const res=await fetch(BACKEND_URL+'/api/auth?action=add-points',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+token},body:JSON.stringify({amount:amountRupiah})});
-    return await res.json();
-  }catch(e){return null;}
-}
-async function accountLogout(){
-  const token=getAccountToken();
-  try{if(token)await fetch(BACKEND_URL+'/api/auth?action=logout',{method:'POST',headers:{Authorization:'Bearer '+token}})}catch(e){}
-  setAccountSession();
-  showToast('Kamu sekarang jadi Guest','info');
-}
-
 function renderCoinBalance() {
   const el = document.getElementById('coinBalance');
   if (el) el.innerText = getPoints().toLocaleString('id-ID');
@@ -1419,15 +951,8 @@ let currentBgMode = localStorage.getItem('jimzz_bg_mode') || 'simple';
 function applyBgMode() {
   const simple = document.getElementById('bgSimple');
   const neon = document.getElementById('bgNeon');
-  if (simple && neon) {
-    if (currentBgMode === 'simple') {
-      simple.classList.remove('hidden');
-      neon.classList.remove('active');
-    } else {
-      simple.classList.add('hidden');
-      neon.classList.add('active');
-    }
-  }
+  if (currentBgMode === 'simple') { simple.classList.remove('hidden'); neon.classList.remove('active'); }
+  else { simple.classList.add('hidden'); neon.classList.add('active'); }
   updateBgLabel();
 }
 function updateBgLabel() {
@@ -1655,7 +1180,18 @@ function handleOrderSuccess(orderId, totalBayar, produkNama) {
   showConfetti();
   showToast(`✅ Pesanan ${orderId} SELESAI! Admin udah proses.`, 'success');
 
-  // Koin diberikan server-side saat admin mengonfirmasi order.
+  if (totalBayar && totalBayar > 0) {
+    const earned = addPoints(totalBayar);
+    renderCoinBalance();
+    if (earned > 0) {
+      setTimeout(() => {
+        showToast(`🎁 +${earned.toLocaleString('id-ID')} koin! Total: ${getPoints().toLocaleString('id-ID')} koin`, 'success');
+      }, 1500);
+    }
+  }
+
+  sendToTelegram(`<b>✅ ORDER SELESAI!</b>\n\n<b>🎫 Order ID:</b> <code>${orderId}</code>\n<b>📦 Produk:</b> ${produkNama || '-'}\n<b>🕐 Waktu:</b> ${new Date().toLocaleString('id-ID')}`);
+}
 
 function handleOrderFailed(orderId, produkNama) {
   const processedKey = 'jimzz_processed_' + orderId;
@@ -1721,7 +1257,7 @@ function startBackgroundPolling() {
 async function loadOrders() {
   if (!isAdmin) return;
   try {
-    const res = await fetch(BACKEND_URL + '/api/orders-list', { headers: { Authorization: 'Bearer ' + getAccountToken() } });
+    const res = await fetch(BACKEND_URL + '/api/orders-list');
     const data = await res.json();
     if (!data.success) return;
     const listEl = document.getElementById('orderQueueList');
@@ -1753,7 +1289,7 @@ async function completeOrder(orderId) {
   try {
     const res = await fetch(BACKEND_URL + '/api/complete-order', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + getAccountToken() },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ orderId: orderId })
     });
     const data = await res.json();
@@ -1772,7 +1308,7 @@ async function failOrder(orderId) {
   try {
     const res = await fetch(BACKEND_URL + '/api/fail-order', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + getAccountToken() },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ orderId: orderId })
     });
     const data = await res.json();
@@ -1943,7 +1479,7 @@ function initCursorGlow() {
 let isAdmin = false;
 let secretClickCount = 0;
 let secretClickTimer = null;
-// Status admin hanya berasal dari sesi backend, bukan localStorage.
+if (localStorage.getItem('jimzz_admin') === 'true') isAdmin = true;
 let cachedCounters = { totalOrder: 1375, produkOrder: {} };
 async function loadCounters() {
   try {
@@ -1983,12 +1519,19 @@ function secretClick() {
     }
   }
 }
-function openAdminPanel(){
-  if(!isAdmin){showToast('Akun ini bukan admin','warning');return;}
-  const panel=document.getElementById('adminPanelSection');
-  if(panel){panel.style.display='block';panel.scrollIntoView({behavior:'smooth',block:'start'});}
+function adminLogin() {
+  const input = document.getElementById('adminPasswordInput').value;
+  const error = document.getElementById('adminLoginError');
+  if (input === ADMIN_PASSWORD) {
+    isAdmin = true;
+    localStorage.setItem('jimzz_admin', 'true');
+    document.getElementById('adminLoginModal').classList.remove('show');
+    applyAdminUI();
+  } else {
+    error.classList.add('show');
+    setTimeout(() => error.classList.remove('show'), 2000);
+  }
 }
-function adminLogin() { return false; }
 function adminLogout() {
   isAdmin = false;
   localStorage.removeItem('jimzz_admin');
@@ -2011,7 +1554,6 @@ function applyAdminUI() {
     loadVisitors();
     loadOrders();
     loadStats();
-    loadAdminUsers();
     menuTopup.classList.remove('disabled');
     menuTopup.classList.add('admin-view');
     if (topupMaintenanceInfo) {
@@ -2036,50 +1578,30 @@ function applyAdminUI() {
 function handleTopupClick() { if (isAdmin) switchTab('topup'); else showToast('Top Up Game sedang MAINTENANCE', 'warning'); }
 
 function startApp() {
-  // Startup dibuat fail-safe: satu fitur yang error tidak boleh mematikan
-  // seluruh tombol / navigasi toko.
-  const safeInit = (name, fn) => {
-    try {
-      const result = fn();
-      if (result && typeof result.catch === 'function') {
-        result.catch(err => console.error('[Jimzz startup]', name, err));
-      }
-    } catch (err) {
-      console.error('[Jimzz startup]', name, err);
-    }
-  };
-
-  safeInit('syncAccountMe', () => syncAccountMe());
-  safeInit('renderAccountArea', renderAccountArea);
-  safeInit('applyBgMode', applyBgMode);
-  safeInit('background', () => {
-    if (currentBgMode === 'simple') initCanvasSimple();
-    else initCanvasNeon();
-  });
-  safeInit('initCursorGlow', initCursorGlow);
-  safeInit('initData', initData);
-  safeInit('renderGameList', renderGameList);
-  safeInit('renderPlaylist', renderPlaylist);
-  safeInit('initMusicEvents', initMusicEvents);
-  safeInit('applyAdminUI', applyAdminUI);
-  safeInit('loadCounters', () => loadCounters());
-  safeInit('updateBgLabel', updateBgLabel);
-  safeInit('pingVisitor', () => pingVisitor());
-  safeInit('renderCoinBalance', renderCoinBalance);
-  safeInit('renderCoinHeaderToggle', renderCoinHeaderToggle);
+  applyBgMode();
+  if (currentBgMode === 'simple') initCanvasSimple(); else initCanvasNeon();
+  initCursorGlow();
+  initData();
+  renderGameList();
+  renderPlaylist();
+  initMusicEvents();
+  applyAdminUI();
+  loadCounters();
+  updateBgLabel();
+  pingVisitor();
+  renderCoinBalance();
+  renderCoinHeaderToggle();
 
   // Resume order yang belum kelar (kalau user refresh / tutup web)
-  safeInit('resumeOrder', () => {
-    const orderAktif = getOrderAktif();
-    if (orderAktif) {
-      console.log('🔄 Resume polling order:', orderAktif.orderId);
-      showToast(`🔄 Cek pesanan ${orderAktif.orderId}...`, 'info');
-      startBackgroundPolling();
-    }
-  });
+  const orderAktif = getOrderAktif();
+  if (orderAktif) {
+    console.log('🔄 Resume polling order:', orderAktif.orderId);
+    showToast(`🔄 Cek pesanan ${orderAktif.orderId}...`, 'info');
+    startBackgroundPolling();
+  }
 
   // Bersihin flag processed lama (max 50)
-  safeInit('cleanupProcessedOrders', () => {
+  try {
     const keysToRemove = [];
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
@@ -2088,9 +1610,9 @@ function startApp() {
     if (keysToRemove.length > 50) {
       keysToRemove.slice(0, keysToRemove.length - 50).forEach(k => localStorage.removeItem(k));
     }
-  });
+  } catch(e) {}
 
-  // Tidak ada intro/loading screen: Store langsung tampil.
+  setTimeout(() => document.getElementById('loadingScreen').classList.add('hide'), 1400);
 }
 
 // ============================================
@@ -2158,8 +1680,23 @@ let produkAktif = null;
 let dataPemesan = { link: "", hp: "", jumlah: 0, total: 0, bonus: 0, totalAmount: 0, orderId: "" };
 
 // ============================================
-// RENDER PRODUK (BADGE DINAMIS)
+// SORT & FILTER
 // ============================================
+function applySort(target, mode) {
+  let originalData;
+  let kategori;
+  if (target === 'sosmed') { originalData = produkSosmed; kategori = 'SUNTIK ALL'; }
+  else if (target === 'jpm') { originalData = produkJpm; kategori = 'LAYANAN LAINNYA'; }
+  else { originalData = produkApk; kategori = 'JUAL APK'; }
+  let data = originalData.map((p, i) => ({ ...p, _originalIndex: i }));
+  if (mode === 'termurah') data.sort((a,b) => (a.harga || a.hargaPerUnit) - (b.harga || b.hargaPerUnit));
+  else if (mode === 'termahal') data.sort((a,b) => (b.harga || b.hargaPerUnit) - (a.harga || a.hargaPerUnit));
+  else if (mode === 'terlaris') data.sort((a,b) => (b.baseOrder || 0) - (a.baseOrder || 0));
+  renderProduk(target, data, kategori, mode);
+}
+
+// ============================================
+// RENDER PRODUK (BADGE DINAMIS)
 // ============================================
 function initData() {
   renderProduk('sosmed', produkSosmed, 'SUNTIK ALL', 'default');
@@ -2179,39 +1716,18 @@ function renderProduk(target, data, kategori, mode) {
     return { ...p, _index: realIndex, _totalOrder: totalOrder };
   });
 
-  const prices = withCounts.map(x => Number(x.harga ?? x.hargaPerUnit ?? 0));
-  const maxOrders = Math.max(0, ...withCounts.map(x => Number(x._totalOrder || 0)));
-  const topSellerIndex = withCounts.reduce((best, item, idx, arr) => {
-    if (Number(item._totalOrder || 0) > Number(arr[best]?._totalOrder || 0)) return idx;
-    return best;
-  }, 0);
-  const minPrice = prices.length ? Math.min(...prices) : 0;
-  const maxPrice = prices.length ? Math.max(...prices) : 0;
+  let badgeText = '';
+  let badgeClass = '';
+  if (mode === 'terlaris') { badgeText = '🔥 TERLARIS'; badgeClass = 'badge-hot'; }
+  else if (mode === 'termurah') { badgeText = '💰 TERMURAH'; badgeClass = 'badge-cheap'; }
+  else if (mode === 'termahal') { badgeText = '💎 TERMAHAL'; badgeClass = 'badge-expensive'; }
 
   el.innerHTML = withCounts.map((p, i) => {
-    const price = Number(p.harga ?? p.hargaPerUnit ?? 0);
-    const isCheapest = price === minPrice;
-    const isMostExpensive = price === maxPrice && maxPrice !== minPrice;
-    const isTopSeller = i === topSellerIndex && maxOrders > 0;
-    const badges = [];
-
-    // Kalau 2 status jatuh ke produk yang sama, gabungkan jadi SATU badge.
-    if (isMostExpensive && isTopSeller) {
-      badges.push('<span class="product-badge badge-combo">💎 TERMAHAL <b>•</b> 🔥 TERLARIS</span>');
-    } else if (isCheapest && isTopSeller) {
-      badges.push('<span class="product-badge badge-combo badge-combo-cheap">💰 TERMURAH <b>•</b> 🔥 TERLARIS</span>');
-    } else if (isMostExpensive) {
-      badges.push('<span class="product-badge badge-expensive">💎 TERMAHAL</span>');
-    } else if (isCheapest) {
-      badges.push('<span class="product-badge badge-cheap">💰 TERMURAH</span>');
-    } else if (isTopSeller) {
-      badges.push('<span class="product-badge badge-hot">🔥 TERLARIS</span>');
-    }
-    const badgeHtml = badges.join('');
+    const showBadge = i === 0 && badgeText !== '';
     const wished = isWishlisted(p.nama);
     return `
-    <div class="produk-card${badgeHtml ? ' has-badges' : ''}">
-      ${badgeHtml ? '<div class="product-badges">'+badgeHtml+'</div>' : ''}
+    <div class="produk-card">
+      ${showBadge ? `<div class="${badgeClass}">${badgeText}</div>` : ''}
       <button class="btn-wishlist ${wished ? 'active' : ''}" onclick="event.stopPropagation(); toggleWishlist('${p.nama.replace(/'/g, "\\'")}')">${wished ? '⭐' : '☆'}</button>
       <div class="produk-header">
         <div class="produk-icon">${p.icon}</div>
@@ -2527,7 +2043,7 @@ async function keStep3() {
   
   try {
     const res = await fetch(BACKEND_URL + '/api/create-order-v2', {
-      method: 'POST', headers: { 'Content-Type': 'application/json', ...(getAccountToken() ? { Authorization: 'Bearer ' + getAccountToken() } : {}) },
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ 
         amount: totalBayar, 
         customerPhone: dataPemesan.hp, 
@@ -2607,7 +2123,7 @@ async function loadHistory() {
   const resultEl = document.getElementById('historyResult');
   resultEl.innerHTML = '<div class="visitor-empty">⏳ Mencari...</div>';
   try {
-    const res = await fetch(BACKEND_URL + '/api/orders-history' + (token ? '' : '?phone=' + encodeURIComponent(hp)), {headers: token ? {Authorization:'Bearer '+token} : {}});
+    const res = await fetch(BACKEND_URL + '/api/orders-history?phone=' + encodeURIComponent(hp));
     const data = await res.json();
     if (!data.success || !data.orders || data.orders.length === 0) {
       resultEl.innerHTML = '<div class="visitor-empty">Tidak ada order dengan no ini</div>';
