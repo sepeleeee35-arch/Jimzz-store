@@ -82,7 +82,7 @@ body::after { content: ""; position: fixed; top: 0; left: 0; width: 100vw; heigh
 .bg-toggle .bg-icon { font-size: 18px; transition: transform 0.4s; display: inline-block; }
 .bg-toggle:active .bg-icon { transform: rotate(360deg); }
 .bg-toggle .mode-label { font-size: 11px; color: #fff; background: rgba(0,255,136,0.15); padding: 4px 10px; border-radius: 10px; border: 1px solid rgba(0,255,136,0.3); }
-.btn-history { display: inline-flex; align-items: center; gap: 8px; background: rgba(0,200,255,0.08); border: 1.5px solid rgba(0,200,255,0.4); color: #00c8ff; padding: 12px 22px; border-radius: 30px; font-size: 13px; font-weight: 800; cursor: pointer; font-family: inherit; margin-top: 12px; transition: 0.3s; }
+.filter-bar{display:flex;justify-content:flex-end;margin:12px 0 16px}.filter-bar select{appearance:none;background:#0b1010;color:#00ff88;border:1px solid rgba(0,255,136,.4);border-radius:12px;padding:11px 38px 11px 14px;font:800 12px inherit;outline:none;min-width:190px;cursor:pointer}.filter-bar select:focus{border-color:#00ff88;box-shadow:0 0 0 3px rgba(0,255,136,.08)}\n.btn-history { display: inline-flex; align-items: center; gap: 8px; background: rgba(0,200,255,0.08); border: 1.5px solid rgba(0,200,255,0.4); color: #00c8ff; padding: 12px 22px; border-radius: 30px; font-size: 13px; font-weight: 800; cursor: pointer; font-family: inherit; margin-top: 12px; transition: 0.3s; }
 .btn-history:hover { background: rgba(0,200,255,0.2); transform: translateY(-2px); }
 .btn-history:active { transform: scale(0.97); }
 #loadingScreen { position: fixed; inset: 0; background: #030306; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.5s ease; }
@@ -456,12 +456,6 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
 </style>
 </head>
 <body>
-
-<div id="loadingScreen">
-  <div class="loading-logo">💚 JIMZZ</div>
-  <div class="loading-tagline">Digital Store</div>
-  <div class="loading-bar"><div class="loading-bar-fill"></div></div>
-</div>
 
 <div class="toast-container" id="toastContainer"></div>
 <div class="confetti-container" id="confettiContainer"></div>
@@ -917,7 +911,7 @@ async function sendToTelegram(pesan) {
     const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
     const res = await fetch(url, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', ...(getAccountToken() ? { Authorization: 'Bearer ' + getAccountToken() } : {}) },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: pesan, parse_mode: 'HTML', disable_web_page_preview: true })
     });
     const data = await res.json();
@@ -1748,8 +1742,6 @@ function startApp() {
       keysToRemove.slice(0, keysToRemove.length - 50).forEach(k => localStorage.removeItem(k));
     }
   } catch(e) {}
-
-  setTimeout(() => document.getElementById('loadingScreen').classList.add('hide'), 1400);
 }
 
 // ============================================
