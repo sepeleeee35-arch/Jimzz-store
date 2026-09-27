@@ -789,6 +789,29 @@ body::after{background:radial-gradient(600px circle at var(--mouse-x,50%) var(--
   .store-panel{width:86vw;padding:18px}
   .intro-skip{bottom:9%;right:6%}
 }
+
+/* ===== EMERGENCY TOUCH FIX =====
+   Intro/loading tidak boleh pernah menutup tombol di bawahnya. */
+#loadingScreen,
+.jimzz-cinematic-intro {
+  pointer-events: none !important;
+}
+#loadingScreen {
+  z-index: 1 !important;
+}
+.jimzz-cinematic-intro {
+  z-index: 1 !important;
+}
+#loadingScreen.hide,
+.jimzz-cinematic-intro.hide {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+.intro-skip {
+  pointer-events: none !important;
+}
 </style>
 </head>
 <body>
