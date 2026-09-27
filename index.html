@@ -94,6 +94,20 @@ body::after { content: ""; position: fixed; top: 0; left: 0; width: 100vw; heigh
 @keyframes loadBar { to { width: 100%; } }
 @keyframes shimmer { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
 @keyframes pulseGlow { 0%,100% { opacity:1; transform: scale(1); } 50% { opacity:0.7; transform: scale(0.97); } }
+
+/* ===== ACCOUNT ===== */
+.account-btn{display:inline-flex;align-items:center;gap:8px;margin-top:12px;background:rgba(0,255,136,.08);border:1.5px solid rgba(0,255,136,.4);color:#00ff88;padding:12px 22px;border-radius:30px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;transition:.3s}
+.account-btn:hover{background:rgba(0,255,136,.18);transform:translateY(-2px)}
+.account-badge{display:inline-flex;align-items:center;gap:7px;margin-top:12px;padding:9px 14px;border-radius:22px;background:rgba(255,255,255,.04);border:1px solid rgba(0,255,136,.25);color:#dfffea;font-size:11px;font-weight:800}
+.account-badge button{border:0;background:transparent;color:#ff7777;font:inherit;cursor:pointer}
+#accountModal{position:fixed;inset:0;background:rgba(0,0,0,.88);backdrop-filter:blur(18px);z-index:7000;display:none;align-items:center;justify-content:center;padding:18px}
+#accountModal.show{display:flex}
+.account-box{width:min(92vw,410px);background:linear-gradient(145deg,#101914,#0d0d15);border:1px solid rgba(0,255,136,.28);border-radius:22px;padding:25px 20px;box-shadow:0 30px 90px rgba(0,0,0,.8);position:relative}
+.account-box h2{color:#00ff88;font-size:23px;margin-bottom:5px}.account-box p{color:#7d8790;font-size:11px;margin-bottom:18px}
+.account-close{position:absolute;right:14px;top:10px;background:transparent;border:0;color:#888;font-size:28px;cursor:pointer}
+.account-tabs{display:flex;gap:7px;margin-bottom:16px}.account-tab{flex:1;padding:10px;border-radius:10px;border:1px solid #26332d;background:#080b09;color:#777;font-weight:800;cursor:pointer}.account-tab.active{border-color:#00ff88;color:#00ff88;background:rgba(0,255,136,.07)}
+.account-form{display:none}.account-form.active{display:block}.account-form input{width:100%;padding:13px 14px;margin-bottom:10px;background:#050607;border:1px solid #26332d;border-radius:11px;color:#fff;outline:none;font-family:inherit}.account-form input:focus{border-color:#00ff88}.account-submit{width:100%;padding:13px;border:0;border-radius:11px;background:linear-gradient(135deg,#00ff88,#00cc6a);color:#031008;font-weight:900;cursor:pointer}.account-note{margin-top:12px!important;color:#89918b!important;font-size:10px!important;line-height:1.5}.account-bonus{padding:10px;border:1px solid rgba(255,215,0,.25);background:rgba(255,215,0,.06);border-radius:11px;color:#ffd75a;font-size:11px;font-weight:800;margin-bottom:12px}
+
 .admin-badge-float { position: fixed; top: 12px; right: 12px; z-index: 999; background: linear-gradient(135deg, #ffd700, #ff9500); color: #000; padding: 8px 14px; border-radius: 20px; font-size: 11px; font-weight: 800; box-shadow: 0 5px 25px rgba(255,215,0,0.6); display: none; align-items: center; gap: 6px; cursor: pointer; letter-spacing: 0.5px; }
 .admin-badge-float.show { display: flex; }
 .admin-badge-float .logout-x { color: #000; font-weight: 900; margin-left: 5px; }
@@ -894,6 +908,9 @@ body::after{background:radial-gradient(600px circle at var(--mouse-x,50%) var(--
     <div>
       <button class="btn-history" onclick="bukaRiwayat()">📋 Riwayat Order</button>
     </div>
+    <div id="accountArea">
+      <button class="account-btn" onclick="openAccountModal()">👤 Gunakan Akun</button>
+    </div>
     <button class="bg-toggle" id="bgToggle" onclick="toggleBgMode()">
       <span class="bg-icon">🎨</span>
       <span>Background</span>
@@ -1083,6 +1100,32 @@ body::after{background:radial-gradient(600px circle at var(--mouse-x,50%) var(--
   <button class="nav-item" data-tab="jpm" onclick="switchTab('jpm')"><span class="nav-icon">🚀</span><span class="nav-label">Lainnya</span></button>
 </div>
 
+
+<div class="modal-overlay" id="accountModal" onclick="if(event.target===this)closeAccountModal()">
+  <div class="account-box">
+    <button class="account-close" onclick="closeAccountModal()">×</button>
+    <h2>👤 Akun Jimzz</h2>
+    <p>Simpan koin dan akses akunmu dari perangkat ini.</p>
+    <div class="account-tabs">
+      <button class="account-tab active" id="accountLoginTab" onclick="showAccountForm('login')">Login</button>
+      <button class="account-tab" id="accountRegisterTab" onclick="showAccountForm('register')">Register</button>
+    </div>
+    <div class="account-form active" id="accountLoginForm">
+      <input id="accountLoginUsername" autocomplete="username" placeholder="Username">
+      <input id="accountLoginPassword" type="password" autocomplete="current-password" placeholder="Password">
+      <button class="account-submit" onclick="accountLogin()">Login</button>
+    </div>
+    <div class="account-form" id="accountRegisterForm">
+      <div class="account-bonus">⭐ Bonus pendaftaran: 500 koin untuk akun pertama di perangkat ini.</div>
+      <input id="accountRegUsername" autocomplete="username" placeholder="Username (min. 4 karakter)">
+      <input id="accountRegPassword" type="password" autocomplete="new-password" placeholder="Password (min. 6 karakter)">
+      <input id="accountRegConfirm" type="password" autocomplete="new-password" placeholder="Ulangi password">
+      <button class="account-submit" onclick="accountRegister()">Buat Akun</button>
+    </div>
+    <p class="account-note">Guest tetap bisa belanja tanpa akun. Jika kamu punya koin Guest, koin itu akan dipindahkan saat membuat akun.</p>
+  </div>
+</div>
+
 <div class="modal-overlay" id="orderModal" onclick="if(event.target===this)tutupOrder()">
   <div class="modal-box">
     <button class="modal-close" onclick="tutupOrder()">×</button>
@@ -1263,6 +1306,113 @@ function addPoints(amount) {
   localStorage.setItem('jimzz_points', (current + earned).toString());
   return earned;
 }
+
+function getAccountToken(){ return localStorage.getItem('jimzz_account_token') || ''; }
+function getAccountUser(){ try{return JSON.parse(localStorage.getItem('jimzz_account_user')||'null')}catch{return null} }
+function setAccountSession(token,user){
+  if(token) localStorage.setItem('jimzz_account_token',token); else localStorage.removeItem('jimzz_account_token');
+  if(user) localStorage.setItem('jimzz_account_user',JSON.stringify(user)); else localStorage.removeItem('jimzz_account_user');
+  renderAccountArea();
+}
+function accountDeviceId(){
+  let id=localStorage.getItem('jimzz_device_id');
+  if(!id){ id='dev_'+cryptoRandomId(); localStorage.setItem('jimzz_device_id',id); }
+  return id;
+}
+function cryptoRandomId(){
+  if(window.crypto?.getRandomValues){const a=new Uint32Array(4);crypto.getRandomValues(a);return Array.from(a).map(x=>x.toString(36)).join('');}
+  return Date.now().toString(36)+'_'+Math.random().toString(36).slice(2);
+}
+function openAccountModal(){document.getElementById('accountModal')?.classList.add('show');}
+function closeAccountModal(){document.getElementById('accountModal')?.classList.remove('show');}
+function showAccountForm(mode){
+  document.getElementById('accountLoginForm').classList.toggle('active',mode==='login');
+  document.getElementById('accountRegisterForm').classList.toggle('active',mode==='register');
+  document.getElementById('accountLoginTab').classList.toggle('active',mode==='login');
+  document.getElementById('accountRegisterTab').classList.toggle('active',mode==='register');
+}
+function renderAccountArea(){
+  const el=document.getElementById('accountArea'); if(!el)return;
+  const user=getAccountUser();
+  if(user){
+    el.innerHTML='<div class="account-badge">👤 '+escapeHtml(user.username)+' • ⭐ '+Number(user.points||0).toLocaleString('id-ID')+' <button onclick="accountLogout()">Keluar</button></div>';
+  }else{
+    el.innerHTML='<button class="account-btn" onclick="openAccountModal()">👤 Gunakan Akun</button>';
+  }
+  renderCoinBalance();
+}
+function escapeHtml(s){return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
+async function syncAccountMe(){
+  const token=getAccountToken(); if(!token)return false;
+  try{
+    const res=await fetch(BACKEND_URL+'/api/auth?action=me',{headers:{Authorization:'Bearer '+token}});
+    const data=await res.json();
+    if(!data.success){setAccountSession();return false;}
+    setAccountSession(token,data.user);
+    localStorage.setItem('jimzz_points',String(data.user.points||0));
+    return true;
+  }catch(e){console.log('Account sync error',e);return false;}
+}
+async function accountLogin(){
+  const username=document.getElementById('accountLoginUsername').value.trim();
+  const password=document.getElementById('accountLoginPassword').value;
+  if(!username||!password){showToast('Username dan password wajib diisi','warning');return;}
+  try{
+    const res=await fetch(BACKEND_URL+'/api/auth?action=login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username,password})});
+    const data=await res.json();
+    if(!data.success){showToast(data.error||'Login gagal','error');return;}
+    setAccountSession(data.token,data.user);
+    localStorage.setItem('jimzz_points',String(data.user.points||0));
+    closeAccountModal(); renderCoinBalance();
+    showToast('✅ Login berhasil sebagai '+data.user.username,'success');
+  }catch(e){showToast('Gagal terhubung ke server','error');}
+}
+async function accountRegister(){
+  const username=document.getElementById('accountRegUsername').value.trim();
+  const password=document.getElementById('accountRegPassword').value;
+  const confirmPassword=document.getElementById('accountRegConfirm').value;
+  if(!username||!password||!confirmPassword){showToast('Semua data register wajib diisi','warning');return;}
+  if(password!==confirmPassword){showToast('Konfirmasi password tidak cocok','error');return;}
+  const deviceId=accountDeviceId();
+  const alreadyBonus=localStorage.getItem('jimzz_bonus_claimed_device')==='true';
+  const guestPoints=getPoints();
+  try{
+    const res=await fetch(BACKEND_URL+'/api/auth?action=register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username,password,confirmPassword,deviceId})});
+    const data=await res.json();
+    if(!data.success){showToast(data.error||'Registrasi gagal','error');return;}
+    setAccountSession(data.token,data.user);
+    let totalPoints=Number(data.user.points||0);
+    if(!alreadyBonus){
+      const bonus=await addPointsToAccount(25000);
+      if(bonus?.success) totalPoints=Number(bonus.totalPoints||totalPoints);
+      localStorage.setItem('jimzz_bonus_claimed_device','true');
+    }
+    if(guestPoints>0){
+      const migrated=await addPointsToAccount(guestPoints*KOIN_PER_RUPIAH);
+      if(migrated?.success) totalPoints=Number(migrated.totalPoints||totalPoints);
+      localStorage.setItem('jimzz_points','0');
+    }
+    const fresh={...data.user,points:totalPoints};
+    setAccountSession(data.token,fresh); localStorage.setItem('jimzz_points',String(totalPoints));
+    closeAccountModal(); renderCoinBalance();
+    showConfetti();
+    showToast('🎉 Akun dibuat! Koin berhasil disiapkan.','success');
+  }catch(e){showToast('Gagal terhubung ke server','error');}
+}
+async function addPointsToAccount(amountRupiah){
+  const token=getAccountToken(); if(!token)return null;
+  try{
+    const res=await fetch(BACKEND_URL+'/api/auth?action=add-points',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+token},body:JSON.stringify({amount:amountRupiah})});
+    return await res.json();
+  }catch(e){return null;}
+}
+async function accountLogout(){
+  const token=getAccountToken();
+  try{if(token)await fetch(BACKEND_URL+'/api/auth?action=logout',{method:'POST',headers:{Authorization:'Bearer '+token}})}catch(e){}
+  setAccountSession();
+  showToast('Kamu sekarang jadi Guest','info');
+}
+
 function renderCoinBalance() {
   const el = document.getElementById('coinBalance');
   if (el) el.innerText = getPoints().toLocaleString('id-ID');
@@ -1535,12 +1685,23 @@ function handleOrderSuccess(orderId, totalBayar, produkNama) {
   showToast(`✅ Pesanan ${orderId} SELESAI! Admin udah proses.`, 'success');
 
   if (totalBayar && totalBayar > 0) {
-    const earned = addPoints(totalBayar);
-    renderCoinBalance();
-    if (earned > 0) {
-      setTimeout(() => {
-        showToast(`🎁 +${earned.toLocaleString('id-ID')} koin! Total: ${getPoints().toLocaleString('id-ID')} koin`, 'success');
-      }, 1500);
+    const user = getAccountUser();
+    if (user && getAccountToken()) {
+      addPointsToAccount(totalBayar).then(result => {
+        if (result?.success) {
+          const updated = {...getAccountUser(), points:Number(result.totalPoints||0)};
+          setAccountSession(getAccountToken(),updated);
+          localStorage.setItem('jimzz_points',String(updated.points||0));
+          renderCoinBalance();
+          if (result.earned > 0) setTimeout(() => showToast(`🎁 +${Number(result.earned).toLocaleString('id-ID')} koin! Total: ${Number(result.totalPoints).toLocaleString('id-ID')} koin`,'success'),1500);
+        } else {
+          showToast('Koin akun belum tersinkron. Coba buka akun lagi.','warning');
+        }
+      });
+    } else {
+      const earned = addPoints(totalBayar);
+      renderCoinBalance();
+      if (earned > 0) setTimeout(() => showToast(`🎁 +${earned.toLocaleString('id-ID')} koin! Total: ${getPoints().toLocaleString('id-ID')} koin`,'success'),1500);
     }
   }
 
@@ -1936,6 +2097,8 @@ function skipLoadingScreen() {
   if (screen) screen.classList.add('hide');
 }
 function startApp() {
+  syncAccountMe();
+  renderAccountArea();
   applyBgMode();
   if (currentBgMode === 'simple') initCanvasSimple(); else initCanvasNeon();
   initCursorGlow();
