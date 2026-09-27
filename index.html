@@ -1000,6 +1000,13 @@ body::after{background:radial-gradient(600px circle at var(--mouse-x,50%) var(--
         <div class="admin-stat"><div class="admin-stat-value" id="adminProdukMT">5</div><div class="admin-stat-label">Produk MT</div></div>
         <div class="admin-stat"><div class="admin-stat-value" id="adminStatus">Online</div><div class="admin-stat-label">Status Web</div></div>
       </div>
+      <div style="margin-top:16px;padding:16px;border:1px solid rgba(255,215,0,.2);border-radius:16px;background:rgba(255,215,0,.03)">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+          <div><b style="color:#ffd700">👥 MANAJEMEN AKUN</b><div style="font-size:10px;color:#777;margin-top:3px">Lihat akun dan naik/turunkan akses admin.</div></div>
+          <button onclick="loadAdminUsers()" style="border:1px solid #ffd700;background:rgba(255,215,0,.08);color:#ffd700;padding:9px 12px;border-radius:10px;font-weight:800">🔄 Muat Akun</button>
+        </div>
+        <div id="adminUsersList" style="margin-top:12px"><div style="color:#777;font-size:11px">Klik Muat Akun.</div></div>
+      </div>
     </div>
   </section>
 
@@ -1114,6 +1121,7 @@ body::after{background:radial-gradient(600px circle at var(--mouse-x,50%) var(--
       <input id="accountLoginUsername" autocomplete="username" placeholder="Username">
       <input id="accountLoginPassword" type="password" autocomplete="current-password" placeholder="Password">
       <button class="account-submit" onclick="accountLogin()">Login</button>
+      <div class="account-note">Lupa password? Hubungi admin untuk bantuan. Tidak ada reset password otomatis.</div>
     </div>
     <div class="account-form" id="accountRegisterForm">
       <div class="account-bonus">⭐ Bonus pendaftaran: 500 koin untuk akun pertama di perangkat ini.</div>
@@ -1338,7 +1346,7 @@ function renderAccountArea(){
   const user=getAccountUser();
   if(user){
     const adminBtn=user.isAdmin ? '<button onclick="openAdminPanel()" style="color:#ffd700">👑 Admin</button>' : '';
-    el.innerHTML='<div class="account-badge">👤 '+escapeHtml(user.username)+' • ⭐ '+Number(user.points||0).toLocaleString('id-ID')+' '+adminBtn+' <button onclick="accountLogout()">Keluar</button></div>';
+    el.innerHTML='<div class="account-badge">👤 '+escapeHtml(user.username)+' • ⭐ '+Number(user.points||0).toLocaleString('id-ID')+' <button onclick="showAccountProfile()">Profil</button><button onclick="changeAccountPassword()">PW</button><button onclick="showAccountSessions()">Sesi</button> '+adminBtn+' <button onclick="accountLogout()">Keluar</button></div>';
   }else{
     el.innerHTML='<button class="account-btn" onclick="openAccountModal()">👤 Gunakan Akun</button>';
   }
@@ -1356,12 +1364,63 @@ async function syncAccountMe(){
     return true;
   }catch(e){console.log('Account sync error',e);return false;}
 }
-async function accountLogin(){
+async async function changeAccountPassword(){
+  const currentPassword=prompt('Masukkan password lama:');
+  if(currentPassword===null)return;
+  const newPassword=prompt('Masukkan password baru (min 8, huruf + angka):');
+  if(newPassword===null)return;
+  const confirmPassword=prompt('Ulangi password baru:');
+  if(confirmPassword===null)return;
+  try{
+    const res=await fetch(BACKEND_URL+'/api/auth?action=change-password',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+getAccountToken()},body:JSON.stringify({currentPassword,newPassword,confirmPassword})});
+    const data=await res.json(); showToast(data.success?'✅ Password berhasil diubah':('❌ '+(data.error||'Gagal ubah password')),data.success?'success':'error');
+  }catch(e){showToast('Gagal terhubung ke server','error');}
+}
+async function showAccountProfile(){
+  try{
+    const res=await fetch(BACKEND_URL+'/api/auth?action=profile',{headers:{Authorization:'Bearer '+getAccountToken()}});
+    const data=await res.json();
+    if(!data.success) return showToast(data.error||'Gagal memuat profil','error');
+    const orders=data.orders||[];
+    alert('👤 '+data.user.username+'\n⭐ Koin: '+Number(data.user.points||0).toLocaleString('id-ID')+'\n🛒 Total order: '+orders.length+'\n📅 Bergabung: '+new Date(data.user.created_at).toLocaleDateString('id-ID'));
+  }catch(e){showToast('Gagal memuat profil','error');}
+}
+async function showAccountSessions(){
+  try{
+    const res=await fetch(BACKEND_URL+'/api/auth?action=sessions',{headers:{Authorization:'Bearer '+getAccountToken()}});
+    const data=await res.json();
+    if(!data.success) return showToast(data.error||'Gagal memuat sesi','error');
+    const text=(data.sessions||[]).map((s,i)=>(i+1)+'. '+s.deviceLabel+' — '+new Date(s.createdAt).toLocaleString('id-ID')+(s.current?' (PERANGKAT INI)':'')).join('\n');
+    if(confirm('📱 Sesi akun:\n\n'+(text||'Tidak ada')+'\n\nTekan OK untuk logout semua perangkat lain.')) logoutAllDevices();
+  }catch(e){showToast('Gagal memuat sesi','error');}
+}
+async function logoutAllDevices(){
+  if(!confirm('Logout semua perangkat lain?'))return;
+  const res=await fetch(BACKEND_URL+'/api/auth?action=logout-all',{method:'POST',headers:{Authorization:'Bearer '+getAccountToken()}});
+  const data=await res.json(); showToast(data.success?'✅ Perangkat lain sudah logout':('❌ '+(data.error||'Gagal')),data.success?'success':'error');
+}
+async function loadAdminUsers(){
+  if(!isAdmin)return;
+  const el=document.getElementById('adminUsersList'); if(!el)return;
+  el.innerHTML='<div style="color:#ffd700;font-size:11px">⏳ Memuat akun...</div>';
+  try{
+    const res=await fetch(BACKEND_URL+'/api/auth?action=admin-users',{headers:{Authorization:'Bearer '+getAccountToken()}});
+    const data=await res.json();
+    if(!data.success) throw new Error(data.error||'Gagal');
+    el.innerHTML=(data.users||[]).map(u=>'<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid #20251f"><div><b>'+escapeHtml(u.username)+'</b><div style="font-size:9px;color:#777">⭐ '+Number(u.points||0).toLocaleString('id-ID')+' • login '+Number(u.login_count||0)+'x</div></div><button onclick="toggleUserAdmin(\''+u.id+'\','+(!u.isAdmin)+')" style="border:1px solid '+(u.isAdmin?'#ff7777':'#00ff88')+';background:transparent;color:'+(u.isAdmin?'#ff7777':'#00ff88')+';padding:6px 9px;border-radius:8px;font-size:10px;font-weight:800">'+(u.isAdmin?'Turunkan':'Jadikan Admin')+'</button></div>').join('')||'<div style="color:#777">Belum ada akun.</div>';
+  }catch(e){el.innerHTML='<div style="color:#ff7777;font-size:11px">❌ '+escapeHtml(e.message)+'</div>';}
+}
+async function toggleUserAdmin(userId,makeAdmin){
+  if(!confirm(makeAdmin?'Jadikan akun ini ADMIN?':'Turunkan akun ini dari ADMIN?'))return;
+  const res=await fetch(BACKEND_URL+'/api/auth?action=set-admin',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+getAccountToken()},body:JSON.stringify({userId,makeAdmin})});
+  const data=await res.json(); if(data.success){showToast(makeAdmin?'👑 Akun jadi admin':'Admin diturunkan','success');loadAdminUsers();}else showToast(data.error||'Gagal','error');
+}
+function accountLogin(){
   const username=document.getElementById('accountLoginUsername').value.trim();
   const password=document.getElementById('accountLoginPassword').value;
   if(!username||!password){showToast('Username dan password wajib diisi','warning');return;}
   try{
-    const res=await fetch(BACKEND_URL+'/api/auth?action=login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username,password})});
+    const res=await fetch(BACKEND_URL+'/api/auth?action=login',{method:'POST',headers:{'Content-Type':'application/json','X-Device-Label':navigator.userAgent.slice(0,80)},body:JSON.stringify({username,password})});
     const data=await res.json();
     if(!data.success){showToast(data.error||'Login gagal','error');return;}
     setAccountSession(data.token,data.user);
@@ -1382,7 +1441,7 @@ async function accountRegister(){
   const guestPoints=getPoints();
   if(password.length < 8 || !/[A-Za-z]/.test(password) || !/[0-9]/.test(password)){showToast('Password minimal 8 karakter dan harus berisi huruf + angka','warning');return;}
   try{
-    const res=await fetch(BACKEND_URL+'/api/auth?action=register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username,password,confirmPassword,deviceId})});
+    const res=await fetch(BACKEND_URL+'/api/auth?action=register',{method:'POST',headers:{'Content-Type':'application/json','X-Device-Label':navigator.userAgent.slice(0,80)},body:JSON.stringify({username,password,confirmPassword,deviceId})});
     const data=await res.json();
     if(!data.success){showToast(data.error||'Registrasi gagal','error');return;}
     setAccountSession(data.token,data.user);
@@ -2648,7 +2707,7 @@ async function loadHistory() {
   const resultEl = document.getElementById('historyResult');
   resultEl.innerHTML = '<div class="visitor-empty">⏳ Mencari...</div>';
   try {
-    const res = await fetch(BACKEND_URL + '/api/orders-history?phone=' + encodeURIComponent(hp));
+    const res = await fetch(BACKEND_URL + '/api/orders-history', {headers: token ? {Authorization:'Bearer '+token} : {}});
     const data = await res.json();
     if (!data.success || !data.orders || data.orders.length === 0) {
       resultEl.innerHTML = '<div class="visitor-empty">Tidak ada order dengan no ini</div>';
