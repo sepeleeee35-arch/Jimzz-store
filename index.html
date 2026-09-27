@@ -795,63 +795,6 @@ body::after{background:radial-gradient(600px circle at var(--mouse-x,50%) var(--
 </head>
 <body>
 
-<div id="loadingScreen" class="jimzz-cinematic-intro">
-  <div class="intro-scene scene-1">
-    <div class="store-glow"></div>
-    <div class="store-badge">DIGITAL STORE</div>
-    <div class="store-title"><span>JIMZZ STORE</span></div>
-    <div class="store-sub">TOP UP • GAME • SOSMED • DIGITAL</div>
-    <div class="store-cta">MULAI BELANJA</div>
-    <div class="store-features">
-      <div class="store-feature">⚡ PROSES CEPAT</div>
-      <div class="store-feature">🔒 AMAN</div>
-      <div class="store-feature">💳 MUDAH ORDER</div>
-    </div>
-  </div>
-  <div class="intro-scene scene-2">
-    <div class="store-panel">
-      <div class="store-panel-kicker">PILIH KEBUTUHANMU</div>
-      <h2>Semua Produk Digital<br>di Satu Tempat</h2>
-      <p>Pilih produk, isi detail order, lalu lanjutkan pembayaran dengan alur yang simpel.</p>
-      <div class="store-row">
-        <div class="store-mini"><b>🎮</b><span>GAME</span></div>
-        <div class="store-mini"><b>📱</b><span>SOSMED</span></div>
-        <div class="store-mini"><b>💎</b><span>DIGITAL</span></div>
-      </div>
-    </div>
-    <div class="scene-caption">PILIH PRODUK • ORDER • SELESAI</div>
-  </div>
-  <div class="intro-scene scene-3">
-    <div class="store-panel">
-      <div class="store-panel-kicker">JIMZZ STORE</div>
-      <h2>Harga Jelas.<br>Order Gampang.</h2>
-      <p>Tampilan dibuat seperti toko digital modern supaya produk dan proses pembelian tetap mudah ditemukan.</p>
-      <div class="store-row">
-        <div class="store-mini"><b>💰</b><span>HARGA</span></div>
-        <div class="store-mini"><b>🛒</b><span>ORDER</span></div>
-        <div class="store-mini"><b>📋</b><span>RIWAYAT</span></div>
-      </div>
-    </div>
-    <div class="scene-caption">BELANJA DIGITAL LEBIH SIMPLE</div>
-  </div>
-  <div class="intro-scene scene-4">
-    <div class="store-panel">
-      <div class="store-panel-kicker">SIAP BELANJA?</div>
-      <h2>Masuk ke<br>Jimzz Store</h2>
-      <p>Produk digital yang kamu cari sudah menunggu di halaman utama.</p>
-    </div>
-    <div class="scene-caption">WELCOME TO JIMZZ STORE</div>
-  </div>
-  <div class="intro-final">
-    <div class="final-kicker">✦ ORIGINAL ANIME-STYLE INTRO ✦</div>
-    <div class="final-logo">JIMZZ <span>STORE</span></div>
-    <div class="final-sub">DIGITAL • GAME • SOCIAL</div>
-    <div class="final-line"></div>
-  </div>
-  <div class="intro-progress"><div></div></div>
-  <button class="intro-skip" onclick="skipLoadingScreen()">SKIP INTRO</button>
-</div>
-
 <div class="toast-container" id="toastContainer"></div>
 <div class="confetti-container" id="confettiContainer"></div>
 <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
@@ -2165,10 +2108,6 @@ function applyAdminUI() {
 }
 function handleTopupClick() { if (isAdmin) switchTab('topup'); else showToast('Top Up Game sedang MAINTENANCE', 'warning'); }
 
-function skipLoadingScreen() {
-  const screen = document.getElementById('loadingScreen');
-  if (screen) screen.classList.add('hide');
-}
 function startApp() {
   // Startup dibuat fail-safe: satu fitur yang error tidak boleh mematikan
   // seluruh tombol / navigasi toko.
@@ -2224,8 +2163,7 @@ function startApp() {
     }
   });
 
-  // Intro tetap tampil sebagai visual, tetapi tidak boleh mengunci halaman.
-  setTimeout(skipLoadingScreen, 8500);
+  // Tidak ada intro/loading screen: Store langsung tampil.
 }
 
 // ============================================
