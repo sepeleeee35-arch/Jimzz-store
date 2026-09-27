@@ -633,8 +633,15 @@ body::after{background:radial-gradient(600px circle at var(--mouse-x,50%) var(--
   position:fixed!important;inset:0!important;z-index:99999!important;overflow:hidden!important;
   background:#050609!important;color:#fff!important;display:block!important;
   opacity:1;transition:opacity .65s ease!important;
+  /* Intro hanya visual. Semua tombol halaman di bawah tetap bisa disentuh. */
+  pointer-events:none!important;
 }
 .jimzz-cinematic-intro.hide{opacity:0!important;pointer-events:none!important}
+.jimzz-cinematic-intro .intro-skip{
+  pointer-events:auto!important;
+  position:relative!important;
+  z-index:100000!important;
+}
 
 .intro-scene{position:absolute;inset:0;overflow:hidden;opacity:0;transform:scale(1.03)}
 .intro-scene::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.12),rgba(0,0,0,.68));z-index:2}
@@ -1520,8 +1527,15 @@ let currentBgMode = localStorage.getItem('jimzz_bg_mode') || 'simple';
 function applyBgMode() {
   const simple = document.getElementById('bgSimple');
   const neon = document.getElementById('bgNeon');
-  if (currentBgMode === 'simple') { simple.classList.remove('hidden'); neon.classList.remove('active'); }
-  else { simple.classList.add('hidden'); neon.classList.add('active'); }
+  if (simple && neon) {
+    if (currentBgMode === 'simple') {
+      simple.classList.remove('hidden');
+      neon.classList.remove('active');
+    } else {
+      simple.classList.add('hidden');
+      neon.classList.add('active');
+    }
+  }
   updateBgLabel();
 }
 function updateBgLabel() {
@@ -2156,32 +2170,50 @@ function skipLoadingScreen() {
   if (screen) screen.classList.add('hide');
 }
 function startApp() {
-  syncAccountMe();
-  renderAccountArea();
-  applyBgMode();
-  if (currentBgMode === 'simple') initCanvasSimple(); else initCanvasNeon();
-  initCursorGlow();
-  initData();
-  renderGameList();
-  renderPlaylist();
-  initMusicEvents();
-  applyAdminUI();
-  loadCounters();
-  updateBgLabel();
-  pingVisitor();
-  renderCoinBalance();
-  renderCoinHeaderToggle();
+  // Startup dibuat fail-safe: satu fitur yang error tidak boleh mematikan
+  // seluruh tombol / navigasi toko.
+  const safeInit = (name, fn) => {
+    try {
+      const result = fn();
+      if (result && typeof result.catch === 'function') {
+        result.catch(err => console.error('[Jimzz startup]', name, err));
+      }
+    } catch (err) {
+      console.error('[Jimzz startup]', name, err);
+    }
+  };
+
+  safeInit('syncAccountMe', () => syncAccountMe());
+  safeInit('renderAccountArea', renderAccountArea);
+  safeInit('applyBgMode', applyBgMode);
+  safeInit('background', () => {
+    if (currentBgMode === 'simple') initCanvasSimple();
+    else initCanvasNeon();
+  });
+  safeInit('initCursorGlow', initCursorGlow);
+  safeInit('initData', initData);
+  safeInit('renderGameList', renderGameList);
+  safeInit('renderPlaylist', renderPlaylist);
+  safeInit('initMusicEvents', initMusicEvents);
+  safeInit('applyAdminUI', applyAdminUI);
+  safeInit('loadCounters', () => loadCounters());
+  safeInit('updateBgLabel', updateBgLabel);
+  safeInit('pingVisitor', () => pingVisitor());
+  safeInit('renderCoinBalance', renderCoinBalance);
+  safeInit('renderCoinHeaderToggle', renderCoinHeaderToggle);
 
   // Resume order yang belum kelar (kalau user refresh / tutup web)
-  const orderAktif = getOrderAktif();
-  if (orderAktif) {
-    console.log('🔄 Resume polling order:', orderAktif.orderId);
-    showToast(`🔄 Cek pesanan ${orderAktif.orderId}...`, 'info');
-    startBackgroundPolling();
-  }
+  safeInit('resumeOrder', () => {
+    const orderAktif = getOrderAktif();
+    if (orderAktif) {
+      console.log('🔄 Resume polling order:', orderAktif.orderId);
+      showToast(`🔄 Cek pesanan ${orderAktif.orderId}...`, 'info');
+      startBackgroundPolling();
+    }
+  });
 
   // Bersihin flag processed lama (max 50)
-  try {
+  safeInit('cleanupProcessedOrders', () => {
     const keysToRemove = [];
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
@@ -2190,8 +2222,9 @@ function startApp() {
     if (keysToRemove.length > 50) {
       keysToRemove.slice(0, keysToRemove.length - 50).forEach(k => localStorage.removeItem(k));
     }
-  } catch(e) {}
+  });
 
+  // Intro tetap tampil sebagai visual, tetapi tidak boleh mengunci halaman.
   setTimeout(skipLoadingScreen, 8500);
 }
 
