@@ -1292,7 +1292,7 @@ function getOrderAktif() {
   } catch { return null; }
 }
 
-function handleOrderSuccess(orderId, totalBayar, produkNama) {
+async function handleOrderSuccess(orderId, totalBayar, produkNama) {
   const processedKey = 'jimzz_processed_' + orderId;
   if (localStorage.getItem(processedKey) === 'done') return;
   localStorage.setItem(processedKey, 'done');
@@ -2180,7 +2180,8 @@ async function keStep3() {
   
   try {
     const res = await fetch(BACKEND_URL + '/api/create-order-v2', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', ...(getAccountToken() ? { Authorization: 'Bearer ' + getAccountToken() } : {}) },
       body: JSON.stringify({ 
         amount: totalBayar, 
         customerPhone: dataPemesan.hp, 
