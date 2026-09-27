@@ -1303,7 +1303,7 @@ async function toggleUserAdmin(userId,makeAdmin){
   const res=await fetch(BACKEND_URL+'/api/auth?action=set-admin',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+getAccountToken()},body:JSON.stringify({userId,makeAdmin})});
   const data=await res.json(); if(data.success){showToast(makeAdmin?'👑 Akun jadi admin':'Admin diturunkan','success');loadAdminUsers();}else showToast(data.error||'Gagal','error');
 }
-function accountLogin(){
+async function accountLogin(){
   const username=document.getElementById('accountLoginUsername').value.trim();
   const password=document.getElementById('accountLoginPassword').value;
   if(!username||!password){showToast('Username dan password wajib diisi','warning');return;}
