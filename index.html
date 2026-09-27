@@ -96,12 +96,12 @@ body::after { content: ""; position: fixed; top: 0; left: 0; width: 100vw; heigh
 @keyframes pulseGlow { 0%,100% { opacity:1; transform: scale(1); } 50% { opacity:0.7; transform: scale(0.97); } }
 /* ===== ACCOUNT ===== */
 #accountArea{position:fixed;top:max(10px,env(safe-area-inset-top));left:10px;z-index:7500}
-.account-btn{display:inline-flex;align-items:center;gap:6px;margin:0;background:rgba(7,12,10,.88);border:1px solid rgba(0,255,136,.38);color:#dfffea;padding:8px 11px;border-radius:12px;font-size:11px;font-weight:800;cursor:pointer;font-family:inherit;transition:.2s;backdrop-filter:blur(14px);box-shadow:0 8px 24px rgba(0,0,0,.28)}
+.account-btn{display:inline-flex;align-items:center;gap:6px;margin:0;background:#07100c;border:1px solid rgba(0,255,136,.38);color:#dfffea;padding:8px 11px;border-radius:12px;font-size:11px;font-weight:800;cursor:pointer;font-family:inherit;transition:.2s;box-shadow:0 8px 24px rgba(0,0,0,.28)}
 .account-btn:hover{border-color:#00ff88;background:rgba(0,255,136,.12)}
-.account-badge{display:inline-flex;align-items:center;gap:6px;margin:0;padding:8px 10px;border-radius:12px;background:rgba(7,12,10,.9);border:1px solid rgba(0,255,136,.28);color:#dfffea;font-size:10px;font-weight:800;backdrop-filter:blur(14px);box-shadow:0 8px 24px rgba(0,0,0,.28)}
+.account-badge{display:inline-flex;align-items:center;gap:6px;margin:0;padding:8px 10px;border-radius:12px;background:#07100c;border:1px solid rgba(0,255,136,.28);color:#dfffea;font-size:10px;font-weight:800;box-shadow:0 8px 24px rgba(0,0,0,.28)}
 .account-badge button{border:0;background:transparent;color:#ff7777;font:inherit;cursor:pointer;padding:0}
-#accountModal{position:fixed;top:52px;left:10px;width:auto;height:auto;background:none;z-index:7000;display:none;padding:0;pointer-events:none}
-#accountModal.show{display:block}
+#accountModal{position:fixed!important;top:52px!important;left:10px!important;right:auto!important;bottom:auto!important;width:auto!important;height:auto!important;min-height:0!important;background:transparent!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;z-index:7000!important;display:none!important;padding:0!important;pointer-events:none!important;align-items:flex-start!important;justify-content:flex-start!important;overflow:visible!important}
+#accountModal.show{display:block!important}
 .account-box{width:min(88vw,330px);max-height:calc(100vh - 70px);overflow:auto;background:linear-gradient(145deg,#101914,#0d0d15);border:1px solid rgba(0,255,136,.28);border-radius:14px;padding:16px 14px;box-shadow:0 18px 55px rgba(0,0,0,.72);position:relative;pointer-events:auto}
 .account-box h2{color:#00ff88;font-size:19px;margin-bottom:4px}.account-box p{color:#7d8790;font-size:10px;margin-bottom:14px}
 .account-close{position:absolute;right:10px;top:7px;background:transparent;border:0;color:#888;font-size:25px;cursor:pointer}
@@ -460,6 +460,10 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
 #page-home footer{max-width:760px;margin-left:auto;margin-right:auto}
 @media(max-width:480px){#page-home header{margin:10px 10px 22px;padding:32px 14px 24px;border-radius:24px}#page-home header h1{font-size:42px}#page-home .trust-row{gap:6px}#page-home .trust-item{font-size:9px}#page-home .menu-home{margin-left:4px;margin-right:4px}}
 
+/* ACCOUNT_POPUP_FIX_V3 */
+.modal-overlay#accountModal,.modal-overlay#accountModal.show{background:transparent!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;inset:auto!important;top:52px!important;left:10px!important;right:auto!important;bottom:auto!important;width:auto!important;height:auto!important;min-height:0!important;padding:0!important;display:none!important;align-items:flex-start!important;justify-content:flex-start!important;overflow:visible!important}
+.modal-overlay#accountModal.show{display:block!important}
+.modal-overlay#accountModal .account-box{width:min(88vw,330px)!important;max-width:330px!important;margin:0!important;transform:none!important}
 </style>
 </head>
 <body>
@@ -975,7 +979,7 @@ async function syncAccountMe(){
     return true;
   }catch(e){console.log('Account sync error',e);renderAccountArea();return false;}
 }
-async function accountLogin(){
+async async function accountLogin(){
   const username=document.getElementById('accountLoginUsername').value.trim();
   const password=document.getElementById('accountLoginPassword').value;
   if(!username||!password){showToast('Username dan password wajib diisi','warning');return;}
