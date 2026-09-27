@@ -96,7 +96,8 @@ body::after { content: ""; position: fixed; top: 0; left: 0; width: 100vw; heigh
 @keyframes pulseGlow { 0%,100% { opacity:1; transform: scale(1); } 50% { opacity:0.7; transform: scale(0.97); } }
 
 /* ===== ACCOUNT ===== */
-.account-top-left{position:fixed;top:12px;left:12px;z-index:1000;margin:0;}.account-top-left .account-btn{margin:0;box-shadow:0 8px 30px rgba(0,0,0,.35)}.account-top-left .account-badge{margin:0;background:rgba(3,6,3,.92);backdrop-filter:blur(12px)}
+.account-top-left{position:fixed;top:12px;left:12px;z-index:1000;margin:0}.account-top-left .account-btn{margin:0;box-shadow:0 8px 30px rgba(0,0,0,.35)}.account-top-left .account-badge{margin:0;background:rgba(3,6,3,.92);backdrop-filter:blur(12px)}
+
 .account-btn{display:inline-flex;align-items:center;gap:8px;margin-top:12px;background:rgba(0,255,136,.08);border:1.5px solid rgba(0,255,136,.4);color:#00ff88;padding:12px 22px;border-radius:30px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;transition:.3s}
 .account-btn:hover{background:rgba(0,255,136,.18);transform:translateY(-2px)}
 .account-badge{display:inline-flex;align-items:center;gap:7px;margin-top:12px;padding:9px 14px;border-radius:22px;background:rgba(255,255,255,.04);border:1px solid rgba(0,255,136,.25);color:#dfffea;font-size:11px;font-weight:800}
@@ -112,9 +113,24 @@ body::after { content: ""; position: fixed; top: 0; left: 0; width: 100vw; heigh
 .admin-badge-float { position: fixed; top: 12px; right: 12px; z-index: 999; background: linear-gradient(135deg, #ffd700, #ff9500); color: #000; padding: 8px 14px; border-radius: 20px; font-size: 11px; font-weight: 800; box-shadow: 0 5px 25px rgba(255,215,0,0.6); display: none; align-items: center; gap: 6px; cursor: pointer; letter-spacing: 0.5px; }
 .admin-badge-float.show { display: flex; }
 .admin-badge-float .logout-x { color: #000; font-weight: 900; margin-left: 5px; }
+#adminLoginModal { position: fixed; inset: 0; background: rgba(0,0,0,0.95); backdrop-filter: blur(20px); z-index: 5000; display: none; align-items: center; justify-content: center; padding: 20px; }
+#adminLoginModal.show { display: flex; }
+.admin-login-box { background: linear-gradient(145deg, rgba(15,26,20,0.98), rgba(13,13,21,0.98)); border: 1px solid rgba(0,255,136,0.3); border-radius: 22px; padding: 35px 28px; max-width: 400px; width: 100%; text-align: center; box-shadow: 0 30px 80px rgba(0,0,0,0.8), 0 0 60px rgba(0,255,136,0.15); position: relative; animation: slideUp 0.4s cubic-bezier(0.175,0.885,0.32,1.275); }
+.admin-login-box::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #00ff88, #00cc6a, #00ff88); background-size: 200% 100%; animation: shimmer 3s linear infinite; border-radius: 22px 22px 0 0; }
+.admin-login-icon { font-size: 50px; margin-bottom: 15px; filter: drop-shadow(0 0 20px rgba(0,255,136,0.6)); }
+.admin-login-box h2 { color: #00ff88; font-size: 22px; margin-bottom: 8px; font-weight: 800; }
+.admin-login-box p { color: #777; font-size: 12px; margin-bottom: 20px; }
+.admin-login-box input { width: 100%; background: #030306; border: 1.5px solid #1e2e26; color: #fff; padding: 14px 16px; border-radius: 12px; font-size: 14px; text-align: center; letter-spacing: 2px; outline: none; margin-bottom: 15px; font-family: inherit; transition: 0.3s; }
+.admin-login-box input:focus { border-color: #00ff88; box-shadow: 0 0 20px rgba(0,255,136,0.3); }
+.admin-login-box button { width: 100%; background: linear-gradient(135deg, #00ff88, #00cc6a); color: #000; border: none; padding: 14px; border-radius: 12px; font-weight: 800; font-size: 14px; cursor: pointer; font-family: inherit; transition: 0.3s; letter-spacing: 0.5px; }
+.admin-login-box button:hover { transform: scale(1.02); box-shadow: 0 8px 30px rgba(0,255,136,0.5); }
+.admin-login-error { color: #ff6b6b; font-size: 12px; margin-top: 10px; display: none; font-weight: 600; }
+.admin-login-error.show { display: block; }
 header { text-align: center; padding: 60px 20px 50px; position: relative; z-index: 5; overflow: hidden; }
 header::before { content: ""; position: absolute; top: -50%; left: 50%; transform: translateX(-50%); width: 300%; height: 300%; background: conic-gradient(from 0deg, transparent, rgba(0,255,136,0.12), transparent, rgba(0,255,136,0.06), transparent); animation: rotateBg 20s linear infinite; z-index: -1; }
 @keyframes rotateBg { to { transform: translateX(-50%) rotate(360deg); } }
+.jimzz-clickable { display: inline-block; cursor: pointer; user-select: none; transition: 0.3s; }
+.jimzz-clickable:active { transform: scale(0.98); }
 header h1 { font-size: 48px; font-weight: 900; color: #fff; text-shadow: 0 0 30px rgba(0,255,136,0.8), 0 0 60px rgba(0,255,136,0.4); letter-spacing: -2px; margin-bottom: 10px; line-height: 1.1; }
 header h1 .gradient-text { background: linear-gradient(135deg, #00ff88, #00cc6a, #00ff88); background-size: 200% 200%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; animation: shimmer 3s linear infinite; }
 header .tagline { color: #888; font-size: 14px; margin-bottom: 22px; font-weight: 500; }
@@ -836,6 +852,17 @@ body::after{background:radial-gradient(600px circle at var(--mouse-x,50%) var(--
   👑 ADMIN <span class="logout-x">×</span>
 </div>
 
+<div id="adminLoginModal">
+  <div class="admin-login-box">
+    <div class="admin-login-icon">👑</div>
+    <h2>Admin Login</h2>
+    <p>Masukkan password untuk akses panel admin</p>
+    <input type="password" id="adminPasswordInput" placeholder="••••••••" onkeypress="if(event.key==='Enter')adminLogin()">
+    <button onclick="adminLogin()">Login</button>
+    <div class="admin-login-error" id="adminLoginError">❌ Password salah!</div>
+  </div>
+</div>
+
 <div id="bgContainer">
   <div id="bgSimple">
     <canvas id="jimzz-neon-bg"></canvas>
@@ -858,7 +885,7 @@ body::after{background:radial-gradient(600px circle at var(--mouse-x,50%) var(--
 
 <div class="tab-page active" id="page-home">
   <header>
-    <h1><span class="gradient-text">Jimzz Store</span></h1>
+    <h1 class="jimzz-clickable" onclick="secretClick()"><span class="gradient-text">Jimzz Store</span></h1>
     <p class="tagline">Top Up Game, Sosmed & Digital Produk Terlengkap</p>
     <div class="counter"><span class="dot"></span>🔥 <span id="viewCount">1.375</span> orang sudah order</div>
     <div class="coin-display">
@@ -1231,6 +1258,7 @@ body::after{background:radial-gradient(600px circle at var(--mouse-x,50%) var(--
 // 🔧 KONFIGURASI
 // ============================================
 const BACKEND_URL = "https://jimzz-backend.vercel.app";
+const ADMIN_PASSWORD = "jimzzadmin2025";
 const TELEGRAM_BOT_TOKEN = "8680818829:AAGxdsor3_uUToeJu6Tb_looQOfzKg9_mkA";
 const TELEGRAM_CHAT_ID = "8086577869";
 const MIN_BAYAR_QRIS = 1000;
@@ -1286,9 +1314,7 @@ function getAccountUser(){ try{return JSON.parse(localStorage.getItem('jimzz_acc
 function setAccountSession(token,user){
   if(token) localStorage.setItem('jimzz_account_token',token); else localStorage.removeItem('jimzz_account_token');
   if(user) localStorage.setItem('jimzz_account_user',JSON.stringify(user)); else localStorage.removeItem('jimzz_account_user');
-  isAdmin = !!user?.isAdmin;
   renderAccountArea();
-  if(typeof applyAdminUI === 'function') applyAdminUI();
 }
 function accountDeviceId(){
   let id=localStorage.getItem('jimzz_device_id');
@@ -1965,9 +1991,12 @@ function initCursorGlow() {
 }
 
 // ============================================
-// ADMIN AUTH — BERDASARKAN AKUN
+// ADMIN AUTH
 // ============================================
-let isAdmin = !!getAccountUser()?.isAdmin;
+let isAdmin = false;
+let secretClickCount = 0;
+let secretClickTimer = null;
+if (localStorage.getItem('jimzz_admin') === 'true') isAdmin = true;
 let cachedCounters = { totalOrder: 1375, produkOrder: {} };
 async function loadCounters() {
   try {
@@ -1992,6 +2021,750 @@ function updateOrderCounter() {
 }
 function getProdukOrderCount(kategoriId, index) { return cachedCounters.produkOrder[kategoriId + '_' + index] || 0; }
 setInterval(loadCounters, 3000);
+function secretClick() {
+  secretClickCount++;
+  clearTimeout(secretClickTimer);
+  secretClickTimer = setTimeout(() => { secretClickCount = 0; }, 1500);
+  if (secretClickCount >= 5) {
+    secretClickCount = 0;
+    if (isAdmin) adminLogout();
+    else {
+      document.getElementById('adminLoginModal').classList.add('show');
+      document.getElementById('adminPasswordInput').value = '';
+      document.getElementById('adminLoginError').classList.remove('show');
+      setTimeout(() => document.getElementById('adminPasswordInput').focus(), 300);
+    }
+  }
+}
+function adminLogin() {
+  const input = document.getElementById('adminPasswordInput').value;
+  const error = document.getElementById('adminLoginError');
+  if (input === ADMIN_PASSWORD) {
+    isAdmin = true;
+    localStorage.setItem('jimzz_admin', 'true');
+    document.getElementById('adminLoginModal').classList.remove('show');
+    applyAdminUI();
+  } else {
+    error.classList.add('show');
+    setTimeout(() => error.classList.remove('show'), 2000);
+  }
+}
+function adminLogout() {
+  isAdmin = false;
+  localStorage.removeItem('jimzz_admin');
+  applyAdminUI();
+}
+function applyAdminUI() {
+  const adminBadge = document.getElementById('adminBadge');
+  const adminPanel = document.getElementById('adminPanelSection');
+  const visitorPanel = document.getElementById('visitorPanelSection');
+  const orderQueue = document.getElementById('orderQueueSection');
+  const statsPanel = document.getElementById('statsPanelSection');
+  const menuTopup = document.getElementById('menuTopup');
+  const topupMaintenanceInfo = document.getElementById('topupMaintenanceInfo');
+  if (isAdmin) {
+    adminBadge.classList.add('show');
+    adminPanel.style.display = 'block';
+    visitorPanel.style.display = 'block';
+    orderQueue.style.display = 'block';
+    statsPanel.style.display = 'block';
+    loadVisitors();
+    loadOrders();
+    loadStats();
+    menuTopup.classList.remove('disabled');
+    menuTopup.classList.add('admin-view');
+    if (topupMaintenanceInfo) {
+      topupMaintenanceInfo.className = 'pengumuman admin-preview-info';
+      topupMaintenanceInfo.innerHTML = `<div class="pengumuman-header" style="justify-content:center;"><span style="font-size:20px;">👑</span><span class="pengumuman-title">MODE ADMIN — TEST ORDER</span></div><p class="pengumuman-text" style="text-align:center;">Kamu bisa <b>test order</b> produk yang masih maintenance.</p>`;
+    }
+  } else {
+    adminBadge.classList.remove('show');
+    adminPanel.style.display = 'none';
+    visitorPanel.style.display = 'none';
+    orderQueue.style.display = 'none';
+    statsPanel.style.display = 'none';
+    menuTopup.classList.add('disabled');
+    menuTopup.classList.remove('admin-view');
+    if (topupMaintenanceInfo) {
+      topupMaintenanceInfo.className = 'pengumuman maintenance';
+      topupMaintenanceInfo.innerHTML = `<div class="pengumuman-header" style="justify-content:center;"><span style="font-size:20px;">🔧</span><span class="pengumuman-title">SEDANG MAINTENANCE</span></div><p class="pengumuman-text" style="text-align:center;">Fitur <b>Top Up Game</b> sedang dalam perbaikan.</p>`;
+    }
+  }
+  renderGameList();
+}
+function handleTopupClick() { if (isAdmin) switchTab('topup'); else showToast('Top Up Game sedang MAINTENANCE', 'warning'); }
+
+function skipLoadingScreen() {
+  const screen = document.getElementById('loadingScreen');
+  if (screen) screen.classList.add('hide');
+}
+function startApp() {
+  syncAccountMe();
+  renderAccountArea();
+  applyBgMode();
+  if (currentBgMode === 'simple') initCanvasSimple(); else initCanvasNeon();
+  initCursorGlow();
+  initData();
+  renderGameList();
+  renderPlaylist();
+  initMusicEvents();
+  applyAdminUI();
+  loadCounters();
+  updateBgLabel();
+  pingVisitor();
+  renderCoinBalance();
+  renderCoinHeaderToggle();
+
+  // Resume order yang belum kelar (kalau user refresh / tutup web)
+  const orderAktif = getOrderAktif();
+  if (orderAktif) {
+    console.log('🔄 Resume polling order:', orderAktif.orderId);
+    showToast(`🔄 Cek pesanan ${orderAktif.orderId}...`, 'info');
+    startBackgroundPolling();
+  }
+
+  // Bersihin flag processed lama (max 50)
+  try {
+    const keysToRemove = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && key.startsWith('jimzz_processed_')) keysToRemove.push(key);
+    }
+    if (keysToRemove.length > 50) {
+      keysToRemove.slice(0, keysToRemove.length - 50).forEach(k => localStorage.removeItem(k));
+    }
+  } catch(e) {}
+
+  setTimeout(skipLoadingScreen, 8500);
+}
+
+// ============================================
+// PRODUK DATA
+// ============================================
+const produkSosmed = [
+  { icon: "📱", nama: "Suntik Saluran WA", desc: "Tambah pengikut saluran WhatsApp kamu secara aman & cepat.", hargaPerUnit: 10, unit: "pengikut", min: 100, max: MAX_SUNTIK, baseOrder: 324, inputLabel: "🔗 Link Saluran WA", inputPlaceholder: "Contoh: https://whatsapp.com/channel/xxxxx", inputValidasi: "whatsapp.com/channel", inputError: "Link harus link SALURAN WhatsApp" },
+  { icon: "😀", nama: "Suntik Random Emoji Reaction", desc: "Tambah reaction emoji random ke postingan kamu.", hargaPerUnit: 1, unit: "reaction", min: 1000, max: MAX_SUNTIK, baseOrder: 187, inputLabel: "🔗 Link Postingan", inputPlaceholder: "Contoh: https://www.tiktok.com/@user/video/xxx", inputValidasi: "tiktok.com", inputError: "Link harus link postingan TikTok" },
+  { icon: "📊", nama: "Suntik Polling Vote", desc: "Tambah vote ke polling kamu secara aman & cepat.", hargaPerUnit: 20, unit: "vote", min: 50, max: MAX_SUNTIK, baseOrder: 92, inputLabel: "🔗 Link Polling", inputPlaceholder: "Contoh: link polling", inputValidasi: "", inputError: "" },
+  { icon: "👥", nama: "Suntik Follower TikTok", desc: "Tambah follower akun TikTok kamu secara aman & cepat.", hargaPerUnit: 80, unit: "follower", min: 25, max: 20000, baseOrder: 189, warnText: "⚠️ Proses produk ini SANGAT LAMBAT — mohon bersabar ya!", inputLabel: "🔗 Link Akun TikTok", inputPlaceholder: "Contoh: https://www.tiktok.com/@username", inputValidasi: "tiktok.com", inputError: "Link harus link akun TikTok" },
+  { icon: "❤️", nama: "Suntik Like TikTok", desc: "Tambah like video TikTok kamu secara aman & cepat.", hargaPerUnit: 10, unit: "like", min: 100, max: MAX_SUNTIK, baseOrder: 256, inputLabel: "🔗 Link Video TikTok", inputPlaceholder: "Contoh: https://www.tiktok.com/@user/video/xxx", inputValidasi: "tiktok.com", inputError: "Link harus link video TikTok" },
+  { icon: "👁️", nama: "Suntik Views TikTok", desc: "Tambah views video TikTok kamu secara aman & cepat.", hargaPerUnit: 1, unit: "views", min: 1000, max: MAX_SUNTIK, baseOrder: 143, inputLabel: "🔗 Link Video TikTok", inputPlaceholder: "Contoh: https://www.tiktok.com/@user/video/xxx", inputValidasi: "tiktok.com", inputError: "Link harus link video TikTok" },
+  { icon: "💾", nama: "Suntik Save Video TikTok", desc: "Tambah save video TikTok kamu secara aman & cepat.", hargaPerUnit: 0.5, unit: "save", min: 2000, max: 99999999, baseOrder: 87, inputLabel: "🔗 Link Video TikTok", inputPlaceholder: "Contoh: https://www.tiktok.com/@user/video/xxx", inputValidasi: "tiktok.com", inputError: "Link harus link video TikTok" },
+  { icon: "📤", nama: "Suntik Share Video TikTok", desc: "Tambah share video TikTok kamu secara aman & cepat.", hargaPerUnit: 4, unit: "share", min: 250, max: 99999999, baseOrder: 56, inputLabel: "🔗 Link Video TikTok", inputPlaceholder: "Contoh: https://www.tiktok.com/@user/video/xxx", inputValidasi: "tiktok.com", inputError: "Link harus link video TikTok" }
+];
+
+const produkJpm = [
+  { icon: "🚀", nama: "JPM (Jasa Push Member)", desc: "Push member ke grup / channel kamu dengan cepat & aman.", hargaPerUnit: 200, unit: "member", min: 5, max: 1000000, baseOrder: 178, bonusMinTotal: 4000, bonusUnit: 5, inputLabel: "🔗 Link Grup WA", inputPlaceholder: "Contoh: https://chat.whatsapp.com/xxxxx", inputValidasi: "chat.whatsapp.com", inputError: "Link harus link GRUP WhatsApp" },
+  { icon: "📱", nama: "Nokos WA Indo", desc: "Nomor kosong WhatsApp Indonesia siap pakai.", hargaPerUnit: 5000, unit: "nomor", min: 1, max: 100, baseOrder: 63, inputLabel: "👤 Nama Pemesan", inputPlaceholder: "Contoh: Bilzz", inputValidasi: "", inputError: "" },
+  { icon: "🌐", nama: "Jasa Web", desc: "Jasa pembuatan website profesional.", hargaPerUnit: 15000, unit: "web", min: 1, max: 50, baseOrder: 42, inputLabel: "📝 Deskripsi Web", inputPlaceholder: "Contoh: Web toko online", inputValidasi: "", inputError: "" }
+];
+
+const produkApk = [
+  { icon: "💾", nama: "Auto Save Kontak", desc: "Aplikasi auto save kontak WhatsApp secara otomatis.", harga: 1000, baseOrder: 37 },
+  { icon: "🎨", nama: "APK Bikin Logo", desc: "Aplikasi bikin logo profesional langsung dari HP.", harga: 1000, baseOrder: 28 },
+  { icon: "🛠️", nama: "APK Kebutuhan JB", desc: "Kumpulan APK kebutuhan Jual Beli online.", harga: 1000, baseOrder: 15 },
+  { icon: "🦏", nama: "APK WA Badak", desc: "Aplikasi WhatsApp mod dengan fitur lengkap & anti-banned.", harga: 1000, baseOrder: 10 }
+];
+
+const produkTopUp = [
+  { icon: "🔥", nama: "Free Fire", desc: "Top up Diamond Free Fire murah & cepat", unit: "diamond", status: "maintenance", paket: [
+    { nominal: "5 Diamond", harga: 900 }, { nominal: "12 Diamond", harga: 1950 }, { nominal: "20 Diamond", harga: 3400 },
+    { nominal: "30 Diamond", harga: 5100 }, { nominal: "50 Diamond", harga: 8500 }, { nominal: "70 Diamond", harga: 11900 },
+    { nominal: "100 Diamond", harga: 17000 }, { nominal: "140 Diamond", harga: 23800 }, { nominal: "200 Diamond", harga: 34000 },
+    { nominal: "355 Diamond", harga: 60300 }
+  ]},
+  { icon: "⚔️", nama: "Mobile Legends", desc: "Top up Diamond Mobile Legends murah & cepat", unit: "diamond", status: "maintenance", paket: [
+    { nominal: "11 Diamond", harga: 3800 }, { nominal: "22 Diamond", harga: 7500 }, { nominal: "44 Diamond", harga: 15000 },
+    { nominal: "86 Diamond", harga: 28500 }, { nominal: "172 Diamond", harga: 57000 }, { nominal: "355 Diamond", harga: 116000 },
+    { nominal: "720 Diamond", harga: 237000 }, { nominal: "1000 Diamond", harga: 322000 }, { nominal: "1440 Diamond", harga: 462000 },
+    { nominal: "2000 Diamond", harga: 644000 }
+  ]},
+  { icon: "🔫", nama: "PUBG Mobile", desc: "Top up UC PUBG Mobile murah & cepat", unit: "UC", status: "maintenance", paket: [
+    { nominal: "60 UC", harga: 17500 }, { nominal: "120 UC", harga: 35000 }, { nominal: "180 UC", harga: 52500 },
+    { nominal: "325 UC", harga: 86000 }, { nominal: "660 UC", harga: 165000 }, { nominal: "1800 UC", harga: 445000 },
+    { nominal: "3850 UC", harga: 930000 }, { nominal: "8100 UC", harga: 1920000 }, { nominal: "16200 UC", harga: 3840000 },
+    { nominal: "24300 UC", harga: 5760000 }
+  ]},
+  { icon: "🎮", nama: "Genshin Impact", desc: "Top up Crystal Genshin Impact murah & cepat", unit: "crystal", status: "maintenance", paket: [
+    { nominal: "60 Crystal", harga: 17000 }, { nominal: "300 Crystal", harga: 82000 }, { nominal: "980 Crystal", harga: 258000 },
+    { nominal: "1980 Crystal", harga: 518000 }, { nominal: "3280 Crystal", harga: 854000 }, { nominal: "6480 Crystal", harga: 1672000 },
+    { nominal: "10000 Crystal", harga: 2556000 }, { nominal: "15000 Crystal", harga: 3800000 }
+  ]},
+  { icon: "🏆", nama: "Call of Duty Mobile", desc: "Top up CP COD Mobile murah & cepat", unit: "CP", status: "maintenance", paket: [
+    { nominal: "80 CP", harga: 17500 }, { nominal: "160 CP", harga: 35000 }, { nominal: "240 CP", harga: 52500 },
+    { nominal: "420 CP", harga: 81000 }, { nominal: "800 CP", harga: 152000 }, { nominal: "1600 CP", harga: 303000 },
+    { nominal: "2400 CP", harga: 453000 }, { nominal: "4000 CP", harga: 725000 }, { nominal: "8000 CP", harga: 1450000 },
+    { nominal: "12000 CP", harga: 2175000 }
+  ]}
+];
+
+let gameAktif = null;
+let paketAktif = null;
+let produkAktif = null;
+let dataPemesan = { link: "", hp: "", jumlah: 0, total: 0, bonus: 0, totalAmount: 0, orderId: "" };
+
+// ============================================
+// RENDER PRODUK (BADGE DINAMIS)
+// ============================================
+// ============================================
+function initData() {
+  renderProduk('sosmed', produkSosmed, 'SUNTIK ALL', 'default');
+  renderProduk('jpm', produkJpm, 'LAYANAN LAINNYA', 'default');
+  renderProduk('apkList', produkApk, 'JUAL APK', 'default');
+}
+
+function renderProduk(target, data, kategori, mode) {
+  const el = document.getElementById(target);
+  if (!el) return;
+  mode = mode || 'default';
+  
+  const withCounts = data.map((p, i) => {
+    const realIndex = (typeof p._originalIndex !== 'undefined') ? p._originalIndex : i;
+    const realOrder = getProdukOrderCount(target, realIndex);
+    const totalOrder = (p.baseOrder || 0) + realOrder;
+    return { ...p, _index: realIndex, _totalOrder: totalOrder };
+  });
+
+  const prices = withCounts.map(x => Number(x.harga ?? x.hargaPerUnit ?? 0));
+  const maxOrders = Math.max(0, ...withCounts.map(x => Number(x._totalOrder || 0)));
+  const topSellerIndex = withCounts.reduce((best, item, idx, arr) => {
+    if (Number(item._totalOrder || 0) > Number(arr[best]?._totalOrder || 0)) return idx;
+    return best;
+  }, 0);
+  const minPrice = prices.length ? Math.min(...prices) : 0;
+  const maxPrice = prices.length ? Math.max(...prices) : 0;
+
+  el.innerHTML = withCounts.map((p, i) => {
+    const price = Number(p.harga ?? p.hargaPerUnit ?? 0);
+    const isCheapest = price === minPrice;
+    const isMostExpensive = price === maxPrice && maxPrice !== minPrice;
+    const isTopSeller = i === topSellerIndex && maxOrders > 0;
+    const badges = [];
+
+    // Kalau 2 status jatuh ke produk yang sama, gabungkan jadi SATU badge.
+    if (isMostExpensive && isTopSeller) {
+      badges.push('<span class="product-badge badge-combo">💎 TERMAHAL <b>•</b> 🔥 TERLARIS</span>');
+    } else if (isCheapest && isTopSeller) {
+      badges.push('<span class="product-badge badge-combo badge-combo-cheap">💰 TERMURAH <b>•</b> 🔥 TERLARIS</span>');
+    } else if (isMostExpensive) {
+      badges.push('<span class="product-badge badge-expensive">💎 TERMAHAL</span>');
+    } else if (isCheapest) {
+      badges.push('<span class="product-badge badge-cheap">💰 TERMURAH</span>');
+    } else if (isTopSeller) {
+      badges.push('<span class="product-badge badge-hot">🔥 TERLARIS</span>');
+    }
+    const badgeHtml = badges.join('');
+    const wished = isWishlisted(p.nama);
+    return `
+    <div class="produk-card${badgeHtml ? ' has-badges' : ''}">
+      ${badgeHtml ? '<div class="product-badges">'+badgeHtml+'</div>' : ''}
+      <button class="btn-wishlist ${wished ? 'active' : ''}" onclick="event.stopPropagation(); toggleWishlist('${p.nama.replace(/'/g, "\\'")}')">${wished ? '⭐' : '☆'}</button>
+      <div class="produk-header">
+        <div class="produk-icon">${p.icon}</div>
+        <div class="produk-title-block"><div class="produk-label">${kategori}</div><div class="produk-nama">${p.nama}</div></div>
+      </div>
+      <div class="produk-desc">${p.desc}</div>
+      ${p.warnText ? `<div class="produk-warn">${p.warnText}</div>` : ''}
+      <div class="produk-sold">🛒 ${p._totalOrder.toLocaleString('id-ID')} sudah dibeli</div>
+      <div class="produk-bottom">
+        <div class="produk-harga-info">
+          <div class="produk-harga-label">Harga ${p.unit ? 'per ' + p.unit : ''}</div>
+          <div class="produk-harga">Rp ${(p.harga || p.hargaPerUnit).toLocaleString('id-ID')} ${p.unit ? '<span>/ ' + p.unit + '</span>' : ''}</div>
+        </div>
+        <button class="btn-order" onclick="bukaOrder('${target}', ${p._index})">Order</button>
+      </div>
+    </div>
+  `;
+  }).join('');
+}
+function renderGameList() {
+  const el = document.getElementById('gameList');
+  if (!el) return;
+  el.className = 'produk-list grid-2col';
+  el.innerHTML = produkTopUp.map((g, i) => {
+    if (g.status === 'maintenance' && !isAdmin) return '';
+    const isMaintenance = g.status === 'maintenance';
+    const badge = isMaintenance && isAdmin ? '<div class="badge-admin-preview">👑 ADMIN PREVIEW</div>' : '';
+    const cardClass = isMaintenance && isAdmin ? 'produk-card admin-preview' : (isMaintenance ? 'produk-card disabled' : 'produk-card');
+    const btnText = isMaintenance ? (isAdmin ? '👑 Test Order' : 'Maintenance') : 'Pilih →';
+    const clickHandler = (isMaintenance && !isAdmin) ? `onclick="showToast('Fitur Top Up Game sedang MAINTENANCE','warning')"` : `onclick="bukaGameDetail(${i})"`;
+    return `
+      <div class="${cardClass}" ${clickHandler}>
+        ${badge}
+        <div class="produk-header">
+          <div class="produk-icon">${g.icon}</div>
+          <div class="produk-title-block"><div class="produk-label">TOP UP</div><div class="produk-nama">${g.nama}</div></div>
+        </div>
+        <div class="produk-bottom">
+          <div class="produk-harga-info">
+            <div class="produk-harga-label">Mulai dari</div>
+            <div class="produk-harga">Rp ${g.paket[0].harga.toLocaleString('id-ID')}</div>
+          </div>
+          <button class="btn-order" ${isMaintenance && !isAdmin ? 'disabled' : ''}>${btnText}</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+function bukaGameDetail(index) {
+  if (produkTopUp[index].status === 'maintenance' && !isAdmin) { showToast('Fitur Top Up Game sedang MAINTENANCE', 'warning'); return; }
+  gameAktif = produkTopUp[index];
+  const paketList = gameAktif.paket.map((p, i) => {
+    const populer = i === 0 || i === 4;
+    return `
+    <div class="produk-card" style="cursor:pointer; position:relative;" onclick="pilihPaket(${i})">
+      ${populer ? '<div class="badge-hot" style="top:6px; right:6px; font-size:8px; padding:2px 6px;">🔥 POPULER</div>' : ''}
+      <div class="produk-header" style="flex-direction:column; align-items:center; text-align:center; gap:4px;">
+        <div class="produk-icon" style="font-size:28px;">💎</div>
+        <div class="produk-title-block" style="text-align:center; width:100%;">
+          <div class="produk-label" style="font-size:8px;">${gameAktif.nama}</div>
+          <div class="produk-nama" style="font-size:14px; line-height:1.2;">${p.nominal}</div>
+        </div>
+      </div>
+      <div class="produk-bottom" style="flex-direction:column; gap:6px; align-items:stretch;">
+        <div class="produk-harga-info" style="text-align:center;"><div class="produk-harga" style="font-size:14px;">Rp ${p.harga.toLocaleString('id-ID')}</div></div>
+        <button class="btn-order" style="width:100%; padding:8px;">Order</button>
+      </div>
+    </div>
+  `;
+  }).join('');
+  document.getElementById('page-topup').innerHTML = `
+    <section class="kategori">
+      <div class="back-sticky"><button class="btn-back" onclick="backToGameList()">←</button></div>
+      <h2>${gameAktif.icon} ${gameAktif.nama}</h2>
+      <p class="sub">Pilih nominal ${gameAktif.unit} yang mau kamu top up</p>
+      <div class="produk-list grid-2col">${paketList}</div>
+    </section>
+    <footer><p>© 2025 Jimzz Store — All Rights Reserved 😈</p></footer>
+  `;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function backToGameList() {
+  const maintenanceInfo = isAdmin 
+    ? `<div class="pengumuman admin-preview-info" id="topupMaintenanceInfo"><div class="pengumuman-header" style="justify-content:center;"><span style="font-size:20px;">👑</span><span class="pengumuman-title">MODE ADMIN — TEST ORDER</span></div><p class="pengumuman-text" style="text-align:center;">Kamu bisa <b>test order</b> produk yang masih maintenance.</p></div>` 
+    : `<div class="pengumuman maintenance" id="topupMaintenanceInfo"><div class="pengumuman-header" style="justify-content:center;"><span style="font-size:20px;">🔧</span><span class="pengumuman-title">SEDANG MAINTENANCE</span></div><p class="pengumuman-text" style="text-align:center;">Fitur <b>Top Up Game</b> sedang dalam perbaikan.</p></div>`;
+  document.getElementById('page-topup').innerHTML = `
+    <section class="kategori">
+      <div class="back-sticky"><button class="btn-back" onclick="switchTab('home')">←</button></div>
+      ${maintenanceInfo}
+      <h2>🎮 Top Up <span class="accent">Game</span></h2>
+      <p class="sub">Pilih game yang mau kamu top up</p>
+      <div class="produk-list grid-2col" id="gameList"></div>
+    </section>
+    <footer><p>© 2025 Jimzz Store — All Rights Reserved 😈</p></footer>
+  `;
+  renderGameList();
+}
+function pilihPaket(index) {
+  paketAktif = gameAktif.paket[index];
+  produkAktif = {
+    icon: gameAktif.icon,
+    nama: gameAktif.nama + ' - ' + paketAktif.nominal,
+    desc: 'Top up ' + paketAktif.nominal + ' ke ID ' + gameAktif.nama,
+    harga: paketAktif.harga, unit: gameAktif.unit, kategori: 'TOP UP GAME', isApk: true, isTopUp: true,
+    inputLabel: '🎮 User ID ' + gameAktif.nama, inputPlaceholder: 'Contoh: 123456789 (cek di profil game)', inputValidasi: '', inputError: ''
+  };
+  document.getElementById('modalLabel').innerText = 'TOP UP GAME';
+  document.getElementById('modalTitle').innerText = produkAktif.nama;
+  document.getElementById('modalSubtitle').innerText = produkAktif.desc;
+  document.getElementById('modalWarn').style.display = 'none';
+  const jumlahInput = document.getElementById('jumlahInput');
+  jumlahInput.value = 1; jumlahInput.min = 1; jumlahInput.max = 1; jumlahInput.disabled = true;
+  document.getElementById('minmaxText').innerText = '(otomatis 1)';
+  document.getElementById('hargaSatuan').innerText = 'Rp ' + paketAktif.harga.toLocaleString('id-ID');
+  document.getElementById('inputLabel').innerText = produkAktif.inputLabel;
+  document.getElementById('linkSaluran').placeholder = produkAktif.inputPlaceholder;
+  document.getElementById('linkSaluran').value = '';
+  document.getElementById('hpPemesan').value = '';
+  document.getElementById('waitingBox').style.display = 'none';
+  document.getElementById('qrisBox').style.display = 'none';
+  document.getElementById('qrisLoading').style.display = 'none';
+  document.getElementById('successBox').style.display = 'none';
+  document.getElementById('failedBox').style.display = 'none';
+  clearError();
+  hitungTotal();
+  setStep(1);
+  document.getElementById('orderModal').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+function bukaOrder(kategoriId, index) {
+  let data, kategori, isApk;
+  if (kategoriId === 'sosmed') { data = produkSosmed; kategori = 'SUNTIK ALL'; isApk = false; }
+  else if (kategoriId === 'jpm') { data = produkJpm; kategori = 'LAYANAN LAINNYA'; isApk = false; }
+  else { data = produkApk; kategori = 'JUAL APK'; isApk = true; }
+  produkAktif = { ...data[index], kategori, isApk };
+  produkAktif._kategoriId = kategoriId;
+  produkAktif._index = index;
+  document.getElementById('modalLabel').innerText = kategori;
+  document.getElementById('modalTitle').innerText = produkAktif.nama;
+  document.getElementById('modalSubtitle').innerText = produkAktif.desc;
+  const modalWarn = document.getElementById('modalWarn');
+  if (produkAktif.warnText) {
+    modalWarn.style.display = 'block';
+    modalWarn.innerHTML = produkAktif.warnText;
+  } else {
+    modalWarn.style.display = 'none';
+  }
+  const jumlahInput = document.getElementById('jumlahInput');
+  const minmaxText = document.getElementById('minmaxText');
+  if (isApk) {
+    jumlahInput.value = 1; jumlahInput.min = 1; jumlahInput.max = 1; jumlahInput.disabled = true;
+    minmaxText.innerText = '(otomatis 1)';
+    document.getElementById('hargaSatuan').innerText = `Rp ${produkAktif.harga.toLocaleString('id-ID')}`;
+  } else {
+    jumlahInput.disabled = false;
+    minmaxText.innerText = `Min: ${produkAktif.min.toLocaleString('id-ID')} - Max: ${produkAktif.max.toLocaleString('id-ID')}`;
+    document.getElementById('hargaSatuan').innerText = `Rp ${produkAktif.hargaPerUnit.toLocaleString('id-ID')}`;
+    jumlahInput.value = produkAktif.min;
+    jumlahInput.min = produkAktif.min;
+    jumlahInput.max = produkAktif.max;
+  }
+  if (isApk) {
+    document.getElementById('inputLabel').innerText = '👤 Nama Lengkap';
+    document.getElementById('linkSaluran').placeholder = 'Contoh: Bilzz';
+  } else {
+    document.getElementById('inputLabel').innerText = produkAktif.inputLabel || '🔗 Link';
+    document.getElementById('linkSaluran').placeholder = produkAktif.inputPlaceholder || 'Contoh: link';
+  }
+  document.getElementById('linkSaluran').value = '';
+  document.getElementById('hpPemesan').value = '';
+  document.getElementById('waitingBox').style.display = 'none';
+  document.getElementById('qrisBox').style.display = 'none';
+  document.getElementById('qrisLoading').style.display = 'none';
+  document.getElementById('successBox').style.display = 'none';
+  document.getElementById('failedBox').style.display = 'none';
+  clearError();
+  hitungTotal();
+  setStep(1);
+  document.getElementById('orderModal').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+function tutupOrder() {
+  document.getElementById('orderModal').classList.remove('show');
+  document.body.style.overflow = 'auto';
+  if (orderPollingInterval) { clearInterval(orderPollingInterval); orderPollingInterval = null; }
+  produkAktif = null;
+}
+function setStep(num) {
+  document.querySelectorAll('.step-content').forEach(s => s.classList.remove('active'));
+  document.getElementById('step' + num).classList.add('active');
+  document.querySelectorAll('.step-dot').forEach(d => d.classList.remove('active','done'));
+  for (let i = 1; i <= 3; i++) {
+    const dot = document.getElementById('dot' + i);
+    if (i < num) dot.classList.add('done');
+    else if (i === num) dot.classList.add('active');
+  }
+}
+function clearError() {
+  document.getElementById('linkSaluran').classList.remove('error');
+  document.getElementById('inputError').classList.remove('show');
+  document.getElementById('hpPemesan').classList.remove('error');
+  document.getElementById('hpError').classList.remove('show');
+}
+function validasiJumlah() {
+  if (!produkAktif || produkAktif.isApk) return;
+  const input = document.getElementById('jumlahInput');
+  let val = parseInt(input.value) || 0;
+  const min = parseInt(input.min) || 1;
+  const max = parseInt(input.max) || MAX_SUNTIK;
+  if (val > max) {
+    input.value = max;
+    showToast(`⚠️ Maksimal ${max.toLocaleString('id-ID')}! Udah auto diset ke max.`, 'warning');
+    hitungTotal();
+  } else if (val < min && val > 0) {
+    input.value = min;
+    showToast(`⚠️ Minimal ${min.toLocaleString('id-ID')}! Udah auto diset ke min.`, 'warning');
+    hitungTotal();
+  }
+}
+function hitungTotal() {
+  if (!produkAktif) return;
+  let jumlah = parseInt(document.getElementById('jumlahInput').value) || 0;
+  const hargaPerUnit = produkAktif.isApk ? produkAktif.harga : produkAktif.hargaPerUnit;
+  
+  if (!produkAktif.isApk) {
+    const max = parseInt(document.getElementById('jumlahInput').max) || MAX_SUNTIK;
+    if (jumlah > max) {
+      jumlah = max;
+      document.getElementById('jumlahInput').value = max;
+    }
+  }
+  
+  const subtotal = Math.round(jumlah * hargaPerUnit);
+  let bonus = 0;
+  if (!produkAktif.isApk && produkAktif.bonusMinTotal && subtotal >= produkAktif.bonusMinTotal) bonus = produkAktif.bonusUnit || 0;
+  document.getElementById('jumlahDisplay').innerText = jumlah.toLocaleString('id-ID') + ' ' + (produkAktif.unit || 'pcs');
+  
+  const saldoKoin = getPoints();
+  const coinDiscountRow = document.getElementById('coinDiscountRow');
+  const coinDiscount = document.getElementById('coinDiscount');
+  const maxPotongKoin = subtotal - MIN_BAYAR_QRIS;
+  
+  let potonganKoin = 0;
+  if (useCoinMode && saldoKoin > 0 && maxPotongKoin > 0) {
+    potonganKoin = Math.min(saldoKoin, maxPotongKoin);
+    coinDiscountRow.style.display = 'flex';
+    coinDiscount.innerText = '-Rp ' + potonganKoin.toLocaleString('id-ID');
+  } else {
+    coinDiscountRow.style.display = 'none';
+  }
+  
+  const totalAkhir = subtotal - potonganKoin;
+  document.getElementById('totalHarga').innerText = "Rp " + totalAkhir.toLocaleString('id-ID');
+  
+  const bonusRow = document.getElementById('bonusRow');
+  const totalDapatRow = document.getElementById('totalDapatRow');
+  if (bonus > 0) {
+    bonusRow.style.display = 'flex'; totalDapatRow.style.display = 'flex';
+    document.getElementById('bonusValue').innerText = '+' + bonus + ' ' + produkAktif.unit;
+    document.getElementById('totalDapat').innerText = (jumlah + bonus).toLocaleString('id-ID') + ' ' + produkAktif.unit;
+  } else { bonusRow.style.display = 'none'; totalDapatRow.style.display = 'none'; }
+  
+  const validJumlah = jumlah >= parseInt(document.getElementById('jumlahInput').min) && jumlah <= parseInt(document.getElementById('jumlahInput').max);
+  const validTotal = totalAkhir >= MIN_BAYAR_QRIS && subtotal >= MIN_PEMBELIAN;
+  document.getElementById('btnPesan').disabled = !(validJumlah && validTotal);
+  const hintEl = document.getElementById('jumlahHint');
+  if (!validJumlah) { hintEl.innerHTML = `⚠️ Jumlah tidak valid. Min: ${parseInt(document.getElementById('jumlahInput').min).toLocaleString('id-ID')} - Max: ${parseInt(document.getElementById('jumlahInput').max).toLocaleString('id-ID')}`; hintEl.style.color = '#ff6b6b'; }
+  else if (subtotal < MIN_PEMBELIAN) { hintEl.innerHTML = `⚠️ Minimal pembelian <b style="color:#ff6b6b">Rp ${MIN_PEMBELIAN.toLocaleString('id-ID')}</b>.`; hintEl.style.color = '#ff6b6b'; }
+  else if (!validTotal) { hintEl.innerHTML = `⚠️ Bayar minimal <b style="color:#ff6b6b">Rp ${MIN_BAYAR_QRIS.toLocaleString('id-ID')}</b>.`; hintEl.style.color = '#ff6b6b'; }
+  else if (potonganKoin > 0) { hintEl.innerHTML = `⭐ <b style="color:#ffd700">Potong ${potonganKoin.toLocaleString('id-ID')} koin = Rp ${potonganKoin.toLocaleString('id-ID')}</b>`; hintEl.style.color = '#ffd700'; }
+  else if (bonus > 0) { hintEl.innerHTML = `🎁 <b style="color:#00ff88">BONUS +${bonus} ${produkAktif.unit}</b> aktif!`; hintEl.style.color = '#00ff88'; }
+  else { hintEl.innerText = '✅ Jumlah valid, klik "Lanjut ke Pembayaran".'; hintEl.style.color = '#00ff88'; }
+}
+function keStep2() {
+  const jumlah = parseInt(document.getElementById('jumlahInput').value) || 0;
+  const hargaPerUnit = produkAktif.isApk ? produkAktif.harga : produkAktif.hargaPerUnit;
+  const total = Math.round(jumlah * hargaPerUnit);
+  let bonus = 0;
+  if (!produkAktif.isApk && produkAktif.bonusMinTotal && total >= produkAktif.bonusMinTotal) bonus = produkAktif.bonusUnit || 0;
+  dataPemesan.jumlah = jumlah; dataPemesan.total = total; dataPemesan.bonus = bonus;
+  setStep(2);
+}
+async function keStep3() {
+  const link = document.getElementById('linkSaluran').value.trim();
+  const hp = document.getElementById('hpPemesan').value.trim();
+  const inputEl = document.getElementById('linkSaluran');
+  const hpEl = document.getElementById('hpPemesan');
+  const errorEl = document.getElementById('inputError');
+  const hpErrorEl = document.getElementById('hpError');
+  clearError();
+  if (!link) { inputEl.classList.add('error'); errorEl.innerText = produkAktif.isApk ? '❌ Isi nama dulu ya!' : '❌ Isi ' + (produkAktif.inputLabel || 'link') + ' dulu ya!'; errorEl.classList.add('show'); return; }
+  if (!produkAktif.isApk && produkAktif.inputValidasi && !link.toLowerCase().includes(produkAktif.inputValidasi)) { inputEl.classList.add('error'); errorEl.innerText = '❌ ' + (produkAktif.inputError || 'Link tidak valid!'); errorEl.classList.add('show'); return; }
+  if (!hp) { hpEl.classList.add('error'); hpErrorEl.innerText = '❌ Isi no WhatsApp dulu ya!'; hpErrorEl.classList.add('show'); return; }
+  const hpClean = hp.replace(/[\s\-\+]/g, '');
+  const hpValid = /^(62|0)8[0-9]{8,13}$/.test(hpClean);
+  if (!hpValid) { hpEl.classList.add('error'); hpErrorEl.innerText = '❌ No WA tidak valid!'; hpErrorEl.classList.add('show'); return; }
+  dataPemesan.link = link; dataPemesan.hp = hp;
+  setStep(3);
+  document.getElementById('qrisLoading').style.display = 'block';
+  document.getElementById('qrisBox').style.display = 'none';
+  document.getElementById('waitingBox').style.display = 'none';
+  document.getElementById('successBox').style.display = 'none';
+  document.getElementById('failedBox').style.display = 'none';
+  
+  let potonganKoinActual = 0;
+  if (useCoinMode) {
+    const maxPotong = dataPemesan.total - MIN_BAYAR_QRIS;
+    if (maxPotong > 0) {
+      potonganKoinActual = Math.min(getPoints(), maxPotong);
+    }
+  }
+  const totalBayar = dataPemesan.total - potonganKoinActual;
+  
+  try {
+    const res = await fetch(BACKEND_URL + '/api/create-order-v2', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ 
+        amount: totalBayar, 
+        customerPhone: dataPemesan.hp, 
+        productName: produkAktif.nama, 
+        productDetail: dataPemesan.jumlah + ' ' + (produkAktif.unit || 'pcs'), 
+        link: dataPemesan.link,
+        kategoriId: produkAktif._kategoriId,
+        index: produkAktif._index
+      })
+    });
+    const result = await res.json();
+    if (!result.success) throw new Error(result.error || 'Gagal generate QRIS');
+    dataPemesan.totalAmount = result.totalAmount;
+    dataPemesan.orderId = result.orderId;
+    const qrImageUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' + encodeURIComponent(result.qrisString);
+    document.getElementById('qrisImage').src = qrImageUrl;
+    document.getElementById('qrisNominal').innerText = '💳 Silahkan bayar QRIS ini sebesar Rp ' + result.totalAmount.toLocaleString('id-ID');
+    document.getElementById('qrisLoading').style.display = 'none';
+    document.getElementById('qrisBox').style.display = 'block';
+    document.getElementById('waitingBox').style.display = 'block';
+
+    startOrderPolling(result.orderId, totalBayar, produkAktif.nama);
+    simpanOrderAktif(result.orderId, totalBayar, produkAktif.nama);
+    startBackgroundPolling();
+
+    if (potonganKoinActual > 0) {
+      setTimeout(() => {
+        showToast(`⭐ ${potonganKoinActual.toLocaleString('id-ID')} koin akan dipakai kalau pembayaran sukses.`, 'info');
+      }, 2000);
+    }
+    
+    sendToTelegram(`<b>🛒 ORDER BARU MASUK!</b>\n\n<b>📦 Produk:</b> ${produkAktif.nama}\n<b>📋 Detail:</b> ${dataPemesan.jumlah} ${produkAktif.unit || 'pcs'}\n<b>💰 Total Bayar:</b> Rp ${result.totalAmount.toLocaleString('id-ID')}${potonganKoinActual > 0 ? `\n<b>⭐ Potong Koin:</b> ${potonganKoinActual.toLocaleString('id-ID')} koin` : ''}\n<b>👤 WA Customer:</b> ${dataPemesan.hp}\n<b>🔗 Link:</b> ${dataPemesan.link}\n<b>🎫 Order ID:</b> <code>${result.orderId}</code>\n<b>🕐 Waktu:</b> ${new Date().toLocaleString('id-ID')}\n\n⏳ Status: Menunggu pembayaran...`);
+    
+    backupOrder({ order_id: result.orderId, produk: produkAktif.nama, jumlah: dataPemesan.jumlah, total: result.totalAmount, hp: dataPemesan.hp, status: 'pending' });
+  } catch (err) {
+    console.error('QRIS error:', err);
+    document.getElementById('qrisLoading').innerHTML = '<p style="color:#ff6b6b; font-size:13px;">❌ Gagal membuat QRIS</p><p style="color:#888; font-size:11px; margin-top:5px;">' + err.message + '</p>';
+  }
+}
+async function downloadQris() {
+  const btn = document.getElementById('qrisDownload');
+  const originalText = btn.innerText;
+  btn.innerText = '⏳ Mendownload...'; btn.disabled = true;
+  try {
+    const qrImageUrl = document.getElementById('qrisImage').src;
+    const response = await fetch(qrImageUrl);
+    const blob = await response.blob();
+    const blobUrl = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = blobUrl; link.download = 'QRIS-JimzzStore.png';
+    document.body.appendChild(link); link.click(); document.body.removeChild(link);
+    URL.revokeObjectURL(blobUrl);
+    btn.innerText = '✅ Berhasil! Cek Galeri';
+    setTimeout(() => { btn.innerText = originalText; btn.disabled = false; }, 3000);
+  } catch (err) {
+    window.open(document.getElementById('qrisImage').src, '_blank');
+    btn.innerText = originalText; btn.disabled = false;
+  }
+}
+
+// ============================================
+// RIWAYAT ORDER
+// ============================================
+function bukaRiwayat() {
+  document.getElementById('historyModal').classList.add('show');
+  document.body.style.overflow = 'hidden';
+  document.getElementById('historyResult').innerHTML = '';
+  document.getElementById('historyHp').value = '';
+}
+function tutupRiwayat() {
+  document.getElementById('historyModal').classList.remove('show');
+  document.body.style.overflow = 'auto';
+}
+async function loadHistory() {
+  const hp = document.getElementById('historyHp').value.trim();
+  if (!hp) { showToast('Isi no WA dulu!', 'warning'); return; }
+  const resultEl = document.getElementById('historyResult');
+  resultEl.innerHTML = '<div class="visitor-empty">⏳ Mencari...</div>';
+  try {
+    const res = await fetch(BACKEND_URL + '/api/orders-history?phone=' + encodeURIComponent(hp));
+    const data = await res.json();
+    if (!data.success || !data.orders || data.orders.length === 0) {
+      resultEl.innerHTML = '<div class="visitor-empty">Tidak ada order dengan no ini</div>';
+      return;
+    }
+    resultEl.innerHTML = data.orders.map(o => `
+      <div class="order-item" style="margin-bottom:10px;">
+        <div class="order-item-header">
+          <span class="order-item-id">${o.order_id}</span>
+          <span class="order-item-status ${o.status}">${o.status.toUpperCase()}</span>
+        </div>
+        <div class="order-item-detail">
+          📦 <b>${o.product_name}</b><br>
+          📋 ${o.product_detail}<br>
+          💰 Rp ${o.total_amount.toLocaleString('id-ID')}<br>
+          🕐 ${new Date(o.created_at).toLocaleString('id-ID')}
+        </div>
+      </div>
+    `).join('');
+  } catch (err) {
+    resultEl.innerHTML = '<div class="visitor-empty">❌ Gagal load riwayat</div>';
+  }
+}
+
+// ============================================
+// SWITCH TAB
+// ============================================
+function switchTab(tab) {
+  document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + tab).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelector(`.nav-item[data-tab="${tab}"]`).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ============================================
+// MUSIC PLAYER
+// ============================================
+const playlist = [
+  { judul: "Lagu 1", artis: "Jimzz Playlist", cover: "🔥", src: "lagu1.mp3" },
+  { judul: "Lagu 2", artis: "Jimzz Playlist", cover: "💀", src: "lagu2.mp3" },
+  { judul: "Lagu 3", artis: "Jimzz Playlist", cover: "🌆", src: "lagu3.mp3" },
+  { judul: "Lagu 4", artis: "Jimzz Playlist", cover: "🌊", src: "lagu4.mp3" }
+];
+let currentSong = 0;
+let audio;
+function renderPlaylist() {
+  audio = document.getElementById('audioPlayer');
+  const musicList = document.getElementById('musicList');
+  if (!musicList) return;
+  musicList.innerHTML = playlist.map((s, i) => `
+    <div class="music-item ${i === currentSong ? 'active' : ''}" onclick="playSong(${i})">
+      <div class="music-item-thumb">${s.cover}</div>
+      <div class="music-item-info">
+        <div class="music-item-title">${s.judul}</div>
+        <div class="music-item-artist">${s.artis}</div>
+      </div>
+    </div>
+  `).join('');
+}
+function initMusicEvents() {
+  audio = document.getElementById('audioPlayer');
+  if (!audio) return;
+  audio.addEventListener('timeupdate', () => {
+    if (audio.duration) {
+      const percent = (audio.currentTime / audio.duration) * 100;
+      const fill = document.getElementById('progressFill');
+      if (fill) fill.style.width = percent + "%";
+    }
+  });
+  audio.addEventListener('play', updateUI);
+  audio.addEventListener('pause', updateUI);
+  audio.addEventListener('ended', () => { audio.currentTime = 0; audio.play().catch(err => console.log('Replay error:', err)); });
+  audio.addEventListener('error', (e) => console.log('Gagal load:', playlist[currentSong].src));
+}
+function playSong(i) {
+  currentSong = i;
+  audio.src = playlist[i].src;
+  audio.loop = true;
+  audio.play().then(() => { updateUI(); renderPlaylist(); }).catch(err => { console.log('Play error:', err); updateUI(); renderPlaylist(); });
+}
+function updateUI() {
+  const s = playlist[currentSong];
+  const miniTitle = document.getElementById('miniTitle');
+  const miniArtist = document.getElementById('miniArtist');
+  const playMainBtn = document.getElementById('playMainBtn');
+  const musicCover = document.getElementById('musicCover');
+  if (miniTitle) miniTitle.innerText = s.judul;
+  if (miniArtist) miniArtist.innerText = s.artis;
+  if (playMainBtn) playMainBtn.innerText = audio && !audio.paused ? '⏸' : '▶';
+  if (musicCover) {
+    if (audio && !audio.paused) musicCover.classList.remove('paused');
+    else musicCover.classList.add('paused');
+  }
+}
+function togglePlay() {
+  if (!audio) audio = document.getElementById('audioPlayer');
+  if (!audio.src || audio.src === '' || audio.src === window.location.href) { playSong(0); return; }
+  if (audio.paused) audio.play().catch(err => console.log('Play error:', err));
+  else audio.pause();
+  setTimeout(updateUI, 100);
+}
+function nextSong() { currentSong = (currentSong + 1) % playlist.length; playSong(currentSong); }
+function prevSong() { currentSong = (currentSong - 1 + playlist.length) % playlist.length; playSong(currentSong); }
+function toggleExpand() { document.getElementById('musicPlayer').classList.toggle('open'); }
+function seekAudio(e) {
+  const bar = document.getElementById('progressBar');
+  const rect = bar.getBoundingClientRect();
+  const percent = (e.clientX - rect.left) / rect.width;
+  if (audio && audio.duration) audio.currentTime = percent * audio.duration;
+}
+
 // ============================================
 // ADMIN PANEL UPDATE
 // ============================================
