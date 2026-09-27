@@ -632,15 +632,9 @@ body::after{background:radial-gradient(600px circle at var(--mouse-x,50%) var(--
 .jimzz-cinematic-intro{
   position:fixed!important;inset:0!important;z-index:99999!important;overflow:hidden!important;
   background:#050609!important;color:#fff!important;display:block!important;
-  opacity:1;pointer-events:none!important;transition:opacity .65s ease!important;
-  animation:introEmergencyHide 9s forwards!important;
+  opacity:1;transition:opacity .65s ease!important;
 }
-.jimzz-cinematic-intro.hide{opacity:0!important;pointer-events:none!important;visibility:hidden!important}
-.intro-skip{pointer-events:auto!important;touch-action:manipulation!important;cursor:pointer!important;}
-@keyframes introEmergencyHide{
-  0%,94%{opacity:1;pointer-events:auto;visibility:visible}
-  100%{opacity:0;pointer-events:none;visibility:hidden}
-}
+.jimzz-cinematic-intro.hide{opacity:0!important;pointer-events:none!important}
 
 .intro-scene{position:absolute;inset:0;overflow:hidden;opacity:0;transform:scale(1.03)}
 .intro-scene::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.12),rgba(0,0,0,.68));z-index:2}
@@ -789,6 +783,7 @@ body::after{background:radial-gradient(600px circle at var(--mouse-x,50%) var(--
   .store-panel{width:86vw;padding:18px}
   .intro-skip{bottom:9%;right:6%}
 }
+
 </style>
 </head>
 <body>
@@ -847,7 +842,7 @@ body::after{background:radial-gradient(600px circle at var(--mouse-x,50%) var(--
     <div class="final-line"></div>
   </div>
   <div class="intro-progress"><div></div></div>
-  <button class="intro-skip" id="skipIntroBtn" type="button" onclick="skipLoadingScreen()">SKIP INTRO</button>
+  <button class="intro-skip" onclick="skipLoadingScreen()">SKIP INTRO</button>
 </div>
 
 <div class="toast-container" id="toastContainer"></div>
@@ -1370,7 +1365,7 @@ async function syncAccountMe(){
     return true;
   }catch(e){console.log('Account sync error',e);return false;}
 }
-async async function changeAccountPassword(){
+async function changeAccountPassword(){
   const currentPassword=prompt('Masukkan password lama:');
   if(currentPassword===null)return;
   const newPassword=prompt('Masukkan password baru (min 8, huruf + angka):');
@@ -2158,34 +2153,9 @@ function handleTopupClick() { if (isAdmin) switchTab('topup'); else showToast('T
 
 function skipLoadingScreen() {
   const screen = document.getElementById('loadingScreen');
-  if (!screen) return;
-  screen.classList.add('hide');
-  document.body.classList.remove('intro-active');
-  try { sessionStorage.setItem('jimzz_intro_seen','1'); } catch(e) {}
-}
-function initIntro() {
-  const screen = document.getElementById('loadingScreen');
-  const btn = document.getElementById('skipIntroBtn');
-  if (!screen) return;
-  if (btn) {
-    btn.addEventListener('click', function(e) {
-      e.preventDefault();
-      e.stopPropagation();
-      skipLoadingScreen();
-    }, {passive:false});
-  }
-  let seen = false;
-  try { seen = sessionStorage.getItem('jimzz_intro_seen') === '1'; } catch(e) {}
-  if (seen) {
-    skipLoadingScreen();
-    return;
-  }
-  // Fallback keras: intro tidak boleh mengunci halaman.
-  setTimeout(skipLoadingScreen, 9000);
-  setTimeout(function(){ if(!screen.classList.contains('hide')) skipLoadingScreen(); }, 11000);
+  if (screen) screen.classList.add('hide');
 }
 function startApp() {
-  initIntro();
   syncAccountMe();
   renderAccountArea();
   applyBgMode();
