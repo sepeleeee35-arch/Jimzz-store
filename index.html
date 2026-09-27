@@ -841,7 +841,7 @@ body::after{background:radial-gradient(600px circle at var(--mouse-x,50%) var(--
     <div class="final-line"></div>
   </div>
   <div class="intro-progress"><div></div></div>
-  <button class="intro-skip" onclick="skipLoadingScreen()">SKIP INTRO</button>
+  <button class="intro-skip" id="skipIntroBtn" type="button">SKIP INTRO</button>
 </div>
 
 <div class="toast-container" id="toastContainer"></div>
@@ -2152,9 +2152,34 @@ function handleTopupClick() { if (isAdmin) switchTab('topup'); else showToast('T
 
 function skipLoadingScreen() {
   const screen = document.getElementById('loadingScreen');
-  if (screen) screen.classList.add('hide');
+  if (!screen) return;
+  screen.classList.add('hide');
+  document.body.classList.remove('intro-active');
+  try { sessionStorage.setItem('jimzz_intro_seen','1'); } catch(e) {}
+}
+function initIntro() {
+  const screen = document.getElementById('loadingScreen');
+  const btn = document.getElementById('skipIntroBtn');
+  if (!screen) return;
+  if (btn) {
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      skipLoadingScreen();
+    }, {passive:false});
+  }
+  let seen = false;
+  try { seen = sessionStorage.getItem('jimzz_intro_seen') === '1'; } catch(e) {}
+  if (seen) {
+    skipLoadingScreen();
+    return;
+  }
+  // Fallback keras: intro tidak boleh mengunci halaman.
+  setTimeout(skipLoadingScreen, 9000);
+  setTimeout(function(){ if(!screen.classList.contains('hide')) skipLoadingScreen(); }, 11000);
 }
 function startApp() {
+  initIntro();
   syncAccountMe();
   renderAccountArea();
   applyBgMode();
