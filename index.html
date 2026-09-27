@@ -993,15 +993,30 @@ async function accountLogin(){
   const username=document.getElementById('accountLoginUsername').value.trim();
   const password=document.getElementById('accountLoginPassword').value;
   if(!username||!password){showToast('Username dan password wajib diisi','warning');return;}
+  const btn=document.querySelector('#accountLoginForm .account-submit');
+  if(btn?.disabled)return;
+  if(btn){btn.disabled=true;btn.dataset.oldText=btn.textContent;btn.textContent='Memproses...';}
   try{
-    const res=await fetch(BACKEND_URL+'/api/auth?action=login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username,password})});
-    const data=await res.json();
-    if(!data.success){showToast(data.error||'Login gagal','error');return;}
+    const res=await fetch(BACKEND_URL+'/api/auth?action=login',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({username,password})});
+    const raw=await res.text();
+    let data={};
+    try{data=raw?JSON.parse(raw):{};}catch(_){}
+    if(!res.ok||!data.success){
+      const detail=data.detail||data.error||('HTTP '+res.status);
+      showToast('Login gagal: '+detail,'error');
+      console.error('LOGIN API ERROR',res.status,raw);
+      return;
+    }
     setAccountSession(data.token,data.user);
     localStorage.setItem('jimzz_points',String(data.user.points||0));
     closeAccountModal();renderCoinBalance();
     showToast('✅ Login berhasil sebagai '+data.user.username,'success');
-  }catch(e){showToast('Gagal terhubung ke server','error');}
+  }catch(e){
+    console.error('LOGIN NETWORK ERROR',e);
+    showToast('Server tidak bisa dihubungi: '+(e?.message||'network error'),'error');
+  }finally{
+    if(btn){btn.disabled=false;btn.textContent=btn.dataset.oldText||'Login';}
+  }
 }
 async function accountRegister(){
   const username=document.getElementById('accountRegUsername').value.trim();
