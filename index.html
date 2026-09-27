@@ -1265,6 +1265,9 @@ applyBgMode();
       keysToRemove.slice(0, keysToRemove.length - 50).forEach(k => localStorage.removeItem(k));
     }
   } catch(e) {}
+
+  // Loading screen 1.4 detik
+  setTimeout(() => document.getElementById('loadingScreen')?.classList.add('hide'), 1400);
 }
 
 // ============================================
