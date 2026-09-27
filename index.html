@@ -1311,8 +1311,8 @@ function getAccountUser(){ try{return JSON.parse(localStorage.getItem('jimzz_acc
 function setAccountSession(token,user){
   if(token) localStorage.setItem('jimzz_account_token',token); else localStorage.removeItem('jimzz_account_token');
   if(user) localStorage.setItem('jimzz_account_user',JSON.stringify(user)); else localStorage.removeItem('jimzz_account_user');
-  isAdmin=!!(user && user.isAdmin);
-  if(isAdmin) localStorage.setItem('jimzz_admin','true'); else localStorage.removeItem('jimzz_admin');
+  isAdmin=!!(user && user.isAdmin && token);
+  localStorage.removeItem('jimzz_admin');
   renderAccountArea();
   if(document.readyState!=='loading') applyAdminUI();
 }
@@ -1350,7 +1350,7 @@ async function syncAccountMe(){
   try{
     const res=await fetch(BACKEND_URL+'/api/auth?action=me',{headers:{Authorization:'Bearer '+token}});
     const data=await res.json();
-    if(!data.success){setAccountSession();return false;}
+    if(!data.success || !data.user){setAccountSession();return false;}
     setAccountSession(token,data.user);
     localStorage.setItem('jimzz_points',String(data.user.points||0));
     return true;
@@ -1380,6 +1380,7 @@ async function accountRegister(){
   const deviceId=accountDeviceId();
   const alreadyBonus=localStorage.getItem('jimzz_bonus_claimed_device')==='true';
   const guestPoints=getPoints();
+  if(password.length < 8 || !/[A-Za-z]/.test(password) || !/[0-9]/.test(password)){showToast('Password minimal 8 karakter dan harus berisi huruf + angka','warning');return;}
   try{
     const res=await fetch(BACKEND_URL+'/api/auth?action=register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username,password,confirmPassword,deviceId})});
     const data=await res.json();
@@ -1998,7 +1999,7 @@ function initCursorGlow() {
 let isAdmin = false;
 let secretClickCount = 0;
 let secretClickTimer = null;
-if (localStorage.getItem('jimzz_admin') === 'true') isAdmin = true;
+// Status admin hanya berasal dari sesi backend, bukan localStorage.
 let cachedCounters = { totalOrder: 1375, produkOrder: {} };
 async function loadCounters() {
   try {
