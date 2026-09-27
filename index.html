@@ -568,7 +568,6 @@ function getAccountUser(){try{return JSON.parse(localStorage.getItem('jimzz_acco
 function setAccountSession(token,user){
   if(token)localStorage.setItem('jimzz_account_token',token);else localStorage.removeItem('jimzz_account_token');
   if(user)localStorage.setItem('jimzz_account_user',JSON.stringify(user));else localStorage.removeItem('jimzz_account_user');
-  renderAccountArea();
 }
 function accountDeviceId(){
   let id=localStorage.getItem('jimzz_device_id');
@@ -589,7 +588,8 @@ function showAccountForm(mode){
 function renderAccountArea(){ return; }
 function escapeHtml(s){return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
 async function syncAccountMe(){
-  const token=getAccountToken();if(!token){renderAccountArea();return false;}
+  const token=getAccountToken();if(!token){
+return false;}
   try{
     const res=await fetch(BACKEND_URL+'/api/auth?action=me',{headers:{Authorization:'Bearer '+token}});
     const data=await res.json();
@@ -597,7 +597,8 @@ async function syncAccountMe(){
     setAccountSession(token,data.user);
     localStorage.setItem('jimzz_points',String(data.user.points||0));
     return true;
-  }catch(e){console.log('Account sync error',e);renderAccountArea();return false;}
+  }catch(e){console.log('Account sync error',e);
+return false;}
 }
 async function accountLogin(){
   const username=document.getElementById('accountLoginUsername').value.trim();
@@ -1332,7 +1333,7 @@ function applyAdminUI() {
 function handleTopupClick() { if (isAdmin) switchTab('topup'); else showToast('Top Up Game sedang MAINTENANCE', 'warning'); }
 
 function startApp() {
-  renderAccountArea();  applyBgMode();
+applyBgMode();
   if (currentBgMode === 'simple') initCanvasSimple(); else initCanvasNeon();
   initCursorGlow();
   initData();
@@ -1998,17 +1999,27 @@ setInterval(() => {
 }, 5000);
 
 // ============================================
-// SERVICE WORKER
+// CACHE / SERVICE WORKER CLEANUP
 // ============================================
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js').catch(err => console.log('SW error:', err));
-  });
-}
+(async function cleanOldAppCache(){
+  try {
+    if ('serviceWorker' in navigator) {
+      const regs = await navigator.serviceWorker.getRegistrations();
+      for (const reg of regs) await reg.unregister();
+    }
+    if (window.caches) {
+      const keys = await caches.keys();
+      await Promise.all(keys.map(k => caches.delete(k)));
+    }
+  } catch(e) {
+    console.warn('Cache cleanup:', e);
+  }
+})();
 
 // ============================================
 // START APP
 // ============================================
+console.log('[Jimzz Store] GUEST MODE build 2026-09-27');
 startApp();
 </script>
 </body>
