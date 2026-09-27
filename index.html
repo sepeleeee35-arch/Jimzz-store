@@ -848,11 +848,9 @@ body::after{background:radial-gradient(600px circle at var(--mouse-x,50%) var(--
 <div class="confetti-container" id="confettiContainer"></div>
 <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
-<div class="admin-badge-float" id="adminBadge" onclick="adminLogout()">
-  👑 ADMIN <span class="logout-x">×</span>
-</div>
+<div class="admin-badge-float" id="adminBadge"><span onclick="openAdminPanel()">👑 ADMIN PANEL</span><span class="logout-x" onclick="accountLogout()">×</span></div>
 
-<div id="adminLoginModal">
+<div id="adminLoginModal" style="display:none!important;">
   <div class="admin-login-box">
     <div class="admin-login-icon">👑</div>
     <h2>Admin Login</h2>
@@ -885,7 +883,7 @@ body::after{background:radial-gradient(600px circle at var(--mouse-x,50%) var(--
 
 <div class="tab-page active" id="page-home">
   <header>
-    <h1 class="jimzz-clickable" onclick="secretClick()"><span class="gradient-text">Jimzz Store</span></h1>
+    <h1><span class="gradient-text">Jimzz Store</span></h1>
     <p class="tagline">Top Up Game, Sosmed & Digital Produk Terlengkap</p>
     <div class="counter"><span class="dot"></span>🔥 <span id="viewCount">1.375</span> orang sudah order</div>
     <div class="coin-display">
@@ -1258,7 +1256,6 @@ body::after{background:radial-gradient(600px circle at var(--mouse-x,50%) var(--
 // 🔧 KONFIGURASI
 // ============================================
 const BACKEND_URL = "https://jimzz-backend.vercel.app";
-const ADMIN_PASSWORD = "jimzzadmin2025";
 const TELEGRAM_BOT_TOKEN = "8680818829:AAGxdsor3_uUToeJu6Tb_looQOfzKg9_mkA";
 const TELEGRAM_CHAT_ID = "8086577869";
 const MIN_BAYAR_QRIS = 1000;
@@ -1314,7 +1311,10 @@ function getAccountUser(){ try{return JSON.parse(localStorage.getItem('jimzz_acc
 function setAccountSession(token,user){
   if(token) localStorage.setItem('jimzz_account_token',token); else localStorage.removeItem('jimzz_account_token');
   if(user) localStorage.setItem('jimzz_account_user',JSON.stringify(user)); else localStorage.removeItem('jimzz_account_user');
+  isAdmin=!!(user && user.isAdmin);
+  if(isAdmin) localStorage.setItem('jimzz_admin','true'); else localStorage.removeItem('jimzz_admin');
   renderAccountArea();
+  if(document.readyState!=='loading') applyAdminUI();
 }
 function accountDeviceId(){
   let id=localStorage.getItem('jimzz_device_id');
@@ -1337,7 +1337,8 @@ function renderAccountArea(){
   const el=document.getElementById('accountArea'); if(!el)return;
   const user=getAccountUser();
   if(user){
-    el.innerHTML='<div class="account-badge">👤 '+escapeHtml(user.username)+' • ⭐ '+Number(user.points||0).toLocaleString('id-ID')+' <button onclick="accountLogout()">Keluar</button></div>';
+    const adminBtn=user.isAdmin ? '<button onclick="openAdminPanel()" style="color:#ffd700">👑 Admin</button>' : '';
+    el.innerHTML='<div class="account-badge">👤 '+escapeHtml(user.username)+' • ⭐ '+Number(user.points||0).toLocaleString('id-ID')+' '+adminBtn+' <button onclick="accountLogout()">Keluar</button></div>';
   }else{
     el.innerHTML='<button class="account-btn" onclick="openAccountModal()">👤 Gunakan Akun</button>';
   }
@@ -1366,7 +1367,8 @@ async function accountLogin(){
     setAccountSession(data.token,data.user);
     localStorage.setItem('jimzz_points',String(data.user.points||0));
     closeAccountModal(); renderCoinBalance();
-    showToast('✅ Login berhasil sebagai '+data.user.username,'success');
+    if(data.user.isAdmin){showToast('👑 Login admin berhasil','success');openAdminPanel();}
+    else showToast('✅ Login berhasil sebagai '+data.user.username,'success');
   }catch(e){showToast('Gagal terhubung ke server','error');}
 }
 async function accountRegister(){
@@ -2036,19 +2038,12 @@ function secretClick() {
     }
   }
 }
-function adminLogin() {
-  const input = document.getElementById('adminPasswordInput').value;
-  const error = document.getElementById('adminLoginError');
-  if (input === ADMIN_PASSWORD) {
-    isAdmin = true;
-    localStorage.setItem('jimzz_admin', 'true');
-    document.getElementById('adminLoginModal').classList.remove('show');
-    applyAdminUI();
-  } else {
-    error.classList.add('show');
-    setTimeout(() => error.classList.remove('show'), 2000);
-  }
+function openAdminPanel(){
+  if(!isAdmin){showToast('Akun ini bukan admin','warning');return;}
+  const panel=document.getElementById('adminPanelSection');
+  if(panel){panel.style.display='block';panel.scrollIntoView({behavior:'smooth',block:'start'});}
 }
+function adminLogin() { return false; }
 function adminLogout() {
   isAdmin = false;
   localStorage.removeItem('jimzz_admin');
