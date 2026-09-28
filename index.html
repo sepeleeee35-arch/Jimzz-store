@@ -460,6 +460,7 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
 .account-logout{border:0;background:transparent;color:#888;font-size:10px;font-weight:800;cursor:pointer}
 
 
+.forgot-password-link{display:block;margin:10px auto 0;padding:0;border:0;background:transparent;color:#fff;font:700 11px Inter,Arial;cursor:pointer;text-decoration:none}.forgot-password-link:hover{text-decoration:underline;color:#00ff88}.owner-gift-box{margin:0 0 14px;padding:13px;border:1px solid rgba(255,215,0,.18);border-radius:12px;background:rgba(255,215,0,.035)}.owner-gift-title{color:#ffd700;font-size:11px;font-weight:900}.owner-gift-sub{color:#777;font-size:9px;line-height:1.5;margin:3px 0 9px}.owner-gift-input{width:100%;margin-top:7px;padding:10px 11px;border:1px solid rgba(255,215,0,.22);border-radius:9px;background:#050507;color:#fff;font:700 11px Inter,Arial;outline:none}.owner-gift-button{width:100%;margin-top:8px;padding:10px;border:0;border-radius:9px;background:linear-gradient(135deg,#ffd700,#ff9500);color:#111;font:900 11px Inter,Arial;cursor:pointer}.owner-gift-button:active{transform:scale(.98)}
 /* PRODUCT BANNERS FIX */
 .banner-stack{position:absolute;top:8px;right:8px;left:auto;z-index:10;display:flex;align-items:center;pointer-events:none}
 .produk-card{position:relative;overflow:visible}
@@ -479,7 +480,7 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
 <!-- ACCOUNT_DISABLED_2026_09_27 -->
 </head>
 <body>
-<div id="siteVersion">JIMZZ STORE • v3.2.5</div>
+<div id="siteVersion">JIMZZ STORE • v3.2.6</div>
 
 
 <div class="toast-container id="toastContainer"></div>
@@ -502,6 +503,7 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
       <div class="account-field"><label>PASSWORD</label><input id="loginPassword" type="password" autocomplete="current-password" minlength="6" required></div>
       <button class="account-submit" type="submit">🔐 Login</button>
       <div class="account-msg" id="loginMsg"></div>
+      <button type="button" class="forgot-password-link" onclick="openRecoveryModal()">Lupa Password?</button>
     </form>
     <form class="account-form" id="accountRegisterForm" onsubmit="event.preventDefault();accountRegister()">
       <div class="account-field"><label>USERNAME</label><input id="registerUsername" autocomplete="username" maxlength="24" required></div><div class="account-field"><label>EMAIL <span style="color:#777;">(opsional)</span></label><input id="registerEmail" type="email" autocomplete="email" placeholder="nama@email.com"></div><div class="account-field"><label>NO. TELEPON <span style="color:#777;">(opsional)</span></label><input id="registerPhone" type="tel" autocomplete="tel" placeholder="08xxxxxxxxxx"></div>
@@ -510,24 +512,30 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
       <button class="account-submit" type="submit">✨ Buat Akun</button>
       <div class="account-msg" id="registerMsg"></div>
     </form>
-    <div class="account-recovery" style="margin-top:16px;border-top:1px solid rgba(255,255,255,.08);padding-top:16px;">
-      <div style="font-weight:800;color:#fff;margin-bottom:6px;">🔑 Lupa Password?</div>
-      <div style="font-size:11px;color:#777;margin-bottom:10px;">Reset melalui email atau OTP nomor telepon.</div>
-      <form onsubmit="event.preventDefault();requestEmailReset()">
-        <div class="account-field"><label>EMAIL RESET</label><input id="resetEmail" type="email" placeholder="nama@email.com"></div>
-        <button class="account-submit" type="submit">📧 Kirim Link Reset</button>
-      </form>
-      <form onsubmit="event.preventDefault();requestPhoneReset()" style="margin-top:10px;">
-        <div class="account-field"><label>NO. TELEPON</label><input id="resetPhone" type="tel" placeholder="08xxxxxxxxxx"></div>
-        <button class="account-submit" type="submit">📱 Kirim OTP</button>
-      </form>
-      <div id="phoneOtpPanel" style="display:none;margin-top:10px;">
-        <div class="account-field"><label>OTP 6 DIGIT</label><input id="resetPhoneOtp" inputmode="numeric" maxlength="6"></div>
-        <div class="account-field"><label>PASSWORD BARU</label><input id="resetPhonePassword" type="password" minlength="8"></div>
-        <button class="account-submit" type="button" onclick="verifyPhoneReset()">🔐 Reset Password</button>
-      </div>
-      <div class="account-msg" id="recoveryMsg"></div>
+  </div>
+</div>
+
+<div class="account-modal" id="recoveryModal" onclick="if(event.target===this)closeRecoveryModal()">
+  <div class="account-box">
+    <button class="account-close" onclick="closeRecoveryModal()" aria-label="Tutup">×</button>
+    <div class="account-icon">🔑</div>
+    <h2>Lupa Password?</h2>
+    <div class="account-sub">Masukkan email atau nomor telepon. Salah satu saja cukup.</div>
+    <form onsubmit="event.preventDefault();requestEmailReset()">
+      <div class="account-field"><label>EMAIL</label><input id="resetEmail" type="email" placeholder="nama@email.com" autocomplete="email"></div>
+      <button class="account-submit" type="submit">📧 Kirim Link Reset</button>
+    </form>
+    <div style="text-align:center;color:#666;font-size:10px;margin:12px 0;">— atau —</div>
+    <form onsubmit="event.preventDefault();requestPhoneReset()">
+      <div class="account-field"><label>NO. TELEPON</label><input id="resetPhone" type="tel" placeholder="08xxxxxxxxxx" autocomplete="tel"></div>
+      <button class="account-submit" type="submit">📱 Kirim OTP</button>
+    </form>
+    <div id="phoneOtpPanel" style="display:none;margin-top:10px;">
+      <div class="account-field"><label>OTP 6 DIGIT</label><input id="resetPhoneOtp" inputmode="numeric" maxlength="6"></div>
+      <div class="account-field"><label>PASSWORD BARU</label><input id="resetPhonePassword" type="password" minlength="8" autocomplete="new-password"></div>
+      <button class="account-submit" type="button" onclick="verifyPhoneReset()">🔐 Reset Password</button>
     </div>
+    <div class="account-msg" id="recoveryMsg"></div>
   </div>
 </div>
 
@@ -684,6 +692,14 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
     <div class="admin-panel owner-accounts-panel">
       <div class="admin-panel-header"><span style="font-size:24px;">👑</span><span class="admin-panel-title">OWNER — KELOLA AKUN</span><button onclick="renderAccountManager()" style="margin-left:auto;background:rgba(255,215,0,.12);border:1px solid rgba(255,215,0,.45);color:#ffd700;padding:6px 10px;border-radius:8px;font-size:10px;font-weight:800;cursor:pointer;">↻</button></div>
       <div id="ownerAccountSummary" style="color:#888;font-size:10px;margin:-8px 0 12px;">Memuat akun...</div>
+      <div class="owner-gift-box">
+        <div class="owner-gift-title">🎁 GIFT KOIN</div>
+        <div class="owner-gift-sub">Kirim koin ke akun USER/ADMIN. Koin owner sendiri tidak terbatas.</div>
+        <select id="giftTargetUser" class="owner-gift-input"><option value="">Pilih akun penerima...</option></select>
+        <input id="giftAmount" class="owner-gift-input" type="text" inputmode="numeric" autocomplete="off" placeholder="Jumlah koin, contoh 1000000000000000">
+        <button class="owner-gift-button" type="button" onclick="giftCoinsToUser()">🎁 Kirim Koin</button>
+        <div id="giftCoinsMsg" class="account-msg"></div>
+      </div>
       <div id="ownerAccountList" class="owner-account-list"></div>
     </div>
   </section>
@@ -949,13 +965,15 @@ function getGuestPoints() {
   catch { return 0; }
 }
 function getLoggedAccount(){return accountCache||(()=>{try{return JSON.parse(localStorage.getItem(JIMZZ_CACHE_KEY)||'null')}catch{return null}})();}
-function getPoints(){const account=getLoggedAccount();return account?Math.max(0,parseInt(account.coins??0,10)||0):getGuestPoints();}
-function setPoints(value){const coins=Math.max(0,Math.floor(Number(value)||0));const account=getLoggedAccount();if(account){account.coins=coins;accountCache=account;localStorage.setItem(JIMZZ_CACHE_KEY,JSON.stringify(account));renderCoinBalance();return coins;}localStorage.setItem(GUEST_COINS_KEY,String(coins));return coins;}
-function addPoints(amount){const current=getPoints(),earned=Math.floor(amount/KOIN_PER_RUPIAH);setPoints(current+earned);return earned;}
+function getPoints(){const account=getLoggedAccount();if(account?.role==='owner')return Infinity;return account?Math.max(0,parseInt(account.coins??0,10)||0):getGuestPoints();}
+function setPoints(value){const account=getLoggedAccount();if(account?.role==='owner')return Infinity;const coins=Math.max(0,Math.floor(Number(value)||0));if(account){account.coins=coins;accountCache=account;localStorage.setItem(JIMZZ_CACHE_KEY,JSON.stringify(account));renderCoinBalance();return coins;}localStorage.setItem(GUEST_COINS_KEY,String(coins));return coins;}
+function addPoints(amount){const account=getLoggedAccount();if(account?.role==='owner')return 0;const current=getPoints(),earned=Math.floor(amount/KOIN_PER_RUPIAH);setPoints(current+earned);return earned;}
 function transferGuestCoinsToAccount(){const guest=getGuestPoints();localStorage.setItem(GUEST_COINS_KEY,'0');return guest;}
 function renderCoinBalance() {
   const el = document.getElementById('coinBalance');
-  if (el) el.innerText = getPoints().toLocaleString('id-ID');
+  if (!el) return;
+  const points=getPoints();
+  el.innerText = points===Infinity ? '∞' : points.toLocaleString('id-ID');
 }
 
 let useCoinMode = localStorage.getItem('jimzz_use_coin') === 'true';
@@ -1583,11 +1601,16 @@ setInterval(loadCounters,3000);
 function escapeAccountHtml(value){return String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));}
 async function renderAccountManager(){
   if(!isOwnerAccount())return;
-  const summary=document.getElementById('ownerAccountSummary'),list=document.getElementById('ownerAccountList');
+  const summary=document.getElementById('ownerAccountSummary'),list=document.getElementById('ownerAccountList'),select=document.getElementById('giftTargetUser');
   try{
     const data=await accountApi('list');
     const users=data.users||[];
     if(summary)summary.textContent=users.length+' akun terdaftar di server';
+    if(select){
+      const old=select.value;
+      select.innerHTML='<option value="">Pilih akun penerima...</option>'+users.filter(u=>String(u.role||'user')!=='owner').map(u=>'<option value="'+escapeAccountHtml(u.id)+'">'+escapeAccountHtml(u.username)+' — '+Number(u.coins||0).toLocaleString('id-ID')+' koin</option>').join('');
+      if(users.some(u=>u.id===old))select.value=old;
+    }
     if(!list)return;
     if(!users.length){list.innerHTML='<div class="owner-account-empty">Belum ada akun.</div>';return;}
     list.innerHTML=users.map(u=>{
@@ -1599,6 +1622,21 @@ async function renderAccountManager(){
       return '<div class="owner-account-item"><div class="owner-account-info"><div class="owner-account-name">'+escapeAccountHtml(u.username)+'</div><div class="owner-account-meta">'+escapeAccountHtml(u.createdAt?new Date(u.createdAt).toLocaleString('id-ID'):'Tanggal tidak tersedia')+'</div></div><span class="owner-account-role '+role+'">'+label+'</span>'+action+(role!=='owner'?ban:'')+'</div>';
     }).join('');
   }catch(e){if(list)list.innerHTML='<div class="owner-account-empty">Gagal memuat akun: '+escapeAccountHtml(e.message)+'</div>';}
+}
+async function giftCoinsToUser(){
+  if(!isOwnerAccount())return;
+  const select=document.getElementById('giftTargetUser'),input=document.getElementById('giftAmount'),msg=document.getElementById('giftCoinsMsg');
+  const userId=select?.value||'', raw=String(input?.value||'').replace(/[^0-9]/g,'');
+  const amount=Number(raw);
+  if(!userId){if(msg){msg.textContent='Pilih akun penerima dulu.';msg.style.color='#ff6b6b';}return;}
+  if(!raw||!Number.isSafeInteger(amount)||amount<=0){if(msg){msg.textContent='Jumlah koin tidak valid.';msg.style.color='#ff6b6b';}return;}
+  try{
+    const data=await accountApi('gift-coins',{userId,amount});
+    if(msg){msg.textContent=data.message||'Koin berhasil dikirim.';msg.style.color='#00ff88';}
+    if(input)input.value='';
+    await renderAccountManager();
+    showToast('🎁 Koin berhasil dikirim.','success');
+  }catch(e){if(msg){msg.textContent=e.message;msg.style.color='#ff6b6b';}}
 }
 async function setAccountRole(userId,role){
   if(!isOwnerAccount())return;
@@ -1615,6 +1653,8 @@ function handleTopupClick(){if(isAdmin)switchTab('topup');else showToast('Top Up
 
 function openAccountModal(){document.getElementById('accountModal')?.classList.add('show');switchAccountForm('login');}
 function closeAccountModal(){document.getElementById('accountModal')?.classList.remove('show');}
+function openRecoveryModal(){document.getElementById('recoveryModal')?.classList.add('show');document.getElementById('recoveryMsg').textContent='';}
+function closeRecoveryModal(){document.getElementById('recoveryModal')?.classList.remove('show');}
 function switchAccountForm(type){const login=type==='login';document.getElementById('accountLoginForm')?.classList.toggle('active',login);document.getElementById('accountRegisterForm')?.classList.toggle('active',!login);document.getElementById('accountLoginTab')?.classList.toggle('active',login);document.getElementById('accountRegisterTab')?.classList.toggle('active',!login);const lm=document.getElementById('loginMsg'),rm=document.getElementById('registerMsg');if(lm)lm.textContent='';if(rm)rm.textContent='';}
 async function accountRegister(){
   const username=document.getElementById('registerUsername').value.trim(),email=document.getElementById('registerEmail').value.trim(),phone=document.getElementById('registerPhone').value.trim(),password=document.getElementById('registerPassword').value,password2=document.getElementById('registerPassword2').value,msg=document.getElementById('registerMsg');
@@ -1653,7 +1693,7 @@ async function requestPhoneReset(){
 }
 async function verifyPhoneReset(){
   const phone=document.getElementById('resetPhone').value.trim(),token=document.getElementById('resetPhoneOtp').value.trim(),password=document.getElementById('resetPhonePassword').value,msg=document.getElementById('recoveryMsg');
-  try{const data=await accountApi('verify-phone-reset',{phone,token,password},false);msg.textContent=data.message||'Password berhasil direset.';msg.style.color='#00ff88';}
+  try{const data=await accountApi('verify-phone-reset',{phone,token,password},false);msg.textContent=data.message||'Password berhasil direset.';msg.style.color='#00ff88';setTimeout(closeRecoveryModal,700);}
   catch(e){msg.textContent=e.message;msg.style.color='#ff6b6b';}
 }
 function openAccountSettings(){
