@@ -480,7 +480,7 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
 <!-- ACCOUNT_DISABLED_2026_09_27 -->
 </head>
 <body>
-<div id="siteVersion">JIMZZ STORE • v3.2.6</div>
+<div id="siteVersion">JIMZZ STORE • v3.2.7</div>
 
 
 <div class="toast-container id="toastContainer"></div>
@@ -927,7 +927,7 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
   <audio id="audioPlayer"></audio>
 </div>
 <script>
-const JIMZZ_VERSION = 'v3.2.5';
+const JIMZZ_VERSION = 'v3.2.7';
 
 // ============================================
 // 🔧 KONFIGURASI
@@ -1581,18 +1581,38 @@ async function accountApi(action,body={},auth=true){
 }
 async function syncAccountMe(){
   if(!getAccountRefreshToken()){renderCoinBalance();return false;}
+  const previous=getLoggedAccount();
   try{
     const data=await accountApi('me');
-    saveAccountSession(null,data.user);
+    const next=data.user;
+    if(previous && next?.lastCoinGift?.id && previous.lastCoinGift?.id!==next.lastCoinGift.id){
+      const amount=Number(next.lastCoinGift.amount||0);
+      const sender=next.lastCoinGift.from||'Owner';
+      if(amount>0) showToast('🎁 +'+amount.toLocaleString('id-ID')+' koin dari '+sender,'success');
+    }
+    saveAccountSession(null,next);
     renderCoinBalance();updateAccountUI();applyAdminUI();return true;
   }catch{
     try{
       const data=await accountApi('refresh',{refreshToken:getAccountRefreshToken()},false);
-      saveAccountSession(data.session,data.user);
+      const next=data.user;
+      if(previous && next?.lastCoinGift?.id && previous.lastCoinGift?.id!==next.lastCoinGift.id){
+        const amount=Number(next.lastCoinGift.amount||0);
+        const sender=next.lastCoinGift.from||'Owner';
+        if(amount>0) showToast('🎁 +'+amount.toLocaleString('id-ID')+' koin dari '+sender,'success');
+      }
+      saveAccountSession(data.session,next);
       renderCoinBalance();updateAccountUI();applyAdminUI();return true;
     }catch{clearAccountSession();renderCoinBalance();updateAccountUI();applyAdminUI();return false;}
   }
 }
+let accountSyncBusy=false;
+setInterval(async()=>{
+  if(accountSyncBusy || !getAccountRefreshToken()) return;
+  accountSyncBusy=true;
+  try{await syncAccountMe();}finally{accountSyncBusy=false;}
+},5000);
+
 async function loadCounters(){try{const res=await fetch(BACKEND_URL+'/api/counters');const data=await res.json();if(data.success){const oldTotal=cachedCounters.totalOrder;cachedCounters.totalOrder=data.totalOrder;cachedCounters.produkOrder=data.produkOrder||{};updateOrderCounter();if(oldTotal!==data.totalOrder){renderProduk('sosmed',produkSosmed,'SUNTIK ALL');renderProduk('jpm',produkJpm,'LAYANAN LAINNYA');renderProduk('apkList',produkApk,'JUAL APK');}}}catch(err){console.log('Gagal load counters:',err);}}
 let cachedCounters={totalOrder:1375,produkOrder:{}};
 function updateOrderCounter(){const el=document.getElementById('viewCount');if(el)el.innerText=cachedCounters.totalOrder.toLocaleString('id-ID');}
@@ -1632,7 +1652,7 @@ async function giftCoinsToUser(){
   if(!raw||!Number.isSafeInteger(amount)||amount<=0){if(msg){msg.textContent='Jumlah koin tidak valid.';msg.style.color='#ff6b6b';}return;}
   try{
     const data=await accountApi('gift-coins',{userId,amount});
-    if(msg){msg.textContent=data.message||'Koin berhasil dikirim.';msg.style.color='#00ff88';}
+    if(msg){msg.textContent=(data.message||'Koin berhasil dikirim.')+' Penerima akan menerimanya otomatis tanpa refresh.';msg.style.color='#00ff88';}
     if(input)input.value='';
     await renderAccountManager();
     showToast('🎁 Koin berhasil dikirim.','success');
@@ -1662,18 +1682,21 @@ async function accountRegister(){
   if(email && !/^\S+@\S+\.\S+$/.test(email)){msg.textContent='Format email tidak valid.';msg.style.color='#ff6b6b';return;}
   if(password.length<8){msg.textContent='Password minimal 8 karakter.';msg.style.color='#ff6b6b';return;}
   if(password!==password2){msg.textContent='Konfirmasi password tidak sama.';msg.style.color='#ff6b6b';return;}
+  const guestCoinsBefore=getGuestPoints();
   try{
     const data=await accountApi('register',{username,email,phone,password},false);
     saveAccountSession(data.session,data.user);
-    const guest=getGuestPoints();
-    if(guest>0){
-      const claim=Math.min(guest,1000);
-      const upd=await accountApi('claim-guest-coins',{coins:claim});
+    if(guestCoinsBefore>0){
+      const upd=await accountApi('claim-guest-coins',{coins:guestCoinsBefore});
       saveAccountSession(null,upd.user);
-      localStorage.setItem(GUEST_COINS_KEY,String(Math.max(0,guest-claim)));
-      data.user=upd.user;
+      localStorage.setItem(GUEST_COINS_KEY,'0');
+    }else{
+      localStorage.setItem(GUEST_COINS_KEY,'0');
     }
-    renderCoinBalance();updateAccountUI();applyAdminUI();msg.textContent='Akun berhasil dibuat.';msg.style.color='#00ff88';setTimeout(closeAccountModal,500);
+    renderCoinBalance();updateAccountUI();applyAdminUI();
+    msg.textContent='Akun berhasil dibuat dan kamu langsung masuk ke akun.';msg.style.color='#00ff88';
+    showToast(guestCoinsBefore>0?'🎉 Akun dibuat. Koin tamu dipindahkan ke akun baru.':'🎉 Akun berhasil dibuat dan langsung login.','success');
+    setTimeout(closeAccountModal,500);
   }catch(e){msg.textContent=e.message;msg.style.color='#ff6b6b';}
 }
 async function accountLogin(){
