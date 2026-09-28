@@ -479,7 +479,7 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
 <!-- ACCOUNT_DISABLED_2026_09_27 -->
 </head>
 <body>
-<div id="siteVersion">JIMZZ STORE • v3.2.1</div>
+<div id="siteVersion">JIMZZ STORE • v3.2.4</div>
 
 
 <div class="toast-container id="toastContainer"></div>
@@ -911,7 +911,7 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
   <audio id="audioPlayer"></audio>
 </div>
 <script>
-const JIMZZ_VERSION = 'v3.2.2';
+const JIMZZ_VERSION = 'v3.2.4';
 
 // ============================================
 // 🔧 KONFIGURASI
@@ -950,7 +950,7 @@ function getGuestPoints() {
 }
 function getLoggedAccount(){return accountCache||(()=>{try{return JSON.parse(localStorage.getItem(JIMZZ_CACHE_KEY)||'null')}catch{return null}})();}
 function getPoints(){const account=getLoggedAccount();return account?Math.max(0,parseInt(account.coins??0,10)||0):getGuestPoints();}
-function setPoints(value){const coins=Math.max(0,Math.floor(Number(value)||0));const account=getLoggedAccount();if(account){account.coins=coins;accountCache=account;localStorage.setItem(JIMZZ_CACHE_KEY,JSON.stringify(account));accountApi('update-coins',{coins}).then(d=>{saveAccountSession(null,d.user);renderCoinBalance();}).catch(e=>console.log('Gagal sync koin:',e.message));return coins;}localStorage.setItem(GUEST_COINS_KEY,String(coins));return coins;}
+function setPoints(value){const coins=Math.max(0,Math.floor(Number(value)||0));const account=getLoggedAccount();if(account){account.coins=coins;accountCache=account;localStorage.setItem(JIMZZ_CACHE_KEY,JSON.stringify(account));renderCoinBalance();return coins;}localStorage.setItem(GUEST_COINS_KEY,String(coins));return coins;}
 function addPoints(amount){const current=getPoints(),earned=Math.floor(amount/KOIN_PER_RUPIAH);setPoints(current+earned);return earned;}
 function transferGuestCoinsToAccount(){const guest=getGuestPoints();localStorage.setItem(GUEST_COINS_KEY,'0');return guest;}
 function renderCoinBalance() {
@@ -1226,12 +1226,12 @@ async function handleOrderSuccess(orderId, totalBayar, produkNama) {
   showToast(`✅ Pesanan ${orderId} SELESAI! Admin udah proses.`, 'success');
 
   if (totalBayar && totalBayar > 0) {
-    const account = getAccountUser();
+    const account = getLoggedAccount();
     if (account && getAccountToken()) {
       await syncAccountMe();
       const fresh = getAccountUser();
       if (fresh) {
-        setAccountSession(getAccountToken(), fresh);
+        saveAccountSession(null, fresh);
         renderCoinBalance();
         showToast(`🎁 Koin akun diperbarui: ${Number(fresh.points||0).toLocaleString('id-ID')} koin`, 'success');
       }
@@ -1622,8 +1622,19 @@ async function accountRegister(){
   if(email && !/^\S+@\S+\.\S+$/.test(email)){msg.textContent='Format email tidak valid.';msg.style.color='#ff6b6b';return;}
   if(password.length<8){msg.textContent='Password minimal 8 karakter.';msg.style.color='#ff6b6b';return;}
   if(password!==password2){msg.textContent='Konfirmasi password tidak sama.';msg.style.color='#ff6b6b';return;}
-  try{const data=await accountApi('register',{username,email,phone,password},false);const guest=getGuestPoints();if(guest>0){const upd=await accountApi('update-coins',{coins:guest});data.user=upd.user;localStorage.setItem(GUEST_COINS_KEY,'0');}saveAccountSession(data.session,data.user);renderCoinBalance();updateAccountUI();applyAdminUI();msg.textContent='Akun berhasil dibuat.';msg.style.color='#00ff88';setTimeout(closeAccountModal,500);}
-  catch(e){msg.textContent=e.message;msg.style.color='#ff6b6b';}
+  try{
+    const data=await accountApi('register',{username,email,phone,password},false);
+    saveAccountSession(data.session,data.user);
+    const guest=getGuestPoints();
+    if(guest>0){
+      const claim=Math.min(guest,1000);
+      const upd=await accountApi('claim-guest-coins',{coins:claim});
+      saveAccountSession(null,upd.user);
+      localStorage.setItem(GUEST_COINS_KEY,String(Math.max(0,guest-claim)));
+      data.user=upd.user;
+    }
+    renderCoinBalance();updateAccountUI();applyAdminUI();msg.textContent='Akun berhasil dibuat.';msg.style.color='#00ff88';setTimeout(closeAccountModal,500);
+  }catch(e){msg.textContent=e.message;msg.style.color='#ff6b6b';}
 }
 async function accountLogin(){
   const username=document.getElementById('loginUsername').value.trim(),password=document.getElementById('loginPassword').value,msg=document.getElementById('loginMsg');
@@ -2148,7 +2159,7 @@ async function keStep3() {
   try {
     const res = await fetch(BACKEND_URL + '/api/create-order-v2', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', ...(getAccountToken() ? { Authorization: 'Bearer ' + getAccountToken() } : {}) },
       body: JSON.stringify({ 
         amount: totalBayar, 
         customerPhone: dataPemesan.hp, 
