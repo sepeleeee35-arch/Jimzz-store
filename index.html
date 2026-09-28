@@ -504,11 +504,50 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
       <div class="account-msg" id="loginMsg"></div>
     </form>
     <form class="account-form" id="accountRegisterForm" onsubmit="event.preventDefault();accountRegister()">
-      <div class="account-field"><label>USERNAME</label><input id="registerUsername" autocomplete="username" maxlength="24" required></div>
+      <div class="account-field"><label>USERNAME</label><input id="registerUsername" autocomplete="username" maxlength="24" required></div><div class="account-field"><label>EMAIL</label><input id="registerEmail" type="email" autocomplete="email" placeholder="nama@email.com" required></div><div class="account-field"><label>NO. TELEPON <span style="color:#777;">(opsional)</span></label><input id="registerPhone" type="tel" autocomplete="tel" placeholder="08xxxxxxxxxx"></div>
       <div class="account-field"><label>PASSWORD</label><input id="registerPassword" type="password" autocomplete="new-password" minlength="6" required></div>
       <div class="account-field"><label>ULANGI PASSWORD</label><input id="registerPassword2" type="password" autocomplete="new-password" minlength="6" required></div>
       <button class="account-submit" type="submit">✨ Buat Akun</button>
       <div class="account-msg" id="registerMsg"></div>
+    </form>
+    <div class="account-recovery" style="margin-top:16px;border-top:1px solid rgba(255,255,255,.08);padding-top:16px;">
+      <div style="font-weight:800;color:#fff;margin-bottom:6px;">🔑 Lupa Password?</div>
+      <div style="font-size:11px;color:#777;margin-bottom:10px;">Reset melalui email atau OTP nomor telepon.</div>
+      <form onsubmit="event.preventDefault();requestEmailReset()">
+        <div class="account-field"><label>EMAIL RESET</label><input id="resetEmail" type="email" placeholder="nama@email.com"></div>
+        <button class="account-submit" type="submit">📧 Kirim Link Reset</button>
+      </form>
+      <form onsubmit="event.preventDefault();requestPhoneReset()" style="margin-top:10px;">
+        <div class="account-field"><label>NO. TELEPON</label><input id="resetPhone" type="tel" placeholder="08xxxxxxxxxx"></div>
+        <button class="account-submit" type="submit">📱 Kirim OTP</button>
+      </form>
+      <div id="phoneOtpPanel" style="display:none;margin-top:10px;">
+        <div class="account-field"><label>OTP 6 DIGIT</label><input id="resetPhoneOtp" inputmode="numeric" maxlength="6"></div>
+        <div class="account-field"><label>PASSWORD BARU</label><input id="resetPhonePassword" type="password" minlength="8"></div>
+        <button class="account-submit" type="button" onclick="verifyPhoneReset()">🔐 Reset Password</button>
+      </div>
+      <div class="account-msg" id="recoveryMsg"></div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="accountSettingsModal" onclick="if(event.target===this)closeAccountSettings()">
+  <div class="modal-box" style="max-width:520px;">
+    <button class="modal-close" onclick="closeAccountSettings()">×</button>
+    <div class="modal-title-block"><div class="modal-label">AKUN</div><div class="modal-title">⚙️ Pengaturan Akun</div><div class="modal-subtitle">Kelola email, nomor telepon, dan password.</div></div>
+    <form onsubmit="event.preventDefault();saveAccountContact()">
+      <div class="form-box"><label>📧 Email</label><input id="accountEmail" type="email" required></div>
+      <div class="form-box"><label>📱 Nomor Telepon <span style="color:#777;">(opsional)</span></label><input id="accountPhone" type="tel" placeholder="08xxxxxxxxxx"></div>
+      <button class="btn-next" type="submit">💾 Simpan Kontak</button>
+      <div class="account-msg" id="contactMsg"></div>
+    </form>
+    <hr style="border:0;border-top:1px solid rgba(255,255,255,.08);margin:18px 0;">
+    <form onsubmit="event.preventDefault();changeAccountPassword()">
+      <div class="form-box"><label>🔒 Password Saat Ini</label><input id="currentAccountPassword" type="password" required></div>
+      <div class="form-box"><label>🔐 Password Baru</label><input id="newAccountPassword" type="password" minlength="8" required></div>
+      <div class="form-box"><label>🔐 Ulangi Password Baru</label><input id="newAccountPassword2" type="password" minlength="8" required></div>
+      <button class="btn-next" type="submit">🔑 Ganti Password</button>
+      <div class="account-msg" id="passwordMsg"></div>
     </form>
   </div>
 </div>
@@ -539,7 +578,7 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
     <p class="tagline">Top Up Game, Sosmed & Digital Produk Terlengkap</p>
     <div class="counter"><span class="dot"></span>🔥 <span id="viewCount">1.375</span> orang sudah order</div>
     <button class="account-btn" id="accountButton" onclick="openAccountModal()">👤 Login / Register</button>
-    <div class="account-profile" id="accountProfile"><span>👋 <span id="accountName"></span></span><span class="account-role" id="accountRole"></span><button class="account-logout" onclick="accountLogout()">Logout</button></div>
+    <div class="account-profile" id="accountProfile"><span>👋 <span id="accountName"></span></span><span class="account-role" id="accountRole"></span><button class="account-logout" onclick="openAccountSettings()">⚙️ Akun</button><button class="account-logout" onclick="accountLogout()">Logout</button></div>
     <div class="coin-display">
       <span class="coin-icon">⭐</span>
       <span>Koin Kamu:</span>
@@ -872,13 +911,12 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
   <audio id="audioPlayer"></audio>
 </div>
 <script>
-const JIMZZ_VERSION = 'v3.2.1';
+const JIMZZ_VERSION = 'v3.2.2';
 
 // ============================================
 // 🔧 KONFIGURASI
 // ============================================
 const BACKEND_URL = "https://jimzz-backend.vercel.app";
-const ADMIN_PASSWORD = "jimzzadmin2025";
 const TELEGRAM_BOT_TOKEN = "8680818829:AAGxdsor3_uUToeJu6Tb_looQOfzKg9_mkA";
 const TELEGRAM_CHAT_ID = "8086577869";
 const MIN_BAYAR_QRIS = 1000;
@@ -1340,7 +1378,7 @@ async function failOrder(orderId) {
   try {
     const res = await fetch(BACKEND_URL + '/api/fail-order', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'X-Admin-Password': ADMIN_PASSWORD },
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + getAccountToken() },
       body: JSON.stringify({ orderId: orderId })
     });
     const data = await res.json();
@@ -1596,38 +1634,51 @@ function openAccountModal(){document.getElementById('accountModal')?.classList.a
 function closeAccountModal(){document.getElementById('accountModal')?.classList.remove('show');}
 function switchAccountForm(type){const login=type==='login';document.getElementById('accountLoginForm')?.classList.toggle('active',login);document.getElementById('accountRegisterForm')?.classList.toggle('active',!login);document.getElementById('accountLoginTab')?.classList.toggle('active',login);document.getElementById('accountRegisterTab')?.classList.toggle('active',!login);const lm=document.getElementById('loginMsg'),rm=document.getElementById('registerMsg');if(lm)lm.textContent='';if(rm)rm.textContent='';}
 async function accountRegister(){
-  const username=document.getElementById('registerUsername').value.trim(),password=document.getElementById('registerPassword').value,password2=document.getElementById('registerPassword2').value,msg=document.getElementById('registerMsg');
-  if(!/^[A-Za-z0-9_]{3,24}$/.test(username)){msg.textContent='Username 3–24 karakter: huruf, angka, atau _.';msg.style.color='#ff6b6b';return;}
-  if(password.length<6){msg.textContent='Password minimal 6 karakter.';msg.style.color='#ff6b6b';return;}
+  const username=document.getElementById('registerUsername').value.trim(),email=document.getElementById('registerEmail').value.trim(),phone=document.getElementById('registerPhone').value.trim(),password=document.getElementById('registerPassword').value,password2=document.getElementById('registerPassword2').value,msg=document.getElementById('registerMsg');
+  if(!/^[A-Za-z0-9_]{3,24}$/.test(username)){msg.textContent='Username 3–24 karakter.';msg.style.color='#ff6b6b';return;}
+  if(!/^\S+@\S+\.\S+$/.test(email)){msg.textContent='Email wajib diisi dan valid.';msg.style.color='#ff6b6b';return;}
+  if(password.length<8){msg.textContent='Password minimal 8 karakter.';msg.style.color='#ff6b6b';return;}
   if(password!==password2){msg.textContent='Konfirmasi password tidak sama.';msg.style.color='#ff6b6b';return;}
-  try{
-    const data=await accountApi('register',{username,password},false);
-    const guest=getGuestPoints();
-    if(guest>0){const upd=await accountApi('update-coins',{coins:guest});data.user=upd.user;localStorage.setItem(GUEST_COINS_KEY,'0');}
-    saveAccountSession(data.session,data.user);renderCoinBalance();updateAccountUI();applyAdminUI();msg.textContent='Akun berhasil dibuat.';msg.style.color='#00ff88';setTimeout(closeAccountModal,500);
-  }catch(e){msg.textContent=e.message;msg.style.color='#ff6b6b';}
+  try{const data=await accountApi('register',{username,email,phone,password},false);const guest=getGuestPoints();if(guest>0){const upd=await accountApi('update-coins',{coins:guest});data.user=upd.user;localStorage.setItem(GUEST_COINS_KEY,'0');}saveAccountSession(data.session,data.user);renderCoinBalance();updateAccountUI();applyAdminUI();msg.textContent='Akun berhasil dibuat.';msg.style.color='#00ff88';setTimeout(closeAccountModal,500);}
+  catch(e){msg.textContent=e.message;msg.style.color='#ff6b6b';}
 }
 async function accountLogin(){
   const username=document.getElementById('loginUsername').value.trim(),password=document.getElementById('loginPassword').value,msg=document.getElementById('loginMsg');
-  try{
-    const data=await accountApi('login',{username,password},false);
-    saveAccountSession(data.session,data.user);renderCoinBalance();updateAccountUI();applyAdminUI();msg.textContent='Login berhasil.';msg.style.color='#00ff88';setTimeout(closeAccountModal,400);return;
-  }catch(e){
-    // Migrasi otomatis akun lama dari perangkat ini jika password cocok.
-    try{
-      const old=JSON.parse(localStorage.getItem(JIMZZ_USERS_KEY)||'{}')[username.toLowerCase()];
-      if(old?.hash){
-        const digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(password));
-        const hash=Array.from(new Uint8Array(digest)).map(b=>b.toString(16).padStart(2,'0')).join('');
-        if(hash===old.hash){
-          const data=await accountApi('register',{username,password},false);
-          const oldCoins=Number(old.coins||0);if(oldCoins>0){const upd=await accountApi('update-coins',{coins:oldCoins});data.user=upd.user;}
-          saveAccountSession(data.session,data.user);renderCoinBalance();updateAccountUI();applyAdminUI();msg.textContent='Akun dipindahkan ke server.';msg.style.color='#00ff88';setTimeout(closeAccountModal,500);return;
-        }
-      }
-    }catch{}
-    msg.textContent=e.message||'Username atau password salah.';msg.style.color='#ff6b6b';
-  }
+  try{const data=await accountApi('login',{username,password},false);saveAccountSession(data.session,data.user);renderCoinBalance();updateAccountUI();applyAdminUI();msg.textContent='Login berhasil.';msg.style.color='#00ff88';setTimeout(closeAccountModal,400);}
+  catch(e){msg.textContent=e.message||'Username atau password salah.';msg.style.color='#ff6b6b';}
+}
+async function requestEmailReset(){
+  const email=document.getElementById('resetEmail').value.trim(),msg=document.getElementById('recoveryMsg');
+  try{const data=await accountApi('request-reset',{email},false);msg.textContent=data.message||'Jika email terdaftar, cek inbox.';msg.style.color='#00ff88';}
+  catch(e){msg.textContent=e.message;msg.style.color='#ff6b6b';}
+}
+async function requestPhoneReset(){
+  const phone=document.getElementById('resetPhone').value.trim(),msg=document.getElementById('recoveryMsg');
+  try{await accountApi('request-phone-otp',{phone},false);document.getElementById('phoneOtpPanel').style.display='block';msg.textContent='OTP dikirim. Masukkan kode 6 digit.';msg.style.color='#00ff88';}
+  catch(e){msg.textContent=e.message;msg.style.color='#ff6b6b';}
+}
+async function verifyPhoneReset(){
+  const phone=document.getElementById('resetPhone').value.trim(),token=document.getElementById('resetPhoneOtp').value.trim(),password=document.getElementById('resetPhonePassword').value,msg=document.getElementById('recoveryMsg');
+  try{const data=await accountApi('verify-phone-reset',{phone,token,password},false);msg.textContent=data.message||'Password berhasil direset.';msg.style.color='#00ff88';}
+  catch(e){msg.textContent=e.message;msg.style.color='#ff6b6b';}
+}
+function openAccountSettings(){
+  const u=getLoggedAccount();if(!u)return;
+  document.getElementById('accountSettingsModal')?.classList.add('show');
+  document.getElementById('accountEmail').value=u.email||'';
+  document.getElementById('accountPhone').value=u.phone||'';
+}
+function closeAccountSettings(){document.getElementById('accountSettingsModal')?.classList.remove('show');}
+async function saveAccountContact(){
+  const email=document.getElementById('accountEmail').value.trim(),phone=document.getElementById('accountPhone').value.trim(),msg=document.getElementById('contactMsg');
+  try{const data=await accountApi('update-contact',{email,phone});saveAccountSession(null,data.user);msg.textContent=data.message||'Kontak diperbarui.';msg.style.color='#00ff88';}
+  catch(e){msg.textContent=e.message;msg.style.color='#ff6b6b';}
+}
+async function changeAccountPassword(){
+  const currentPassword=document.getElementById('currentAccountPassword').value,password=document.getElementById('newAccountPassword').value,password2=document.getElementById('newAccountPassword2').value,msg=document.getElementById('passwordMsg');
+  if(password.length<8||password!==password2){msg.textContent='Password baru minimal 8 karakter dan harus sama.';msg.style.color='#ff6b6b';return;}
+  try{const data=await accountApi('change-password',{currentPassword,password});msg.textContent=data.message||'Password berhasil diganti.';msg.style.color='#00ff88';}
+  catch(e){msg.textContent=e.message;msg.style.color='#ff6b6b';}
 }
 async function accountLogout(){clearAccountSession();renderCoinBalance();updateAccountUI();applyAdminUI();showToast('Berhasil logout','info');}
 function updateAccountUI(){const user=getLoggedAccount(),btn=document.getElementById('accountButton'),profile=document.getElementById('accountProfile'),nameEl=document.getElementById('accountName'),roleEl=document.getElementById('accountRole');if(user){if(btn)btn.style.display='none';if(profile)profile.classList.add('show');if(nameEl)nameEl.textContent=user.username;if(roleEl){const role=user.role||'user';roleEl.textContent=role==='owner'?'OWNER':role==='admin'?'ADMIN':'';roleEl.className='account-role '+role;roleEl.style.display=(role==='owner'||role==='admin')?'inline-flex':'none';}}else{if(btn)btn.style.display='inline-flex';if(profile)profile.classList.remove('show');if(roleEl)roleEl.style.display='none';}updateRoleBadge(user?.role||'user');}
