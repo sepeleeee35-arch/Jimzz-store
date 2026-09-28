@@ -938,7 +938,7 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
   <audio id="audioPlayer"></audio>
 </div>
 <script>
-const JIMZZ_VERSION = 'v3.3.0';
+const JIMZZ_VERSION = 'v3.3.1';
 
 // ============================================
 // 🔧 KONFIGURASI
@@ -2256,7 +2256,50 @@ async function keStep3() {
   const hpErrorEl = document.getElementById('hpError');
   clearError();
   if (!link) { inputEl.classList.add('error'); errorEl.innerText = produkAktif.isApk ? '❌ Isi nama dulu ya!' : '❌ Isi ' + (produkAktif.inputLabel || 'link') + ' dulu ya!'; errorEl.classList.add('show'); return; }
-  if (!produkAktif.isApk && produkAktif.inputValidasi && !link.toLowerCase().includes(produkAktif.inputValidasi)) { inputEl.classList.add('error'); errorEl.innerText = '❌ ' + (produkAktif.inputError || 'Link tidak valid!'); errorEl.classList.add('show'); return; }
+  if (!produkAktif.isApk && produkAktif.inputValidasi) {
+    const expected = String(produkAktif.inputValidasi).toLowerCase();
+    let parsedUrl = null;
+    try { parsedUrl = new URL(link); } catch {}
+    const host = parsedUrl?.hostname?.toLowerCase() || '';
+    const type = expected === 'whatsapp.com/channel' ? 'whatsapp-channel' : (expected === 'tiktok.com' ? 'tiktok' : null);
+
+    if (!parsedUrl || parsedUrl.protocol !== 'https:' || (type === 'whatsapp-channel' && !/^((www\\.)?whatsapp\\.com)$/i.test(host)) || (type === 'whatsapp-channel' && !/^\\/channel\\/[A-Za-z0-9_-]+\\/?$/i.test(parsedUrl.pathname))) {
+      inputEl.classList.add('error');
+      errorEl.innerText = '❌ ' + (produkAktif.inputError || 'Link tidak valid!');
+      errorEl.classList.add('show');
+      return;
+    }
+
+    if (type) {
+      inputEl.classList.add('checking');
+      errorEl.innerText = '⏳ Sedang mengecek link langsung...';
+      errorEl.classList.add('show');
+      try {
+        const verifyRes = await fetch(BACKEND_URL + '/api/validate-link', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: link, type })
+        });
+        const verify = await verifyRes.json();
+        if (!verify.valid) {
+          inputEl.classList.add('error');
+          errorEl.innerText = '❌ ' + (verify.error || 'Link tidak bisa diverifikasi.');
+          errorEl.classList.add('show');
+          inputEl.classList.remove('checking');
+          return;
+        }
+        if (verify.normalizedUrl) document.getElementById('linkSaluran').value = verify.normalizedUrl;
+      } catch (verifyError) {
+        inputEl.classList.add('error');
+        errorEl.innerText = '❌ Gagal mengecek link. Coba lagi.';
+        errorEl.classList.add('show');
+        inputEl.classList.remove('checking');
+        return;
+      }
+      inputEl.classList.remove('checking');
+      clearError();
+    }
+  }
   if (!hp) { hpEl.classList.add('error'); hpErrorEl.innerText = '❌ Isi no WhatsApp dulu ya!'; hpErrorEl.classList.add('show'); return; }
   const hpClean = hp.replace(/[\s\-\+]/g, '');
   const hpValid = /^(62|0)8[0-9]{8,13}$/.test(hpClean);
@@ -2316,7 +2359,12 @@ async function keStep3() {
     backupOrder({ order_id: result.orderId, produk: produkAktif.nama, jumlah: dataPemesan.jumlah, total: result.totalAmount, hp: dataPemesan.hp, status: 'pending' });
   } catch (err) {
     console.error('QRIS error:', err);
-    document.getElementById('qrisLoading').innerHTML = '<p style="color:#ff6b6b; font-size:13px;">❌ Gagal membuat QRIS</p><p style="color:#888; font-size:11px; margin-top:5px;">' + err.message + '</p>';
+    const safeMessage = String(err?.message || 'Terjadi kesalahan saat membuat QRIS.')
+      .replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+    document.getElementById('qrisLoading').innerHTML =
+      '<div style="color:#ff6b6b;font-size:13px;font-weight:800;">❌ Gagal membuat QRIS</div>' +
+      '<div style="color:#999;font-size:11px;margin-top:7px;line-height:1.6;">' + safeMessage + '</div>' +
+      '<button onclick="keStep3()" style="margin-top:14px;padding:10px 16px;border:1px solid #00ff88;border-radius:10px;background:transparent;color:#00ff88;font-weight:800;">🔄 Coba Lagi</button>';
   }
 }
 async function downloadQris() {
