@@ -440,48 +440,8 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
 #page-home .maintenance-badge{display:inline-block;margin-top:6px;padding:3px 7px;border-radius:7px;background:rgba(255,149,0,.09);border:1px solid rgba(255,149,0,.2);color:#ffad35;font-size:9px;font-weight:800}
 #page-home footer{max-width:760px;margin-left:auto;margin-right:auto}
 @media(max-width:480px){#page-home header{margin:10px 10px 22px;padding:32px 14px 24px;border-radius:24px}#page-home header h1{font-size:42px}#page-home .trust-row{gap:6px}#page-home .trust-item{font-size:9px}#page-home .menu-home{margin-left:4px;margin-right:4px}}
-
-/* JIMZZ_ACCOUNT_SYSTEM_V1 */
-.account-btn{position:fixed;top:12px;left:12px;z-index:4500;display:inline-flex;align-items:center;justify-content:center;gap:7px;margin:0;padding:10px 16px;border:1px solid rgba(0,255,136,.45);border-radius:12px;background:linear-gradient(135deg,rgba(0,255,136,.16),rgba(0,180,110,.08));color:#00ff88;font:800 12px Inter,Arial,sans-serif;cursor:pointer;box-shadow:0 0 22px rgba(0,255,136,.12);transition:.25s}
-.account-btn:hover{transform:translateY(-1px);box-shadow:0 0 28px rgba(0,255,136,.24)}
-.account-modal{position:fixed;inset:0;z-index:6000;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(0,0,0,.78);backdrop-filter:blur(14px)}
-.account-modal.show{display:flex}
-.account-box{position:relative;width:min(410px,100%);padding:28px 22px 24px;border:1px solid rgba(0,255,136,.35);border-radius:24px;background:linear-gradient(145deg,#0d1813,#0b0b12);box-shadow:0 30px 90px rgba(0,0,0,.8),0 0 45px rgba(0,255,136,.12);animation:accountIn .28s ease}
-@keyframes accountIn{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
-.account-close{position:absolute;right:14px;top:12px;width:32px;height:32px;border:0;border-radius:50%;background:#15151d;color:#aaa;font-size:20px;cursor:pointer}
-.account-icon{font-size:38px;text-align:center;margin-bottom:8px}
-.account-box h2{text-align:center;color:#00ff88;font-size:22px;margin:0 0 5px}
-.account-sub{text-align:center;color:#777;font-size:11px;margin-bottom:18px}
-.account-tabs{display:flex;gap:7px;padding:4px;background:#07070b;border-radius:12px;margin-bottom:16px}
-.account-tab{flex:1;border:0;border-radius:9px;padding:10px;background:transparent;color:#777;font:800 12px Inter,Arial;cursor:pointer}
-.account-tab.active{background:linear-gradient(135deg,#00ff88,#00cc6a);color:#000}
-.account-form{display:none}
-.account-form.active{display:block}
-.account-field{margin-bottom:11px}
-.account-field label{display:block;color:#aaa;font-size:10px;font-weight:800;margin:0 0 6px 3px}
-.account-field input{width:100%;padding:13px 14px;border:1px solid #202a25;border-radius:11px;background:#050509;color:#fff;outline:none;font:500 13px Inter,Arial}
-.account-field input:focus{border-color:#00ff88;box-shadow:0 0 15px rgba(0,255,136,.12)}
-.account-submit{width:100%;margin-top:4px;padding:13px;border:0;border-radius:11px;background:linear-gradient(135deg,#00ff88,#00cc6a);color:#000;font:900 13px Inter,Arial;cursor:pointer}
-.account-msg{min-height:18px;margin-top:10px;text-align:center;font-size:11px;font-weight:700}
-.account-profile{position:fixed;top:12px;left:12px;z-index:4500;display:none;align-items:center;justify-content:center;gap:8px;margin:0;color:#00ff88;font-size:11px;font-weight:800}
-.account-profile.show{display:flex}
-.account-logout{border:0;background:transparent;color:#888;font-size:10px;font-weight:800;cursor:pointer}
-
-
-/* PRODUCT BANNERS FIX */
-.banner-stack{position:absolute;top:10px;right:10px;left:auto;z-index:4;display:flex;align-items:center;pointer-events:none}
-.produk-card{position:relative;overflow:visible}
-.product-banner{display:inline-flex;align-items:center;justify-content:center;min-height:26px;padding:6px 10px;border-radius:9px;color:#050507;font-size:9px;font-weight:950;letter-spacing:.45px;line-height:1;white-space:nowrap;background:linear-gradient(135deg,#00ff88,#00c96b);box-shadow:0 5px 18px rgba(0,255,136,.38),0 0 0 1px rgba(255,255,255,.14) inset;animation:bannerFloat 2.2s ease-in-out infinite, bannerGlow 2.5s ease-in-out infinite}
-.product-banner.hot{background:linear-gradient(135deg,#ff3b30,#ff9500);color:#fff;box-shadow:0 5px 20px rgba(255,76,0,.38),0 0 0 1px rgba(255,255,255,.16) inset}
-.product-banner.expensive{background:linear-gradient(135deg,#b56cff,#5e5ce6);color:#fff;box-shadow:0 5px 20px rgba(125,92,230,.4),0 0 0 1px rgba(255,255,255,.16) inset}
-.product-banner.cheap{background:linear-gradient(135deg,#ffd60a,#ff9f0a);color:#151000;box-shadow:0 5px 20px rgba(255,190,0,.38),0 0 0 1px rgba(255,255,255,.18) inset}
-.product-banner.combo{background:linear-gradient(90deg,#00ff88,#00d9ff,#a855f7,#ff3b30,#ffd60a);background-size:300% 100%;color:#050507;animation:bannerFloat 2.2s ease-in-out infinite,bannerGradient 3s linear infinite}
-@keyframes bannerFloat{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-3px) rotate(1deg)}}
-@keyframes bannerGlow{0%,100%{filter:brightness(1);transform:translateY(0)}50%{filter:brightness(1.18);transform:translateY(-2px)}}
-@keyframes bannerGradient{0%{background-position:0% 50%}100%{background-position:300% 50%}}
-
 </style>
-<!-- OPTIONAL_ACCOUNT_ENABLED_2026_09_28 -->
+<!-- ACCOUNT_DISABLED_2026_09_27 -->
 </head>
 <body>
 
@@ -507,34 +467,6 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
     <input type="password" id="adminPasswordInput" placeholder="••••••••" onkeypress="if(event.key==='Enter')adminLogin()">
     <button onclick="adminLogin()">Login</button>
     <div class="admin-login-error" id="adminLoginError">❌ Password salah!</div>
-  </div>
-</div>
-
-
-<!-- JIMZZ_ACCOUNT_SYSTEM_V1 -->
-<div class="account-modal" id="accountModal" onclick="if(event.target===this)closeAccountModal()">
-  <div class="account-box">
-    <button class="account-close" onclick="closeAccountModal()" aria-label="Tutup">×</button>
-    <div class="account-icon">👤</div>
-    <h2>Akun Jimzz Store</h2>
-    <div class="account-sub">Login atau buat akun baru</div>
-    <div class="account-tabs">
-      <button class="account-tab active" id="accountLoginTab" onclick="switchAccountForm('login')">Login</button>
-      <button class="account-tab" id="accountRegisterTab" onclick="switchAccountForm('register')">Register</button>
-    </div>
-    <form class="account-form active" id="accountLoginForm" onsubmit="event.preventDefault();accountLogin()">
-      <div class="account-field"><label>USERNAME</label><input id="loginUsername" autocomplete="username" maxlength="24" required></div>
-      <div class="account-field"><label>PASSWORD</label><input id="loginPassword" type="password" autocomplete="current-password" minlength="6" required></div>
-      <button class="account-submit" type="submit">🔐 Login</button>
-      <div class="account-msg" id="loginMsg"></div>
-    </form>
-    <form class="account-form" id="accountRegisterForm" onsubmit="event.preventDefault();accountRegister()">
-      <div class="account-field"><label>USERNAME</label><input id="registerUsername" autocomplete="username" maxlength="24" required></div>
-      <div class="account-field"><label>PASSWORD</label><input id="registerPassword" type="password" autocomplete="new-password" minlength="6" required></div>
-      <div class="account-field"><label>ULANGI PASSWORD</label><input id="registerPassword2" type="password" autocomplete="new-password" minlength="6" required></div>
-      <button class="account-submit" type="submit">✨ Buat Akun</button>
-      <div class="account-msg" id="registerMsg"></div>
-    </form>
   </div>
 </div>
 
@@ -572,9 +504,6 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
         <div class="coin-header-switch" id="coinHeaderSwitch"></div>
       </div>
     </div>
-
-    <button class="account-btn" id="accountButton" onclick="openAccountModal()">👤 Login / Register</button>
-    <div class="account-profile" id="accountProfile"><span>👋 <span id="accountName"></span></span><button class="account-logout" onclick="accountLogout()">Keluar</button></div>
     <div class="trust-row">
       <div class="trust-item"><span class="trust-icon">⚡</span> Proses Cepat</div>
       <div class="trust-item"><span class="trust-icon">🔒</span> Aman & Terpercaya</div>
@@ -935,25 +864,44 @@ function toggleWishlist(produkName) {
 function isWishlisted(name) { return getWishlist().includes(name); }
 
 // ============================================
-// LOYALTY POINT (KOIN) — GUEST + ACCOUNT
+// LOYALTY POINT (KOIN)
 // ============================================
-const GUEST_POINTS_KEY = 'jimzz_guest_points_v1';
-const ACCOUNT_POINTS_KEY = 'jimzz_accounts_v1';
-function getPointsForGuest(){try{return parseInt(localStorage.getItem(GUEST_POINTS_KEY)||localStorage.getItem('jimzz_points')||'0',10)||0;}catch(e){return 0;}}
-function getPoints(){
-  try{
-    const session=localStorage.getItem('jimzz_session_v1');
-    if(session){const users=JSON.parse(localStorage.getItem(ACCOUNT_POINTS_KEY)||'{}');return Number(users[session.toLowerCase()]?.points||0);}
-    return getPointsForGuest();
-  }catch(e){return 0;}
+function getPoints() { try { return parseInt(localStorage.getItem('jimzz_points') || '0'); } catch { return 0; } }
+function addPoints(amount) {
+  const current = getPoints();
+  const earned = Math.floor(amount / KOIN_PER_RUPIAH);
+  localStorage.setItem('jimzz_points', (current + earned).toString());
+  return earned;
 }
-function setPoints(value){
-  const points=Math.max(0,Math.floor(Number(value)||0)),session=localStorage.getItem('jimzz_session_v1');
-  if(session){try{const users=JSON.parse(localStorage.getItem(ACCOUNT_POINTS_KEY)||'{}'),key=session.toLowerCase();if(users[key]){users[key].points=points;localStorage.setItem(ACCOUNT_POINTS_KEY,JSON.stringify(users));}}catch(e){}}
-  else{localStorage.setItem(GUEST_POINTS_KEY,String(points));localStorage.setItem('jimzz_points',String(points));}
+
+// ACCOUNT SYSTEM REMOVED 2026-09-27
+function getAccountToken(){ return ''; }
+function getAccountUser(){ return null; }
+function setAccountSession(){ }
+async function syncAccountMe(){ return false; }
+function renderCoinBalance() {
+  const el = document.getElementById('coinBalance');
+  if (el) el.innerText = getPoints().toLocaleString('id-ID');
 }
-function addPoints(amount){const earned=Math.floor(Number(amount||0)/KOIN_PER_RUPIAH);if(earned>0)setPoints(getPoints()+earned);return earned;}
-function renderCoinBalance(){const el=document.getElementById('coinBalance');if(el)el.innerText=getPoints().toLocaleString('id-ID');}
+
+let useCoinMode = localStorage.getItem('jimzz_use_coin') === 'true';
+
+function toggleCoinHeader() {
+  useCoinMode = !useCoinMode;
+  localStorage.setItem('jimzz_use_coin', useCoinMode.toString());
+  renderCoinHeaderToggle();
+  if (produkAktif) hitungTotal();
+  showToast(useCoinMode ? '⭐ Koin AKTIF — otomatis dipakai di setiap order' : '❌ Koin NONAKTIF — gak dipakai di order', useCoinMode ? 'success' : 'info');
+}
+
+function renderCoinHeaderToggle() {
+  const sw = document.getElementById('coinHeaderSwitch');
+  const label = document.getElementById('coinHeaderLabel');
+  if (sw && label) {
+    if (useCoinMode) { sw.classList.add('active'); label.classList.add('active'); label.innerText = 'ON'; }
+    else { sw.classList.remove('active'); label.classList.remove('active'); label.innerText = 'OFF'; }
+  }
+}
 
 // ============================================
 // BACKUP ORDER
@@ -984,7 +932,6 @@ function updateBgLabel() {
 function toggleBgMode() {
   currentBgMode = currentBgMode === 'simple' ? 'neon' : 'simple';
   localStorage.setItem('jimzz_bg_mode', currentBgMode);
-  updateAccountUI();
   applyBgMode();
   if (currentBgMode === 'simple') initCanvasSimple(); else initCanvasNeon();
 }
@@ -1607,43 +1554,6 @@ function applyAdminUI() {
 }
 function handleTopupClick() { if (isAdmin) switchTab('topup'); else showToast('Top Up Game sedang MAINTENANCE', 'warning'); }
 
-
-// ============================================
-// JIMZZ ACCOUNT SYSTEM V2 — OPTIONAL ACCOUNT
-// Guest coins transfer into the new account + 500 bonus.
-// ============================================
-const JIMZZ_USERS_KEY='jimzz_accounts_v1';
-const JIMZZ_SESSION_KEY='jimzz_session_v1';
-function getJimzzUsers(){try{return JSON.parse(localStorage.getItem(JIMZZ_USERS_KEY)||'{}');}catch(e){return {};}}
-async function jimzzHash(value){const data=new TextEncoder().encode(value),hash=await crypto.subtle.digest('SHA-256',data);return Array.from(new Uint8Array(hash)).map(b=>b.toString(16).padStart(2,'0')).join('');}
-function openAccountModal(){document.getElementById('accountModal')?.classList.add('show');switchAccountForm('login');}
-function closeAccountModal(){document.getElementById('accountModal')?.classList.remove('show');}
-function switchAccountForm(type){const login=type==='login';document.getElementById('accountLoginForm')?.classList.toggle('active',login);document.getElementById('accountRegisterForm')?.classList.toggle('active',!login);document.getElementById('accountLoginTab')?.classList.toggle('active',login);document.getElementById('accountRegisterTab')?.classList.toggle('active',!login);document.getElementById('loginMsg').textContent='';document.getElementById('registerMsg').textContent='';}
-async function accountRegister(){
-  const username=document.getElementById('registerUsername').value.trim(),password=document.getElementById('registerPassword').value,password2=document.getElementById('registerPassword2').value,msg=document.getElementById('registerMsg');
-  if(!/^[A-Za-z0-9_]{3,24}$/.test(username)){msg.textContent='Username 3–24 karakter: huruf, angka, atau _.';msg.style.color='#ff6b6b';return;}
-  if(password.length<6){msg.textContent='Password minimal 6 karakter.';msg.style.color='#ff6b6b';return;}
-  if(password!==password2){msg.textContent='Konfirmasi password tidak sama.';msg.style.color='#ff6b6b';return;}
-  const users=getJimzzUsers(),key=username.toLowerCase();
-  if(users[key]){msg.textContent='Username sudah terdaftar.';msg.style.color='#ff6b6b';return;}
-  const guestCoins=getPointsForGuest();
-  users[key]={username,hash:await jimzzHash(password),points:guestCoins+500,bonusClaimed:true,createdAt:Date.now()};
-  localStorage.setItem(JIMZZ_USERS_KEY,JSON.stringify(users));localStorage.setItem(JIMZZ_SESSION_KEY,username);localStorage.setItem(GUEST_POINTS_KEY,'0');localStorage.setItem('jimzz_points','0');
-  updateAccountUI();renderCoinBalance();
-  msg.textContent='Akun dibuat! Bonus 500 koin + '+guestCoins.toLocaleString('id-ID')+' koin guest masuk ke akun.';msg.style.color='#00ff88';
-  showToast('🎁 Akun dibuat: '+(guestCoins+500).toLocaleString('id-ID')+' koin!','success');setTimeout(closeAccountModal,900);
-}
-async function accountLogin(){
-  const username=document.getElementById('loginUsername').value.trim(),password=document.getElementById('loginPassword').value,msg=document.getElementById('loginMsg'),users=getJimzzUsers(),user=users[username.toLowerCase()];
-  if(!user||user.hash!==await jimzzHash(password)){msg.textContent='Username atau password salah.';msg.style.color='#ff6b6b';return;}
-  localStorage.setItem(JIMZZ_SESSION_KEY,user.username);updateAccountUI();renderCoinBalance();msg.textContent='Login berhasil.';msg.style.color='#00ff88';setTimeout(closeAccountModal,450);
-}
-function accountLogout(){localStorage.removeItem(JIMZZ_SESSION_KEY);updateAccountUI();renderCoinBalance();showToast('Berhasil logout. Kamu kembali sebagai guest.','info');}
-function getAccountUser(){const session=localStorage.getItem(JIMZZ_SESSION_KEY);if(!session)return null;return getJimzzUsers()[session.toLowerCase()]||null;}
-function getAccountToken(){return localStorage.getItem(JIMZZ_SESSION_KEY)||'';}
-function setAccountSession(token,user){if(token)localStorage.setItem(JIMZZ_SESSION_KEY,user?.username||token);else localStorage.removeItem(JIMZZ_SESSION_KEY);}
-async function syncAccountMe(){return false;}
-function updateAccountUI(){const name=localStorage.getItem(JIMZZ_SESSION_KEY),btn=document.getElementById('accountButton'),profile=document.getElementById('accountProfile'),nameEl=document.getElementById('accountName');if(name){if(btn)btn.style.display='none';if(profile)profile.classList.add('show');if(nameEl)nameEl.textContent=name;}else{if(btn)btn.style.display='inline-flex';if(profile)profile.classList.remove('show');}}
 function startApp() {
 applyBgMode();
   if (currentBgMode === 'simple') initCanvasSimple(); else initCanvasNeon();
