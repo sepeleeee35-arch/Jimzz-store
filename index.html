@@ -479,7 +479,7 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
 <!-- ACCOUNT_DISABLED_2026_09_27 -->
 </head>
 <body>
-<div id="siteVersion">JIMZZ STORE • v3.0.9</div>
+<div id="siteVersion">JIMZZ STORE • v3.1.0</div>
 
 
 <div class="toast-container id="toastContainer"></div>
@@ -872,7 +872,7 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
   <audio id="audioPlayer"></audio>
 </div>
 <script>
-const JIMZZ_VERSION = 'v3.0.9';
+const JIMZZ_VERSION = 'v3.1.0';
 
 // ============================================
 // 🔧 KONFIGURASI
@@ -1689,6 +1689,14 @@ updateAccountUI=function(){
   updateRoleBadge(role);
 }
 
+window.addEventListener('storage', (event) => {
+  if (event.key === JIMZZ_SESSION_KEY || event.key === JIMZZ_USERS_KEY || event.key === GUEST_COINS_KEY) {
+    updateAccountUI();
+    renderCoinBalance();
+    applyAdminUI();
+  }
+});
+
 function startApp() {
 applyBgMode();
   if (currentBgMode === 'simple') initCanvasSimple(); else initCanvasNeon();
@@ -1697,6 +1705,8 @@ applyBgMode();
   renderGameList();
   renderPlaylist();
   initMusicEvents();
+  updateAccountUI();
+  renderCoinBalance();
   applyAdminUI();
   loadCounters();
   updateBgLabel();
