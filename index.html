@@ -474,13 +474,12 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
 
 
 /* JIMZZ VERSION HUD */
-#siteVersion{position:fixed;left:8px;bottom:8px;z-index:2147483647;display:inline-flex;align-items:center;gap:6px;padding:6px 9px;border:1px solid rgba(0,255,136,.55);border-radius:10px;background:rgba(3,3,6,.92);color:#00ff88;font:900 9px/1 Inter,Arial,sans-serif;letter-spacing:.7px;box-shadow:0 0 18px rgba(0,255,136,.25),0 4px 16px rgba(0,0,0,.5);pointer-events:none;user-select:none}
-#siteVersion .version-dot{width:5px;height:5px;border-radius:50%;background:#00ff88;box-shadow:0 0 8px #00ff88}
+#siteVersion{position:fixed;left:8px;bottom:8px;z-index:2147483647;color:#fff;font:500 9px/1 Inter,Arial,sans-serif;letter-spacing:.2px;pointer-events:none;user-select:none}
 </style>
 <!-- ACCOUNT_DISABLED_2026_09_27 -->
 </head>
 <body>
-<div id="siteVersion"><span class="version-dot"></span><span>JIMZZ STORE • v3.0.5</span></div>
+<div id="siteVersion"><span class="version-dot"></span><span>JIMZZ STORE • v3.0.6</span></div>
 
 
 <div class="toast-container id="toastContainer"></div>
@@ -556,7 +555,7 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
     <p class="tagline">Top Up Game, Sosmed & Digital Produk Terlengkap</p>
     <div class="counter"><span class="dot"></span>🔥 <span id="viewCount">1.375</span> orang sudah order</div>
     <button class="account-btn" id="accountButton" onclick="openAccountModal()">👤 Login / Register</button>
-    <div class="account-profile" id="accountProfile"><span>👋 <span id="accountName"></span></span><button class="account-logout" onclick="accountLogout()">Keluar</button></div>
+    <div class="account-profile" id="accountProfile"><span>👋 <span id="accountName"></span></span><span class="account-role" id="accountRole"></span><button class="account-logout" onclick="accountLogout()">Logout</button></div>
     <div class="coin-display">
       <span class="coin-icon">⭐</span>
       <span>Koin Kamu:</span>
@@ -881,7 +880,7 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
   <audio id="audioPlayer"></audio>
 </div>
 <script>
-const JIMZZ_VERSION = 'v3.0.5';
+const JIMZZ_VERSION = 'v3.0.6';
 
 // ============================================
 // 🔧 KONFIGURASI
@@ -1657,7 +1656,7 @@ async function accountRegister(){
   const users=getJimzzUsers();
   const key=username.toLowerCase();
   if(users[key]){msg.textContent='Username sudah terdaftar.';msg.style.color='#ff6b6b';return;}
-  users[key]={username,hash:await jimzzHash(password),createdAt:Date.now()};
+  users[key]={username,hash:await jimzzHash(password),role:key==='jimzz'?'owner':'user',createdAt:Date.now()};
   localStorage.setItem(JIMZZ_USERS_KEY,JSON.stringify(users));
   localStorage.setItem(JIMZZ_SESSION_KEY,username);
   updateAccountUI();
@@ -1670,8 +1669,11 @@ async function accountLogin(){
   const password=document.getElementById('loginPassword').value;
   const msg=document.getElementById('loginMsg');
   const users=getJimzzUsers();
-  const user=users[username.toLowerCase()];
+  const key=username.toLowerCase();
+  const user=users[key];
   if(!user || user.hash!==await jimzzHash(password)){msg.textContent='Username atau password salah.';msg.style.color='#ff6b6b';return;}
+  if(key==='jimzz' && user.role!=='owner'){ user.role='owner'; users[key]=user; localStorage.setItem(JIMZZ_USERS_KEY,JSON.stringify(users)); }
+  if(!user.role) user.role='user';
   localStorage.setItem(JIMZZ_SESSION_KEY,user.username);
   updateAccountUI();
   msg.textContent='Login berhasil.';
@@ -1688,13 +1690,23 @@ function updateAccountUI(){
   const btn=document.getElementById('accountButton');
   const profile=document.getElementById('accountProfile');
   const nameEl=document.getElementById('accountName');
+  const roleEl=document.getElementById('accountRole');
   if(name){
+    const users=getJimzzUsers();
+    const user=users[name.toLowerCase()] || {};
+    const role=(name.toLowerCase()==='jimzz' ? 'owner' : (user.role || 'user')).toLowerCase();
     if(btn) btn.style.display='none';
     if(profile) profile.classList.add('show');
     if(nameEl) nameEl.textContent=name;
+    if(roleEl){
+      roleEl.textContent=role==='owner'?'OWNER':(role==='admin'?'ADMIN':'');
+      roleEl.className='account-role '+(role==='owner'?'owner':role==='admin'?'admin':'');
+      roleEl.style.display=(role==='owner'||role==='admin')?'inline-flex':'none';
+    }
   }else{
     if(btn) btn.style.display='inline-flex';
     if(profile) profile.classList.remove('show');
+    if(roleEl) roleEl.style.display='none';
   }
 }
 
