@@ -474,23 +474,7 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
 
 
 /* JIMZZ VERSION HUD */
-#siteVersion{position:fixed;left:8px;bottom:8px;z-index:2147483647;color:#fff;font:500 9px/1 Inter,Arial,sans-serif;letter-spacing:.2px;pointer-events:none;user-select:none}
-.account-role{display:inline-flex;align-items:center;padding:3px 7px;border-radius:7px;font-size:9px;font-weight:900;letter-spacing:.4px}
-.account-role.owner{background:rgba(255,215,0,.14);border:1px solid rgba(255,215,0,.45);color:#ffd700}
-.account-role.admin{background:rgba(0,200,255,.12);border:1px solid rgba(0,200,255,.4);color:#00c8ff}
-.owner-account-list{display:flex;flex-direction:column;gap:8px;max-height:360px;overflow:auto}
-.owner-account-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(0,0,0,.35);border:1px solid rgba(255,215,0,.14);border-radius:11px}
-.owner-account-info{flex:1;min-width:0}
-.owner-account-name{color:#fff;font-size:11px;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.owner-account-meta{color:#777;font-size:9px;margin-top:2px}
-.owner-account-role{font-size:9px;font-weight:900;letter-spacing:.4px}
-.owner-account-role.owner{color:#ffd700}
-.owner-account-role.admin{color:#00c8ff}
-.owner-account-role.user{color:#777}
-.owner-account-action{border:1px solid rgba(255,215,0,.35);background:rgba(255,215,0,.08);color:#ffd700;border-radius:8px;padding:6px 9px;font-size:9px;font-weight:800;cursor:pointer}
-.owner-account-action.demote{border-color:rgba(255,43,43,.3);background:rgba(255,43,43,.06);color:#ff6b6b}
-.owner-account-empty{text-align:center;color:#666;font-size:11px;padding:18px}
-@media(max-width:480px){.owner-account-item{gap:7px}.owner-account-action{padding:6px 7px;font-size:8px}}
+#siteVersion{position:fixed;left:8px;bottom:8px;z-index:2147483647;color:#fff;font:500 9px/1 Inter,Arial,sans-serif;letter-spacing:.2px;pointer-events:none;user-select:none}.owner-account-list{display:flex;flex-direction:column;gap:8px;max-height:360px;overflow:auto}.owner-account-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(0,0,0,.35);border:1px solid rgba(255,215,0,.14);border-radius:11px}.owner-account-info{flex:1;min-width:0}.owner-account-name{color:#fff;font-size:11px;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.owner-account-meta{color:#777;font-size:9px;margin-top:2px}.owner-account-role{font-size:9px;font-weight:900;letter-spacing:.4px}.owner-account-role.owner{color:#ffd700}.owner-account-role.admin{color:#00c8ff}.owner-account-role.user{color:#777}.owner-account-action{border:1px solid rgba(255,215,0,.35);background:rgba(255,215,0,.08);color:#ffd700;border-radius:8px;padding:6px 9px;font-size:9px;font-weight:800;cursor:pointer}.owner-account-action.demote{border-color:rgba(255,43,43,.3);background:rgba(255,43,43,.06);color:#ff6b6b}.owner-account-empty{text-align:center;color:#666;font-size:11px;padding:18px}@media(max-width:480px){.owner-account-item{gap:7px}.owner-account-action{padding:6px 7px;font-size:8px}}
 </style>
 <!-- ACCOUNT_DISABLED_2026_09_27 -->
 </head>
@@ -501,7 +485,6 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
 <div class="toast-container id="toastContainer"></div>
 <div class="confetti-container" id="confettiContainer"></div>
 <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
-
 
 <!-- JIMZZ_ACCOUNT_SYSTEM_V1 -->
 <div class="account-modal" id="accountModal" onclick="if(event.target===this)closeAccountModal()">
@@ -660,11 +643,7 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
 
   <section class="kategori" id="ownerAccountsSection" style="display:none;">
     <div class="admin-panel owner-accounts-panel">
-      <div class="admin-panel-header">
-        <span style="font-size:24px;">👑</span>
-        <span class="admin-panel-title">OWNER — KELOLA AKUN</span>
-        <button onclick="renderAccountManager()" style="margin-left:auto;background:rgba(255,215,0,.12);border:1px solid rgba(255,215,0,.45);color:#ffd700;padding:6px 10px;border-radius:8px;font-size:10px;font-weight:800;cursor:pointer;">↻</button>
-      </div>
+      <div class="admin-panel-header"><span style="font-size:24px;">👑</span><span class="admin-panel-title">OWNER — KELOLA AKUN</span><button onclick="renderAccountManager()" style="margin-left:auto;background:rgba(255,215,0,.12);border:1px solid rgba(255,215,0,.45);color:#ffd700;padding:6px 10px;border-radius:8px;font-size:10px;font-weight:800;cursor:pointer;">↻</button></div>
       <div id="ownerAccountSummary" style="color:#888;font-size:10px;margin:-8px 0 12px;">Memuat akun...</div>
       <div id="ownerAccountList" class="owner-account-list"></div>
     </div>
@@ -1495,197 +1474,56 @@ function initCanvasNeon() {
   function createNeonParticles() {
     neonParticles = [];
     const count = Math.min(110, Math.max(40, Math.floor(neonW * neonH / 11000)));
-    for (let i = 0; i < count; i++) neonParticles.push({ x: Math.random() * neonW, y: Math.random() * neonH, size: Math.random() * 2.2 +// ============================================
+    for (let i = 0; i < count; i++) neonParticles.push({ x: Math.random() * neonW, y: Math.random() * neonH, size: Math.random() * 2.2 + .5, speed: Math.random() * .45 + .1, opacity: Math.random() * .7 + .2, phase: Math.random() * Math.PI * 2, twinkle: Math.random() * .035 + .01 });
+  }
+  function drawNeon() {
+    neonCtx.clearRect(0, 0, neonW, neonH);
+    neonParticles.forEach(p => {
+      if (!neonReducedMotion) { p.y -= p.speed; p.phase += p.twinkle; }
+      if (p.y < -10) { p.y = neonH + 10; p.x = Math.random() * neonW; }
+      const glow = p.opacity * (.65 + Math.sin(p.phase) * .35);
+      const dx = neonMouse.x - p.x; const dy = neonMouse.y - p.y;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      let px = p.x, py = p.y;
+      if (!neonReducedMotion && distance < 180) { const force = (180 - distance) / 180; px -= dx * force * .025; py -= dy * force * .025; }
+      neonCtx.beginPath();
+      neonCtx.arc(px, py, p.size, 0, Math.PI * 2);
+      neonCtx.fillStyle = "rgba(0,255,157," + glow + ")";
+      neonCtx.shadowColor = "#00ff9d"; neonCtx.shadowBlur = 12; neonCtx.fill();
+    });
+    neonCtx.shadowBlur = 0;
+    if (!neonReducedMotion) neonAnimationId = requestAnimationFrame(drawNeon);
+  }
+  window.addEventListener("pointermove", function (event) { if (event.pointerType === "mouse") { neonMouse.x = event.clientX; neonMouse.y = event.clientY; } }, { passive: true });
+  window.addEventListener("resize", resizeNeon);
+  resizeNeon();
+  drawNeon();
+}
+function initCursorGlow() {
+  document.addEventListener('mousemove', (e) => {
+    document.body.style.setProperty('--mouse-x', e.clientX + 'px');
+    document.body.style.setProperty('--mouse-y', e.clientY + 'px');
+  });
+}
+
+// ============================================
 // ACCOUNT ROLE AUTH
 // ============================================
-let isAdmin = false;
-let cachedCounters = { totalOrder: 1375, produkOrder: {} };
-
-function getCurrentAccountRecord() {
-  const name = localStorage.getItem(JIMZZ_SESSION_KEY);
-  if (!name) return null;
-  const users = getJimzzUsers();
-  const key = name.toLowerCase();
-  const user = users[key];
-  if (!user) return null;
-  if (key === 'jimzz') user.role = 'owner';
-  if (!user.role) user.role = 'user';
-  users[key] = user;
-  localStorage.setItem(JIMZZ_USERS_KEY, JSON.stringify(users));
-  return { key, user };
-}
-function getCurrentRole() {
-  const current = getCurrentAccountRecord();
-  return current?.user?.role || null;
-}
-function isOwnerAccount() { return getCurrentRole() === 'owner'; }
-function isPrivilegedAccount() {
-  const role = getCurrentRole();
-  return role === 'owner' || role === 'admin';
-}
-
-async function loadCounters() {
-  try {
-    const res = await fetch(BACKEND_URL + '/api/counters');
-    const data = await res.json();
-    if (data.success) {
-      const oldTotal = cachedCounters.totalOrder;
-      cachedCounters.totalOrder = data.totalOrder;
-      cachedCounters.produkOrder = data.produkOrder || {};
-      updateOrderCounter();
-      if (oldTotal !== data.totalOrder) {
-        renderProduk('sosmed', produkSosmed, 'SUNTIK ALL');
-        renderProduk('jpm', produkJpm, 'LAYANAN LAINNYA');
-        renderProduk('apkList', produkApk, 'JUAL APK');
-      }
-    }
-  } catch (err) { console.log('Gagal load counters:', err); }
-}
-function updateOrderCounter() {
-  const el = document.getElementById('viewCount');
-  if (el) el.innerText = cachedCounters.totalOrder.toLocaleString('id-ID');
-}
-function getProdukOrderCount(kategoriId, index) {
-  return cachedCounters.produkOrder[kategoriId + '_' + index] || 0;
-}
-setInterval(loadCounters, 3000);
-
-function escapeAccountHtml(value) {
-  return String(value ?? '').replace(/[&<>"']/g, ch => ({
-    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
-  }[ch]));
-}
-function renderAccountManager() {
-  if (!isOwnerAccount()) return;
-  const users = getJimzzUsers();
-  const entries = Object.entries(users).sort((a,b) =>
-    String(a[1]?.username || a[0]).localeCompare(String(b[1]?.username || b[0]), 'id')
-  );
-  const summary = document.getElementById('ownerAccountSummary');
-  const list = document.getElementById('ownerAccountList');
-  if (summary) summary.textContent = entries.length + ' akun tersimpan di perangkat/browser ini';
-  if (!list) return;
-  if (!entries.length) {
-    list.innerHTML = '<div class="owner-account-empty">Belum ada akun yang dibuat di browser ini.</div>';
-    return;
-  }
-  list.innerHTML = entries.map(([key, user]) => {
-    const username = user?.username || key;
-    const role = String(user?.role || (key === 'jimzz' ? 'owner' : 'user')).toLowerCase();
-    const roleLabel = role === 'owner' ? 'OWNER' : role === 'admin' ? 'ADMIN' : 'USER';
-    let action = '';
-    if (role === 'owner') {
-      action = '<span class="owner-account-role owner">OWNER</span>';
-    } else if (role === 'admin') {
-      action = '<button class="owner-account-action demote" onclick="setAccountRole(\'' + escapeAccountHtml(key) + '\',\'user\')">Jadikan User</button>';
-    } else {
-      action = '<button class="owner-account-action" onclick="setAccountRole(\'' + escapeAccountHtml(key) + '\',\'admin\')">Jadikan Admin</button>';
-    }
-    return '<div class="owner-account-item">' +
-      '<div class="owner-account-info"><div class="owner-account-name">' + escapeAccountHtml(username) + '</div>' +
-      '<div class="owner-account-meta">' + escapeAccountHtml(user?.createdAt ? new Date(user.createdAt).toLocaleString('id-ID') : 'Tanggal tidak tersedia') + '</div></div>' +
-      '<span class="owner-account-role ' + role + '">' + roleLabel + '</span>' +
-      action + '</div>';
-  }).join('');
-}
-function setAccountRole(key, role) {
-  if (!isOwnerAccount()) return;
-  if (key === 'jimzz') {
-    showToast('Akun Jimzz tetap OWNER.', 'warning');
-    return;
-  }
-  const users = getJimzzUsers();
-  if (!users[key]) {
-    showToast('Akun tidak ditemukan.', 'error');
-    return;
-  }
-  users[key].role = role === 'admin' ? 'admin' : 'user';
-  localStorage.setItem(JIMZZ_USERS_KEY, JSON.stringify(users));
-  renderAccountManager();
-  updateAccountUI();
-  showToast(role === 'admin' ? '👑 ' + users[key].username + ' sekarang ADMIN.' : users[key].username + ' kembali menjadi USER.', 'success');
-}
-
-function applyAdminUI() {
-  isAdmin = isPrivilegedAccount();
-  const adminPanel = document.getElementById('adminPanelSection');
-  const ownerSection = document.getElementById('ownerAccountsSection');
-  const visitorPanel = document.getElementById('visitorPanelSection');
-  const orderQueue = document.getElementById('orderQueueSection');
-  const statsPanel = document.getElementById('statsPanelSection');
-  const menuTopup = document.getElementById('menuTopup');
-  const topupMaintenanceInfo = document.getElementById('topupMaintenanceInfo');
-
-  if (isAdmin) {
-    if (adminPanel) adminPanel.style.display = 'block';
-    if (visitorPanel) visitorPanel.style.display = 'block';
-    if (orderQueue) orderQueue.style.display = 'block';
-    if (statsPanel) statsPanel.style.display = 'block';
-    if (menuTopup) {
-      menuTopup.classList.remove('disabled');
-      menuTopup.classList.add('admin-view');
-    }
-    if (topupMaintenanceInfo) {
-      topupMaintenanceInfo.className = 'pengumuman admin-preview-info';
-      topupMaintenanceInfo.innerHTML = '<div class="pengumuman-header" style="justify-content:center;"><span style="font-size:20px;">👑</span><span class="pengumuman-title">MODE ADMIN — TEST ORDER</span></div><p class="pengumuman-text" style="text-align:center;">Kamu bisa <b>test order</b> produk yang masih maintenance.</p>';
-    }
-    loadVisitors();
-    loadOrders();
-    loadStats();
-  } else {
-    if (adminPanel) adminPanel.style.display = 'none';
-    if (visitorPanel) visitorPanel.style.display = 'none';
-    if (orderQueue) orderQueue.style.display = 'none';
-    if (statsPanel) statsPanel.style.display = 'none';
-    if (menuTopup) {
-      menuTopup.classList.add('disabled');
-      menuTopup.classList.remove('admin-view');
-    }
-    if (topupMaintenanceInfo) {
-      topupMaintenanceInfo.className = 'pengumuman maintenance';
-      topupMaintenanceInfo.innerHTML = '<div class="pengumuman-header" style="justify-content:center;"><span style="font-size:20px;">🔧</span><span class="pengumuman-title">SEDANG MAINTENANCE</span></div><p class="pengumuman-text" style="text-align:center;">Fitur <b>Top Up Game</b> sedang dalam perbaikan.</p>';
-    }
-  }
-
-  if (ownerSection) {
-    ownerSection.style.display = isOwnerAccount() ? 'block' : 'none';
-    if (isOwnerAccount()) renderAccountManager();
-  }
-  renderGameList();
-}
-function handleTopupClick() {
-  if (isAdmin) switchTab('topup');
-  else showToast('Top Up Game sedang MAINTENANCE', 'warning');
-}
-    visitorPanel.style.display = 'block';
-    orderQueue.style.display = 'block';
-    statsPanel.style.display = 'block';
-    loadVisitors();
-    loadOrders();
-    loadStats();
-    menuTopup.classList.remove('disabled');
-    menuTopup.classList.add('admin-view');
-    if (topupMaintenanceInfo) {
-      topupMaintenanceInfo.className = 'pengumuman admin-preview-info';
-      topupMaintenanceInfo.innerHTML = `<div class="pengumuman-header" style="justify-content:center;"><span style="font-size:20px;">👑</span><span class="pengumuman-title">MODE ADMIN — TEST ORDER</span></div><p class="pengumuman-text" style="text-align:center;">Kamu bisa <b>test order</b> produk yang masih maintenance.</p>`;
-    }
-  } else {
-    adminBadge.classList.remove('show');
-    adminPanel.style.display = 'none';
-    visitorPanel.style.display = 'none';
-    orderQueue.style.display = 'none';
-    statsPanel.style.display = 'none';
-    menuTopup.classList.add('disabled');
-    menuTopup.classList.remove('admin-view');
-    if (topupMaintenanceInfo) {
-      topupMaintenanceInfo.className = 'pengumuman maintenance';
-      topupMaintenanceInfo.innerHTML = `<div class="pengumuman-header" style="justify-content:center;"><span style="font-size:20px;">🔧</span><span class="pengumuman-title">SEDANG MAINTENANCE</span></div><p class="pengumuman-text" style="text-align:center;">Fitur <b>Top Up Game</b> sedang dalam perbaikan.</p>`;
-    }
-  }
-  renderGameList();
-}
-function handleTopupClick() { if (isAdmin) switchTab('topup'); else showToast('Top Up Game sedang MAINTENANCE', 'warning'); }
-
+let isAdmin=false;
+let cachedCounters={totalOrder:1375,produkOrder:{}};
+function getCurrentAccountRecord(){const name=localStorage.getItem(JIMZZ_SESSION_KEY);if(!name)return null;const users=getJimzzUsers();const key=name.toLowerCase();const user=users[key];if(!user)return null;if(key==='jimzz')user.role='owner';if(!user.role)user.role='user';users[key]=user;localStorage.setItem(JIMZZ_USERS_KEY,JSON.stringify(users));return {key,user};}
+function getCurrentRole(){return getCurrentAccountRecord()?.user?.role||null;}
+function isOwnerAccount(){return getCurrentRole()==='owner';}
+function isPrivilegedAccount(){const role=getCurrentRole();return role==='owner'||role==='admin';}
+async function loadCounters(){try{const res=await fetch(BACKEND_URL+'/api/counters');const data=await res.json();if(data.success){const oldTotal=cachedCounters.totalOrder;cachedCounters.totalOrder=data.totalOrder;cachedCounters.produkOrder=data.produkOrder||{};updateOrderCounter();if(oldTotal!==data.totalOrder){renderProduk('sosmed',produkSosmed,'SUNTIK ALL');renderProduk('jpm',produkJpm,'LAYANAN LAINNYA');renderProduk('apkList',produkApk,'JUAL APK');}}}catch(err){console.log('Gagal load counters:',err);}}
+function updateOrderCounter(){const el=document.getElementById('viewCount');if(el)el.innerText=cachedCounters.totalOrder.toLocaleString('id-ID');}
+function getProdukOrderCount(kategoriId,index){return cachedCounters.produkOrder[kategoriId+'_'+index]||0;}
+setInterval(loadCounters,3000);
+function escapeAccountHtml(value){return String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));}
+function renderAccountManager(){if(!isOwnerAccount())return;const users=getJimzzUsers();const entries=Object.entries(users).sort((a,b)=>String(a[1]?.username||a[0]).localeCompare(String(b[1]?.username||b[0]),'id'));const summary=document.getElementById('ownerAccountSummary');const list=document.getElementById('ownerAccountList');if(summary)summary.textContent=entries.length+' akun tersimpan di perangkat/browser ini';if(!list)return;if(!entries.length){list.innerHTML='<div class="owner-account-empty">Belum ada akun yang dibuat di browser ini.</div>';return;}list.innerHTML=entries.map(([key,user])=>{const username=user?.username||key;const role=String(user?.role||(key==='jimzz'?'owner':'user')).toLowerCase();const label=role==='owner'?'OWNER':role==='admin'?'ADMIN':'USER';let action='';if(role==='owner')action='<span class="owner-account-role owner">OWNER</span>';else if(role==='admin')action='<button class="owner-account-action demote" onclick="setAccountRole(\''+escapeAccountHtml(key)+'\',\'user\')">Jadikan User</button>';else action='<button class="owner-account-action" onclick="setAccountRole(\''+escapeAccountHtml(key)+'\',\'admin\')">Jadikan Admin</button>';return '<div class="owner-account-item"><div class="owner-account-info"><div class="owner-account-name">'+escapeAccountHtml(username)+'</div><div class="owner-account-meta">'+escapeAccountHtml(user?.createdAt?new Date(user.createdAt).toLocaleString('id-ID'):'Tanggal tidak tersedia')+'</div></div><span class="owner-account-role '+role+'">'+label+'</span>'+action+'</div>';}).join('');}
+function setAccountRole(key,role){if(!isOwnerAccount())return;if(key==='jimzz'){showToast('Akun Jimzz tetap OWNER.','warning');return;}const users=getJimzzUsers();if(!users[key]){showToast('Akun tidak ditemukan.','error');return;}users[key].role=role==='admin'?'admin':'user';localStorage.setItem(JIMZZ_USERS_KEY,JSON.stringify(users));renderAccountManager();showToast(role==='admin'?'👑 '+users[key].username+' sekarang ADMIN.':users[key].username+' kembali menjadi USER.','success');}
+function applyAdminUI(){isAdmin=isPrivilegedAccount();const adminPanel=document.getElementById('adminPanelSection');const ownerSection=document.getElementById('ownerAccountsSection');const visitorPanel=document.getElementById('visitorPanelSection');const orderQueue=document.getElementById('orderQueueSection');const statsPanel=document.getElementById('statsPanelSection');const menuTopup=document.getElementById('menuTopup');const info=document.getElementById('topupMaintenanceInfo');if(isAdmin){if(adminPanel)adminPanel.style.display='block';if(visitorPanel)visitorPanel.style.display='block';if(orderQueue)orderQueue.style.display='block';if(statsPanel)statsPanel.style.display='block';if(menuTopup){menuTopup.classList.remove('disabled');menuTopup.classList.add('admin-view');}if(info){info.className='pengumuman admin-preview-info';info.innerHTML='<div class="pengumuman-header" style="justify-content:center;"><span style="font-size:20px;">👑</span><span class="pengumuman-title">MODE ADMIN — TEST ORDER</span></div><p class="pengumuman-text" style="text-align:center;">Kamu bisa <b>test order</b> produk yang masih maintenance.</p>';}loadVisitors();loadOrders();loadStats();}else{if(adminPanel)adminPanel.style.display='none';if(visitorPanel)visitorPanel.style.display='none';if(orderQueue)orderQueue.style.display='none';if(statsPanel)statsPanel.style.display='none';if(menuTopup){menuTopup.classList.add('disabled');menuTopup.classList.remove('admin-view');}if(info){info.className='pengumuman maintenance';info.innerHTML='<div class="pengumuman-header" style="justify-content:center;"><span style="font-size:20px;">🔧</span><span class="pengumuman-title">SEDANG MAINTENANCE</span></div><p class="pengumuman-text" style="text-align:center;">Fitur <b>Top Up Game</b> sedang dalam perbaikan.</p>';}}if(ownerSection){ownerSection.style.display=isOwnerAccount()?'block':'none';if(isOwnerAccount())renderAccountManager();}renderGameList();}
+function handleTopupClick(){if(isAdmin)switchTab('topup');else showToast('Top Up Game sedang MAINTENANCE','warning');}
 
 // ============================================
 // JIMZZ ACCOUNT SYSTEM V1
