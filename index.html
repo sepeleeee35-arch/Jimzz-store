@@ -917,8 +917,6 @@ const JIMZZ_VERSION = 'v3.2.2';
 // 🔧 KONFIGURASI
 // ============================================
 const BACKEND_URL = "https://jimzz-backend.vercel.app";
-const TELEGRAM_BOT_TOKEN = "8680818829:AAGxdsor3_uUToeJu6Tb_looQOfzKg9_mkA";
-const TELEGRAM_CHAT_ID = "8086577869";
 const MIN_BAYAR_QRIS = 1000;
 const MIN_PEMBELIAN = 1000;
 const MAX_SUNTIK = 9999999;
@@ -927,20 +925,6 @@ const KOIN_PER_RUPIAH = 50;
 // ============================================
 // TELEGRAM NOTIF
 // ============================================
-async function sendToTelegram(pesan) {
-  if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) return false;
-  try {
-    const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
-    const res = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: pesan, parse_mode: 'HTML', disable_web_page_preview: true })
-    });
-    const data = await res.json();
-    console.log('✅ Telegram terkirim:', data.ok);
-    return data.ok;
-  } catch (err) { console.error('❌ Telegram error:', err); return false; }
-}
 
 // ============================================
 // WISHLIST
@@ -1175,9 +1159,9 @@ async function pingVisitor() {
   } catch (err) { console.log('Ping error:', err); }
 }
 async function loadVisitors() {
-  if (!isAdmin) return;
+  if (!isPrivilegedAccount()) return;
   try {
-    const res = await fetch(BACKEND_URL + '/api/visitors');
+    const res = await fetch(BACKEND_URL + '/api/visitors', { headers: { Authorization: 'Bearer ' + getAccountToken() } });
     const data = await res.json();
     if (!data.success) return;
     document.getElementById('visitorOnline').innerText = data.onlineCount || 0;
@@ -1258,7 +1242,6 @@ async function handleOrderSuccess(orderId, totalBayar, produkNama) {
     }
   }
 
-  sendToTelegram(`<b>✅ ORDER SELESAI!</b>\n\n<b>🎫 Order ID:</b> <code>${orderId}</code>\n<b>📦 Produk:</b> ${produkNama || '-'}\n<b>🕐 Waktu:</b> ${new Date().toLocaleString('id-ID')}`);
 }
 
 function handleOrderFailed(orderId, produkNama) {
@@ -1684,6 +1667,21 @@ async function accountLogout(){clearAccountSession();renderCoinBalance();updateA
 function updateAccountUI(){const user=getLoggedAccount(),btn=document.getElementById('accountButton'),profile=document.getElementById('accountProfile'),nameEl=document.getElementById('accountName'),roleEl=document.getElementById('accountRole');if(user){if(btn)btn.style.display='none';if(profile)profile.classList.add('show');if(nameEl)nameEl.textContent=user.username;if(roleEl){const role=user.role||'user';roleEl.textContent=role==='owner'?'OWNER':role==='admin'?'ADMIN':'';roleEl.className='account-role '+role;roleEl.style.display=(role==='owner'||role==='admin')?'inline-flex':'none';}}else{if(btn)btn.style.display='inline-flex';if(profile)profile.classList.remove('show');if(roleEl)roleEl.style.display='none';}updateRoleBadge(user?.role||'user');}
 function updateRoleBadge(role){const badge=document.getElementById('roleBadge');if(!badge)return;if(role==='owner'){badge.innerHTML='<span class="role-crown">👑</span><span class="role-title">OWNER</span>';badge.className='role-badge owner show';}else if(role==='admin'){badge.innerHTML='<span class="role-crown">👑</span><span>ADMIN</span>';badge.className='role-badge admin show';}else{badge.innerHTML='';badge.className='role-badge';}}
 window.addEventListener('storage',e=>{if([JIMZZ_SESSION_KEY,JIMZZ_CACHE_KEY,GUEST_COINS_KEY].includes(e.key)){accountCache=null;updateAccountUI();renderCoinBalance();applyAdminUI();}});
+async function handleRecoveryLink(){
+  try{
+    const params=new URLSearchParams(window.location.search),code=params.get('code');
+    if(!code)return;
+    const data=await accountApi('exchange-recovery',{code},false);
+    saveAccountSession(data.session,data.user);
+    const p1=prompt('Masukkan password baru (minimal 8 karakter):');
+    const p2=prompt('Ulangi password baru:');
+    if(!p1||p1.length<8||p1!==p2) throw new Error('Password baru tidak valid.');
+    await accountApi('complete-recovery',{password:p1});
+    clearAccountSession();
+    showToast('✅ Password berhasil direset. Silakan login lagi.','success');
+    history.replaceState({},'',window.location.pathname);
+  }catch(e){showToast(e.message||'Link recovery tidak valid.','error');}
+}
 function startApp() {
 applyBgMode();
   if (currentBgMode === 'simple') initCanvasSimple(); else initCanvasNeon();
@@ -1700,6 +1698,7 @@ applyBgMode();
   pingVisitor();
   renderCoinBalance();
   renderCoinHeaderToggle();
+  handleRecoveryLink();
 
   // Resume order yang belum kelar (kalau user refresh / tutup web)
   const orderAktif = getOrderAktif();
@@ -2180,9 +2179,7 @@ async function keStep3() {
         showToast(`⭐ ${potonganKoinActual.toLocaleString('id-ID')} koin akan dipakai kalau pembayaran sukses.`, 'info');
       }, 2000);
     }
-    
-    sendToTelegram(`<b>🛒 ORDER BARU MASUK!</b>\n\n<b>📦 Produk:</b> ${produkAktif.nama}\n<b>📋 Detail:</b> ${dataPemesan.jumlah} ${produkAktif.unit || 'pcs'}\n<b>💰 Total Bayar:</b> Rp ${result.totalAmount.toLocaleString('id-ID')}${potonganKoinActual > 0 ? `\n<b>⭐ Potong Koin:</b> ${potonganKoinActual.toLocaleString('id-ID')} koin` : ''}\n<b>👤 WA Customer:</b> ${dataPemesan.hp}\n<b>🔗 Link:</b> ${dataPemesan.link}\n<b>🎫 Order ID:</b> <code>${result.orderId}</code>\n<b>🕐 Waktu:</b> ${new Date().toLocaleString('id-ID')}\n\n⏳ Status: Menunggu pembayaran...`);
-    
+
     backupOrder({ order_id: result.orderId, produk: produkAktif.nama, jumlah: dataPemesan.jumlah, total: result.totalAmount, hp: dataPemesan.hp, status: 'pending' });
   } catch (err) {
     console.error('QRIS error:', err);
