@@ -434,7 +434,7 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
 @media(max-width:480px){#page-home header{margin:10px 10px 22px;padding:32px 14px 24px;border-radius:24px}#page-home header h1{font-size:42px}#page-home .trust-row{gap:6px}#page-home .trust-item{font-size:9px}#page-home .menu-home{margin-left:4px;margin-right:4px}}
 
 /* JIMZZ_ACCOUNT_SYSTEM_V1 */
-.account-btn{position:fixed;top:10px;left:10px;z-index:2147483646;display:inline-flex;align-items:center;justify-content:center;gap:7px;margin:14px auto 0;padding:10px 16px;border:1px solid rgba(0,255,136,.45);border-radius:12px;background:linear-gradient(135deg,rgba(0,255,136,.16),rgba(0,180,110,.08));color:#00ff88;font:800 12px Inter,Arial,sans-serif;cursor:pointer;box-shadow:0 0 22px rgba(0,255,136,.12);transition:.25s}
+.account-btn{position:relative;z-index:20;display:inline-flex;align-items:center;justify-content:center;gap:7px;margin:14px auto 12px;padding:10px 16px;border:1px solid rgba(0,255,136,.45);border-radius:12px;background:linear-gradient(135deg,rgba(0,255,136,.16),rgba(0,180,110,.08));color:#00ff88;font:800 12px Inter,Arial,sans-serif;cursor:pointer;box-shadow:0 0 22px rgba(0,255,136,.12);transition:.25s}
 .account-btn:hover{transform:translateY(-1px);box-shadow:0 0 28px rgba(0,255,136,.24)}
 .account-modal{position:fixed;inset:0;z-index:6000;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(0,0,0,.78);backdrop-filter:blur(14px)}
 .account-modal.show{display:flex}
@@ -455,7 +455,7 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
 .account-field input:focus{border-color:#00ff88;box-shadow:0 0 15px rgba(0,255,136,.12)}
 .account-submit{width:100%;margin-top:4px;padding:13px;border:0;border-radius:11px;background:linear-gradient(135deg,#00ff88,#00cc6a);color:#000;font:900 13px Inter,Arial;cursor:pointer}
 .account-msg{min-height:18px;margin-top:10px;text-align:center;font-size:11px;font-weight:700}
-.account-profile{position:fixed;top:10px;left:10px;z-index:2147483646;display:none;align-items:center;justify-content:center;gap:8px;margin:0;color:#00ff88;font-size:11px;font-weight:800}
+.account-profile{position:relative;z-index:20;display:none;align-items:center;justify-content:center;gap:8px;margin:12px auto 12px;color:#00ff88;font-size:11px;font-weight:800}
 .account-profile.show{display:flex}
 .account-logout{border:0;background:transparent;color:#888;font-size:10px;font-weight:800;cursor:pointer}
 
@@ -482,7 +482,7 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
 </head>
 <body>
 
-<div id="siteVersion"><span class="version-dot"></span><span>JIMZZ STORE • v3.0.1</span></div>
+<div id="siteVersion"><span class="version-dot"></span><span>JIMZZ STORE • v3.0.2</span></div>
 
 <div class="toast-container" id="toastContainer"></div>
 <div class="confetti-container" id="confettiContainer"></div>
@@ -556,6 +556,10 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
     <h1 class="jimzz-clickable" onclick="secretClick()"><span class="gradient-text">Jimzz Store</span></h1>
     <p class="tagline">Top Up Game, Sosmed & Digital Produk Terlengkap</p>
     <div class="counter"><span class="dot"></span>🔥 <span id="viewCount">1.375</span> orang sudah order</div>
+
+    <button class="account-btn" id="accountButton" onclick="openAccountModal()">👤 Login / Register</button>
+    <div class="account-profile" id="accountProfile"><span>👋 <span id="accountName"></span></span><button class="account-logout" onclick="accountLogout()">Keluar</button></div>
+
     <div class="coin-display">
       <span class="coin-icon">⭐</span>
       <span>Koin Kamu:</span>
@@ -565,9 +569,6 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
         <div class="coin-header-switch" id="coinHeaderSwitch"></div>
       </div>
     </div>
-
-    <button class="account-btn" id="accountButton" onclick="openAccountModal()">👤 Login / Register</button>
-    <div class="account-profile" id="accountProfile"><span>👋 <span id="accountName"></span></span><button class="account-logout" onclick="accountLogout()">Keluar</button></div>
     <div class="trust-row">
       <div class="trust-item"><span class="trust-icon">⚡</span> Proses Cepat</div>
       <div class="trust-item"><span class="trust-icon">🔒</span> Aman & Terpercaya</div>
@@ -942,7 +943,7 @@ function addPoints(amount) {
 // ============================================
 // JIMZZ ACCOUNT SYSTEM — local fallback
 // ============================================
-const JIMZZ_VERSION = 'v3.0.1';
+const JIMZZ_VERSION = 'v3.0.2';
 const JIMZZ_USERS_KEY = 'jimzz_accounts_v1';
 const JIMZZ_SESSION_KEY = 'jimzz_session_v1';
 
@@ -2434,7 +2435,7 @@ setInterval(() => {
 // ============================================
 // START APP
 // ============================================
-console.log('[Jimzz Store] VERSION v3.0.1');
+console.log('[Jimzz Store] VERSION v3.0.2');
 startApp();
 </script>
 </body>
