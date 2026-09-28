@@ -2263,7 +2263,9 @@ async function keStep3() {
     const host = parsedUrl?.hostname?.toLowerCase() || '';
     const type = expected === 'whatsapp.com/channel' ? 'whatsapp-channel' : (expected === 'tiktok.com' ? 'tiktok' : null);
 
-    if (!parsedUrl || parsedUrl.protocol !== 'https:' || (type === 'whatsapp-channel' && !/^((www\\.)?whatsapp\\.com)$/i.test(host)) || (type === 'whatsapp-channel' && !/^\\/channel\\/[A-Za-z0-9_-]+\\/?$/i.test(parsedUrl.pathname))) {
+    if (!parsedUrl || parsedUrl.protocol !== 'https:' ||
+        (type === 'whatsapp-channel' && !/^(www\\.)?whatsapp\\.com$/i.test(host)) ||
+        (type === 'whatsapp-channel' && !/^\\/channel\\/[A-Za-z0-9_-]+\\/?$/i.test(parsedUrl.pathname))) {
       inputEl.classList.add('error');
       errorEl.innerText = '❌ ' + (produkAktif.inputError || 'Link tidak valid!');
       errorEl.classList.add('show');
