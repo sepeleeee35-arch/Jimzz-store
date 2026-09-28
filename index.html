@@ -479,7 +479,7 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
 <!-- ACCOUNT_DISABLED_2026_09_27 -->
 </head>
 <body>
-<div id="siteVersion">JIMZZ STORE • v3.0.8</div>
+<div id="siteVersion">JIMZZ STORE • v3.0.9</div>
 
 
 <div class="toast-container id="toastContainer"></div>
@@ -872,7 +872,7 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
   <audio id="audioPlayer"></audio>
 </div>
 <script>
-const JIMZZ_VERSION = 'v3.0.8';
+const JIMZZ_VERSION = 'v3.0.9';
 
 // ============================================
 // 🔧 KONFIGURASI
@@ -921,19 +921,58 @@ function isWishlisted(name) { return getWishlist().includes(name); }
 // ============================================
 // LOYALTY POINT (KOIN)
 // ============================================
-function getPoints() { try { return parseInt(localStorage.getItem('jimzz_points') || '0'); } catch { return 0; } }
+const GUEST_COINS_KEY = 'jimzz_points';
+function getGuestPoints() {
+  try { return Math.max(0, parseInt(localStorage.getItem(GUEST_COINS_KEY) || '0', 10) || 0); }
+  catch { return 0; }
+}
+function getLoggedAccount() {
+  const session = localStorage.getItem(JIMZZ_SESSION_KEY);
+  if (!session) return null;
+  const users = getJimzzUsers();
+  return users[session.toLowerCase()] || null;
+}
+function getPoints() {
+  const account = getLoggedAccount();
+  if (account) return Math.max(0, parseInt(account.coins ?? 0, 10) || 0);
+  return getGuestPoints();
+}
+function setPoints(value) {
+  const coins = Math.max(0, Math.floor(Number(value) || 0));
+  const session = localStorage.getItem(JIMZZ_SESSION_KEY);
+  if (session) {
+    const users = getJimzzUsers();
+    const key = session.toLowerCase();
+    if (users[key]) {
+      users[key].coins = coins;
+      localStorage.setItem(JIMZZ_USERS_KEY, JSON.stringify(users));
+      return coins;
+    }
+  }
+  localStorage.setItem(GUEST_COINS_KEY, String(coins));
+  return coins;
+}
 function addPoints(amount) {
   const current = getPoints();
   const earned = Math.floor(amount / KOIN_PER_RUPIAH);
-  localStorage.setItem('jimzz_points', (current + earned).toString());
+  setPoints(current + earned);
   return earned;
 }
-
-// ACCOUNT SYSTEM REMOVED 2026-09-27
+function transferGuestCoinsToAccount(key) {
+  const users = getJimzzUsers();
+  if (!users[key]) return 0;
+  const guestCoins = getGuestPoints();
+  const existingCoins = Math.max(0, parseInt(users[key].coins ?? 0, 10) || 0);
+  // Koin guest dipindahkan sekali saat akun dibuat; tidak diduplikasi.
+  users[key].coins = existingCoins + guestCoins;
+  localStorage.setItem(JIMZZ_USERS_KEY, JSON.stringify(users));
+  localStorage.setItem(GUEST_COINS_KEY, '0');
+  return guestCoins;
+}
 function getAccountToken(){ return ''; }
-function getAccountUser(){ return null; }
+function getAccountUser(){ return getLoggedAccount(); }
 function setAccountSession(){ }
-async function syncAccountMe(){ return false; }
+async function syncAccountMe(){ renderCoinBalance(); return !!getLoggedAccount(); }
 function renderCoinBalance() {
   const el = document.getElementById('coinBalance');
   if (el) el.innerText = getPoints().toLocaleString('id-ID');
@@ -1562,9 +1601,11 @@ async function accountRegister(){
   const users=getJimzzUsers();
   const key=username.toLowerCase();
   if(users[key]){msg.textContent='Username sudah terdaftar.';msg.style.color='#ff6b6b';return;}
-  users[key]={username,hash:await jimzzHash(password),role:key==='jimzz'?'owner':'user',createdAt:Date.now()};
+  users[key]={username,hash:await jimzzHash(password),role:key==='jimzz'?'owner':'user',coins:0,createdAt:Date.now()};
   localStorage.setItem(JIMZZ_USERS_KEY,JSON.stringify(users));
   localStorage.setItem(JIMZZ_SESSION_KEY,username);
+  transferGuestCoinsToAccount(key);
+  renderCoinBalance();
   updateAccountUI();
   applyAdminUI();
   msg.textContent='Akun berhasil dibuat.';
@@ -1581,9 +1622,11 @@ async function accountLogin(){
   if(!user || user.hash!==await jimzzHash(password)){msg.textContent='Username atau password salah.';msg.style.color='#ff6b6b';return;}
   if(key==='jimzz' && user.role!=='owner'){ user.role='owner'; users[key]=user; localStorage.setItem(JIMZZ_USERS_KEY,JSON.stringify(users)); }
   if(!user.role) user.role='user';
+  if(!Number.isFinite(Number(user.coins))) user.coins=0;
   users[key]=user;
   localStorage.setItem(JIMZZ_USERS_KEY,JSON.stringify(users));
   localStorage.setItem(JIMZZ_SESSION_KEY,user.username);
+  renderCoinBalance();
   updateAccountUI();
   applyAdminUI();
   msg.textContent='Login berhasil.';
@@ -1592,6 +1635,7 @@ async function accountLogin(){
 }
 function accountLogout(){
   localStorage.removeItem(JIMZZ_SESSION_KEY);
+  renderCoinBalance();
   updateAccountUI();
   applyAdminUI();
   showToast('Berhasil logout','info');
