@@ -872,7 +872,7 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
   <audio id="audioPlayer"></audio>
 </div>
 <script>
-const JIMZZ_VERSION = 'v3.1.1';
+const JIMZZ_VERSION = 'v3.1.2';
 
 // ============================================
 // 🔧 KONFIGURASI
@@ -1333,7 +1333,7 @@ function startBackgroundPolling() {
 // ============================================
 // ADMIN ORDER QUEUE
 // ============================================
-async function loadOrders() {
+async async function loadOrders() {
   if (!isAdmin) return;
   try {
     const res = await fetch(BACKEND_URL + '/api/orders-list', { headers: { 'X-Admin-Password': ADMIN_PASSWORD } });
@@ -2327,10 +2327,10 @@ function seekAudio(e) {
 // ============================================
 setInterval(() => {
   if (isAdmin) {
-    document.getElementById('adminTotalOrder').innerText = cachedCounters.totalOrder;
-    document.getElementById('adminTotalRevenue').innerText = 'Rp ' + (cachedCounters.totalOrder * 5).toLocaleString('id-ID') + 'k';
+    loadStats();
+    loadOrders();
   }
-}, 5000);
+}, 30000);
 
 // ============================================
 // CACHE / SERVICE WORKER CLEANUP
