@@ -872,7 +872,7 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
   <audio id="audioPlayer"></audio>
 </div>
 <script>
-const JIMZZ_VERSION = 'v3.1.1';
+const JIMZZ_VERSION = 'v3.2.0';
 
 // ============================================
 // 🔧 KONFIGURASI
@@ -926,53 +926,11 @@ function getGuestPoints() {
   try { return Math.max(0, parseInt(localStorage.getItem(GUEST_COINS_KEY) || '0', 10) || 0); }
   catch { return 0; }
 }
-function getLoggedAccount() {
-  const session = localStorage.getItem(JIMZZ_SESSION_KEY);
-  if (!session) return null;
-  const users = getJimzzUsers();
-  return users[session.toLowerCase()] || null;
-}
-function getPoints() {
-  const account = getLoggedAccount();
-  if (account) return Math.max(0, parseInt(account.coins ?? 0, 10) || 0);
-  return getGuestPoints();
-}
-function setPoints(value) {
-  const coins = Math.max(0, Math.floor(Number(value) || 0));
-  const session = localStorage.getItem(JIMZZ_SESSION_KEY);
-  if (session) {
-    const users = getJimzzUsers();
-    const key = session.toLowerCase();
-    if (users[key]) {
-      users[key].coins = coins;
-      localStorage.setItem(JIMZZ_USERS_KEY, JSON.stringify(users));
-      return coins;
-    }
-  }
-  localStorage.setItem(GUEST_COINS_KEY, String(coins));
-  return coins;
-}
-function addPoints(amount) {
-  const current = getPoints();
-  const earned = Math.floor(amount / KOIN_PER_RUPIAH);
-  setPoints(current + earned);
-  return earned;
-}
-function transferGuestCoinsToAccount(key) {
-  const users = getJimzzUsers();
-  if (!users[key]) return 0;
-  const guestCoins = getGuestPoints();
-  const existingCoins = Math.max(0, parseInt(users[key].coins ?? 0, 10) || 0);
-  // Koin guest dipindahkan sekali saat akun dibuat; tidak diduplikasi.
-  users[key].coins = existingCoins + guestCoins;
-  localStorage.setItem(JIMZZ_USERS_KEY, JSON.stringify(users));
-  localStorage.setItem(GUEST_COINS_KEY, '0');
-  return guestCoins;
-}
-function getAccountToken(){ return ''; }
-function getAccountUser(){ return getLoggedAccount(); }
-function setAccountSession(){ }
-async function syncAccountMe(){ renderCoinBalance(); return !!getLoggedAccount(); }
+function getLoggedAccount(){return accountCache||(()=>{try{return JSON.parse(localStorage.getItem(JIMZZ_CACHE_KEY)||'null')}catch{return null}})();}
+function getPoints(){const account=getLoggedAccount();return account?Math.max(0,parseInt(account.coins??0,10)||0):getGuestPoints();}
+function setPoints(value){const coins=Math.max(0,Math.floor(Number(value)||0));const account=getLoggedAccount();if(account){account.coins=coins;accountCache=account;localStorage.setItem(JIMZZ_CACHE_KEY,JSON.stringify(account));accountApi('update-coins',{coins}).then(d=>{saveAccountSession(null,d.user);renderCoinBalance();}).catch(e=>console.log('Gagal sync koin:',e.message));return coins;}localStorage.setItem(GUEST_COINS_KEY,String(coins));return coins;}
+function addPoints(amount){const current=getPoints(),earned=Math.floor(amount/KOIN_PER_RUPIAH);setPoints(current+earned);return earned;}
+function transferGuestCoinsToAccount(){const guest=getGuestPoints();localStorage.setItem(GUEST_COINS_KEY,'0');return guest;}
 function renderCoinBalance() {
   const el = document.getElementById('coinBalance');
   if (el) el.innerText = getPoints().toLocaleString('id-ID');
@@ -1546,157 +1504,133 @@ function initCursorGlow() {
 }
 
 // ============================================
-// ACCOUNT ROLE AUTH
+// ============================================
+// ACCOUNT ROLE AUTH — SERVER ACCOUNT V2
 // ============================================
 let isAdmin=false;
-let cachedCounters={totalOrder:1375,produkOrder:{}};
-function getCurrentAccountRecord(){const name=localStorage.getItem(JIMZZ_SESSION_KEY);if(!name)return null;const users=getJimzzUsers();const key=name.toLowerCase();const user=users[key];if(!user)return null;if(key==='jimzz')user.role='owner';if(!user.role)user.role='user';users[key]=user;localStorage.setItem(JIMZZ_USERS_KEY,JSON.stringify(users));return {key,user};}
-function getCurrentRole(){return getCurrentAccountRecord()?.user?.role||null;}
+const JIMZZ_USERS_KEY='jimzz_accounts_v1';
+const JIMZZ_SESSION_KEY='jimzz_session_v1';
+const JIMZZ_TOKEN_KEY='jimzz_access_token_v2';
+const JIMZZ_REFRESH_KEY='jimzz_refresh_token_v2';
+const JIMZZ_CACHE_KEY='jimzz_account_cache_v2';
+let accountCache=null;
+
+function getAccountToken(){return localStorage.getItem(JIMZZ_TOKEN_KEY)||'';}
+function getAccountRefreshToken(){return localStorage.getItem(JIMZZ_REFRESH_KEY)||'';}
+function getLoggedAccount(){try{return accountCache||JSON.parse(localStorage.getItem(JIMZZ_CACHE_KEY)||'null');}catch{return null;}}
+function getCurrentAccountRecord(){const user=getLoggedAccount();return user?{key:String(user.username||'').toLowerCase(),user}:null;}
+function getCurrentRole(){return getLoggedAccount()?.role||null;}
 function isOwnerAccount(){return getCurrentRole()==='owner';}
 function isPrivilegedAccount(){const role=getCurrentRole();return role==='owner'||role==='admin';}
+function saveAccountSession(session,user){
+  if(session?.access_token)localStorage.setItem(JIMZZ_TOKEN_KEY,session.access_token);
+  if(session?.refresh_token)localStorage.setItem(JIMZZ_REFRESH_KEY,session.refresh_token);
+  if(user){accountCache=user;localStorage.setItem(JIMZZ_CACHE_KEY,JSON.stringify(user));localStorage.setItem(JIMZZ_SESSION_KEY,user.username);}
+}
+function clearAccountSession(){
+  accountCache=null;localStorage.removeItem(JIMZZ_TOKEN_KEY);localStorage.removeItem(JIMZZ_REFRESH_KEY);localStorage.removeItem(JIMZZ_CACHE_KEY);localStorage.removeItem(JIMZZ_SESSION_KEY);
+}
+async function accountApi(action,body={},auth=true){
+  const headers={'Content-Type':'application/json'};
+  if(auth&&getAccountToken())headers.Authorization='Bearer '+getAccountToken();
+  const res=await fetch(BACKEND_URL+'/api/account',{method:'POST',headers,body:JSON.stringify({action,...body})});
+  let data={};try{data=await res.json();}catch{}
+  if(!res.ok||!data.success)throw new Error(data.error||'Server error');
+  return data;
+}
+async function syncAccountMe(){
+  if(!getAccountRefreshToken()){renderCoinBalance();return false;}
+  try{
+    const data=await accountApi('me');
+    saveAccountSession(null,data.user);
+    renderCoinBalance();updateAccountUI();applyAdminUI();return true;
+  }catch{
+    try{
+      const data=await accountApi('refresh',{refreshToken:getAccountRefreshToken()},false);
+      saveAccountSession(data.session,data.user);
+      renderCoinBalance();updateAccountUI();applyAdminUI();return true;
+    }catch{clearAccountSession();renderCoinBalance();updateAccountUI();applyAdminUI();return false;}
+  }
+}
 async function loadCounters(){try{const res=await fetch(BACKEND_URL+'/api/counters');const data=await res.json();if(data.success){const oldTotal=cachedCounters.totalOrder;cachedCounters.totalOrder=data.totalOrder;cachedCounters.produkOrder=data.produkOrder||{};updateOrderCounter();if(oldTotal!==data.totalOrder){renderProduk('sosmed',produkSosmed,'SUNTIK ALL');renderProduk('jpm',produkJpm,'LAYANAN LAINNYA');renderProduk('apkList',produkApk,'JUAL APK');}}}catch(err){console.log('Gagal load counters:',err);}}
+let cachedCounters={totalOrder:1375,produkOrder:{}};
 function updateOrderCounter(){const el=document.getElementById('viewCount');if(el)el.innerText=cachedCounters.totalOrder.toLocaleString('id-ID');}
 function getProdukOrderCount(kategoriId,index){return cachedCounters.produkOrder[kategoriId+'_'+index]||0;}
 setInterval(loadCounters,3000);
 function escapeAccountHtml(value){return String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));}
-function renderAccountManager(){if(!isOwnerAccount())return;const users=getJimzzUsers();const entries=Object.entries(users).sort((a,b)=>String(a[1]?.username||a[0]).localeCompare(String(b[1]?.username||b[0]),'id'));const summary=document.getElementById('ownerAccountSummary');const list=document.getElementById('ownerAccountList');if(summary)summary.textContent=entries.length+' akun tersimpan di perangkat/browser ini';if(!list)return;if(!entries.length){list.innerHTML='<div class="owner-account-empty">Belum ada akun yang dibuat di browser ini.</div>';return;}list.innerHTML=entries.map(([key,user])=>{const username=user?.username||key;const role=String(user?.role||(key==='jimzz'?'owner':'user')).toLowerCase();const label=role==='owner'?'OWNER':role==='admin'?'ADMIN':'USER';let action='';if(role==='owner')action='<span class="owner-account-role owner">OWNER</span>';else if(role==='admin')action='<button class="owner-account-action demote" onclick="setAccountRole(\''+escapeAccountHtml(key)+'\',\'user\')">Jadikan User</button>';else action='<button class="owner-account-action" onclick="setAccountRole(\''+escapeAccountHtml(key)+'\',\'admin\')">Jadikan Admin</button>';return '<div class="owner-account-item"><div class="owner-account-info"><div class="owner-account-name">'+escapeAccountHtml(username)+'</div><div class="owner-account-meta">'+escapeAccountHtml(user?.createdAt?new Date(user.createdAt).toLocaleString('id-ID'):'Tanggal tidak tersedia')+'</div></div><span class="owner-account-role '+role+'">'+label+'</span>'+action+'</div>';}).join('');}
-function setAccountRole(key,role){if(!isOwnerAccount())return;if(key==='jimzz'){showToast('Akun Jimzz tetap OWNER.','warning');return;}const users=getJimzzUsers();if(!users[key]){showToast('Akun tidak ditemukan.','error');return;}users[key].role=role==='admin'?'admin':'user';localStorage.setItem(JIMZZ_USERS_KEY,JSON.stringify(users));renderAccountManager();showToast(role==='admin'?'👑 '+users[key].username+' sekarang ADMIN.':users[key].username+' kembali menjadi USER.','success');}
-function applyAdminUI(){isAdmin=isPrivilegedAccount();const adminPanel=document.getElementById('adminPanelSection');const ownerSection=document.getElementById('ownerAccountsSection');const visitorPanel=document.getElementById('visitorPanelSection');const orderQueue=document.getElementById('orderQueueSection');const statsPanel=document.getElementById('statsPanelSection');const menuTopup=document.getElementById('menuTopup');const info=document.getElementById('topupMaintenanceInfo');if(isAdmin){if(adminPanel)adminPanel.style.display='block';if(visitorPanel)visitorPanel.style.display='block';if(orderQueue)orderQueue.style.display=isOwnerAccount()?'block':'none';if(statsPanel)statsPanel.style.display=isOwnerAccount()?'block':'none';if(menuTopup){menuTopup.classList.remove('disabled');menuTopup.classList.add('admin-view');}if(info){info.className='pengumuman admin-preview-info';info.innerHTML='<div class="pengumuman-header" style="justify-content:center;"><span style="font-size:20px;">👑</span><span class="pengumuman-title">MODE ADMIN — TEST ORDER</span></div><p class="pengumuman-text" style="text-align:center;">Kamu bisa <b>test order</b> produk yang masih maintenance.</p>';}loadVisitors();if(isOwnerAccount()){loadOrders();loadStats();}}else{if(adminPanel)adminPanel.style.display='none';if(visitorPanel)visitorPanel.style.display='none';if(orderQueue)orderQueue.style.display='none';if(statsPanel)statsPanel.style.display='none';if(menuTopup){menuTopup.classList.add('disabled');menuTopup.classList.remove('admin-view');}if(info){info.className='pengumuman maintenance';info.innerHTML='<div class="pengumuman-header" style="justify-content:center;"><span style="font-size:20px;">🔧</span><span class="pengumuman-title">SEDANG MAINTENANCE</span></div><p class="pengumuman-text" style="text-align:center;">Fitur <b>Top Up Game</b> sedang dalam perbaikan.</p>';}}if(ownerSection){ownerSection.style.display=isOwnerAccount()?'block':'none';if(isOwnerAccount())renderAccountManager();}renderGameList();}
+async function renderAccountManager(){
+  if(!isOwnerAccount())return;
+  const summary=document.getElementById('ownerAccountSummary'),list=document.getElementById('ownerAccountList');
+  try{
+    const data=await accountApi('list');
+    const users=data.users||[];
+    if(summary)summary.textContent=users.length+' akun terdaftar di server';
+    if(!list)return;
+    if(!users.length){list.innerHTML='<div class="owner-account-empty">Belum ada akun.</div>';return;}
+    list.innerHTML=users.map(u=>{
+      const role=String(u.role||'user').toLowerCase(),label=role==='owner'?'OWNER':role==='admin'?'ADMIN':'USER';
+      let action='';
+      if(role==='owner')action='<span class="owner-account-role owner">OWNER</span>';
+      else action='<button class="owner-account-action '+(role==='admin'?'demote':'')+'" onclick="setAccountRole(\''+escapeAccountHtml(u.id)+'\',\''+(role==='admin'?'user':'admin')+'\')">'+(role==='admin'?'Jadikan User':'Jadikan Admin')+'</button>';
+      const ban='<button class="owner-account-action '+(u.banned?'unban':'ban')+'" onclick="setAccountBan(\''+escapeAccountHtml(u.id)+'\','+(!u.banned)+')">'+(u.banned?'Unban':'Ban')+'</button>';
+      return '<div class="owner-account-item"><div class="owner-account-info"><div class="owner-account-name">'+escapeAccountHtml(u.username)+'</div><div class="owner-account-meta">'+escapeAccountHtml(u.createdAt?new Date(u.createdAt).toLocaleString('id-ID'):'Tanggal tidak tersedia')+'</div></div><span class="owner-account-role '+role+'">'+label+'</span>'+action+(role!=='owner'?ban:'')+'</div>';
+    }).join('');
+  }catch(e){if(list)list.innerHTML='<div class="owner-account-empty">Gagal memuat akun: '+escapeAccountHtml(e.message)+'</div>';}
+}
+async function setAccountRole(userId,role){
+  if(!isOwnerAccount())return;
+  try{await accountApi('set-role',{userId,role});await renderAccountManager();showToast(role==='admin'?'👑 Akun sekarang ADMIN.':'Akun kembali menjadi USER.','success');}
+  catch(e){showToast(e.message,'error');}
+}
+async function setAccountBan(userId,banned){
+  if(!isOwnerAccount())return;
+  try{await accountApi('set-ban',{userId,banned});await renderAccountManager();showToast(banned?'Akun dibanned.':'Akun di-unban.','success');}
+  catch(e){showToast(e.message,'error');}
+}
+function applyAdminUI(){isAdmin=isPrivilegedAccount();const adminPanel=document.getElementById('adminPanelSection');const ownerSection=document.getElementById('ownerAccountsSection');const visitorPanel=document.getElementById('visitorPanelSection');const orderQueue=document.getElementById('orderQueueSection');const statsPanel=document.getElementById('statsPanelSection');const menuTopup=document.getElementById('menuTopup');const info=document.getElementById('topupMaintenanceInfo');const owner=isOwnerAccount();if(isAdmin){if(adminPanel)adminPanel.style.display='block';if(visitorPanel)visitorPanel.style.display='block';if(orderQueue)orderQueue.style.display=owner?'block':'none';if(statsPanel)statsPanel.style.display=owner?'block':'none';if(menuTopup){menuTopup.classList.remove('disabled');menuTopup.classList.add('admin-view');}if(info){info.className='pengumuman admin-preview-info';info.innerHTML='<div class="pengumuman-header" style="justify-content:center;"><span style="font-size:20px;">👑</span><span class="pengumuman-title">MODE ADMIN — TEST ORDER</span></div><p class="pengumuman-text" style="text-align:center;">Kamu bisa <b>test order</b> produk yang masih maintenance.</p>';}loadVisitors();if(owner){loadOrders();loadStats();}}else{if(adminPanel)adminPanel.style.display='none';if(visitorPanel)visitorPanel.style.display='none';if(orderQueue)orderQueue.style.display='none';if(statsPanel)statsPanel.style.display='none';if(menuTopup){menuTopup.classList.add('disabled');menuTopup.classList.remove('admin-view');}if(info){info.className='pengumuman maintenance';info.innerHTML='<div class="pengumuman-header" style="justify-content:center;"><span style="font-size:20px;">🔧</span><span class="pengumuman-title">SEDANG MAINTENANCE</span></div><p class="pengumuman-text" style="text-align:center;">Fitur <b>Top Up Game</b> sedang dalam perbaikan.</p>';}}if(ownerSection){ownerSection.style.display=owner?'block':'none';if(owner)renderAccountManager();}renderGameList();}
 function handleTopupClick(){if(isAdmin)switchTab('topup');else showToast('Top Up Game sedang MAINTENANCE','warning');}
 
-// ============================================
-// JIMZZ ACCOUNT SYSTEM V1
-// Frontend-only account for now. Password is stored as SHA-256 hash in localStorage.
-// ============================================
-const JIMZZ_USERS_KEY = 'jimzz_accounts_v1';
-const JIMZZ_SESSION_KEY = 'jimzz_session_v1';
-
-function getJimzzUsers(){
-  try { return JSON.parse(localStorage.getItem(JIMZZ_USERS_KEY) || '{}'); } catch(e){ return {}; }
-}
-async function jimzzHash(value){
-  const data=new TextEncoder().encode(value);
-  const hash=await crypto.subtle.digest('SHA-256',data);
-  return Array.from(new Uint8Array(hash)).map(b=>b.toString(16).padStart(2,'0')).join('');
-}
-function openAccountModal(){ document.getElementById('accountModal')?.classList.add('show'); switchAccountForm(localStorage.getItem('jimzz_accounts_v1') ? 'login' : 'register'); }
-function closeAccountModal(){ document.getElementById('accountModal')?.classList.remove('show'); }
-function switchAccountForm(type){
-  const login=type==='login';
-  document.getElementById('accountLoginForm')?.classList.toggle('active',login);
-  document.getElementById('accountRegisterForm')?.classList.toggle('active',!login);
-  document.getElementById('accountLoginTab')?.classList.toggle('active',login);
-  document.getElementById('accountRegisterTab')?.classList.toggle('active',!login);
-  document.getElementById('loginMsg').textContent='';
-  document.getElementById('registerMsg').textContent='';
-}
+function openAccountModal(){document.getElementById('accountModal')?.classList.add('show');switchAccountForm('login');}
+function closeAccountModal(){document.getElementById('accountModal')?.classList.remove('show');}
+function switchAccountForm(type){const login=type==='login';document.getElementById('accountLoginForm')?.classList.toggle('active',login);document.getElementById('accountRegisterForm')?.classList.toggle('active',!login);document.getElementById('accountLoginTab')?.classList.toggle('active',login);document.getElementById('accountRegisterTab')?.classList.toggle('active',!login);const lm=document.getElementById('loginMsg'),rm=document.getElementById('registerMsg');if(lm)lm.textContent='';if(rm)rm.textContent='';}
 async function accountRegister(){
-  const username=document.getElementById('registerUsername').value.trim();
-  const password=document.getElementById('registerPassword').value;
-  const password2=document.getElementById('registerPassword2').value;
-  const msg=document.getElementById('registerMsg');
-  if(!/^[A-Za-z0-9_]{3,24}$/.test(username)){msg.textContent='Username 3–24 karakter: huruf, angka, atau _. ';msg.style.color='#ff6b6b';return;}
+  const username=document.getElementById('registerUsername').value.trim(),password=document.getElementById('registerPassword').value,password2=document.getElementById('registerPassword2').value,msg=document.getElementById('registerMsg');
+  if(!/^[A-Za-z0-9_]{3,24}$/.test(username)){msg.textContent='Username 3–24 karakter: huruf, angka, atau _.';msg.style.color='#ff6b6b';return;}
   if(password.length<6){msg.textContent='Password minimal 6 karakter.';msg.style.color='#ff6b6b';return;}
   if(password!==password2){msg.textContent='Konfirmasi password tidak sama.';msg.style.color='#ff6b6b';return;}
-  const users=getJimzzUsers();
-  const key=username.toLowerCase();
-  if(users[key]){msg.textContent='Username sudah terdaftar.';msg.style.color='#ff6b6b';return;}
-  users[key]={username,hash:await jimzzHash(password),role:key==='jimzz'?'owner':'user',coins:0,createdAt:Date.now()};
-  localStorage.setItem(JIMZZ_USERS_KEY,JSON.stringify(users));
-  localStorage.setItem(JIMZZ_SESSION_KEY,username);
-  transferGuestCoinsToAccount(key);
-  renderCoinBalance();
-  updateAccountUI();
-  applyAdminUI();
-  msg.textContent='Akun berhasil dibuat.';
-  msg.style.color='#00ff88';
-  setTimeout(closeAccountModal,500);
+  try{
+    const data=await accountApi('register',{username,password},false);
+    const guest=getGuestPoints();
+    if(guest>0){const upd=await accountApi('update-coins',{coins:guest});data.user=upd.user;localStorage.setItem(GUEST_COINS_KEY,'0');}
+    saveAccountSession(data.session,data.user);renderCoinBalance();updateAccountUI();applyAdminUI();msg.textContent='Akun berhasil dibuat.';msg.style.color='#00ff88';setTimeout(closeAccountModal,500);
+  }catch(e){msg.textContent=e.message;msg.style.color='#ff6b6b';}
 }
 async function accountLogin(){
-  const username=document.getElementById('loginUsername').value.trim();
-  const password=document.getElementById('loginPassword').value;
-  const msg=document.getElementById('loginMsg');
-  const users=getJimzzUsers();
-  const key=username.toLowerCase();
-  const user=users[key];
-  if(!user || user.hash!==await jimzzHash(password)){msg.textContent='Username atau password salah.';msg.style.color='#ff6b6b';return;}
-  if(key==='jimzz' && user.role!=='owner'){ user.role='owner'; users[key]=user; localStorage.setItem(JIMZZ_USERS_KEY,JSON.stringify(users)); }
-  if(!user.role) user.role='user';
-  if(!Number.isFinite(Number(user.coins))) user.coins=0;
-  users[key]=user;
-  localStorage.setItem(JIMZZ_USERS_KEY,JSON.stringify(users));
-  localStorage.setItem(JIMZZ_SESSION_KEY,user.username);
-  renderCoinBalance();
-  updateAccountUI();
-  applyAdminUI();
-  msg.textContent='Login berhasil.';
-  msg.style.color='#00ff88';
-  setTimeout(closeAccountModal,400);
-}
-function accountLogout(){
-  localStorage.removeItem(JIMZZ_SESSION_KEY);
-  renderCoinBalance();
-  updateAccountUI();
-  applyAdminUI();
-  showToast('Berhasil logout','info');
-}
-function updateAccountUI(){
-  const name=localStorage.getItem(JIMZZ_SESSION_KEY);
-  const btn=document.getElementById('accountButton');
-  const profile=document.getElementById('accountProfile');
-  const nameEl=document.getElementById('accountName');
-  const roleEl=document.getElementById('accountRole');
-  if(name){
-    const users=getJimzzUsers();
-    const user=users[name.toLowerCase()] || {};
-    const role=(name.toLowerCase()==='jimzz' ? 'owner' : (user.role || 'user')).toLowerCase();
-    if(btn) btn.style.display='none';
-    if(profile) profile.classList.add('show');
-    if(nameEl) nameEl.textContent=name;
-    if(roleEl){
-      roleEl.textContent=role==='owner'?'OWNER':(role==='admin'?'ADMIN':'');
-      roleEl.className='account-role '+(role==='owner'?'owner':role==='admin'?'admin':'');
-      roleEl.style.display=(role==='owner'||role==='admin')?'inline-flex':'none';
-    }
-  }else{
-    if(btn) btn.style.display='inline-flex';
-    if(profile) profile.classList.remove('show');
-    if(roleEl) roleEl.style.display='none';
+  const username=document.getElementById('loginUsername').value.trim(),password=document.getElementById('loginPassword').value,msg=document.getElementById('loginMsg');
+  try{
+    const data=await accountApi('login',{username,password},false);
+    saveAccountSession(data.session,data.user);renderCoinBalance();updateAccountUI();applyAdminUI();msg.textContent='Login berhasil.';msg.style.color='#00ff88';setTimeout(closeAccountModal,400);return;
+  }catch(e){
+    // Migrasi otomatis akun lama dari perangkat ini jika password cocok.
+    try{
+      const old=JSON.parse(localStorage.getItem(JIMZZ_USERS_KEY)||'{}')[username.toLowerCase()];
+      if(old?.hash){
+        const digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(password));
+        const hash=Array.from(new Uint8Array(digest)).map(b=>b.toString(16).padStart(2,'0')).join('');
+        if(hash===old.hash){
+          const data=await accountApi('register',{username,password},false);
+          const oldCoins=Number(old.coins||0);if(oldCoins>0){const upd=await accountApi('update-coins',{coins:oldCoins});data.user=upd.user;}
+          saveAccountSession(data.session,data.user);renderCoinBalance();updateAccountUI();applyAdminUI();msg.textContent='Akun dipindahkan ke server.';msg.style.color='#00ff88';setTimeout(closeAccountModal,500);return;
+        }
+      }
+    }catch{}
+    msg.textContent=e.message||'Username atau password salah.';msg.style.color='#ff6b6b';
   }
 }
-
-function updateRoleBadge(role){
-  const badge=document.getElementById('roleBadge');
-  if(!badge)return;
-  if(role==='owner'){
-    badge.innerHTML='<span class="role-crown">👑</span><span class="role-title">OWNER</span>';
-    badge.className='role-badge owner show';
-  }else if(role==='admin'){
-    badge.innerHTML='<span class="role-crown">👑</span><span>ADMIN</span>';
-    badge.className='role-badge admin show';
-  }else{
-    badge.innerHTML='';
-    badge.className='role-badge';
-  }
-}
-const jimzzOriginalUpdateAccountUI=updateAccountUI;
-updateAccountUI=function(){
-  jimzzOriginalUpdateAccountUI();
-  const name=localStorage.getItem(JIMZZ_SESSION_KEY);
-  if(!name){updateRoleBadge('user');return;}
-  const users=getJimzzUsers();
-  const role=(name.toLowerCase()==='jimzz'?'owner':(users[name.toLowerCase()]?.role||'user')).toLowerCase();
-  updateRoleBadge(role);
-}
-
-window.addEventListener('storage', (event) => {
-  if (event.key === JIMZZ_SESSION_KEY || event.key === JIMZZ_USERS_KEY || event.key === GUEST_COINS_KEY) {
-    updateAccountUI();
-    renderCoinBalance();
-    applyAdminUI();
-  }
-});
-
+async function accountLogout(){clearAccountSession();renderCoinBalance();updateAccountUI();applyAdminUI();showToast('Berhasil logout','info');}
+function updateAccountUI(){const user=getLoggedAccount(),btn=document.getElementById('accountButton'),profile=document.getElementById('accountProfile'),nameEl=document.getElementById('accountName'),roleEl=document.getElementById('accountRole');if(user){if(btn)btn.style.display='none';if(profile)profile.classList.add('show');if(nameEl)nameEl.textContent=user.username;if(roleEl){const role=user.role||'user';roleEl.textContent=role==='owner'?'OWNER':role==='admin'?'ADMIN':'';roleEl.className='account-role '+role;roleEl.style.display=(role==='owner'||role==='admin')?'inline-flex':'none';}}else{if(btn)btn.style.display='inline-flex';if(profile)profile.classList.remove('show');if(roleEl)roleEl.style.display='none';}updateRoleBadge(user?.role||'user');}
+function updateRoleBadge(role){const badge=document.getElementById('roleBadge');if(!badge)return;if(role==='owner'){badge.innerHTML='<span class="role-crown">👑</span><span class="role-title">OWNER</span>';badge.className='role-badge owner show';}else if(role==='admin'){badge.innerHTML='<span class="role-crown">👑</span><span>ADMIN</span>';badge.className='role-badge admin show';}else{badge.innerHTML='';badge.className='role-badge';}}
+window.addEventListener('storage',e=>{if([JIMZZ_SESSION_KEY,JIMZZ_CACHE_KEY,GUEST_COINS_KEY].includes(e.key)){accountCache=null;updateAccountUI();renderCoinBalance();applyAdminUI();}});
 function startApp() {
 applyBgMode();
   if (currentBgMode === 'simple') initCanvasSimple(); else initCanvasNeon();
