@@ -49,6 +49,7 @@ body::after { content: ""; position: fixed; top: 0; left: 0; width: 100vw; heigh
 @keyframes laserMove { 0% { left: -350px; opacity: 0; } 12% { opacity: .9; } 85% { opacity: .9; } 100% { left: 110%; opacity: 0; } }
 @keyframes ringSpin { to { transform: rotate(360deg); } }
 @keyframes coinGiftIn{from{opacity:0;transform:translate(-50%,-18px) scale(.95)}to{opacity:1;transform:translate(-50%,0) scale(1)}}
+#banLockScreen{position:fixed;inset:0;z-index:2147483000;display:none;align-items:center;justify-content:center;padding:22px;background:rgba(0,0,0,.58);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}#banLockScreen.show{display:flex}#banLockCard{width:min(420px,100%);padding:30px 22px 22px;border:1px solid rgba(255,70,70,.45);border-radius:22px;background:rgba(10,10,14,.96);box-shadow:0 25px 90px rgba(0,0,0,.7);text-align:center;color:#fff}#banLockCard .ban-icon{font-size:52px;margin-bottom:10px}#banLockCard h2{margin:0 0 10px;font-size:23px;color:#ff4d5d}#banLockCard p{margin:0;color:#bbb;font-size:12px;line-height:1.7}#banLogoutButton{width:100%;margin-top:22px;padding:13px;border:0;border-radius:11px;background:#fff;color:#111;font-weight:900;font-size:12px;cursor:pointer}.delete-account{border-color:rgba(255,60,60,.55)!important;color:#ff6666!important}.delete-account:active{transform:scale(.97)}
 .toast-container { position: fixed; bottom: 110px; left: 50%; transform: translateX(-50%); z-index: 8000; display: flex; flex-direction: column; gap: 10px; pointer-events: none; width: calc(100% - 40px); max-width: 400px; }
 .toast { background: linear-gradient(145deg, #0f1a14, #0d0d15); border: 1.5px solid #00ff88; border-radius: 14px; padding: 14px 18px; display: flex; align-items: center; gap: 12px; color: #fff; font-size: 13px; font-weight: 600; box-shadow: 0 10px 40px rgba(0,255,136,0.3); transform: translateY(100px); opacity: 0; transition: all 0.4s cubic-bezier(0.175,0.885,0.32,1.275); pointer-events: auto; }
 .toast.show { transform: translateY(0); opacity: 1; }
@@ -481,7 +482,7 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
 <!-- ACCOUNT_DISABLED_2026_09_27 -->
 </head>
 <body>
-<div id="siteVersion">JIMZZ STORE • v3.2.8</div>
+<div id="siteVersion">JIMZZ STORE • v3.2.9</div>
 
 
 <div class="toast-container id="toastContainer"></div>
@@ -558,6 +559,15 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
       <button class="btn-next" type="submit">🔑 Ganti Password</button>
       <div class="account-msg" id="passwordMsg"></div>
     </form>
+  </div>
+</div>
+
+<div id="banLockScreen" aria-modal="true" role="dialog">
+  <div id="banLockCard">
+    <div class="ban-icon">🚫</div>
+    <h2>AKUN ANDA TELAH DI BANNED</h2>
+    <p>Akun ini tidak dapat digunakan lagi saat status banned aktif.<br>Semua fitur website dikunci.</p>
+    <button id="banLogoutButton" onclick="logoutFromBanScreen()">Logout</button>
   </div>
 </div>
 
@@ -928,7 +938,7 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
   <audio id="audioPlayer"></audio>
 </div>
 <script>
-const JIMZZ_VERSION = 'v3.2.8';
+const JIMZZ_VERSION = 'v3.2.9';
 
 // ============================================
 // 🔧 KONFIGURASI
@@ -1608,12 +1618,12 @@ async function syncAccountMe(){
   };
   try{
     const data=await accountApi('me');
-    const next=data.user;checkGift(next);
+    const next=data.user;if(next?.banned){saveAccountSession(null,next);showBanLockScreen();return false;}checkGift(next);
     saveAccountSession(null,next);renderCoinBalance();updateAccountUI();applyAdminUI();return true;
   }catch{
     try{
       const data=await accountApi('refresh',{refreshToken:getAccountRefreshToken()},false);
-      const next=data.user;checkGift(next);
+      const next=data.user;if(next?.banned){saveAccountSession(null,next);showBanLockScreen();return false;}checkGift(next);
       saveAccountSession(data.session,next);renderCoinBalance();updateAccountUI();applyAdminUI();return true;
     }catch{clearAccountSession();renderCoinBalance();updateAccountUI();applyAdminUI();return false;}
   }
@@ -1652,7 +1662,8 @@ async function renderAccountManager(){
       if(role==='owner')action='<span class="owner-account-role owner">OWNER</span>';
       else action='<button class="owner-account-action '+(role==='admin'?'demote':'')+'" onclick="setAccountRole(\''+escapeAccountHtml(u.id)+'\',\''+(role==='admin'?'user':'admin')+'\')">'+(role==='admin'?'Jadikan User':'Jadikan Admin')+'</button>';
       const ban='<button class="owner-account-action '+(u.banned?'unban':'ban')+'" onclick="setAccountBan(\''+escapeAccountHtml(u.id)+'\','+(!u.banned)+')">'+(u.banned?'Unban':'Ban')+'</button>';
-      return '<div class="owner-account-item"><div class="owner-account-info"><div class="owner-account-name">'+escapeAccountHtml(u.username)+'</div><div class="owner-account-meta">'+escapeAccountHtml(u.createdAt?new Date(u.createdAt).toLocaleString('id-ID'):'Tanggal tidak tersedia')+'</div></div><span class="owner-account-role '+role+'">'+label+'</span>'+action+(role!=='owner'?ban:'')+'</div>';
+      const del='<button class="owner-account-action delete-account" onclick="deleteAccountOwner(\''+escapeAccountHtml(u.id)+'\')">Hapus</button>';
+      return '<div class="owner-account-item"><div class="owner-account-info"><div class="owner-account-name">'+escapeAccountHtml(u.username)+'</div><div class="owner-account-meta">'+escapeAccountHtml(u.createdAt?new Date(u.createdAt).toLocaleString('id-ID'):'Tanggal tidak tersedia')+'</div></div><span class="owner-account-role '+role+'">'+label+'</span>'+action+(role!=='owner'?ban+del:'')+'</div>';
     }).join('');
   }catch(e){if(list)list.innerHTML='<div class="owner-account-empty">Gagal memuat akun: '+escapeAccountHtml(e.message)+'</div>';}
 }
@@ -1676,11 +1687,34 @@ async function setAccountRole(userId,role){
   try{await accountApi('set-role',{userId,role});await renderAccountManager();showToast(role==='admin'?'👑 Akun sekarang ADMIN.':'Akun kembali menjadi USER.','success');}
   catch(e){showToast(e.message,'error');}
 }
+async function deleteAccountOwner(userId){
+  if(!isOwnerAccount())return;
+  if(!confirm('Hapus akun ini secara permanen? Semua sesi akun akan tidak berlaku.'))return;
+  try{
+    await accountApi('delete-account',{userId});
+    await renderAccountManager();
+    showToast('🗑️ Akun berhasil dihapus.','success');
+  }catch(e){showToast(e.message,'error');}
+}
 async function setAccountBan(userId,banned){
   if(!isOwnerAccount())return;
-  try{await accountApi('set-ban',{userId,banned});await renderAccountManager();showToast(banned?'Akun dibanned.':'Akun di-unban.','success');}
+  try{await accountApi('set-ban',{userId,banned});await renderAccountManager();showToast(banned?'🚫 Akun langsung dikunci di perangkat pengguna.':'✅ Akun di-unban.','success');}
   catch(e){showToast(e.message,'error');}
 }
+function showBanLockScreen(){
+  const el=document.getElementById('banLockScreen');if(el)el.classList.add('show');
+  document.body.style.overflow='hidden';
+  const modal=document.querySelectorAll('.account-modal,.modal-overlay');
+  modal.forEach(x=>x.classList.remove('show'));
+}
+function hideBanLockScreen(){
+  const el=document.getElementById('banLockScreen');if(el)el.classList.remove('show');
+  document.body.style.overflow='';
+}
+function logoutFromBanScreen(){
+  clearAccountSession();hideBanLockScreen();renderCoinBalance();updateAccountUI();applyAdminUI();showToast('Berhasil logout.','info');
+}
+
 function applyAdminUI(){isAdmin=isPrivilegedAccount();const adminPanel=document.getElementById('adminPanelSection');const ownerSection=document.getElementById('ownerAccountsSection');const visitorPanel=document.getElementById('visitorPanelSection');const orderQueue=document.getElementById('orderQueueSection');const statsPanel=document.getElementById('statsPanelSection');const menuTopup=document.getElementById('menuTopup');const info=document.getElementById('topupMaintenanceInfo');const owner=isOwnerAccount();if(isAdmin){if(adminPanel)adminPanel.style.display='block';if(visitorPanel)visitorPanel.style.display='block';if(orderQueue)orderQueue.style.display=owner?'block':'none';if(statsPanel)statsPanel.style.display=owner?'block':'none';if(menuTopup){menuTopup.classList.remove('disabled');menuTopup.classList.add('admin-view');}if(info){info.className='pengumuman admin-preview-info';info.innerHTML='<div class="pengumuman-header" style="justify-content:center;"><span style="font-size:20px;">👑</span><span class="pengumuman-title">MODE ADMIN — TEST ORDER</span></div><p class="pengumuman-text" style="text-align:center;">Kamu bisa <b>test order</b> produk yang masih maintenance.</p>';}loadVisitors();if(owner){loadOrders();loadStats();}}else{if(adminPanel)adminPanel.style.display='none';if(visitorPanel)visitorPanel.style.display='none';if(orderQueue)orderQueue.style.display='none';if(statsPanel)statsPanel.style.display='none';if(menuTopup){menuTopup.classList.add('disabled');menuTopup.classList.remove('admin-view');}if(info){info.className='pengumuman maintenance';info.innerHTML='<div class="pengumuman-header" style="justify-content:center;"><span style="font-size:20px;">🔧</span><span class="pengumuman-title">SEDANG MAINTENANCE</span></div><p class="pengumuman-text" style="text-align:center;">Fitur <b>Top Up Game</b> sedang dalam perbaikan.</p>';}}if(ownerSection){ownerSection.style.display=owner?'block':'none';if(owner)renderAccountManager();}renderGameList();}
 function handleTopupClick(){if(isAdmin)switchTab('topup');else showToast('Top Up Game sedang MAINTENANCE','warning');}
 
