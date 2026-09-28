@@ -504,7 +504,7 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
       <div class="account-msg" id="loginMsg"></div>
     </form>
     <form class="account-form" id="accountRegisterForm" onsubmit="event.preventDefault();accountRegister()">
-      <div class="account-field"><label>USERNAME</label><input id="registerUsername" autocomplete="username" maxlength="24" required></div><div class="account-field"><label>EMAIL</label><input id="registerEmail" type="email" autocomplete="email" placeholder="nama@email.com" required></div><div class="account-field"><label>NO. TELEPON <span style="color:#777;">(opsional)</span></label><input id="registerPhone" type="tel" autocomplete="tel" placeholder="08xxxxxxxxxx"></div>
+      <div class="account-field"><label>USERNAME</label><input id="registerUsername" autocomplete="username" maxlength="24" required></div><div class="account-field"><label>EMAIL <span style="color:#777;">(opsional)</span></label><input id="registerEmail" type="email" autocomplete="email" placeholder="nama@email.com"></div><div class="account-field"><label>NO. TELEPON <span style="color:#777;">(opsional)</span></label><input id="registerPhone" type="tel" autocomplete="tel" placeholder="08xxxxxxxxxx"></div>
       <div class="account-field"><label>PASSWORD</label><input id="registerPassword" type="password" autocomplete="new-password" minlength="6" required></div>
       <div class="account-field"><label>ULANGI PASSWORD</label><input id="registerPassword2" type="password" autocomplete="new-password" minlength="6" required></div>
       <button class="account-submit" type="submit">✨ Buat Akun</button>
@@ -1619,7 +1619,7 @@ function switchAccountForm(type){const login=type==='login';document.getElementB
 async function accountRegister(){
   const username=document.getElementById('registerUsername').value.trim(),email=document.getElementById('registerEmail').value.trim(),phone=document.getElementById('registerPhone').value.trim(),password=document.getElementById('registerPassword').value,password2=document.getElementById('registerPassword2').value,msg=document.getElementById('registerMsg');
   if(!/^[A-Za-z0-9_]{3,24}$/.test(username)){msg.textContent='Username 3–24 karakter.';msg.style.color='#ff6b6b';return;}
-  if(!/^\S+@\S+\.\S+$/.test(email)){msg.textContent='Email wajib diisi dan valid.';msg.style.color='#ff6b6b';return;}
+  if(email && !/^\S+@\S+\.\S+$/.test(email)){msg.textContent='Format email tidak valid.';msg.style.color='#ff6b6b';return;}
   if(password.length<8){msg.textContent='Password minimal 8 karakter.';msg.style.color='#ff6b6b';return;}
   if(password!==password2){msg.textContent='Konfirmasi password tidak sama.';msg.style.color='#ff6b6b';return;}
   try{const data=await accountApi('register',{username,email,phone,password},false);const guest=getGuestPoints();if(guest>0){const upd=await accountApi('update-coins',{coins:guest});data.user=upd.user;localStorage.setItem(GUEST_COINS_KEY,'0');}saveAccountSession(data.session,data.user);renderCoinBalance();updateAccountUI();applyAdminUI();msg.textContent='Akun berhasil dibuat.';msg.style.color='#00ff88';setTimeout(closeAccountModal,500);}
