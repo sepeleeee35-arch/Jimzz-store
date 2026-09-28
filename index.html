@@ -938,7 +938,7 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
   <audio id="audioPlayer"></audio>
 </div>
 <script>
-const JIMZZ_VERSION = 'v3.3.1';
+const JIMZZ_VERSION = 'v3.3.2';
 
 // ============================================
 // 🔧 KONFIGURASI
@@ -2338,7 +2338,7 @@ async function keStep3() {
       })
     });
     const result = await res.json();
-    if (!result.success) throw new Error(result.error || 'Gagal generate QRIS');
+    if (!result.success) throw new Error([result.error, result.detail].filter(Boolean).join(' — ') || 'Gagal generate QRIS');
     dataPemesan.totalAmount = result.totalAmount;
     dataPemesan.orderId = result.orderId;
     const qrImageUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' + encodeURIComponent(result.qrisString);
