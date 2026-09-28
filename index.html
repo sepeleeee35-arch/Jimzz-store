@@ -86,7 +86,15 @@ body::after { content: ""; position: fixed; top: 0; left: 0; width: 100vw; heigh
 .btn-history { display: inline-flex; align-items: center; gap: 8px; background: rgba(0,200,255,0.08); border: 1.5px solid rgba(0,200,255,0.4); color: #00c8ff; padding: 12px 22px; border-radius: 30px; font-size: 13px; font-weight: 800; cursor: pointer; font-family: inherit; margin-top: 12px; transition: 0.3s; }
 .btn-history:hover { background: rgba(0,200,255,0.2); transform: translateY(-2px); }
 .btn-history:active { transform: scale(0.97); }
+#loadingScreen { position: fixed; inset: 0; background: #030306; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.5s ease; }
+#loadingScreen.hide { opacity: 0; pointer-events: none; }
+.loading-logo { font-size: 48px; font-weight: 900; color: #00ff88; text-shadow: 0 0 30px rgba(0,255,136,0.8); animation: pulseGlow 1.5s ease-in-out infinite; letter-spacing: -1px; }
+.loading-tagline { color: #666; font-size: 12px; margin-top: 10px; letter-spacing: 3px; text-transform: uppercase; font-weight: 600; }
+.loading-bar { width: 200px; height: 3px; background: #1a1a24; border-radius: 2px; margin-top: 25px; overflow: hidden; }
+.loading-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #00ff88, #00cc6a, #00ff88); background-size: 200% 100%; border-radius: 2px; animation: loadBar 1.2s ease-out forwards, shimmer 1.5s linear infinite; }
+@keyframes loadBar { to { width: 100%; } }
 @keyframes shimmer { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
+@keyframes pulseGlow { 0%,100% { opacity:1; transform: scale(1); } 50% { opacity:0.7; transform: scale(0.97); } }
 .admin-badge-float { position: fixed; top: 12px; right: 12px; z-index: 999; background: linear-gradient(135deg, #ffd700, #ff9500); color: #000; padding: 8px 14px; border-radius: 20px; font-size: 11px; font-weight: 800; box-shadow: 0 5px 25px rgba(255,215,0,0.6); display: none; align-items: center; gap: 6px; cursor: pointer; letter-spacing: 0.5px; }
 .admin-badge-float.show { display: flex; }
 .admin-badge-float .logout-x { color: #000; font-weight: 900; margin-left: 5px; }
@@ -434,7 +442,7 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
 @media(max-width:480px){#page-home header{margin:10px 10px 22px;padding:32px 14px 24px;border-radius:24px}#page-home header h1{font-size:42px}#page-home .trust-row{gap:6px}#page-home .trust-item{font-size:9px}#page-home .menu-home{margin-left:4px;margin-right:4px}}
 
 /* JIMZZ_ACCOUNT_SYSTEM_V1 */
-.account-btn{position:relative;z-index:20;display:inline-flex;align-items:center;justify-content:center;gap:7px;margin:14px auto 12px;padding:10px 16px;border:1px solid rgba(0,255,136,.45);border-radius:12px;background:linear-gradient(135deg,rgba(0,255,136,.16),rgba(0,180,110,.08));color:#00ff88;font:800 12px Inter,Arial,sans-serif;cursor:pointer;box-shadow:0 0 22px rgba(0,255,136,.12);transition:.25s}
+.account-btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;margin:14px auto 0;padding:10px 16px;border:1px solid rgba(0,255,136,.45);border-radius:12px;background:linear-gradient(135deg,rgba(0,255,136,.16),rgba(0,180,110,.08));color:#00ff88;font:800 12px Inter,Arial,sans-serif;cursor:pointer;box-shadow:0 0 22px rgba(0,255,136,.12);transition:.25s}
 .account-btn:hover{transform:translateY(-1px);box-shadow:0 0 28px rgba(0,255,136,.24)}
 .account-modal{position:fixed;inset:0;z-index:6000;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(0,0,0,.78);backdrop-filter:blur(14px)}
 .account-modal.show{display:flex}
@@ -455,13 +463,13 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
 .account-field input:focus{border-color:#00ff88;box-shadow:0 0 15px rgba(0,255,136,.12)}
 .account-submit{width:100%;margin-top:4px;padding:13px;border:0;border-radius:11px;background:linear-gradient(135deg,#00ff88,#00cc6a);color:#000;font:900 13px Inter,Arial;cursor:pointer}
 .account-msg{min-height:18px;margin-top:10px;text-align:center;font-size:11px;font-weight:700}
-.account-profile{position:relative;z-index:20;display:none;align-items:center;justify-content:center;gap:8px;margin:12px auto 12px;color:#00ff88;font-size:11px;font-weight:800}
+.account-profile{display:none;align-items:center;justify-content:center;gap:8px;margin:12px auto 0;color:#00ff88;font-size:11px;font-weight:800}
 .account-profile.show{display:flex}
 .account-logout{border:0;background:transparent;color:#888;font-size:10px;font-weight:800;cursor:pointer}
 
 
 /* PRODUCT BANNERS FIX */
-.banner-stack{position:absolute;top:10px;right:10px;left:auto;z-index:4;display:flex;align-items:center;pointer-events:none}
+.banner-stack{position:absolute;top:10px;left:10px;z-index:4;display:flex;align-items:center;pointer-events:none}
 .produk-card{position:relative;overflow:visible}
 .product-banner{display:inline-flex;align-items:center;justify-content:center;min-height:26px;padding:6px 10px;border-radius:9px;color:#050507;font-size:9px;font-weight:950;letter-spacing:.45px;line-height:1;white-space:nowrap;background:linear-gradient(135deg,#00ff88,#00c96b);box-shadow:0 5px 18px rgba(0,255,136,.38),0 0 0 1px rgba(255,255,255,.14) inset;animation:bannerFloat 2.2s ease-in-out infinite, bannerGlow 2.5s ease-in-out infinite}
 .product-banner.hot{background:linear-gradient(135deg,#ff3b30,#ff9500);color:#fff;box-shadow:0 5px 20px rgba(255,76,0,.38),0 0 0 1px rgba(255,255,255,.16) inset}
@@ -473,16 +481,21 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
 @keyframes bannerGradient{0%{background-position:0% 50%}100%{background-position:300% 50%}}
 
 
-/* JIMZZ VERSION HUD — always visible */
-#siteVersion{position:fixed;left:8px;bottom:8px;z-index:2147483647;display:inline-flex;align-items:center;gap:6px;padding:6px 9px;border:1px solid rgba(0,255,136,.55);border-radius:10px;background:rgba(3,3,6,.92);color:#00ff88;font:900 9px/1 Inter,Arial,sans-serif;letter-spacing:.7px;box-shadow:0 0 18px rgba(0,255,136,.25),0 4px 16px rgba(0,0,0,.5);pointer-events:none;user-select:none;backdrop-filter:blur(8px)}
-#siteVersion .version-dot{width:5px;height:5px;border-radius:50%;background:#00ff88;box-shadow:0 0 8px #00ff88;animation:versionPulse 1.2s ease-in-out infinite}
-@keyframes versionPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.45;transform:scale(.75)}}
+/* JIMZZ VERSION HUD */
+#siteVersion{position:fixed;left:8px;bottom:8px;z-index:2147483647;display:inline-flex;align-items:center;gap:6px;padding:6px 9px;border:1px solid rgba(0,255,136,.55);border-radius:10px;background:rgba(3,3,6,.92);color:#00ff88;font:900 9px/1 Inter,Arial,sans-serif;letter-spacing:.7px;box-shadow:0 0 18px rgba(0,255,136,.25),0 4px 16px rgba(0,0,0,.5);pointer-events:none;user-select:none}
+#siteVersion .version-dot{width:5px;height:5px;border-radius:50%;background:#00ff88;box-shadow:0 0 8px #00ff88}
 </style>
-<!-- JIMZZ_VERSION_SYSTEM -->
+<!-- ACCOUNT_DISABLED_2026_09_27 -->
 </head>
 <body>
+<div id="siteVersion"><span class="version-dot"></span><span>JIMZZ STORE • v3.0.3</span></div>
 
-<div id="siteVersion"><span class="version-dot"></span><span>JIMZZ STORE • v3.0.2</span></div>
+
+<div id="loadingScreen">
+  <div class="loading-logo">💚 JIMZZ</div>
+  <div class="loading-tagline">Digital Store</div>
+  <div class="loading-bar"><div class="loading-bar-fill"></div></div>
+</div>
 
 <div class="toast-container" id="toastContainer"></div>
 <div class="confetti-container" id="confettiContainer"></div>
@@ -556,10 +569,6 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
     <h1 class="jimzz-clickable" onclick="secretClick()"><span class="gradient-text">Jimzz Store</span></h1>
     <p class="tagline">Top Up Game, Sosmed & Digital Produk Terlengkap</p>
     <div class="counter"><span class="dot"></span>🔥 <span id="viewCount">1.375</span> orang sudah order</div>
-
-    <button class="account-btn" id="accountButton" onclick="openAccountModal()">👤 Login / Register</button>
-    <div class="account-profile" id="accountProfile"><span>👋 <span id="accountName"></span></span><button class="account-logout" onclick="accountLogout()">Keluar</button></div>
-
     <div class="coin-display">
       <span class="coin-icon">⭐</span>
       <span>Koin Kamu:</span>
@@ -569,6 +578,9 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
         <div class="coin-header-switch" id="coinHeaderSwitch"></div>
       </div>
     </div>
+
+    <button class="account-btn" id="accountButton" onclick="openAccountModal()">👤 Login / Register</button>
+    <div class="account-profile" id="accountProfile"><span>👋 <span id="accountName"></span></span><button class="account-logout" onclick="accountLogout()">Keluar</button></div>
     <div class="trust-row">
       <div class="trust-item"><span class="trust-icon">⚡</span> Proses Cepat</div>
       <div class="trust-item"><span class="trust-icon">🔒</span> Aman & Terpercaya</div>
@@ -884,6 +896,8 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
   <audio id="audioPlayer"></audio>
 </div>
 <script>
+const JIMZZ_VERSION = 'v3.0.3';
+
 // ============================================
 // 🔧 KONFIGURASI
 // ============================================
@@ -939,101 +953,11 @@ function addPoints(amount) {
   return earned;
 }
 
-
-// ============================================
-// JIMZZ ACCOUNT SYSTEM — local fallback
-// ============================================
-const JIMZZ_VERSION = 'v3.0.2';
-const JIMZZ_USERS_KEY = 'jimzz_accounts_v1';
-const JIMZZ_SESSION_KEY = 'jimzz_session_v1';
-
-function getJimzzUsers(){
-  try{return JSON.parse(localStorage.getItem(JIMZZ_USERS_KEY)||'{}');}
-  catch(e){return {};}
-}
-async function jimzzHash(value){
-  const data=new TextEncoder().encode(value);
-  const hash=await crypto.subtle.digest('SHA-256',data);
-  return Array.from(new Uint8Array(hash)).map(b=>b.toString(16).padStart(2,'0')).join('');
-}
-function openAccountModal(){
-  document.getElementById('accountModal')?.classList.add('show');
-  switchAccountForm('login');
-}
-function closeAccountModal(){
-  document.getElementById('accountModal')?.classList.remove('show');
-}
-function switchAccountForm(type){
-  const login=type==='login';
-  document.getElementById('accountLoginForm')?.classList.toggle('active',login);
-  document.getElementById('accountRegisterForm')?.classList.toggle('active',!login);
-  document.getElementById('accountLoginTab')?.classList.toggle('active',login);
-  document.getElementById('accountRegisterTab')?.classList.toggle('active',!login);
-  const lm=document.getElementById('loginMsg'),rm=document.getElementById('registerMsg');
-  if(lm)lm.textContent=''; if(rm)rm.textContent='';
-}
-async function accountRegister(){
-  const username=document.getElementById('registerUsername').value.trim();
-  const password=document.getElementById('registerPassword').value;
-  const password2=document.getElementById('registerPassword2').value;
-  const msg=document.getElementById('registerMsg');
-  if(!/^[A-Za-z0-9_]{3,24}$/.test(username)){msg.textContent='Username 3–24 karakter: huruf, angka, atau _.';msg.style.color='#ff6b6b';return;}
-  if(password.length<6){msg.textContent='Password minimal 6 karakter.';msg.style.color='#ff6b6b';return;}
-  if(password!==password2){msg.textContent='Konfirmasi password tidak sama.';msg.style.color='#ff6b6b';return;}
-  const users=getJimzzUsers(),key=username.toLowerCase();
-  if(users[key]){msg.textContent='Username sudah terdaftar.';msg.style.color='#ff6b6b';return;}
-  const guestCoins=getPoints();
-  users[key]={username,hash:await jimzzHash(password),points:guestCoins+500,createdAt:Date.now()};
-  localStorage.setItem(JIMZZ_USERS_KEY,JSON.stringify(users));
-  localStorage.setItem(JIMZZ_SESSION_KEY,username);
-  localStorage.setItem('jimzz_points','0');
-  updateAccountUI(); renderCoinBalance();
-  msg.textContent='Akun dibuat! Bonus 500 koin + koin guest masuk ke akun.';msg.style.color='#00ff88';
-  showToast('🎁 Akun berhasil dibuat!','success');
-  setTimeout(closeAccountModal,800);
-}
-async function accountLogin(){
-  const username=document.getElementById('loginUsername').value.trim();
-  const password=document.getElementById('loginPassword').value;
-  const msg=document.getElementById('loginMsg');
-  const users=getJimzzUsers(),user=users[username.toLowerCase()];
-  if(!user||user.hash!==await jimzzHash(password)){msg.textContent='Username atau password salah.';msg.style.color='#ff6b6b';return;}
-  localStorage.setItem(JIMZZ_SESSION_KEY,user.username);
-  updateAccountUI(); renderCoinBalance();
-  msg.textContent='Login berhasil.';msg.style.color='#00ff88';
-  setTimeout(closeAccountModal,450);
-}
-function accountLogout(){
-  localStorage.removeItem(JIMZZ_SESSION_KEY);
-  updateAccountUI(); renderCoinBalance();
-  showToast('Berhasil logout. Kamu kembali sebagai guest.','info');
-}
-function getAccountUser(){
-  const session=localStorage.getItem(JIMZZ_SESSION_KEY);
-  if(!session)return null;
-  return getJimzzUsers()[session.toLowerCase()]||null;
-}
-function getAccountToken(){return localStorage.getItem(JIMZZ_SESSION_KEY)||'';}
-function setAccountSession(token,user){
-  if(token)localStorage.setItem(JIMZZ_SESSION_KEY,user?.username||token);
-  else localStorage.removeItem(JIMZZ_SESSION_KEY);
-}
-async function syncAccountMe(){return false;}
-function updateAccountUI(){
-  const name=localStorage.getItem(JIMZZ_SESSION_KEY);
-  const btn=document.getElementById('accountButton');
-  const profile=document.getElementById('accountProfile');
-  const nameEl=document.getElementById('accountName');
-  if(name){
-    if(btn)btn.style.display='none';
-    if(profile){profile.classList.add('show');profile.style.display='flex';}
-    if(nameEl)nameEl.textContent=name;
-  }else{
-    if(btn){btn.style.display='inline-flex';}
-    if(profile){profile.classList.remove('show');profile.style.display='none';}
-  }
-}
-
+// ACCOUNT SYSTEM REMOVED 2026-09-27
+function getAccountToken(){ return ''; }
+function getAccountUser(){ return null; }
+function setAccountSession(){ }
+async function syncAccountMe(){ return false; }
 function renderCoinBalance() {
   const el = document.getElementById('coinBalance');
   if (el) el.innerText = getPoints().toLocaleString('id-ID');
@@ -1803,7 +1727,6 @@ applyBgMode();
   pingVisitor();
   renderCoinBalance();
   renderCoinHeaderToggle();
-  updateAccountUI();
 
   // Resume order yang belum kelar (kalau user refresh / tutup web)
   const orderAktif = getOrderAktif();
@@ -1825,6 +1748,8 @@ applyBgMode();
     }
   } catch(e) {}
 
+  // Loading screen 1.4 detik
+  setTimeout(() => document.getElementById('loadingScreen')?.classList.add('hide'), 1400);
 }
 
 // ============================================
@@ -2435,7 +2360,7 @@ setInterval(() => {
 // ============================================
 // START APP
 // ============================================
-console.log('[Jimzz Store] VERSION v3.0.2');
+console.log('[Jimzz Store] GUEST MODE build 2026-09-27');
 startApp();
 </script>
 </body>
