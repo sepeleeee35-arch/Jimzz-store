@@ -86,15 +86,7 @@ body::after { content: ""; position: fixed; top: 0; left: 0; width: 100vw; heigh
 .btn-history { display: inline-flex; align-items: center; gap: 8px; background: rgba(0,200,255,0.08); border: 1.5px solid rgba(0,200,255,0.4); color: #00c8ff; padding: 12px 22px; border-radius: 30px; font-size: 13px; font-weight: 800; cursor: pointer; font-family: inherit; margin-top: 12px; transition: 0.3s; }
 .btn-history:hover { background: rgba(0,200,255,0.2); transform: translateY(-2px); }
 .btn-history:active { transform: scale(0.97); }
-#loadingScreen { position: fixed; inset: 0; background: #030306; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.5s ease; }
-#loadingScreen.hide { opacity: 0; pointer-events: none; }
-.loading-logo { font-size: 48px; font-weight: 900; color: #00ff88; text-shadow: 0 0 30px rgba(0,255,136,0.8); animation: pulseGlow 1.5s ease-in-out infinite; letter-spacing: -1px; }
-.loading-tagline { color: #666; font-size: 12px; margin-top: 10px; letter-spacing: 3px; text-transform: uppercase; font-weight: 600; }
-.loading-bar { width: 200px; height: 3px; background: #1a1a24; border-radius: 2px; margin-top: 25px; overflow: hidden; }
-.loading-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #00ff88, #00cc6a, #00ff88); background-size: 200% 100%; border-radius: 2px; animation: loadBar 1.2s ease-out forwards, shimmer 1.5s linear infinite; }
-@keyframes loadBar { to { width: 100%; } }
-@keyframes shimmer { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
-@keyframes pulseGlow { 0%,100% { opacity:1; transform: scale(1); } 50% { opacity:0.7; transform: scale(0.97); } }
+50% { opacity:0.7; transform: scale(0.97); } }
 .admin-badge-float { position: fixed; top: 12px; right: 12px; z-index: 999; background: linear-gradient(135deg, #ffd700, #ff9500); color: #000; padding: 8px 14px; border-radius: 20px; font-size: 11px; font-weight: 800; box-shadow: 0 5px 25px rgba(255,215,0,0.6); display: none; align-items: center; gap: 6px; cursor: pointer; letter-spacing: 0.5px; }
 .admin-badge-float.show { display: flex; }
 .admin-badge-float .logout-x { color: #000; font-weight: 900; margin-left: 5px; }
@@ -488,16 +480,10 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
 <!-- ACCOUNT_DISABLED_2026_09_27 -->
 </head>
 <body>
-<div id="siteVersion"><span class="version-dot"></span><span>JIMZZ STORE • v3.0.4</span></div>
+<div id="siteVersion"><span class="version-dot"></span><span>JIMZZ STORE • v3.0.5</span></div>
 
 
-<div id="loadingScreen">
-  <div class="loading-logo">💚 JIMZZ</div>
-  <div class="loading-tagline">Digital Store</div>
-  <div class="loading-bar"><div class="loading-bar-fill"></div></div>
-</div>
-
-<div class="toast-container" id="toastContainer"></div>
+<div class="toast-container id="toastContainer"></div>
 <div class="confetti-container" id="confettiContainer"></div>
 <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
@@ -569,6 +555,8 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
     <h1 class="jimzz-clickable" onclick="secretClick()"><span class="gradient-text">Jimzz Store</span></h1>
     <p class="tagline">Top Up Game, Sosmed & Digital Produk Terlengkap</p>
     <div class="counter"><span class="dot"></span>🔥 <span id="viewCount">1.375</span> orang sudah order</div>
+    <button class="account-btn" id="accountButton" onclick="openAccountModal()">👤 Login / Register</button>
+    <div class="account-profile" id="accountProfile"><span>👋 <span id="accountName"></span></span><button class="account-logout" onclick="accountLogout()">Keluar</button></div>
     <div class="coin-display">
       <span class="coin-icon">⭐</span>
       <span>Koin Kamu:</span>
@@ -578,9 +566,6 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
         <div class="coin-header-switch" id="coinHeaderSwitch"></div>
       </div>
     </div>
-
-    <button class="account-btn" id="accountButton" onclick="openAccountModal()">👤 Login / Register</button>
-    <div class="account-profile" id="accountProfile"><span>👋 <span id="accountName"></span></span><button class="account-logout" onclick="accountLogout()">Keluar</button></div>
     <div class="trust-row">
       <div class="trust-item"><span class="trust-icon">⚡</span> Proses Cepat</div>
       <div class="trust-item"><span class="trust-icon">🔒</span> Aman & Terpercaya</div>
@@ -896,7 +881,7 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
   <audio id="audioPlayer"></audio>
 </div>
 <script>
-const JIMZZ_VERSION = 'v3.0.4';
+const JIMZZ_VERSION = 'v3.0.5';
 
 // ============================================
 // 🔧 KONFIGURASI
@@ -1747,9 +1732,6 @@ applyBgMode();
       keysToRemove.slice(0, keysToRemove.length - 50).forEach(k => localStorage.removeItem(k));
     }
   } catch(e) {}
-
-  // Loading screen 1.4 detik
-  setTimeout(() => document.getElementById('loadingScreen')?.classList.add('hide'), 1400);
 }
 
 // ============================================
