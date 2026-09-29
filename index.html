@@ -978,6 +978,8 @@ function isWishlisted(name) { return getWishlist().includes(name); }
 // ============================================
 // LOYALTY POINT (KOIN)
 // ============================================
+const GUEST_COINS_KEY='jimzz_points';
+function getGuestPoints(){return 0;}
 function getLoggedAccount(){return accountCache||(()=>{try{return JSON.parse(localStorage.getItem(JIMZZ_CACHE_KEY)||'null')}catch{return null}})();}
 function getPoints(){const account=getLoggedAccount();if(account?.role==='owner')return Infinity;if(!account)return 0;return Math.max(0,parseInt(account.coins??0,10)||0);}
 function setPoints(value){const account=getLoggedAccount();if(!account)return 0;if(account.role==='owner')return Infinity;const coins=Math.max(0,Math.floor(Number(value)||0));account.coins=coins;accountCache=account;localStorage.setItem(JIMZZ_CACHE_KEY,JSON.stringify(account));renderCoinBalance();return coins;}
