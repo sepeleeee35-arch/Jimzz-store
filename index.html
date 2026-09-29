@@ -1239,7 +1239,7 @@ function getOrderAktif() {
   } catch { return null; }
 }
 
-async async function handleOrderSuccess(orderId, totalBayar, produkNama) {
+async function handleOrderSuccess(orderId, totalBayar, produkNama) {
   const processedKey = 'jimzz_processed_' + orderId;
   if (localStorage.getItem(processedKey) === 'done') return;
   localStorage.setItem(processedKey, 'done');
@@ -1292,22 +1292,7 @@ async async function handleOrderSuccess(orderId, totalBayar, produkNama) {
 }
 
 function handleOrderExpired(orderId, produkNama) {
-  const processedKey = 'jimzz_processed_' + orderId;
-  if (localStorage.getItem(processedKey) === 'done') return;
-  localStorage.setItem(processedKey, 'done');
-  hapusOrderAktif();
-  const modal = document.getElementById('orderModal');
-  if (modal && modal.classList.contains('show')) {
-    document.getElementById('qrisBox').style.display = 'none';
-    document.getElementById('waitingBox').style.display = 'none';
-    document.getElementById('successBox').style.display = 'none';
-    document.getElementById('failedBox').style.display = 'block';
-    const title = document.querySelector('#failedBox .failed-title');
-    const text = document.querySelector('#failedBox .failed-text');
-    if (title) title.innerText = 'QRIS KEDALUWARSA!';
-    if (text) text.innerText = 'Waktu pembayaran 30 menit sudah habis. Silakan buat order baru.';
-  }
-  showToast('⏰ QRIS '+orderId+' sudah expired.', 'warning');
+  showToast('ℹ️ QRIS tetap aktif selama order masih pending.', 'info');
 }
 
 function handleOrderFailed(orderId, produkNama) {
@@ -1342,9 +1327,6 @@ function startOrderPolling(orderId, totalBayar, produkNama) {
     if (status === 'success') {
       clearInterval(orderPollingInterval); orderPollingInterval = null;
       handleOrderSuccess(orderId, totalBayar, produkNama);
-    } else if (status === 'expired') {
-      clearInterval(orderPollingInterval); orderPollingInterval = null;
-      handleOrderExpired(orderId, produkNama);
     } else if (status === 'failed' || status === 'cancel') {
       clearInterval(orderPollingInterval); orderPollingInterval = null;
       handleOrderFailed(orderId, produkNama);
@@ -1364,9 +1346,6 @@ function startBackgroundPolling() {
     if (status === 'success') {
       clearInterval(backgroundPollingInterval); backgroundPollingInterval = null;
       handleOrderSuccess(order.orderId, order.totalBayar, order.produkNama);
-    } else if (status === 'expired') {
-      clearInterval(backgroundPollingInterval); backgroundPollingInterval = null;
-      handleOrderExpired(order.orderId, order.produkNama);
     } else if (status === 'failed' || status === 'cancel') {
       clearInterval(backgroundPollingInterval); backgroundPollingInterval = null;
       handleOrderFailed(order.orderId, order.produkNama);
@@ -1387,14 +1366,13 @@ async function loadOrders() {
     const pending = (data.orders || []).filter(o => o.status === 'pending');
     if (pending.length === 0) { listEl.innerHTML = '<div class="order-queue-empty">Belum ada order pending</div>'; return; }
     listEl.innerHTML = pending.map(o => {
-      const expired = o.created_at && (Date.now() - new Date(o.created_at).getTime() >= 30 * 60 * 1000);
       return `
       <div class="order-item">
         <div class="order-item-header">
           <span class="order-item-id">${o.order_id}</span>
-          <span class="order-item-status pending">${expired ? 'QRIS EXPIRED' : 'PENDING'}</span>
+          <span class="order-item-status pending">PENDING</span>
         </div>
-        ${expired ? '<div style="margin:8px 0;padding:8px 10px;border:1px solid #ff9500;border-radius:8px;color:#ff9500;font-size:11px;font-weight:800;">⏰ QRIS sudah expired — order tetap bisa dikonfirmasi atau ditandai gagal oleh owner.</div>' : ''}
+        
         <div class="order-item-detail">
           📦 <b>${o.product_name}</b><br>
           📋 ${o.product_detail}<br>
