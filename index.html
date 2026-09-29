@@ -887,7 +887,7 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
       <div class="qris-box" id="qrisBox" style="display:none;">
         <img id="qrisImage" src="" alt="QRIS">
         <button id="qrisDownload" onclick="downloadQris()" style="display:inline-flex; align-items:center; justify-content:center; gap:6px; margin:12px auto 0; background:transparent; border:2px solid #00ff88; color:#00ff88; padding:10px 20px; border-radius:10px; font-weight:bold; font-size:13px; cursor:pointer; font-family:inherit;">⬇️ Download QRIS</button>
-        <div class="qris-nominal" id="qrisNominal">💳 Silahkan bayar QRIS ini sebesar Rp 0</div><div id="qrisExpiry" style="margin-top:8px;color:#ff9500;font-size:11px;font-weight:800;">⏳ QRIS berlaku 30:00</div>
+        <div class="qris-nominal" id="qrisNominal">💳 Silahkan bayar QRIS ini sebesar Rp 0</div>
       </div>
 
       <div class="waiting-box" id="waitingBox" style="display:none;">
@@ -1220,15 +1220,14 @@ setInterval(loadVisitors, 10000);
 // ============================================
 let orderPollingInterval = null;
 let backgroundPollingInterval = null;
-let qrisExpiryInterval = null;
 const ACTIVE_ORDER_KEY = 'jimzz_active_order';
 
-function simpanOrderAktif(orderId, totalBayar, produkNama, expiresAt) {
+function simpanOrderAktif(orderId, totalBayar, produkNama) {
   localStorage.setItem(ACTIVE_ORDER_KEY, JSON.stringify({
     orderId, totalBayar, produkNama, startedAt: Date.now(), expiresAt: expiresAt || null
   }));
 }
-function hapusOrderAktif() { localStorage.removeItem(ACTIVE_ORDER_KEY); if(qrisExpiryInterval){clearInterval(qrisExpiryInterval);qrisExpiryInterval=null;} }
+function hapusOrderAktif() { localStorage.removeItem(ACTIVE_ORDER_KEY); }
 function getOrderAktif() {
   try {
     const raw = localStorage.getItem(ACTIVE_ORDER_KEY);
@@ -1251,48 +1250,46 @@ async function handleOrderSuccess(orderId, totalBayar, produkNama) {
     document.getElementById('waitingBox').style.display = 'none';
     document.getElementById('failedBox').style.display = 'none';
     document.getElementById('successBox').style.display = 'block';
-
-    const title = document.querySelector('#successBox .success-title');
-    const text = document.querySelector('#successBox .success-text');
-    if (title) title.innerText = '🎉 PESANAN ANDA SELESAI!';
-    if (text) text.innerText = 'Pesanan ' + orderId + ' sudah dikonfirmasi oleh owner.';
   }
-
   showConfetti();
   showToast('✅ Pesanan Anda selesai! Owner sudah mengonfirmasi.', 'success');
 
-  let earned = 0;
   if (totalBayar && totalBayar > 0) {
     const account = getLoggedAccount();
     if (account && getAccountToken()) {
-      try {
-        await syncAccountMe();
-        const fresh = getLoggedAccount();
-        if (fresh) {
-          const before = Number(account.points || 0);
-          const after = Number(fresh.points || 0);
-          earned = Math.max(0, after - before);
-          saveAccountSession(null, fresh);
-          renderCoinBalance();
-        }
-      } catch (e) {
-        console.warn('Sync koin gagal:', e);
+      await syncAccountMe();
+      const fresh = getLoggedAccount();
+      if (fresh) {
+        saveAccountSession(null, fresh);
+        renderCoinBalance();
+        showToast(`🎁 Koin akun diperbarui: ${Number(fresh.points||0).toLocaleString('id-ID')} koin`, 'success');
       }
     } else {
-      earned = addPoints(totalBayar);
+      const earned = addPoints(totalBayar);
       renderCoinBalance();
+      if (earned > 0) setTimeout(() => showToast(`🎁 +${earned.toLocaleString('id-ID')} koin! Total: ${getPoints().toLocaleString('id-ID')} koin`, 'success'),1500);
     }
   }
 
-  if (earned > 0) {
-    showToast('🎁 Anda menerima +' + earned.toLocaleString('id-ID') + ' koin!', 'success');
-  } else {
-    showToast('🎁 Pesanan selesai. Koin akan diperbarui jika akun terhubung.', 'success');
-  }
 }
 
 function handleOrderExpired(orderId, produkNama) {
-  showToast('ℹ️ QRIS tetap aktif selama order masih pending.', 'info');
+  const processedKey = 'jimzz_processed_' + orderId;
+  if (localStorage.getItem(processedKey) === 'done') return;
+  localStorage.setItem(processedKey, 'done');
+  hapusOrderAktif();
+  const modal = document.getElementById('orderModal');
+  if (modal && modal.classList.contains('show')) {
+    document.getElementById('qrisBox').style.display = 'none';
+    document.getElementById('waitingBox').style.display = 'none';
+    document.getElementById('successBox').style.display = 'none';
+    document.getElementById('failedBox').style.display = 'block';
+    const title = document.querySelector('#failedBox .failed-title');
+    const text = document.querySelector('#failedBox .failed-text');
+    if (title) title.innerText = 'QRIS KEDALUWARSA!';
+    if (text) text.innerText = 'Waktu pembayaran 10 menit sudah habis. Silakan buat order baru.';
+  }
+  showToast('⏰ QRIS '+orderId+' sudah expired.', 'warning');
 }
 
 function handleOrderFailed(orderId, produkNama) {
@@ -1327,6 +1324,9 @@ function startOrderPolling(orderId, totalBayar, produkNama) {
     if (status === 'success') {
       clearInterval(orderPollingInterval); orderPollingInterval = null;
       handleOrderSuccess(orderId, totalBayar, produkNama);
+    } else if (status === 'expired') {
+      clearInterval(orderPollingInterval); orderPollingInterval = null;
+      handleOrderExpired(orderId, produkNama);
     } else if (status === 'failed' || status === 'cancel') {
       clearInterval(orderPollingInterval); orderPollingInterval = null;
       handleOrderFailed(orderId, produkNama);
@@ -1346,6 +1346,9 @@ function startBackgroundPolling() {
     if (status === 'success') {
       clearInterval(backgroundPollingInterval); backgroundPollingInterval = null;
       handleOrderSuccess(order.orderId, order.totalBayar, order.produkNama);
+    } else if (status === 'expired') {
+      clearInterval(backgroundPollingInterval); backgroundPollingInterval = null;
+      handleOrderExpired(order.orderId, order.produkNama);
     } else if (status === 'failed' || status === 'cancel') {
       clearInterval(backgroundPollingInterval); backgroundPollingInterval = null;
       handleOrderFailed(order.orderId, order.produkNama);
@@ -1365,14 +1368,12 @@ async function loadOrders() {
     const listEl = document.getElementById('orderQueueList');
     const pending = (data.orders || []).filter(o => o.status === 'pending');
     if (pending.length === 0) { listEl.innerHTML = '<div class="order-queue-empty">Belum ada order pending</div>'; return; }
-    listEl.innerHTML = pending.map(o => {
-      return `
+    listEl.innerHTML = pending.map(o => `
       <div class="order-item">
         <div class="order-item-header">
           <span class="order-item-id">${o.order_id}</span>
           <span class="order-item-status pending">PENDING</span>
         </div>
-        
         <div class="order-item-detail">
           📦 <b>${o.product_name}</b><br>
           📋 ${o.product_detail}<br>
@@ -2373,18 +2374,16 @@ async function keStep3() {
     if (!result.success) throw new Error([result.error, result.code && '[' + result.code + ']', result.detail, result.hint].filter(Boolean).join(' — ') || 'Gagal generate QRIS');
     dataPemesan.totalAmount = result.totalAmount;
     dataPemesan.orderId = result.orderId;
-    dataPemesan.expiresAt = result.expiresAt || new Date(Date.now() + 30 * 60 * 1000).toISOString();
-    const qrImageUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' + encodeURIComponent(result.qrisString);
+        const qrImageUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' + encodeURIComponent(result.qrisString);
     document.getElementById('qrisImage').src = qrImageUrl;
     document.getElementById('qrisNominal').innerText = '💳 Silahkan bayar QRIS ini sebesar Rp ' + result.totalAmount.toLocaleString('id-ID');
-    startQrisExpiryCountdown(dataPemesan.expiresAt);
     if (result.telegramSent === false) console.warn('[Jimzz] Telegram order notification was not sent. Check TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID in Vercel.');
     document.getElementById('qrisLoading').style.display = 'none';
     document.getElementById('qrisBox').style.display = 'block';
     document.getElementById('waitingBox').style.display = 'block';
 
     startOrderPolling(result.orderId, totalBayar, produkAktif.nama);
-    simpanOrderAktif(result.orderId, totalBayar, produkAktif.nama, dataPemesan.expiresAt);
+    simpanOrderAktif(result.orderId, totalBayar, produkAktif.nama);
     startBackgroundPolling();
 
     if (potonganKoinActual > 0) {
@@ -2404,25 +2403,6 @@ async function keStep3() {
       '<button onclick="keStep3()" style="margin-top:14px;padding:10px 16px;border:1px solid #00ff88;border-radius:10px;background:transparent;color:#00ff88;font-weight:800;">🔄 Coba Lagi</button>';
   }
 }
-function startQrisExpiryCountdown(expiresAt) {
-  if (qrisExpiryInterval) clearInterval(qrisExpiryInterval);
-  const el = document.getElementById('qrisExpiry');
-  const end = new Date(expiresAt).getTime();
-  const tick = () => {
-    const left = Math.max(0, end - Date.now());
-    const totalSec = Math.ceil(left / 1000);
-    const mm = Math.floor(totalSec / 60).toString().padStart(2,'0');
-    const ss = (totalSec % 60).toString().padStart(2,'0');
-    if (el) el.innerText = left > 0 ? '⏳ QRIS berlaku ' + mm + ':' + ss : '⏰ QRIS EXPIRED — silakan order lagi';
-    if (left <= 0) {
-      clearInterval(qrisExpiryInterval);
-      qrisExpiryInterval = null;
-    }
-  };
-  tick();
-  qrisExpiryInterval = setInterval(tick, 1000);
-}
-
 async function downloadQris() {
   const btn = document.getElementById('qrisDownload');
   const originalText = btn.innerText;
@@ -2433,7 +2413,7 @@ async function downloadQris() {
     const blob = await response.blob();
     const blobUrl = URL.createObjectURL(blob);
     const link = document.createElement('a');
-    link.href = blobUrl; link.download = 'QRIS-JimzzStore-' + (dataPemesan.orderId || Date.now()) + '.png';
+    link.href = blobUrl; link.download = 'QRIS-JimzzStore.png';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
