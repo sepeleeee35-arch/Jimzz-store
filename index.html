@@ -1391,22 +1391,51 @@ async function loadOrders() {
 async function completeOrder(orderId) {
   if (!isOwnerAccount()) return showToast('OWNER only', 'error');
   if (!confirm('Yakin mau SELESAIKAN order ' + orderId + '?')) return;
+
+  const token=getAccountToken();
+  if(!token) return showToast('❌ Session OWNER tidak ditemukan. Login ulang.', 'error');
+
   try {
+    showToast('⏳ Memproses order + koin...', 'info');
+
     const res = await fetch(BACKEND_URL + '/api/complete-order', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + getAccountToken() },
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
       body: JSON.stringify({ orderId: orderId })
     });
-    const data = await res.json();
-    if (data.success) {
-      showToast('✅ Order ' + orderId + ' selesai!', 'success');
-      loadOrders();
-      loadCounters();
-      loadStats();
-    } else {
-      showToast('Gagal: ' + (data.error || 'Unknown error'), 'error');
+
+    let data={};
+    try { data=await res.json(); } catch {}
+    if (!res.ok || !data.success) {
+      const detail=[data.error,data.detail,data.telegramReason].filter(Boolean).join(' — ');
+      throw new Error(detail || ('HTTP '+res.status));
     }
-  } catch (err) { showToast('Error: ' + err.message, 'error'); }
+
+    const earned=Number(data.earnedCoins||0);
+    if(data.coinsCredited && earned>0){
+      showToast('🎁 Pesanan berhasil! +'+earned.toLocaleString('id-ID')+' koin masuk.', 'success');
+    }else if(earned>0){
+      showToast('✅ Pesanan berhasil! Koin order sudah tercatat.', 'success');
+    }else{
+      showToast('✅ Pesanan '+orderId+' berhasil dikonfirmasi.', 'success');
+    }
+
+    // Refresh akun pembeli di device pembeli bila session tersebut aktif.
+    // Ini juga memicu popup +koin melalui lastCoinGift.
+    try { await syncAccountMe(); } catch(e) { console.warn('Account coin refresh:',e); }
+
+    if(data.telegramSent===false){
+      console.warn('[Jimzz] Confirm Telegram gagal:',data.telegramReason,data.telegramDetail);
+      showToast('⚠️ Order berhasil, tapi Telegram gagal: '+(data.telegramReason||'unknown'), 'warning');
+    }
+
+    await loadOrders();
+    await loadCounters();
+    await loadStats();
+  } catch (err) {
+    console.error('completeOrder:',err);
+    showToast('❌ Confirm gagal: '+err.message, 'error');
+  }
 }
 async function failOrder(orderId) {
   if (!isOwnerAccount()) return showToast('OWNER only', 'error');
