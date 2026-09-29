@@ -1237,7 +1237,7 @@ function getOrderAktif() {
   } catch { return null; }
 }
 
-async function handleOrderSuccess(orderId, totalBayar, produkNama) {
+async async function handleOrderSuccess(orderId, totalBayar, produkNama) {
   const processedKey = 'jimzz_processed_' + orderId;
   if (localStorage.getItem(processedKey) === 'done') return;
   localStorage.setItem(processedKey, 'done');
