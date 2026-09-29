@@ -887,7 +887,7 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
       <div class="qris-box" id="qrisBox" style="display:none;">
         <img id="qrisImage" src="" alt="QRIS">
         <button id="qrisDownload" onclick="downloadQris()" style="display:inline-flex; align-items:center; justify-content:center; gap:6px; margin:12px auto 0; background:transparent; border:2px solid #00ff88; color:#00ff88; padding:10px 20px; border-radius:10px; font-weight:bold; font-size:13px; cursor:pointer; font-family:inherit;">⬇️ Download QRIS</button>
-        <div class="qris-nominal" id="qrisNominal">💳 Silahkan bayar QRIS ini sebesar Rp 0</div><div id="qrisExpiry" style="margin-top:8px;color:#ff9500;font-size:11px;font-weight:800;">⏳ QRIS berlaku 10:00</div>
+        <div class="qris-nominal" id="qrisNominal">💳 Silahkan bayar QRIS ini sebesar Rp 0</div><div id="qrisExpiry" style="margin-top:8px;color:#ff9500;font-size:11px;font-weight:800;">⏳ QRIS berlaku 30:00</div>
       </div>
 
       <div class="waiting-box" id="waitingBox" style="display:none;">
@@ -1239,7 +1239,7 @@ function getOrderAktif() {
   } catch { return null; }
 }
 
-async function handleOrderSuccess(orderId, totalBayar, produkNama) {
+async async function handleOrderSuccess(orderId, totalBayar, produkNama) {
   const processedKey = 'jimzz_processed_' + orderId;
   if (localStorage.getItem(processedKey) === 'done') return;
   localStorage.setItem(processedKey, 'done');
@@ -1251,27 +1251,44 @@ async function handleOrderSuccess(orderId, totalBayar, produkNama) {
     document.getElementById('waitingBox').style.display = 'none';
     document.getElementById('failedBox').style.display = 'none';
     document.getElementById('successBox').style.display = 'block';
-  }
-  showConfetti();
-  showToast(`✅ Pesanan ${orderId} SELESAI! Admin udah proses.`, 'success');
 
+    const title = document.querySelector('#successBox .success-title');
+    const text = document.querySelector('#successBox .success-text');
+    if (title) title.innerText = '🎉 PESANAN ANDA SELESAI!';
+    if (text) text.innerText = 'Pesanan ' + orderId + ' sudah dikonfirmasi oleh owner.';
+  }
+
+  showConfetti();
+  showToast('✅ Pesanan Anda selesai! Owner sudah mengonfirmasi.', 'success');
+
+  let earned = 0;
   if (totalBayar && totalBayar > 0) {
     const account = getLoggedAccount();
     if (account && getAccountToken()) {
-      await syncAccountMe();
-      const fresh = getLoggedAccount();
-      if (fresh) {
-        saveAccountSession(null, fresh);
-        renderCoinBalance();
-        showToast(`🎁 Koin akun diperbarui: ${Number(fresh.points||0).toLocaleString('id-ID')} koin`, 'success');
+      try {
+        await syncAccountMe();
+        const fresh = getLoggedAccount();
+        if (fresh) {
+          const before = Number(account.points || 0);
+          const after = Number(fresh.points || 0);
+          earned = Math.max(0, after - before);
+          saveAccountSession(null, fresh);
+          renderCoinBalance();
+        }
+      } catch (e) {
+        console.warn('Sync koin gagal:', e);
       }
     } else {
-      const earned = addPoints(totalBayar);
+      earned = addPoints(totalBayar);
       renderCoinBalance();
-      if (earned > 0) setTimeout(() => showToast(`🎁 +${earned.toLocaleString('id-ID')} koin! Total: ${getPoints().toLocaleString('id-ID')} koin`, 'success'),1500);
     }
   }
 
+  if (earned > 0) {
+    showToast('🎁 Anda menerima +' + earned.toLocaleString('id-ID') + ' koin!', 'success');
+  } else {
+    showToast('🎁 Pesanan selesai. Koin akan diperbarui jika akun terhubung.', 'success');
+  }
 }
 
 function handleOrderExpired(orderId, produkNama) {
@@ -1288,7 +1305,7 @@ function handleOrderExpired(orderId, produkNama) {
     const title = document.querySelector('#failedBox .failed-title');
     const text = document.querySelector('#failedBox .failed-text');
     if (title) title.innerText = 'QRIS KEDALUWARSA!';
-    if (text) text.innerText = 'Waktu pembayaran 10 menit sudah habis. Silakan buat order baru.';
+    if (text) text.innerText = 'Waktu pembayaran 30 menit sudah habis. Silakan buat order baru.';
   }
   showToast('⏰ QRIS '+orderId+' sudah expired.', 'warning');
 }
@@ -1369,12 +1386,15 @@ async function loadOrders() {
     const listEl = document.getElementById('orderQueueList');
     const pending = (data.orders || []).filter(o => o.status === 'pending');
     if (pending.length === 0) { listEl.innerHTML = '<div class="order-queue-empty">Belum ada order pending</div>'; return; }
-    listEl.innerHTML = pending.map(o => `
+    listEl.innerHTML = pending.map(o => {
+      const expired = o.created_at && (Date.now() - new Date(o.created_at).getTime() >= 30 * 60 * 1000);
+      return `
       <div class="order-item">
         <div class="order-item-header">
           <span class="order-item-id">${o.order_id}</span>
-          <span class="order-item-status pending">PENDING</span>
+          <span class="order-item-status pending">${expired ? 'QRIS EXPIRED' : 'PENDING'}</span>
         </div>
+        ${expired ? '<div style="margin:8px 0;padding:8px 10px;border:1px solid #ff9500;border-radius:8px;color:#ff9500;font-size:11px;font-weight:800;">⏰ QRIS sudah expired — order tetap bisa dikonfirmasi atau ditandai gagal oleh owner.</div>' : ''}
         <div class="order-item-detail">
           📦 <b>${o.product_name}</b><br>
           📋 ${o.product_detail}<br>
@@ -2375,7 +2395,7 @@ async function keStep3() {
     if (!result.success) throw new Error([result.error, result.code && '[' + result.code + ']', result.detail, result.hint].filter(Boolean).join(' — ') || 'Gagal generate QRIS');
     dataPemesan.totalAmount = result.totalAmount;
     dataPemesan.orderId = result.orderId;
-    dataPemesan.expiresAt = result.expiresAt || new Date(Date.now() + 10 * 60 * 1000).toISOString();
+    dataPemesan.expiresAt = result.expiresAt || new Date(Date.now() + 30 * 60 * 1000).toISOString();
     const qrImageUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' + encodeURIComponent(result.qrisString);
     document.getElementById('qrisImage').src = qrImageUrl;
     document.getElementById('qrisNominal').innerText = '💳 Silahkan bayar QRIS ini sebesar Rp ' + result.totalAmount.toLocaleString('id-ID');
@@ -2415,7 +2435,7 @@ function startQrisExpiryCountdown(expiresAt) {
     const totalSec = Math.ceil(left / 1000);
     const mm = Math.floor(totalSec / 60).toString().padStart(2,'0');
     const ss = (totalSec % 60).toString().padStart(2,'0');
-    if (el) el.innerText = left > 0 ? '⏳ QRIS berlaku ' + mm + ':' + ss : '⏰ QRIS sudah expired';
+    if (el) el.innerText = left > 0 ? '⏳ QRIS berlaku ' + mm + ':' + ss : '⏰ QRIS EXPIRED — silakan order lagi';
     if (left <= 0) {
       clearInterval(qrisExpiryInterval);
       qrisExpiryInterval = null;
@@ -2435,7 +2455,7 @@ async function downloadQris() {
     const blob = await response.blob();
     const blobUrl = URL.createObjectURL(blob);
     const link = document.createElement('a');
-    link.href = blobUrl; link.download = 'QRIS-JimzzStore.png';
+    link.href = blobUrl; link.download = 'QRIS-JimzzStore-' + (dataPemesan.orderId || Date.now()) + '.png';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
