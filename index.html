@@ -63,7 +63,12 @@ body::after { content: ""; position: fixed; top: 0; left: 0; width: 100vw; heigh
 .share-btn.wa { background: linear-gradient(135deg, #25D366, #1da851); box-shadow: 0 5px 20px rgba(37,211,102,0.5); }
 .share-btn.tg { background: linear-gradient(135deg, #229ED9, #1a7fb0); box-shadow: 0 5px 20px rgba(34,158,217,0.5); }
 .share-btn.copy { background: linear-gradient(135deg, #ffd700, #ff9500); box-shadow: 0 5px 20px rgba(255,215,0,0.5); }
-.coin-display { display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, rgba(255,215,0,0.15), rgba(255,150,0,0.05)); border: 1px solid rgba(255,215,0,0.4); color: #ffd700; padding: 8px 18px; border-radius: 20px; font-size: 12px; font-weight: 700; margin-top: 12px; cursor: default; transition: 0.3s; }
+.coin-display { display:inline-flex; align-items:center; gap:8px; background:linear-gradient(135deg,rgba(255,215,0,.15),rgba(255,150,0,.05)); border:1px solid rgba(255,215,0,.4); color:#ffd700; padding:8px 18px; border-radius:20px; font-size:12px; font-weight:700; margin-top:12px; cursor:pointer; transition:.3s; user-select:none; }
+.coin-display:hover{border-color:rgba(255,215,0,.75);box-shadow:0 6px 22px rgba(255,190,0,.16);transform:translateY(-1px)}
+.coin-guest-lock{font-size:9px;color:#ffcf55;opacity:.9;white-space:nowrap}.coin-header-toggle.locked{opacity:.65}
+.coin-info-modal{position:fixed;inset:0;z-index:12000;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.78);backdrop-filter:blur(14px)}
+.coin-info-modal.show{display:flex}.coin-info-card{width:min(430px,100%);background:linear-gradient(145deg,#10151a,#0b0d12);border:1px solid rgba(255,215,0,.35);border-radius:22px;padding:25px 22px;box-shadow:0 25px 80px rgba(0,0,0,.7)}
+.coin-info-card h3{margin:0 0 8px;color:#ffd700;font-size:21px}.coin-info-card p{color:#aaa;font-size:12px;line-height:1.7;margin:8px 0}.coin-info-list{margin:14px 0 18px;padding-left:20px;color:#ddd;font-size:12px;line-height:1.8}.coin-info-actions{display:flex;gap:10px}.coin-info-actions button{flex:1;border:0;border-radius:11px;padding:12px;font-weight:800;cursor:pointer}.coin-info-login{background:#00ff88;color:#00140b}.coin-info-close{background:#20242b;color:#fff}
 .coin-display .coin-icon { font-size: 16px; }
 .coin-display .coin-value { color: #fff; font-weight: 800; font-size: 14px; }
 .coin-header-toggle { display: inline-flex; align-items: center; gap: 6px; margin-left: 8px; padding-left: 10px; border-left: 1px solid rgba(255,215,0,0.3); cursor: pointer; user-select: none; }
@@ -489,6 +494,12 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
 <div class="confetti-container" id="confettiContainer"></div>
 <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
+<div class="coin-info-modal" id="coinInfoModal" onclick="if(event.target===this)closeCoinInfo()"><div class="coin-info-card">
+<h3>⭐ Tentang Koin Jimzz</h3><p>Koin adalah saldo bonus akun yang bisa digunakan untuk mendapatkan potongan pada pesanan.</p>
+<ul class="coin-info-list"><li>Guest tidak bisa mendapatkan atau menggunakan koin.</li><li>Koin pesanan masuk ke akun setelah pesanan berhasil dikonfirmasi.</li><li>Saldo koin tersimpan pada akun.</li><li>Login atau Register untuk membuka fitur koin.</li></ul>
+<div class="coin-info-actions"><button class="coin-info-close" type="button" onclick="closeCoinInfo()">Tutup</button><button class="coin-info-login" type="button" onclick="coinInfoLogin()">🔐 Login / Register</button></div>
+</div></div>
+
 <!-- JIMZZ_ACCOUNT_SYSTEM_V1 -->
 <div class="account-modal" id="accountModal" onclick="if(event.target===this)closeAccountModal()">
   <div class="account-box">
@@ -598,13 +609,11 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
     <div class="counter"><span class="dot"></span>🔥 <span id="viewCount">1.375</span> orang sudah order</div>
     <button class="account-btn" id="accountButton" onclick="openAccountModal()">👤 Login / Register</button>
     <div class="account-profile" id="accountProfile"><span>👋 <span id="accountName"></span></span><span class="account-role" id="accountRole"></span><button class="account-logout" onclick="openAccountSettings()">⚙️ Akun</button><button class="account-logout" onclick="accountLogout()">Logout</button></div>
-    <div class="coin-display">
-      <span class="coin-icon">⭐</span>
-      <span>Koin Kamu:</span>
-      <span class="coin-value" id="coinBalance">0</span>
-      <div class="coin-header-toggle" id="coinHeaderToggle" onclick="toggleCoinHeader()">
-        <span class="coin-header-label" id="coinHeaderLabel">OFF</span>
-        <div class="coin-header-switch" id="coinHeaderSwitch"></div>
+    <div class="coin-display" id="coinDisplay" onclick="openCoinInfo()">
+      <span class="coin-icon">⭐</span><span>Koin Kamu:</span><span class="coin-value" id="coinBalance">0</span>
+      <span class="coin-guest-lock" id="coinGuestLock">🔒 Login/Register</span>
+      <div class="coin-header-toggle" id="coinHeaderToggle" onclick="event.stopPropagation();toggleCoinHeader()">
+        <span class="coin-header-label" id="coinHeaderLabel">OFF</span><div class="coin-header-switch" id="coinHeaderSwitch"></div>
       </div>
     </div>
     <div class="trust-row">
@@ -969,41 +978,17 @@ function isWishlisted(name) { return getWishlist().includes(name); }
 // ============================================
 // LOYALTY POINT (KOIN)
 // ============================================
-const GUEST_COINS_KEY = 'jimzz_points';
-function getGuestPoints() {
-  try { return Math.max(0, parseInt(localStorage.getItem(GUEST_COINS_KEY) || '0', 10) || 0); }
-  catch { return 0; }
-}
 function getLoggedAccount(){return accountCache||(()=>{try{return JSON.parse(localStorage.getItem(JIMZZ_CACHE_KEY)||'null')}catch{return null}})();}
-function getPoints(){const account=getLoggedAccount();if(account?.role==='owner')return Infinity;return account?Math.max(0,parseInt(account.coins??0,10)||0):getGuestPoints();}
-function setPoints(value){const account=getLoggedAccount();if(account?.role==='owner')return Infinity;const coins=Math.max(0,Math.floor(Number(value)||0));if(account){account.coins=coins;accountCache=account;localStorage.setItem(JIMZZ_CACHE_KEY,JSON.stringify(account));renderCoinBalance();return coins;}localStorage.setItem(GUEST_COINS_KEY,String(coins));return coins;}
-function addPoints(amount){const account=getLoggedAccount();if(account?.role==='owner')return 0;const current=getPoints(),earned=Math.floor(amount/KOIN_PER_RUPIAH);setPoints(current+earned);return earned;}
-function transferGuestCoinsToAccount(){const guest=getGuestPoints();localStorage.setItem(GUEST_COINS_KEY,'0');return guest;}
-function renderCoinBalance() {
-  const el = document.getElementById('coinBalance');
-  if (!el) return;
-  const points=getPoints();
-  el.innerText = points===Infinity ? '∞' : points.toLocaleString('id-ID');
-}
-
-let useCoinMode = localStorage.getItem('jimzz_use_coin') === 'true';
-
-function toggleCoinHeader() {
-  useCoinMode = !useCoinMode;
-  localStorage.setItem('jimzz_use_coin', useCoinMode.toString());
-  renderCoinHeaderToggle();
-  if (produkAktif) hitungTotal();
-  showToast(useCoinMode ? '⭐ Koin AKTIF — otomatis dipakai di setiap order' : '❌ Koin NONAKTIF — gak dipakai di order', useCoinMode ? 'success' : 'info');
-}
-
-function renderCoinHeaderToggle() {
-  const sw = document.getElementById('coinHeaderSwitch');
-  const label = document.getElementById('coinHeaderLabel');
-  if (sw && label) {
-    if (useCoinMode) { sw.classList.add('active'); label.classList.add('active'); label.innerText = 'ON'; }
-    else { sw.classList.remove('active'); label.classList.remove('active'); label.innerText = 'OFF'; }
-  }
-}
+function getPoints(){const account=getLoggedAccount();if(account?.role==='owner')return Infinity;if(!account)return 0;return Math.max(0,parseInt(account.coins??0,10)||0);}
+function setPoints(value){const account=getLoggedAccount();if(!account)return 0;if(account.role==='owner')return Infinity;const coins=Math.max(0,Math.floor(Number(value)||0));account.coins=coins;accountCache=account;localStorage.setItem(JIMZZ_CACHE_KEY,JSON.stringify(account));renderCoinBalance();return coins;}
+function addPoints(amount){const account=getLoggedAccount();if(!account||account.role==='owner')return 0;const earned=Math.floor(Number(amount||0)/KOIN_PER_RUPIAH);setPoints(getPoints()+earned);return earned;}
+function renderCoinBalance(){const el=document.getElementById('coinBalance');if(!el)return;const points=getPoints();el.innerText=points===Infinity?'∞':points.toLocaleString('id-ID');}
+function openCoinInfo(){document.getElementById('coinInfoModal')?.classList.add('show');}
+function closeCoinInfo(){document.getElementById('coinInfoModal')?.classList.remove('show');}
+function coinInfoLogin(){closeCoinInfo();openAccountModal();}
+let useCoinMode=!!getLoggedAccount()&&localStorage.getItem('jimzz_use_coin')==='true';
+function toggleCoinHeader(){if(!getLoggedAccount()){useCoinMode=false;localStorage.setItem('jimzz_use_coin','false');renderCoinHeaderToggle();openCoinInfo();return;}useCoinMode=!useCoinMode;localStorage.setItem('jimzz_use_coin',useCoinMode.toString());renderCoinHeaderToggle();if(produkAktif)hitungTotal();showToast(useCoinMode?'⭐ Koin AKTIF — otomatis dipakai di order':'❌ Koin NONAKTIF — tidak dipakai di order',useCoinMode?'success':'info');}
+function renderCoinHeaderToggle(){const sw=document.getElementById('coinHeaderSwitch'),label=document.getElementById('coinHeaderLabel'),toggle=document.getElementById('coinHeaderToggle'),hint=document.getElementById('coinGuestLock'),logged=!!getLoggedAccount();if(sw&&label){if(logged&&useCoinMode){sw.classList.add('active');label.classList.add('active');label.innerText='ON';}else{sw.classList.remove('active');label.classList.remove('active');label.innerText='OFF';}}if(toggle)toggle.classList.toggle('locked',!logged);if(hint)hint.style.display=logged?'none':'inline';}
 
 // ============================================
 // BACKUP ORDER
@@ -1237,7 +1222,7 @@ function getOrderAktif() {
   } catch { return null; }
 }
 
-async async function handleOrderSuccess(orderId, totalBayar, produkNama) {
+async function handleOrderSuccess(orderId, totalBayar, produkNama) {
   const processedKey = 'jimzz_processed_' + orderId;
   if (localStorage.getItem(processedKey) === 'done') return;
   localStorage.setItem(processedKey, 'done');
@@ -1264,9 +1249,8 @@ async async function handleOrderSuccess(orderId, totalBayar, produkNama) {
         showToast(`🎁 Koin akun diperbarui: ${Number(fresh.coins||0).toLocaleString('id-ID')} koin`, 'success');
       }
     } else {
-      const earned = addPoints(totalBayar);
       renderCoinBalance();
-      if (earned > 0) setTimeout(() => showToast(`🎁 +${earned.toLocaleString('id-ID')} koin! Total: ${getPoints().toLocaleString('id-ID')} koin`, 'success'),1500);
+      setTimeout(() => showToast('🔒 Koin terkunci untuk Guest. Login/Register untuk mendapatkan dan menggunakan koin.', 'info'), 1200);
     }
   }
 
@@ -1388,7 +1372,7 @@ async function loadOrders() {
     `).join('');
   } catch (err) { console.log('Load orders error:', err); }
 }
-async async function completeOrder(orderId) {
+async function completeOrder(orderId) {
   if (!isOwnerAccount()) return showToast('OWNER only', 'error');
   if (!confirm('Yakin mau SELESAIKAN order ' + orderId + '?')) return;
 
@@ -1887,6 +1871,7 @@ applyBgMode();
   updateBgLabel();
   pingVisitor();
   renderCoinBalance();
+  if(!getLoggedAccount()) useCoinMode=false;
   renderCoinHeaderToggle();
   handleRecoveryLink();
 
