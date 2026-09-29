@@ -1388,7 +1388,7 @@ async function loadOrders() {
     `).join('');
   } catch (err) { console.log('Load orders error:', err); }
 }
-async function completeOrder(orderId) {
+async async function completeOrder(orderId) {
   if (!isOwnerAccount()) return showToast('OWNER only', 'error');
   if (!confirm('Yakin mau SELESAIKAN order ' + orderId + '?')) return;
 
@@ -1449,8 +1449,12 @@ async function failOrder(orderId) {
     const data = await res.json();
     if (data.success) {
       showToast('❌ Order ' + orderId + ' ditandai gagal!', 'warning');
-      loadOrders();
-      loadStats();
+      if (data.telegramSent === false) {
+        showToast('⚠️ Cancel berhasil, tapi Telegram gagal: ' + (data.telegramReason || 'unknown'), 'warning');
+        console.warn('[Jimzz] Cancel Telegram gagal:', data.telegramReason, data.telegramDetail);
+      }
+      await loadOrders();
+      await loadStats();
     } else {
       showToast('Gagal: ' + (data.error || 'Unknown error'), 'error');
     }
