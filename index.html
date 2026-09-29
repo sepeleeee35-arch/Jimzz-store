@@ -2376,7 +2376,7 @@ async function keStep3() {
     dataPemesan.orderId = result.orderId;
         const qrImageUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' + encodeURIComponent(result.qrisString);
     document.getElementById('qrisImage').src = qrImageUrl;
-    document.getElementById('qrisNominal').innerText = '💳 Silahkan bayar QRIS ini sebesar Rp ' + result.totalAmount.toLocaleString('id-ID');
+    document.getElementById('qrisNominal').innerText = '💳 Nominal QRIS: Rp ' + result.totalAmount.toLocaleString('id-ID');
     if (result.telegramSent === false) console.warn('[Jimzz] Telegram order notification was not sent. Check TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID in Vercel.');
     document.getElementById('qrisLoading').style.display = 'none';
     document.getElementById('qrisBox').style.display = 'block';
@@ -2413,7 +2413,7 @@ async function downloadQris() {
     const blob = await response.blob();
     const blobUrl = URL.createObjectURL(blob);
     const link = document.createElement('a');
-    link.href = blobUrl; link.download = 'QRIS-JimzzStore.png';
+    link.href = blobUrl; link.download = 'QRIS-JimzzStore-' + (dataPemesan.orderId || Date.now()) + '-' + Date.now() + '.png';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -2546,7 +2546,7 @@ setInterval(() => {
 // ============================================
 // START APP
 // ============================================
-console.log('[Jimzz Store] GUEST MODE build 2026-09-27');
+console.log('[Jimzz Store] GUEST MODE build 3.3.1');
 startApp();
 </script>
 </body>
