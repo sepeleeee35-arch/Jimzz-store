@@ -887,7 +887,6 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
       <div class="qris-box" id="qrisBox" style="display:none;">
         <img id="qrisImage" src="" alt="QRIS">
         <button id="qrisDownload" onclick="downloadQris()" style="display:inline-flex; align-items:center; justify-content:center; gap:6px; margin:12px auto 0; background:transparent; border:2px solid #00ff88; color:#00ff88; padding:10px 20px; border-radius:10px; font-weight:bold; font-size:13px; cursor:pointer; font-family:inherit;">⬇️ Download QRIS</button>
-        <div class="qris-nominal" id="qrisNominal">💳 Silahkan bayar QRIS ini sebesar Rp 0</div>
       </div>
 
       <div class="waiting-box" id="waitingBox" style="display:none;">
@@ -2376,7 +2375,6 @@ async function keStep3() {
     dataPemesan.orderId = result.orderId;
         const qrImageUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' + encodeURIComponent(result.qrisString);
     document.getElementById('qrisImage').src = qrImageUrl;
-    document.getElementById('qrisNominal').innerText = '💳 Nominal QRIS: Rp ' + result.totalAmount.toLocaleString('id-ID');
     if (result.telegramSent === false) console.warn('[Jimzz] Telegram order notification was not sent. Check TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID in Vercel.');
     document.getElementById('qrisLoading').style.display = 'none';
     document.getElementById('qrisBox').style.display = 'block';
