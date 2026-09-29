@@ -2338,7 +2338,7 @@ async function keStep3() {
       })
     });
     const result = await res.json();
-    if (!result.success) throw new Error([result.error, result.detail].filter(Boolean).join(' — ') || 'Gagal generate QRIS');
+    if (!result.success) throw new Error([result.error, result.code && '[' + result.code + ']', result.detail, result.hint].filter(Boolean).join(' — ') || 'Gagal generate QRIS');
     dataPemesan.totalAmount = result.totalAmount;
     dataPemesan.orderId = result.orderId;
     const qrImageUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' + encodeURIComponent(result.qrisString);
