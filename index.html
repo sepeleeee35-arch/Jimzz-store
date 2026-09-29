@@ -1261,7 +1261,7 @@ async function handleOrderSuccess(orderId, totalBayar, produkNama) {
       if (fresh) {
         saveAccountSession(null, fresh);
         renderCoinBalance();
-        showToast(`🎁 Koin akun diperbarui: ${Number(fresh.points||0).toLocaleString('id-ID')} koin`, 'success');
+        showToast(`🎁 Koin akun diperbarui: ${Number(fresh.coins||0).toLocaleString('id-ID')} koin`, 'success');
       }
     } else {
       const earned = addPoints(totalBayar);
