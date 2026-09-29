@@ -2380,6 +2380,7 @@ async function keStep3() {
     document.getElementById('qrisImage').src = qrImageUrl;
     document.getElementById('qrisNominal').innerText = '💳 Silahkan bayar QRIS ini sebesar Rp ' + result.totalAmount.toLocaleString('id-ID');
     startQrisExpiryCountdown(dataPemesan.expiresAt);
+    if (result.telegramSent === false) console.warn('[Jimzz] Telegram order notification was not sent. Check TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID in Vercel.');
     document.getElementById('qrisLoading').style.display = 'none';
     document.getElementById('qrisBox').style.display = 'block';
     document.getElementById('waitingBox').style.display = 'block';
@@ -2435,8 +2436,10 @@ async function downloadQris() {
     const blobUrl = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = blobUrl; link.download = 'QRIS-JimzzStore.png';
-    document.body.appendChild(link); link.click(); document.body.removeChild(link);
-    URL.revokeObjectURL(blobUrl);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setTimeout(() => URL.revokeObjectURL(blobUrl), 3000);
     btn.innerText = '✅ Berhasil! Cek Galeri';
     setTimeout(() => { btn.innerText = originalText; btn.disabled = false; }, 3000);
   } catch (err) {
