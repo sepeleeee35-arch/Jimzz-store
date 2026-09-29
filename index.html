@@ -2126,10 +2126,12 @@ function bukaOrder(kategoriId, index) {
     jumlahInput.min = produkAktif.min;
     jumlahInput.max = produkAktif.max;
   }
+  const linkForm = document.getElementById('linkSaluran').closest('.form-box');
   if (isApk) {
-    document.getElementById('inputLabel').innerText = '👤 Nama Lengkap';
-    document.getElementById('linkSaluran').placeholder = 'Contoh: Bilzz';
+    // Produk APK tidak lagi meminta nama. Pembeli cukup mengisi nomor WhatsApp.
+    if (linkForm) linkForm.style.display = 'none';
   } else {
+    if (linkForm) linkForm.style.display = '';
     document.getElementById('inputLabel').innerText = produkAktif.inputLabel || '🔗 Link';
     document.getElementById('linkSaluran').placeholder = produkAktif.inputPlaceholder || 'Contoh: link';
   }
@@ -2255,7 +2257,12 @@ async function keStep3() {
   const errorEl = document.getElementById('inputError');
   const hpErrorEl = document.getElementById('hpError');
   clearError();
-  if (!link) { inputEl.classList.add('error'); errorEl.innerText = produkAktif.isApk ? '❌ Isi nama dulu ya!' : '❌ Isi ' + (produkAktif.inputLabel || 'link') + ' dulu ya!'; errorEl.classList.add('show'); return; }
+  if (!produkAktif.isApk && !link) {
+    inputEl.classList.add('error');
+    errorEl.innerText = '❌ Isi ' + (produkAktif.inputLabel || 'link') + ' dulu ya!';
+    errorEl.classList.add('show');
+    return;
+  }
   if (!produkAktif.isApk && produkAktif.inputValidasi) {
     const expected = String(produkAktif.inputValidasi).toLowerCase();
     let parsedUrl = null;
@@ -2306,7 +2313,8 @@ async function keStep3() {
   const hpClean = hp.replace(/[\s\-\+]/g, '');
   const hpValid = /^(62|0)8[0-9]{8,13}$/.test(hpClean);
   if (!hpValid) { hpEl.classList.add('error'); hpErrorEl.innerText = '❌ No WA tidak valid!'; hpErrorEl.classList.add('show'); return; }
-  dataPemesan.link = link; dataPemesan.hp = hp;
+  dataPemesan.link = produkAktif.isApk ? '' : link;
+  dataPemesan.hp = hp;
   setStep(3);
   document.getElementById('qrisLoading').style.display = 'block';
   document.getElementById('qrisBox').style.display = 'none';
