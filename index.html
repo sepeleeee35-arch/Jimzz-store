@@ -1620,13 +1620,22 @@ function getCurrentAccountRecord(){const user=getLoggedAccount();return user?{ke
 function getCurrentRole(){return getLoggedAccount()?.role||null;}
 function isOwnerAccount(){return getCurrentRole()==='owner';}
 function isPrivilegedAccount(){const role=getCurrentRole();return role==='owner'||role==='admin';}
+function hasBuyerFeatures(){return !!getLoggedAccount();}
 function saveAccountSession(session,user){
   if(session?.access_token)localStorage.setItem(JIMZZ_TOKEN_KEY,session.access_token);
   if(session?.refresh_token)localStorage.setItem(JIMZZ_REFRESH_KEY,session.refresh_token);
-  if(user){accountCache=user;localStorage.setItem(JIMZZ_CACHE_KEY,JSON.stringify(user));localStorage.setItem(JIMZZ_SESSION_KEY,user.username);}
+  if(user){
+    accountCache=user;
+    localStorage.setItem(JIMZZ_CACHE_KEY,JSON.stringify(user));
+    localStorage.setItem(JIMZZ_SESSION_KEY,user.username||'');
+  }
 }
 function clearAccountSession(){
-  accountCache=null;localStorage.removeItem(JIMZZ_TOKEN_KEY);localStorage.removeItem(JIMZZ_REFRESH_KEY);localStorage.removeItem(JIMZZ_CACHE_KEY);localStorage.removeItem(JIMZZ_SESSION_KEY);
+  accountCache=null;
+  localStorage.removeItem(JIMZZ_TOKEN_KEY);
+  localStorage.removeItem(JIMZZ_REFRESH_KEY);
+  localStorage.removeItem(JIMZZ_CACHE_KEY);
+  localStorage.removeItem(JIMZZ_SESSION_KEY);
 }
 async function refreshAccountSession(){
   const refreshToken=getAccountRefreshToken();
@@ -1643,7 +1652,6 @@ async function refreshAccountSession(){
     return true;
   }catch{return false;}
 }
-
 async function accountApi(action,body={},auth=true){
   let token=auth?getAccountToken():'';
   if(auth&&!token&&getAccountRefreshToken()){
@@ -1652,19 +1660,22 @@ async function accountApi(action,body={},auth=true){
   }
   const headers={'Content-Type':'application/json'};
   if(auth&&token)headers.Authorization='Bearer '+token;
-  let res=await fetch(BACKEND_URL+'/api/account',{method:'POST',headers,body:JSON.stringify({action,...body})});
+  let res=await fetch(BACKEND_URL+'/api/account',{
+    method:'POST',headers,body:JSON.stringify({action,...body})
+  });
   let data={};try{data=await res.json();}catch{}
   if(auth&&(res.status===401||res.status===403)&&getAccountRefreshToken()){
     if(await refreshAccountSession()){
       headers.Authorization='Bearer '+getAccountToken();
-      res=await fetch(BACKEND_URL+'/api/account',{method:'POST',headers,body:JSON.stringify({action,...body})});
+      res=await fetch(BACKEND_URL+'/api/account',{
+        method:'POST',headers,body:JSON.stringify({action,...body})
+      });
       data={};try{data=await res.json();}catch{}
     }
   }
   if(!res.ok||!data.success)throw new Error(data.error||'Server error');
   return data;
 }
-
 async function accountFetch(path,options={},auth=true){
   const opts={...options,headers:{...(options.headers||{})}};
   if(auth){
@@ -1821,7 +1832,48 @@ function logoutFromBanScreen(){
   clearAccountSession();hideBanLockScreen();renderCoinBalance();updateAccountUI();applyAdminUI();showToast('Berhasil logout.','info');
 }
 
-function applyAdminUI(){isAdmin=isPrivilegedAccount();const adminPanel=document.getElementById('adminPanelSection');const ownerSection=document.getElementById('ownerAccountsSection');const visitorPanel=document.getElementById('visitorPanelSection');const orderQueue=document.getElementById('orderQueueSection');const statsPanel=document.getElementById('statsPanelSection');const menuTopup=document.getElementById('menuTopup');const info=document.getElementById('topupMaintenanceInfo');const owner=isOwnerAccount();if(isAdmin){if(adminPanel)adminPanel.style.display='block';if(visitorPanel)visitorPanel.style.display='block';if(orderQueue)orderQueue.style.display=owner?'block':'none';if(statsPanel)statsPanel.style.display=owner?'block':'none';if(menuTopup){menuTopup.classList.remove('disabled');menuTopup.classList.add('admin-view');}if(info){info.className='pengumuman admin-preview-info';info.innerHTML='<div class="pengumuman-header" style="justify-content:center;"><span style="font-size:20px;">👑</span><span class="pengumuman-title">MODE ADMIN — TEST ORDER</span></div><p class="pengumuman-text" style="text-align:center;">Kamu bisa <b>test order</b> produk yang masih maintenance.</p>';}loadVisitors();if(owner){loadOrders();loadStats();}}else{if(adminPanel)adminPanel.style.display='none';if(visitorPanel)visitorPanel.style.display='none';if(orderQueue)orderQueue.style.display='none';if(statsPanel)statsPanel.style.display='none';if(menuTopup){menuTopup.classList.add('disabled');menuTopup.classList.remove('admin-view');}if(info){info.className='pengumuman maintenance';info.innerHTML='<div class="pengumuman-header" style="justify-content:center;"><span style="font-size:20px;">🔧</span><span class="pengumuman-title">SEDANG MAINTENANCE</span></div><p class="pengumuman-text" style="text-align:center;">Fitur <b>Top Up Game</b> sedang dalam perbaikan.</p>';}}if(ownerSection){ownerSection.style.display=owner?'block':'none';if(owner)renderAccountManager();}renderGameList();}
+function applyAdminUI(){
+  const role=getCurrentRole();
+  isAdmin=role==='owner'||role==='admin';
+  const adminPanel=document.getElementById('adminPanelSection');
+  const ownerSection=document.getElementById('ownerAccountsSection');
+  const visitorPanel=document.getElementById('visitorPanelSection');
+  const orderQueue=document.getElementById('orderQueueSection');
+  const statsPanel=document.getElementById('statsPanelSection');
+  const menuTopup=document.getElementById('menuTopup');
+  const info=document.getElementById('topupMaintenanceInfo');
+  const owner=role==='owner';
+
+  // Admin/Owner mewarisi semua fitur Buyer/User.
+  if(isAdmin){
+    if(adminPanel)adminPanel.style.display='block';
+    if(visitorPanel)visitorPanel.style.display='block';
+    if(orderQueue)orderQueue.style.display=owner?'block':'none';
+    if(statsPanel)statsPanel.style.display=owner?'block':'none';
+    if(menuTopup){menuTopup.classList.remove('disabled');menuTopup.classList.add('admin-view');}
+    if(info){
+      info.className='pengumuman admin-preview-info';
+      info.innerHTML='<div class="pengumuman-header" style="justify-content:center;"><span style="font-size:20px;">👑</span><span class="pengumuman-title">MODE ADMIN — TEST ORDER</span></div><p class="pengumuman-text" style="text-align:center;">Kamu bisa <b>test order</b> produk yang masih maintenance.</p>';
+    }
+    loadVisitors();
+    if(owner){loadOrders();loadStats();}
+  }else{
+    if(adminPanel)adminPanel.style.display='none';
+    if(visitorPanel)visitorPanel.style.display='none';
+    if(orderQueue)orderQueue.style.display='none';
+    if(statsPanel)statsPanel.style.display='none';
+    if(menuTopup){menuTopup.classList.add('disabled');menuTopup.classList.remove('admin-view');}
+    if(info){
+      info.className='pengumuman maintenance';
+      info.innerHTML='<div class="pengumuman-header" style="justify-content:center;"><span style="font-size:20px;">🔧</span><span class="pengumuman-title">SEDANG MAINTENANCE</span></div><p class="pengumuman-text" style="text-align:center;">Fitur <b>Top Up Game</b> sedang dalam perbaikan.</p>';
+    }
+  }
+  if(ownerSection){
+    ownerSection.style.display=owner?'block':'none';
+    if(owner)renderAccountManager();
+  }
+  renderGameList();
+}
 function handleTopupClick(){if(isAdmin)switchTab('topup');else showToast('Top Up Game sedang MAINTENANCE','warning');}
 
 function openAccountModal(){document.getElementById('accountModal')?.classList.add('show');switchAccountForm('login');}
