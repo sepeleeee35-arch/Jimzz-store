@@ -110,6 +110,10 @@ body::after { content: ""; position: fixed; top: 0; left: 0; width: 100vw; heigh
 .admin-login-box button:hover { transform: scale(1.02); box-shadow: 0 8px 30px rgba(0,255,136,0.5); }
 .admin-login-error { color: #ff6b6b; font-size: 12px; margin-top: 10px; display: none; font-weight: 600; }
 .admin-login-error.show { display: block; }
+
+.jimzz-version-badge{display:inline-flex;align-items:center;gap:7px;margin:8px 0 16px;padding:6px 11px;border:1px solid rgba(0,255,136,.28);border-radius:999px;background:rgba(0,255,136,.06);color:#8a8a8a;font-size:10px;font-weight:700;letter-spacing:.35px;backdrop-filter:blur(8px)}
+.jimzz-version-badge span{color:#00ff88;font-weight:900}
+
 header { text-align: center; padding: 60px 20px 50px; position: relative; z-index: 5; overflow: hidden; }
 header::before { content: ""; position: absolute; top: -50%; left: 50%; transform: translateX(-50%); width: 300%; height: 300%; background: conic-gradient(from 0deg, transparent, rgba(0,255,136,0.12), transparent, rgba(0,255,136,0.06), transparent); animation: rotateBg 20s linear infinite; z-index: -1; }
 @keyframes rotateBg { to { transform: translateX(-50%) rotate(360deg); } }
@@ -604,6 +608,8 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
 
 <div class="tab-page active" id="page-home">
   <header>
+<div class="jimzz-version-badge" aria-label="Versi website">Jimzz Store <span>v3.4.3</span></div>
+
     <h1><span class="gradient-text">Jimzz Store</span></h1><div id="roleBadge" class="role-badge" aria-hidden="true"></div>
     <p class="tagline">Top Up Game, Sosmed & Digital Produk Terlengkap</p>
     <div class="counter"><span class="dot"></span>🔥 <span id="viewCount">1.375</span> orang sudah order</div>
@@ -2683,7 +2689,7 @@ setInterval(() => {
 // ============================================
 // START APP
 // ============================================
-console.log('[Jimzz Store] GUEST MODE build 3.4.0');
+console.log('[Jimzz Store] GUEST MODE build 3.4.3');
 startApp();
 </script>
 </body>
