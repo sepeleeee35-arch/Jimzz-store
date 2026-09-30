@@ -1910,6 +1910,11 @@ async function handleRecoveryLink(){
   }catch(e){showToast(e.message||'Link recovery tidak valid.','error');}
 }
 function startApp() {
+  // Jangan biarkan cache OWNER/ADMIN lama tampil sebagai sesi aktif
+  // jika browser sudah kehilangan kedua token autentikasinya.
+  if(getLoggedAccount() && !getAccountToken() && !getAccountRefreshToken()){
+    clearAccountSession();
+  }
 applyBgMode();
   if (currentBgMode === 'simple') initCanvasSimple(); else initCanvasNeon();
   initCursorGlow();
