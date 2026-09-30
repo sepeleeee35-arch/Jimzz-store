@@ -1384,15 +1384,12 @@ async function completeOrder(orderId) {
   if (!isOwnerAccount()) return showToast('OWNER only', 'error');
   if (!confirm('Yakin mau SELESAIKAN order ' + orderId + '?')) return;
 
-  const token=getAccountToken();
-  if(!token) return showToast('❌ Session OWNER tidak ditemukan. Login ulang.', 'error');
-
   try {
     showToast('⏳ Memproses order + koin...', 'info');
 
     const res = await accountFetch('/api/complete-order', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ orderId: orderId })
     });
 
@@ -1435,7 +1432,7 @@ async function failOrder(orderId) {
   try {
     const res = await accountFetch('/api/fail-order', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + getAccountToken() },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ orderId: orderId })
     });
     const data = await res.json();
