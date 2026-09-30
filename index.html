@@ -487,7 +487,7 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
 <!-- ACCOUNT_DISABLED_2026_09_27 -->
 </head>
 <body>
-<div id="siteVersion">JIMZZ STORE • v3.3.4</div>
+<div id="siteVersion">JIMZZ STORE • v3.3.7</div>
 
 
 <div class="toast-container id="toastContainer"></div>
@@ -946,7 +946,7 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
   <audio id="audioPlayer"></audio>
 </div>
 <script>
-const JIMZZ_VERSION = 'v3.3.4';
+const JIMZZ_VERSION = 'v3.3.7';
 
 // ============================================
 // 🔧 KONFIGURASI
@@ -981,10 +981,12 @@ function isWishlisted(name) { return getWishlist().includes(name); }
 const GUEST_COINS_KEY='jimzz_points';
 function getGuestPoints(){return 0;}
 function getLoggedAccount(){return accountCache||(()=>{try{return JSON.parse(localStorage.getItem(JIMZZ_CACHE_KEY)||'null')}catch{return null}})();}
-function getPoints(){const account=getLoggedAccount();if(account?.role==='owner')return Infinity;if(!account)return 0;return Math.max(0,parseInt(account.coins??0,10)||0);}
-function setPoints(value){const account=getLoggedAccount();if(!account)return 0;if(account.role==='owner')return Infinity;const coins=Math.max(0,Math.floor(Number(value)||0));account.coins=coins;accountCache=account;localStorage.setItem(JIMZZ_CACHE_KEY,JSON.stringify(account));renderCoinBalance();return coins;}
-function addPoints(amount){const account=getLoggedAccount();if(!account||account.role==='owner')return 0;const earned=Math.floor(Number(amount||0)/KOIN_PER_RUPIAH);setPoints(getPoints()+earned);return earned;}
-function renderCoinBalance(){const el=document.getElementById('coinBalance');if(!el)return;const points=getPoints();el.innerText=points===Infinity?'∞':points.toLocaleString('id-ID');}
+function coinBigInt(value){try{return BigInt(String(value ?? '0').trim()||'0');}catch{return 0n;}}
+function formatCoinValue(value){try{return coinBigInt(value).toLocaleString('id-ID');}catch{return '0';}}
+function getPoints(){const account=getLoggedAccount();if(!account)return 0n;if(account.role==='owner')return 0n;return coinBigInt(account.coins);}
+function setPoints(value){const account=getLoggedAccount();if(!account)return 0n;if(account.role==='owner')return 0n;const coins=coinBigInt(value);account.coins=coins.toString();accountCache=account;localStorage.setItem(JIMZZ_CACHE_KEY,JSON.stringify(account));renderCoinBalance();return coins;}
+function addPoints(amount){const account=getLoggedAccount();if(!account||account.role==='owner')return 0;const earned=Math.floor(Number(amount||0)/KOIN_PER_RUPIAH);setPoints(getPoints()+BigInt(earned));return earned;}
+function renderCoinBalance(){const el=document.getElementById('coinBalance');if(!el)return;const account=getLoggedAccount();if(account?.role==='owner'){el.innerText='∞';return;}el.innerText=formatCoinValue(getPoints());}
 function openCoinInfo(){document.getElementById('coinInfoModal')?.classList.add('show');}
 function closeCoinInfo(){document.getElementById('coinInfoModal')?.classList.remove('show');}
 function coinInfoLogin(){closeCoinInfo();openAccountModal();}
@@ -1248,7 +1250,7 @@ async function handleOrderSuccess(orderId, totalBayar, produkNama) {
       if (fresh) {
         saveAccountSession(null, fresh);
         renderCoinBalance();
-        showToast(`🎁 Koin akun diperbarui: ${Number(fresh.coins||0).toLocaleString('id-ID')} koin`, 'success');
+        showToast(`🎁 Koin akun diperbarui: ${formatCoinValue(fresh.coins)} koin`, 'success');
       }
     } else {
       renderCoinBalance();
@@ -1696,9 +1698,9 @@ async function accountFetch(path,options={},auth=true){
   return res;
 }
 function showCoinGiftNotification(amount,sender){
-  amount=Number(amount||0);
-  if(!amount)return;
-  const text='🎁 +'+amount.toLocaleString('id-ID')+' koin dari '+(sender||'Owner');
+  const amountBig=coinBigInt(amount);
+  if(amountBig<=0n)return;
+  const text='🎁 +'+formatCoinValue(amountBig)+' koin dari '+(sender||'Owner');
   showToast(text,'success');
   if(navigator.vibrate)try{navigator.vibrate([120,60,120]);}catch{}
   const existing=document.getElementById('coinGiftPopup');existing?.remove();
@@ -1715,11 +1717,15 @@ async function syncAccountMe(){
   const checkGift=(next)=>{
     const oldId=previous?.lastCoinGift?.id||'';
     const newId=next?.lastCoinGift?.id||'';
-    const oldCoins=Number(previous?.coins||0),newCoins=Number(next?.coins||0);
-    if((newId && newId!==oldId) || newCoins>oldCoins){
-      const amount=newId&&newId!==oldId?Number(next.lastCoinGift.amount||0):newCoins-oldCoins;
-      if(amount>0)showCoinGiftNotification(amount,next.lastCoinGift?.from||'Owner');
+    if(newId && newId!==oldId){
+      const amount=coinBigInt(next.lastCoinGift?.amount);
+      if(amount>0n)showCoinGiftNotification(amount,next.lastCoinGift?.from||'Owner');
+      return;
     }
+    const oldCoins=coinBigInt(previous?.coins);
+    const newCoins=coinBigInt(next?.coins);
+    const diff=newCoins-oldCoins;
+    if(diff>0n)showCoinGiftNotification(diff,next?.lastCoinGift?.from||'Owner');
   };
   try{
     const data=await accountApi('me');
@@ -1756,7 +1762,7 @@ async function renderAccountManager(){
     if(summary)summary.textContent=users.length+' akun terdaftar di server';
     if(select){
       const old=select.value;
-      select.innerHTML='<option value="">Pilih akun penerima...</option>'+users.filter(u=>String(u.role||'user')!=='owner').map(u=>'<option value="'+escapeAccountHtml(u.id)+'">'+escapeAccountHtml(u.username)+' — '+Number(u.coins||0).toLocaleString('id-ID')+' koin</option>').join('');
+      select.innerHTML='<option value="">Pilih akun penerima...</option>'+users.filter(u=>String(u.role||'user')!=='owner').map(u=>'<option value="'+escapeAccountHtml(u.id)+'">'+escapeAccountHtml(u.username)+' — '+formatCoinValue(u.coins)+' koin</option>').join('');
       if(users.some(u=>u.id===old))select.value=old;
     }
     if(!list)return;
@@ -1777,13 +1783,12 @@ async function adjustCoinsToUser(direction){
   if(!isOwnerAccount())return;
   const select=document.getElementById('giftTargetUser'),input=document.getElementById('giftAmount'),msg=document.getElementById('giftCoinsMsg');
   const userId=select?.value||'', raw=String(input?.value||'').replace(/[^0-9]/g,'');
-  const amount=Number(raw);
-  const delta=direction>0?amount:-amount;
+  const delta=(direction>0?'':'-')+raw;
   if(!userId){if(msg){msg.textContent='Pilih akun dulu.';msg.style.color='#ff6b6b';}return;}
-  if(!raw||!Number.isInteger(amount)||!Number.isFinite(amount)||amount<=0){if(msg){msg.textContent='Jumlah koin tidak valid.';msg.style.color='#ff6b6b';}return;}
+  if(!raw||!/^[0-9]+$/.test(raw)||BigInt(raw||'0')<=0n){if(msg){msg.textContent='Jumlah koin tidak valid.';msg.style.color='#ff6b6b';}return;}
   try{
     const data=await accountApi('adjust-coins',{userId,delta});
-    if(msg){msg.textContent=(data.message||'Saldo koin berhasil diubah.')+' Saldo sekarang: '+Number(data.newCoins||0).toLocaleString('id-ID')+' koin.';msg.style.color='#00ff88';}
+    if(msg){msg.textContent=(data.message||'Saldo koin berhasil diubah.')+' Saldo sekarang: '+formatCoinValue(data.newCoins)+' koin.';msg.style.color='#00ff88';}
     if(input)input.value='';
     await renderAccountManager();
     showToast((direction>0?'➕ ':'➖ ')+(direction>0?'Koin ditambahkan.':'Koin dikurangi.'),'success');
@@ -2364,8 +2369,9 @@ function hitungTotal() {
   const maxPotongKoin = subtotal - MIN_BAYAR_QRIS;
   
   let potonganKoin = 0;
-  if (useCoinMode && saldoKoin > 0 && maxPotongKoin > 0) {
-    potonganKoin = Math.min(saldoKoin, maxPotongKoin);
+  if (useCoinMode && saldoKoin > 0n && maxPotongKoin > 0) {
+    const saldoUntukPotongan = saldoKoin > BigInt(maxPotongKoin) ? maxPotongKoin : Number(saldoKoin);
+    potonganKoin = Math.min(saldoUntukPotongan, maxPotongKoin);
     coinDiscountRow.style.display = 'flex';
     coinDiscount.innerText = '-Rp ' + potonganKoin.toLocaleString('id-ID');
   } else {
@@ -2480,7 +2486,10 @@ async function keStep3() {
   if (useCoinMode) {
     const maxPotong = dataPemesan.total - MIN_BAYAR_QRIS;
     if (maxPotong > 0) {
-      potonganKoinActual = Math.min(getPoints(), maxPotong);
+      const saldoKoin = getPoints();
+      potonganKoinActual = saldoKoin > 0n
+        ? Math.min(saldoKoin > BigInt(maxPotong) ? maxPotong : Number(saldoKoin), maxPotong)
+        : 0;
     }
   }
   const totalBayar = dataPemesan.total - potonganKoinActual;
