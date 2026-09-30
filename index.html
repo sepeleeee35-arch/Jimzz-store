@@ -487,7 +487,7 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
 <!-- ACCOUNT_DISABLED_2026_09_27 -->
 </head>
 <body>
-<div id="siteVersion">JIMZZ STORE • v3.3.3</div>
+<div id="siteVersion">JIMZZ STORE • v3.3.4</div>
 
 
 <div class="toast-container id="toastContainer"></div>
@@ -717,7 +717,7 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
         <div class="owner-gift-sub">Kirim koin ke akun USER/ADMIN. Koin owner sendiri tidak terbatas.</div>
         <select id="giftTargetUser" class="owner-gift-input"><option value="">Pilih akun penerima...</option></select>
         <input id="giftAmount" class="owner-gift-input" type="text" inputmode="numeric" autocomplete="off" placeholder="Jumlah koin, contoh 1000000000000000">
-        <button class="owner-gift-button" type="button" onclick="giftCoinsToUser()">🎁 Kirim Koin</button>
+        <button class="owner-gift-button" type="button" onclick="adjustCoinsToUser(1)">➕ Tambah Koin</button><button class="owner-gift-button" type="button" onclick="adjustCoinsToUser(-1)" style="background:linear-gradient(135deg,#ff6b6b,#ff9500);">➖ Kurangi Koin</button>
         <div id="giftCoinsMsg" class="account-msg"></div>
       </div>
       <div id="ownerAccountList" class="owner-account-list"></div>
@@ -946,7 +946,7 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
   <audio id="audioPlayer"></audio>
 </div>
 <script>
-const JIMZZ_VERSION = 'v3.3.3';
+const JIMZZ_VERSION = 'v3.3.4';
 
 // ============================================
 // 🔧 KONFIGURASI
@@ -1772,19 +1772,21 @@ async function renderAccountManager(){
     }).join('');
   }catch(e){if(list)list.innerHTML='<div class="owner-account-empty">Gagal memuat akun: '+escapeAccountHtml(e.message)+'</div>';}
 }
-async function giftCoinsToUser(){
+async function giftCoinsToUser(){ return adjustCoinsToUser(1); }
+async function adjustCoinsToUser(direction){
   if(!isOwnerAccount())return;
   const select=document.getElementById('giftTargetUser'),input=document.getElementById('giftAmount'),msg=document.getElementById('giftCoinsMsg');
   const userId=select?.value||'', raw=String(input?.value||'').replace(/[^0-9]/g,'');
   const amount=Number(raw);
-  if(!userId){if(msg){msg.textContent='Pilih akun penerima dulu.';msg.style.color='#ff6b6b';}return;}
-  if(!raw||!Number.isSafeInteger(amount)||amount<=0){if(msg){msg.textContent='Jumlah koin tidak valid.';msg.style.color='#ff6b6b';}return;}
+  const delta=direction>0?amount:-amount;
+  if(!userId){if(msg){msg.textContent='Pilih akun dulu.';msg.style.color='#ff6b6b';}return;}
+  if(!raw||!Number.isInteger(amount)||!Number.isFinite(amount)||amount<=0){if(msg){msg.textContent='Jumlah koin tidak valid.';msg.style.color='#ff6b6b';}return;}
   try{
-    const data=await accountApi('gift-coins',{userId,amount});
-    if(msg){msg.textContent=(data.message||'Koin berhasil dikirim.')+' Penerima akan menerimanya otomatis tanpa refresh.';msg.style.color='#00ff88';}
+    const data=await accountApi('adjust-coins',{userId,delta});
+    if(msg){msg.textContent=(data.message||'Saldo koin berhasil diubah.')+' Saldo sekarang: '+Number(data.newCoins||0).toLocaleString('id-ID')+' koin.';msg.style.color='#00ff88';}
     if(input)input.value='';
     await renderAccountManager();
-    showToast('🎁 Koin berhasil dikirim.','success');
+    showToast((direction>0?'➕ ':'➖ ')+(direction>0?'Koin ditambahkan.':'Koin dikurangi.'),'success');
   }catch(e){if(msg){msg.textContent=e.message;msg.style.color='#ff6b6b';}}
 }
 async function setAccountRole(userId,role){
