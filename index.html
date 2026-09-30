@@ -1110,9 +1110,9 @@ let salesChartInstance = null;
 async function loadStats() {
   if (!isOwnerAccount()) return;
   try {
-    const res = await fetch(BACKEND_URL + '/api/stats', { headers: { Authorization: 'Bearer ' + getAccountToken() } });
+    const res = await accountFetch('/api/stats', { headers: {} });
     const data = await res.json();
-    if (!data.success) return;
+    if (!res.ok || !data.success) throw new Error(data.error || data.detail || ('HTTP '+res.status));
     document.getElementById('statsRevenue').innerText = 'Rp ' + (data.summary.totalRevenue || 0).toLocaleString('id-ID');
     document.getElementById('statsSuccess').innerText = data.summary.totalSuccess || 0;
     document.getElementById('statsPending').innerText = data.summary.totalPending || 0;
@@ -1176,9 +1176,9 @@ async function pingVisitor() {
 async function loadVisitors() {
   if (!isPrivilegedAccount()) return;
   try {
-    const res = await fetch(BACKEND_URL + '/api/visitors', { headers: { Authorization: 'Bearer ' + getAccountToken() } });
+    const res = await accountFetch('/api/visitors', { headers: {} });
     const data = await res.json();
-    if (!data.success) return;
+    if (!res.ok || !data.success) throw new Error(data.error || data.detail || ('HTTP '+res.status));
     document.getElementById('visitorOnline').innerText = data.onlineCount || 0;
     document.getElementById('visitorToday').innerText = data.todayCount || 0;
     document.getElementById('visitorTotal').innerText = data.totalCount || 0;
@@ -1347,9 +1347,11 @@ function startBackgroundPolling() {
 async function loadOrders() {
   if (!isOwnerAccount()) return;
   try {
-    const res = await fetch(BACKEND_URL + '/api/orders-list', { headers: { Authorization: 'Bearer ' + getAccountToken() } });
+    const res = await accountFetch('/api/orders-list', { headers: {} });
     const data = await res.json();
-    if (!data.success) return;
+    if (!res.ok || !data.success) {
+      throw new Error(data.error || data.detail || ('HTTP '+res.status));
+    }
     const listEl = document.getElementById('orderQueueList');
     const pending = (data.orders || []).filter(o => o.status === 'pending');
     if (pending.length === 0) { listEl.innerHTML = '<div class="order-queue-empty">Belum ada order pending</div>'; return; }
@@ -1388,7 +1390,7 @@ async function completeOrder(orderId) {
   try {
     showToast('⏳ Memproses order + koin...', 'info');
 
-    const res = await fetch(BACKEND_URL + '/api/complete-order', {
+    const res = await accountFetch('/api/complete-order', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
       body: JSON.stringify({ orderId: orderId })
@@ -1428,10 +1430,10 @@ async function completeOrder(orderId) {
   }
 }
 async function failOrder(orderId) {
-  if (!isPrivilegedAccount()) return showToast('OWNER/ADMIN only', 'error');
+  if (!isOwnerAccount()) return showToast('OWNER only', 'error');
   if (!confirm('Yakin mau tandai GAGAL order ' + orderId + '?')) return;
   try {
-    const res = await fetch(BACKEND_URL + '/api/fail-order', {
+    const res = await accountFetch('/api/fail-order', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + getAccountToken() },
       body: JSON.stringify({ orderId: orderId })
@@ -1629,13 +1631,61 @@ function saveAccountSession(session,user){
 function clearAccountSession(){
   accountCache=null;localStorage.removeItem(JIMZZ_TOKEN_KEY);localStorage.removeItem(JIMZZ_REFRESH_KEY);localStorage.removeItem(JIMZZ_CACHE_KEY);localStorage.removeItem(JIMZZ_SESSION_KEY);
 }
+async function refreshAccountSession(){
+  const refreshToken=getAccountRefreshToken();
+  if(!refreshToken)return false;
+  try{
+    const res=await fetch(BACKEND_URL+'/api/account',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({action:'refresh',refreshToken})
+    });
+    let data={};try{data=await res.json();}catch{}
+    if(!res.ok||!data.success||!data.session)return false;
+    saveAccountSession(data.session,data.user);
+    return true;
+  }catch{return false;}
+}
+
 async function accountApi(action,body={},auth=true){
+  let token=auth?getAccountToken():'';
+  if(auth&&!token&&getAccountRefreshToken()){
+    await refreshAccountSession();
+    token=getAccountToken();
+  }
   const headers={'Content-Type':'application/json'};
-  if(auth&&getAccountToken())headers.Authorization='Bearer '+getAccountToken();
-  const res=await fetch(BACKEND_URL+'/api/account',{method:'POST',headers,body:JSON.stringify({action,...body})});
+  if(auth&&token)headers.Authorization='Bearer '+token;
+  let res=await fetch(BACKEND_URL+'/api/account',{method:'POST',headers,body:JSON.stringify({action,...body})});
   let data={};try{data=await res.json();}catch{}
+  if(auth&&(res.status===401||res.status===403)&&getAccountRefreshToken()){
+    if(await refreshAccountSession()){
+      headers.Authorization='Bearer '+getAccountToken();
+      res=await fetch(BACKEND_URL+'/api/account',{method:'POST',headers,body:JSON.stringify({action,...body})});
+      data={};try{data=await res.json();}catch{}
+    }
+  }
   if(!res.ok||!data.success)throw new Error(data.error||'Server error');
   return data;
+}
+
+async function accountFetch(path,options={},auth=true){
+  const opts={...options,headers:{...(options.headers||{})}};
+  if(auth){
+    let token=getAccountToken();
+    if(!token&&getAccountRefreshToken()){
+      await refreshAccountSession();
+      token=getAccountToken();
+    }
+    if(token)opts.headers.Authorization='Bearer '+token;
+  }
+  let res=await fetch(BACKEND_URL+path,opts);
+  if(auth&&(res.status===401||res.status===403)&&getAccountRefreshToken()){
+    if(await refreshAccountSession()){
+      opts.headers.Authorization='Bearer '+getAccountToken();
+      res=await fetch(BACKEND_URL+path,opts);
+    }
+  }
+  return res;
 }
 function showCoinGiftNotification(amount,sender){
   amount=Number(amount||0);
