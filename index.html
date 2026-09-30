@@ -1345,7 +1345,7 @@ function startBackgroundPolling() {
 // ADMIN ORDER QUEUE
 // ============================================
 async function loadOrders() {
-  if (!isPrivilegedAccount()) return;
+  if (!isOwnerAccount()) return;
   try {
     const res = await fetch(BACKEND_URL + '/api/orders-list', { headers: { Authorization: 'Bearer ' + getAccountToken() } });
     const data = await res.json();
@@ -1379,7 +1379,7 @@ async function loadOrders() {
   }
 }
 async function completeOrder(orderId) {
-  if (!isPrivilegedAccount()) return showToast('OWNER/ADMIN only', 'error');
+  if (!isOwnerAccount()) return showToast('OWNER only', 'error');
   if (!confirm('Yakin mau SELESAIKAN order ' + orderId + '?')) return;
 
   const token=getAccountToken();
@@ -1450,7 +1450,7 @@ async function failOrder(orderId) {
     }
   } catch (err) { showToast('Error: ' + err.message, 'error'); }
 }
-setInterval(() => { if (isPrivilegedAccount() && document.getElementById('orderQueueSection')?.style.display !== 'none') loadOrders(); }, 10000);
+setInterval(() => { if (isOwnerAccount() && document.getElementById('orderQueueSection')?.style.display !== 'none') loadOrders(); }, 10000);
 setInterval(() => { if (isOwnerAccount() && document.getElementById('statsPanelSection')?.style.display !== 'none') loadStats(); }, 30000);
 
 // ============================================
@@ -1774,7 +1774,7 @@ function logoutFromBanScreen(){
   clearAccountSession();hideBanLockScreen();renderCoinBalance();updateAccountUI();applyAdminUI();showToast('Berhasil logout.','info');
 }
 
-function applyAdminUI(){isAdmin=isPrivilegedAccount();const adminPanel=document.getElementById('adminPanelSection');const ownerSection=document.getElementById('ownerAccountsSection');const visitorPanel=document.getElementById('visitorPanelSection');const orderQueue=document.getElementById('orderQueueSection');const statsPanel=document.getElementById('statsPanelSection');const menuTopup=document.getElementById('menuTopup');const info=document.getElementById('topupMaintenanceInfo');const owner=isOwnerAccount();if(isAdmin){if(adminPanel)adminPanel.style.display='block';if(visitorPanel)visitorPanel.style.display='block';if(orderQueue)orderQueue.style.display=isAdmin?'block':'none';if(statsPanel)statsPanel.style.display=owner?'block':'none';if(menuTopup){menuTopup.classList.remove('disabled');menuTopup.classList.add('admin-view');}if(info){info.className='pengumuman admin-preview-info';info.innerHTML='<div class="pengumuman-header" style="justify-content:center;"><span style="font-size:20px;">👑</span><span class="pengumuman-title">MODE ADMIN — TEST ORDER</span></div><p class="pengumuman-text" style="text-align:center;">Kamu bisa <b>test order</b> produk yang masih maintenance.</p>';}loadVisitors();if(isAdmin){loadOrders();} if(owner){loadStats();}}else{if(adminPanel)adminPanel.style.display='none';if(visitorPanel)visitorPanel.style.display='none';if(orderQueue)orderQueue.style.display='none';if(statsPanel)statsPanel.style.display='none';if(menuTopup){menuTopup.classList.add('disabled');menuTopup.classList.remove('admin-view');}if(info){info.className='pengumuman maintenance';info.innerHTML='<div class="pengumuman-header" style="justify-content:center;"><span style="font-size:20px;">🔧</span><span class="pengumuman-title">SEDANG MAINTENANCE</span></div><p class="pengumuman-text" style="text-align:center;">Fitur <b>Top Up Game</b> sedang dalam perbaikan.</p>';}}if(ownerSection){ownerSection.style.display=owner?'block':'none';if(owner)renderAccountManager();}renderGameList();}
+function applyAdminUI(){isAdmin=isPrivilegedAccount();const adminPanel=document.getElementById('adminPanelSection');const ownerSection=document.getElementById('ownerAccountsSection');const visitorPanel=document.getElementById('visitorPanelSection');const orderQueue=document.getElementById('orderQueueSection');const statsPanel=document.getElementById('statsPanelSection');const menuTopup=document.getElementById('menuTopup');const info=document.getElementById('topupMaintenanceInfo');const owner=isOwnerAccount();if(isAdmin){if(adminPanel)adminPanel.style.display='block';if(visitorPanel)visitorPanel.style.display='block';if(orderQueue)orderQueue.style.display=owner?'block':'none';if(statsPanel)statsPanel.style.display=owner?'block':'none';if(menuTopup){menuTopup.classList.remove('disabled');menuTopup.classList.add('admin-view');}if(info){info.className='pengumuman admin-preview-info';info.innerHTML='<div class="pengumuman-header" style="justify-content:center;"><span style="font-size:20px;">👑</span><span class="pengumuman-title">MODE ADMIN — TEST ORDER</span></div><p class="pengumuman-text" style="text-align:center;">Kamu bisa <b>test order</b> produk yang masih maintenance.</p>';}loadVisitors();if(owner){loadOrders();loadStats();}}else{if(adminPanel)adminPanel.style.display='none';if(visitorPanel)visitorPanel.style.display='none';if(orderQueue)orderQueue.style.display='none';if(statsPanel)statsPanel.style.display='none';if(menuTopup){menuTopup.classList.add('disabled');menuTopup.classList.remove('admin-view');}if(info){info.className='pengumuman maintenance';info.innerHTML='<div class="pengumuman-header" style="justify-content:center;"><span style="font-size:20px;">🔧</span><span class="pengumuman-title">SEDANG MAINTENANCE</span></div><p class="pengumuman-text" style="text-align:center;">Fitur <b>Top Up Game</b> sedang dalam perbaikan.</p>';}}if(ownerSection){ownerSection.style.display=owner?'block':'none';if(owner)renderAccountManager();}renderGameList();}
 function handleTopupClick(){if(isAdmin)switchTab('topup');else showToast('Top Up Game sedang MAINTENANCE','warning');}
 
 function openAccountModal(){document.getElementById('accountModal')?.classList.add('show');switchAccountForm('login');}
