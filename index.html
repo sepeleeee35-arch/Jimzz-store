@@ -531,6 +531,29 @@ header .coin-display { align-items:center; justify-content:center; flex-wrap:wra
 .order-history-notice{padding:12px 14px;margin:12px 0;border:1px solid rgba(0,200,255,.25);border-radius:12px;background:rgba(0,200,255,.06);color:#b8dce4;font-size:12px;line-height:1.6}.order-history-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:22px 0 12px;color:#aaa;font-size:12px;font-weight:700}.order-history-toolbar button{padding:8px 12px;border:1px solid rgba(0,255,136,.35);border-radius:9px;background:rgba(0,255,136,.07);color:#00ff88;font-weight:800;cursor:pointer}.order-history-list{display:flex;flex-direction:column;gap:12px}.order-history-card{padding:15px;border:1px solid #1f3428;border-radius:15px;background:#090e0b}.order-history-card.status-success{border-color:rgba(0,255,136,.38)}.order-history-card.status-cancel,.order-history-card.status-failed,.order-history-card.status-cancelled{border-color:rgba(255,70,70,.3)}.order-history-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px}.order-history-id{font-family:monospace;font-size:11px;font-weight:900;color:#00ff88;overflow-wrap:anywhere}.order-history-status{flex-shrink:0;padding:4px 8px;border:1px solid #5a4622;border-radius:7px;background:rgba(255,170,0,.1);color:#ffc35a;font-size:9px;font-weight:900}.order-history-status.success{border-color:rgba(0,255,136,.3);background:rgba(0,255,136,.08);color:#00ff88}.order-history-status.cancel,.order-history-status.failed,.order-history-status.cancelled{border-color:rgba(255,80,80,.3);background:rgba(255,70,70,.08);color:#ff8585}.order-history-detail{color:#9ca8a0;font-size:11px;line-height:1.8}.order-history-detail b{color:#e8eee9}.order-history-actions{display:flex;gap:8px;margin-top:12px}.order-history-cancel{width:100%;padding:10px 12px;border:1px solid rgba(255,80,80,.35);border-radius:10px;background:rgba(255,60,60,.08);color:#ff9292;font-size:11px;font-weight:800;cursor:pointer}.order-history-hint{margin-top:10px;color:#87938a;font-size:10px;line-height:1.6}.order-history-empty{padding:28px 15px;text-align:center;border:1px dashed #26372d;border-radius:14px;color:#78837b;font-size:12px}
 @media(max-width:520px){.jimzz-topbar{height:52px;min-height:52px;gap:11px;padding-left:14px;padding-right:12px}.jimzz-menu-trigger{flex-basis:24px;width:24px;height:30px}.jimzz-menu-trigger span{width:21px}.jimzz-topbar-title{font-size:17px}header{padding-top:18px}}
 
+
+/* Account settings is a full-page view, not a floating modal */
+#accountSettingsModal.show{display:block!important;position:fixed;inset:0;z-index:10050;background:#070b09;overflow-y:auto;padding:0;backdrop-filter:none}
+#accountSettingsModal .account-settings-page{box-sizing:border-box;min-height:100dvh;width:100%;max-width:none;margin:0;padding:0 0 36px;background:#070b09;color:#eef7f0;border:0;border-radius:0;box-shadow:none;overflow:visible}
+#accountSettingsModal .account-settings-header{position:sticky;top:0;z-index:3;display:flex;align-items:center;gap:14px;padding:16px clamp(16px,4vw,30px);background:rgba(7,11,9,.96);border-bottom:1px solid #20392b;backdrop-filter:blur(14px)}
+#accountSettingsModal .account-settings-back{width:42px;height:42px;flex:0 0 42px;border:1px solid #284a36;border-radius:14px;background:#101a14;color:#eafff0;font-size:26px;cursor:pointer}
+#accountSettingsModal .account-settings-heading{font-size:21px;font-weight:850;line-height:1.2}
+#accountSettingsModal .account-settings-caption{font-size:12px;color:#91aa99;margin-top:4px}
+#accountSettingsModal .account-settings-content{width:min(760px,100%);margin:0 auto;padding:22px clamp(14px,4vw,26px)}
+#accountSettingsModal .account-settings-profile{display:flex;align-items:center;gap:14px;padding:18px;border:1px solid #28523a;border-radius:18px;background:linear-gradient(120deg,#10231a,#0b100d);margin-bottom:20px}
+#accountSettingsModal .account-settings-profile-icon{width:54px;height:54px;display:grid;place-items:center;border-radius:16px;background:#173a28;border:1px solid #3a9c67;font-size:27px}
+#accountSettingsModal .account-settings-section{padding:18px;margin:14px 0;border:1px solid #1e3527;border-radius:18px;background:#0b100d}
+#accountSettingsModal .account-settings-section h3{font-size:15px;margin:0 0 6px;color:#e5f7eb}
+#accountSettingsModal .account-settings-section p{font-size:12px;line-height:1.5;color:#8fa396;margin:0 0 15px}
+#accountSettingsModal .account-settings-section .form-box{margin:12px 0}
+#accountSettingsModal .account-settings-section .form-box label{color:#b7cbbb}
+#accountSettingsModal .account-settings-section input{box-sizing:border-box;width:100%;min-height:45px}
+#accountSettingsModal .account-settings-section .btn-next{width:100%;margin-top:8px}
+#accountSettingsModal .account-settings-danger{border-color:#57302d;background:#160d0c}
+#accountSettingsModal .account-settings-logout{width:100%;min-height:46px;border:1px solid #a74740;border-radius:12px;background:#351715;color:#ffe9e6;font-weight:800;font-size:14px;cursor:pointer}
+#accountSettingsModal .account-settings-logout:active{transform:scale(.99)}
+@media(min-width:760px){#accountSettingsModal .account-settings-content{padding-top:30px}}
+
 </style>
 <!-- ACCOUNT_DISABLED_2026_09_27 -->
 </head>
@@ -600,24 +623,45 @@ header .coin-display { align-items:center; justify-content:center; flex-wrap:wra
   </div>
 </div>
 
-<div class="modal-overlay" id="accountSettingsModal" onclick="if(event.target===this)closeAccountSettings()">
-  <div class="modal-box" style="max-width:520px;">
-    <button class="modal-close" onclick="closeAccountSettings()">×</button>
-    <div class="modal-title-block"><div class="modal-label">AKUN</div><div class="modal-title">⚙️ Pengaturan Akun</div><div class="modal-subtitle">Kelola email, nomor telepon, dan password.</div></div>
-    <form onsubmit="event.preventDefault();saveAccountContact()">
-      <div class="form-box"><label>📧 Email</label><input id="accountEmail" type="email" required></div>
-      <div class="form-box"><label>📱 Nomor Telepon <span style="color:#777;">(opsional)</span></label><input id="accountPhone" type="tel" placeholder="08xxxxxxxxxx"></div>
-      <button class="btn-next" type="submit">💾 Simpan Kontak</button>
-      <div class="account-msg" id="contactMsg"></div>
-    </form>
-    <hr style="border:0;border-top:1px solid rgba(255,255,255,.08);margin:18px 0;">
-    <form onsubmit="event.preventDefault();changeAccountPassword()">
-      <div class="form-box"><label>🔒 Password Saat Ini</label><input id="currentAccountPassword" type="password" required></div>
-      <div class="form-box"><label>🔐 Password Baru</label><input id="newAccountPassword" type="password" minlength="8" required></div>
-      <div class="form-box"><label>🔐 Ulangi Password Baru</label><input id="newAccountPassword2" type="password" minlength="8" required></div>
-      <button class="btn-next" type="submit">🔑 Ganti Password</button>
-      <div class="account-msg" id="passwordMsg"></div>
-    </form>
+<div class="modal-overlay" id="accountSettingsModal" aria-label="Pengaturan akun">
+  <div class="account-settings-page">
+    <header class="account-settings-header">
+      <button class="account-settings-back" type="button" aria-label="Kembali" onclick="closeAccountSettings()">‹</button>
+      <div><div class="account-settings-heading">Pengaturan Akun</div><div class="account-settings-caption">Kelola profil dan keamanan akunmu</div></div>
+    </header>
+    <main class="account-settings-content">
+      <div class="account-settings-profile">
+        <div class="account-settings-profile-icon" id="settingsProfileIcon">👤</div>
+        <div><div id="settingsProfileName" style="font-size:17px;font-weight:850;">Akun Jimzz Store</div><div id="settingsProfileRole" style="font-size:12px;color:#8fb99c;margin-top:4px;">Pengaturan profil</div></div>
+      </div>
+      <section class="account-settings-section">
+        <h3>📇 Informasi kontak</h3><p>Tambahkan atau perbarui email dan nomor WhatsApp yang bisa kamu hubungi.</p>
+        <form onsubmit="event.preventDefault();saveAccountContact()">
+          <div class="form-box"><label>📧 Email / Gmail</label><input id="accountEmail" type="email" required autocomplete="email" placeholder="nama@gmail.com"></div>
+          <div class="form-box"><label>💬 Nomor WhatsApp</label><input id="accountPhone" type="tel" autocomplete="tel" placeholder="08xxxxxxxxxx"></div>
+          <button class="btn-next" type="submit">💾 Simpan informasi kontak</button>
+          <div class="account-msg" id="contactMsg" role="status"></div>
+        </form>
+      </section>
+      <section class="account-settings-section">
+        <h3>🔐 Keamanan akun</h3><p>Gunakan password yang kuat dan jangan bagikan kepada siapa pun.</p>
+        <form onsubmit="event.preventDefault();changeAccountPassword()">
+          <div class="form-box"><label>Password saat ini</label><input id="currentAccountPassword" type="password" required autocomplete="current-password"></div>
+          <div class="form-box"><label>Password baru</label><input id="newAccountPassword" type="password" minlength="8" required autocomplete="new-password"></div>
+          <div class="form-box"><label>Ulangi password baru</label><input id="newAccountPassword2" type="password" minlength="8" required autocomplete="new-password"></div>
+          <button class="btn-next" type="submit">🔑 Ganti password</button>
+          <div class="account-msg" id="passwordMsg" role="status"></div>
+        </form>
+      </section>
+      <section class="account-settings-section">
+        <h3>🛡️ Privasi dan akun</h3><p>Jangan berikan kode OTP atau password kepada orang lain. Pastikan kamu logout jika memakai perangkat bersama.</p>
+        <button type="button" class="btn-next" style="width:100%;" onclick="showToast('Pastikan email dan nomor WhatsApp yang kamu simpan masih aktif.','info')">ℹ️ Tips keamanan</button>
+      </section>
+      <section class="account-settings-section account-settings-danger">
+        <h3>Keluar dari akun</h3><p>Sesi akun di perangkat ini akan dihapus. Kamu bisa login kembali kapan saja.</p>
+        <button type="button" class="account-settings-logout" onclick="logoutFromAccountSettings()">↪ Logout akun</button>
+      </section>
+    </main>
   </div>
 </div>
 
@@ -2048,16 +2092,22 @@ async function verifyPhoneReset(){
 }
 function openAccountSettings(){
   const u=getLoggedAccount();if(!u)return;
-  document.getElementById('accountSettingsModal')?.classList.add('show');
+  const modal=document.getElementById('accountSettingsModal');modal?.classList.add('show');
   document.getElementById('accountEmail').value=u.email||'';
   document.getElementById('accountPhone').value=u.phone||'';
+  const role=u.role||'user',name=role==='owner'?'Jimzz':(u.username||'pengguna');
+  const nameEl=document.getElementById('settingsProfileName'),roleEl=document.getElementById('settingsProfileRole'),iconEl=document.getElementById('settingsProfileIcon');
+  if(nameEl)nameEl.textContent=name;if(roleEl)roleEl.textContent=role==='owner'?'Developer':role==='admin'?'Admin':'User';if(iconEl)iconEl.textContent=role==='owner'?'👑':role==='admin'?'⭐':'👤';
+  document.body.style.overflow='hidden';
 }
+function logoutFromAccountSettings(){closeAccountSettings();accountLogout();}
+
 function openSettingsFromMenu(){
   toggleJimzzMenu(false);
   if(!getLoggedAccount()){openAccountModal();showToast('Login dulu untuk membuka pengaturan akun.','info');return;}
   openAccountSettings();
 }
-function closeAccountSettings(){document.getElementById('accountSettingsModal')?.classList.remove('show');}
+function closeAccountSettings(){document.getElementById('accountSettingsModal')?.classList.remove('show');document.body.style.overflow='';}
 async function saveAccountContact(){
   const email=document.getElementById('accountEmail').value.trim(),phone=document.getElementById('accountPhone').value.trim(),msg=document.getElementById('contactMsg');
   try{const data=await accountApi('update-contact',{email,phone});saveAccountSession(null,data.user);msg.textContent=data.message||'Kontak diperbarui.';msg.style.color='#00ff88';}
@@ -2070,7 +2120,7 @@ async function changeAccountPassword(){
   catch(e){msg.textContent=e.message;msg.style.color='#ff6b6b';}
 }
 async function accountLogout(){clearAccountSession();renderCoinBalance();updateAccountUI();applyAdminUI();showToast('Berhasil logout','info');}
-function updateAccountUI(){const user=getLoggedAccount(),btn=document.getElementById('accountButton'),profile=document.getElementById('accountProfile'),nameEl=document.getElementById('accountName'),roleEl=document.getElementById('accountRole');if(btn){btn.classList.add('account-hidden');btn.style.display='none';}if(profile){profile.classList.remove('show');profile.style.display='none';}if(nameEl)nameEl.textContent=user?.username||'';if(roleEl){const r=user?.role||'user';roleEl.textContent=r==='owner'?'Jimzz':r==='admin'?'ADMIN':'';roleEl.className='account-role '+r;roleEl.style.display='none';}const role=user?.role||'user',name=user?(role==='owner'?'Jimzz':(user.username||'pengguna')):'Guest',greeting=document.getElementById('jimzzSummaryGreeting'),sub=document.getElementById('jimzzSummarySub'),roleline=document.getElementById('jimzzSummaryRoleline'),avatar=document.getElementById('jimzzSummaryAvatar'),login=document.getElementById('jimzzSummaryLogin');if(greeting){const safeName=escapeAccountHtml(name);const mark=role==='user'?(user?'<span class="jimzz-user-star" aria-label="User">⭐</span>':''):(role==='admin'||role==='owner')?'<span class="jimzz-verified-mark" aria-label="Verified"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#1D9BF0" d="M12 1.8l2.6 1.55 3.02-.15 1.33 2.72 2.72 1.33-.15 3.02L23.1 13l-1.55 2.6.15 3.02-2.72 1.33-1.33 2.72-3.02-.15L12 24.1l-2.6-1.55-3.02.15-1.33-2.72-2.72-1.33.15-3.02L.9 13l1.55-2.6-.15-3.02 2.72-1.33 1.33-2.72 3.02.15L12 1.8z"/><path fill="#fff" d="M10.1 15.9 6.7 12.5l1.6-1.6 1.8 1.8 5-5 1.6 1.6z"/></svg></span>':'';greeting.innerHTML=safeName+mark;}if(sub)sub.textContent='Welcome to Jimzz store';if(roleline){roleline.textContent=role==='admin'?'Admin':role==='owner'?'Developer':'User';roleline.style.display=user?'inline-flex':'none';roleline.className='jimzz-account-roleline role-'+role;}if(avatar){avatar.textContent=role==='owner'?'👑':role==='admin'?'🛡️':'👤';avatar.className='jimzz-account-avatar role-'+(role==='owner'?'owner':role==='admin'?'admin':'user');}if(login)login.style.display=user?'none':'inline-flex';updateRoleBadge(role);renderCoinBalance();renderCoinHeaderToggle();}
+function updateAccountUI(){const user=getLoggedAccount(),btn=document.getElementById('accountButton'),profile=document.getElementById('accountProfile'),nameEl=document.getElementById('accountName'),roleEl=document.getElementById('accountRole');if(btn){btn.classList.add('account-hidden');btn.style.display='none';}if(profile){profile.classList.remove('show');profile.style.display='none';}if(nameEl)nameEl.textContent=user?.username||'';if(roleEl){const r=user?.role||'user';roleEl.textContent=r==='owner'?'Jimzz':r==='admin'?'ADMIN':'';roleEl.className='account-role '+r;roleEl.style.display='none';}const role=user?.role||'user',name=user?(role==='owner'?'Jimzz':(user.username||'pengguna')):'Guest',greeting=document.getElementById('jimzzSummaryGreeting'),sub=document.getElementById('jimzzSummarySub'),roleline=document.getElementById('jimzzSummaryRoleline'),avatar=document.getElementById('jimzzSummaryAvatar'),login=document.getElementById('jimzzSummaryLogin');if(greeting){const safeName=escapeAccountHtml(name);const mark=role==='user'?(user?'<span class="jimzz-user-star" aria-label="User">⭐</span>':''):(role==='admin'||role==='owner')?'<span class="jimzz-verified-mark" aria-label="Verified"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#1D9BF0" d="M12 1.8l2.6 1.55 3.02-.15 1.33 2.72 2.72 1.33-.15 3.02L23.1 13l-1.55 2.6.15 3.02-2.72 1.33-1.33 2.72-3.02-.15L12 24.1l-2.6-1.55-3.02.15-1.33-2.72-2.72-1.33.15-3.02L.9 13l1.55-2.6-.15-3.02 2.72-1.33 1.33-2.72 3.02.15L12 1.8z"/><path fill="#fff" d="M10.1 15.9 6.7 12.5l1.6-1.6 1.8 1.8 5-5 1.6 1.6z"/></svg></span>':'';greeting.innerHTML=safeName+mark;}if(sub)sub.textContent='Welcome to Jimzz store';if(roleline){roleline.textContent=role==='admin'?'Admin':role==='owner'?'Developer':'User';roleline.style.display=user?'inline-flex':'none';roleline.className='jimzz-account-roleline role-'+role;}if(avatar){avatar.textContent=role==='owner'?'👑':role==='admin'?'⭐':'👤';avatar.className='jimzz-account-avatar role-'+(role==='owner'?'owner':role==='admin'?'admin':'user');}if(login)login.style.display=user?'none':'inline-flex';updateRoleBadge(role);renderCoinBalance();renderCoinHeaderToggle();}
 function updateRoleBadge(role){const badge=document.getElementById('roleBadge');if(!badge)return;badge.innerHTML='';badge.className='role-badge';}
 window.addEventListener('storage',e=>{if([JIMZZ_SESSION_KEY,JIMZZ_CACHE_KEY,GUEST_COINS_KEY].includes(e.key)){accountCache=null;updateAccountUI();renderCoinBalance();applyAdminUI();}});
 async function handleRecoveryLink(){
