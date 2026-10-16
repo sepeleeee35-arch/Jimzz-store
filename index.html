@@ -12,13 +12,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
 * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter','Segoe UI',Arial,sans-serif; -webkit-tap-highlight-color:transparent; }
-body { background: #030306; color: #e6e6e6; line-height: 1.6; padding-bottom: 100px; overflow-x: hidden; scrollbar-width: thin; scrollbar-color: #00ff88 #030306; }
+body { background: #000000; color: #e6e6e6; line-height: 1.6; padding-bottom: 100px; overflow-x: hidden; scrollbar-width: thin; scrollbar-color: #00ff88 #000000; }
 body::-webkit-scrollbar { width: 8px; }
-body::-webkit-scrollbar-track { background: #030306; }
+body::-webkit-scrollbar-track { background: #000000; }
 body::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #00ff88, #00cc6a); border-radius: 4px; }
 body::-webkit-scrollbar-thumb:hover { background: #00ff88; }
-body::after { content: ""; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none; background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(0, 255, 136, 0.04), transparent 40%); transition: background 0.3s ease; }
-#bgContainer { position: fixed; top:0; left:0; width:100vw; height:100vh; z-index:-2; pointer-events:none; overflow:hidden; }
+body::after { content: ""; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none; background: none; transition: none; }
+#bgContainer { display: none !important; position: fixed; top:0; left:0; width:100vw; height:100vh; z-index:-2; pointer-events:none; overflow:hidden; }
 #bgSimple { position: absolute; inset:0; display: block; }
 #jimzz-neon-bg { position: absolute; top:0; left:0; width:100%; height:100%; }
 #bgNeon { position: absolute; inset:0; display: none; overflow: hidden; background: radial-gradient(ellipse at 50% 100%, #064c35 0%, #02281d 28%, #010806 75%); }
@@ -633,11 +633,7 @@ footer { text-align: center; padding: 35px 20px; color: #444; font-size: 12px; b
     </div>
     <div>
       </div>
-    <button class="bg-toggle" id="bgToggle" onclick="toggleBgMode()">
-      <span class="bg-icon">🎨</span>
-      <span>Background</span>
-      <span class="mode-label" id="bgModeLabel">SIMPLE</span>
-    </button>
+
   </header>
 
   <section class="kategori" id="statsPanelSection" style="display:none;">
