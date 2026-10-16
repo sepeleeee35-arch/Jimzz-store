@@ -2830,8 +2830,7 @@ async function loadMyOrderHistory(){
  if(!getLoggedAccount()){list.innerHTML='<div class="order-history-empty">Login dulu untuk melihat riwayat order.</div>';return;}
  list.innerHTML='<div class="order-history-empty">Memuat riwayat order...</div>';
  try{
-  const res=await accountFetch('/api/my-orders',{method:'GET'}),data=await res.json();
-  if(!res.ok||!data.success)throw new Error(data.error||'Gagal memuat riwayat order.');
+  const data=await accountApi('my-orders');
   renderMyOrderHistory(Array.isArray(data.orders)?data.orders:[]);
  }catch(error){list.innerHTML='<div class="order-history-empty" style="color:#ff8585;">'+escapeAccountHtml(error.message||'Gagal memuat riwayat order.')+'<br><button type="button" style="margin-top:12px;padding:9px 12px;border:1px solid #34513e;border-radius:9px;background:#101812;color:#00ff88;font-weight:800;" onclick="loadMyOrderHistory()">Coba lagi</button></div>';}
 }
@@ -2839,8 +2838,7 @@ async function cancelMyOrder(orderId){
  if(!getLoggedAccount()){showToast('Login diperlukan.','warning');return;}
  if(!confirm('Batalkan order '+orderId+'? Pembatalan hanya bisa dilakukan jika status masih pending dan sudah lewat 6 jam.'))return;
  try{
-  const res=await accountFetch('/api/my-orders',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({orderId})}),data=await res.json();
-  if(!res.ok||!data.success)throw new Error(data.error||'Order gagal dibatalkan.');
+  const data=await accountApi('cancel-my-order',{orderId});
   showToast(data.message||'Order berhasil dibatalkan.','success');await loadMyOrderHistory();
  }catch(error){showToast(error.message||'Gagal membatalkan order.','error');}
 }
