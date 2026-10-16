@@ -1400,7 +1400,11 @@ async function loadOrders() {
   } catch (err) {
     console.error('Load orders error:', err);
     const listEl = document.getElementById('orderQueueList');
-    if (listEl) listEl.innerHTML = '<div class="order-queue-empty" style="color:#ff6b6b;">Gagal memuat order: '+escapeAccountHtml(err.message || 'Network error')+'</div>';
+    const message=String(err?.message || 'Network error');
+    const detail=message==='OWNER only'
+      ? 'Server belum mengenali role owner akun Jimzz. Coba keluar lalu login kembali. Jika masih muncul, pastikan akun jimzz memiliki role owner di Supabase dan SUPABASE_KEY backend memakai service-role key.'
+      : message;
+    if (listEl) listEl.innerHTML = '<div class="order-queue-empty" style="color:#ff6b6b;">Gagal memuat order: '+escapeAccountHtml(detail)+'</div>';
   }
 }
 async function completeOrder(orderId) {
