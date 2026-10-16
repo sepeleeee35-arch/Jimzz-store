@@ -2596,38 +2596,45 @@ async function keStep3() {
 async function downloadQris() {
   const btn = document.getElementById('qrisDownload');
   const originalText = btn.innerText;
-  btn.innerText = '⏳ Menyiapkan QR...'; btn.disabled = true;
   let blobUrl = null;
+  btn.innerText = '⏳ Menyiapkan file PNG...';
+  btn.disabled = true;
+
   try {
-    if (!dataPemesan.qrisString) throw new Error('Data QRIS belum tersedia.');
+    if (!dataPemesan.qrisString) throw new Error('Data QRIS belum tersedia. Buat QRIS terlebih dahulu.');
+
     const QRCode = await loadJimzzQrCodeLibrary();
     const canvas = document.createElement('canvas');
     await QRCode.toCanvas(canvas, dataPemesan.qrisString, {
       width: 420, margin: 2, errorCorrectionLevel: 'M'
     });
+
     const blob = await new Promise((resolve, reject) => {
-      canvas.toBlob(value => value ? resolve(value) : reject(new Error('Gagal membuat file PNG.')), 'image/png');
+      canvas.toBlob(file => file ? resolve(file) : reject(new Error('Browser gagal membuat file PNG.')), 'image/png');
     });
     blobUrl = URL.createObjectURL(blob);
+
+    // Unduh sebagai file lokal. Jangan pernah membuka URL gambar sebagai fallback.
     const link = document.createElement('a');
     link.href = blobUrl;
     link.download = 'QRIS-JimzzStore-' + (dataPemesan.orderId || Date.now()) + '.png';
+    link.style.display = 'none';
     document.body.appendChild(link);
     link.click();
-    document.body.removeChild(link);
-    btn.innerText = '✅ Berhasil! Cek Unduhan';
+    link.remove();
+
+    btn.innerText = '✅ File dikirim ke Unduhan';
+    showToast('Download QRIS dimulai. Cek folder Download/Unduhan di HP kamu.', 'success');
+  } catch (err) {
+    console.error('[Jimzz] Download QR gagal:', err);
+    showToast('Gagal mengunduh QRIS: ' + (err?.message || 'Coba lagi.'), 'error');
+    btn.innerText = '❌ Gagal — Coba Lagi';
+  } finally {
     setTimeout(() => {
       btn.innerText = originalText;
       btn.disabled = false;
       if (blobUrl) URL.revokeObjectURL(blobUrl);
     }, 3000);
-  } catch (err) {
-    console.error('[Jimzz] Download QR gagal:', err);
-    const image = document.getElementById('qrisImage');
-    if (image?.src) window.open(image.src, '_blank');
-    btn.innerText = originalText;
-    btn.disabled = false;
-    if (blobUrl) URL.revokeObjectURL(blobUrl);
   }
 }
 
