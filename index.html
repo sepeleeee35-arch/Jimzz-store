@@ -637,15 +637,8 @@ header .coin-display { align-items:center; justify-content:center; flex-wrap:wra
     <h1><span class="gradient-text">Jimzz Store</span></h1><div id="roleBadge" class="role-badge" aria-hidden="true"></div>
     <p class="tagline">Top Up Game, Sosmed & Digital Produk Terlengkap</p>
     <div class="counter"><span class="dot"></span>🔥 <span id="viewCount">1.375</span> orang sudah order</div>
-    <button class="account-btn" id="accountButton" onclick="openAccountModal()">👤 Login / Register</button>
-    <div class="account-profile" id="accountProfile"><span>👋 <span id="accountName"></span></span><span class="account-role" id="accountRole"></span><button class="account-logout" onclick="openAccountSettings()">⚙️ Akun</button><button class="account-logout" onclick="accountLogout()">Logout</button></div>
-    <div class="coin-display" id="coinDisplay" onclick="openCoinInfo()">
-      <span class="coin-icon">⭐</span><span>Koin Kamu:</span><span class="coin-value" id="coinBalance">0</span>
-      <span class="coin-guest-lock" id="coinGuestLock">🔒 Login/Register</span>
-      <div class="coin-header-toggle" id="coinHeaderToggle" onclick="event.stopPropagation();toggleCoinHeader()">
-        <span class="coin-header-label" id="coinHeaderLabel">OFF</span><div class="coin-header-switch" id="coinHeaderSwitch"></div>
-      </div>
-    </div>
+    <button class="account-btn" id="accountButton" onclick="openAccountModal()" style="display:none;">👤 Login / Register</button>
+    <div class="account-profile" id="accountProfile" style="display:none;"><span>👋 <span id="accountName"></span></span><span class="account-role" id="accountRole"></span><button class="account-logout" onclick="openAccountSettings()">⚙️ Akun</button><button class="account-logout" onclick="accountLogout()">Logout</button></div>
     <div class="trust-row">
       <div class="trust-item"><span class="trust-icon">⚡</span> Proses Cepat</div>
       <div class="trust-item"><span class="trust-icon">🔒</span> Aman & Terpercaya</div>
@@ -763,19 +756,27 @@ header .coin-display { align-items:center; justify-content:center; flex-wrap:wra
   </section>
 
   <section class="kategori" style="padding-bottom:0;">
-    <div class="jimzz-account-summary" id="jimzzAccountSummary" role="button" tabindex="0" onclick="openAccountModal()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openAccountModal();}">
-      <div class="jimzz-account-summary-top">
+    <div class="jimzz-account-summary" id="jimzzAccountSummary">
+      <div class="jimzz-account-summary-top" onclick="openAccountModal()" style="cursor:pointer;">
         <div class="jimzz-account-avatar">👤</div>
         <div class="jimzz-account-summary-info">
           <div class="jimzz-account-greeting" id="jimzzSummaryGreeting">Hai, selamat datang!</div>
           <div class="jimzz-account-sub" id="jimzzSummarySub">Login untuk melihat akun dan saldo koin kamu</div>
         </div>
-        <div class="jimzz-account-chevron">›</div>
+        <button class="account-logout" onclick="event.stopPropagation();openAccountSettings()" id="jimzzSummarySettings" style="display:none;">⚙️</button>
+        <div class="jimzz-account-chevron" onclick="openAccountModal()">›</div>
       </div>
       <div class="jimzz-account-summary-bottom">
-        <div class="jimzz-account-meta">🪙 Saldo Koin <span class="jimzz-account-coin" id="jimzzSummaryCoins">0</span></div>
-        <div class="jimzz-account-meta" id="jimzzSummaryAction">👤 Login / Register</div>
+        <div class="jimzz-account-meta" onclick="openCoinInfo()" style="cursor:pointer;">🪙 Saldo Koin <span class="jimzz-account-coin" id="coinBalance">0</span></div>
+        <div class="jimzz-account-meta">
+          <span id="coinGuestLock" style="font-size:11px;">Login untuk diskon</span>
+          <span style="font-size:11px;font-weight:750;">Diskon Koin</span>
+          <div class="coin-header-toggle" id="coinHeaderToggle" onclick="event.stopPropagation();toggleCoinHeader()">
+            <span class="coin-header-label" id="coinHeaderLabel">OFF</span><div class="coin-header-switch" id="coinHeaderSwitch"></div>
+          </div>
+        </div>
       </div>
+      <div id="accountName" style="display:none;"></div><div id="accountRole" style="display:none;"></div>
     </div>
   </section>
 
@@ -2016,7 +2017,7 @@ async function changeAccountPassword(){
   catch(e){msg.textContent=e.message;msg.style.color='#ff6b6b';}
 }
 async function accountLogout(){clearAccountSession();renderCoinBalance();updateAccountUI();applyAdminUI();showToast('Berhasil logout','info');}
-function updateAccountUI(){const user=getLoggedAccount(),btn=document.getElementById('accountButton'),profile=document.getElementById('accountProfile'),nameEl=document.getElementById('accountName'),roleEl=document.getElementById('accountRole');if(btn){btn.classList.toggle('account-hidden',!!user);btn.style.removeProperty('display');}if(user){if(profile)profile.classList.add('show');if(nameEl)nameEl.textContent=user.username;if(roleEl){const role=user.role||'user';roleEl.textContent=role==='owner'?'OWNER':role==='admin'?'ADMIN':'';roleEl.className='account-role '+role;roleEl.style.display=(role==='owner'||role==='admin')?'inline-flex':'none';}}else{if(profile)profile.classList.remove('show');if(roleEl)roleEl.style.display='none';}const greeting=document.getElementById('jimzzSummaryGreeting'),sub=document.getElementById('jimzzSummarySub'),coins=document.getElementById('jimzzSummaryCoins'),action=document.getElementById('jimzzSummaryAction');if(greeting)greeting.textContent=user?'Hai, '+(user.username||'pengguna')+'!':'Hai, selamat datang!';if(sub)sub.textContent=user?(user.email||'Akun Jimzz Store'):'Login untuk melihat akun dan saldo koin kamu';if(coins)coins.textContent=user&&user.role==='owner'?'∞':formatCoinValue(user?.coins||0);if(action)action.textContent=user?'› Lihat akun':'👤 Login / Register';updateRoleBadge(user?.role||'user');renderCoinHeaderToggle();}
+function updateAccountUI(){const user=getLoggedAccount(),btn=document.getElementById('accountButton'),profile=document.getElementById('accountProfile'),nameEl=document.getElementById('accountName'),roleEl=document.getElementById('accountRole');if(btn){btn.classList.add('account-hidden');btn.style.display='none';}if(profile){profile.classList.remove('show');profile.style.display='none';}if(nameEl)nameEl.textContent=user?.username||'';if(roleEl){const role=user?.role||'user';roleEl.textContent=role==='owner'?'OWNER':role==='admin'?'ADMIN':'';roleEl.className='account-role '+role;roleEl.style.display='none';}const greeting=document.getElementById('jimzzSummaryGreeting'),sub=document.getElementById('jimzzSummarySub'),settings=document.getElementById('jimzzSummarySettings');if(greeting)greeting.textContent=user?'Hi, '+(user.username||'pengguna')+'!':'Hi, selamat datang!';if(sub)sub.textContent=user?(user.email||'Akun Jimzz Store'):'Login untuk melihat akun dan saldo koin kamu';if(settings)settings.style.display=user?'inline-flex':'none';updateRoleBadge(user?.role||'user');renderCoinBalance();renderCoinHeaderToggle();}
 function updateRoleBadge(role){const badge=document.getElementById('roleBadge');if(!badge)return;if(role==='owner'){badge.innerHTML='<span class="role-crown">👑</span><span class="role-title">OWNER</span>';badge.className='role-badge owner show';}else if(role==='admin'){badge.innerHTML='<span class="role-crown">👑</span><span>ADMIN</span>';badge.className='role-badge admin show';}else{badge.innerHTML='';badge.className='role-badge';}}
 window.addEventListener('storage',e=>{if([JIMZZ_SESSION_KEY,JIMZZ_CACHE_KEY,GUEST_COINS_KEY].includes(e.key)){accountCache=null;updateAccountUI();renderCoinBalance();applyAdminUI();}});
 async function handleRecoveryLink(){
