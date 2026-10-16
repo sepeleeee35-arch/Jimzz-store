@@ -506,7 +506,7 @@ header .coin-display { align-items:center; justify-content:center; flex-wrap:wra
 <!-- ACCOUNT_DISABLED_2026_09_27 -->
 </head>
 <body>
-<div id="siteVersion">v3.4.6</div>
+<div id="siteVersion">v3.4.7</div>
 
 
 <div class="toast-container id="toastContainer"></div>
@@ -962,7 +962,7 @@ header .coin-display { align-items:center; justify-content:center; flex-wrap:wra
   <audio id="audioPlayer"></audio>
 </div>
 <script>
-const JIMZZ_VERSION = 'v3.4.6';
+const JIMZZ_VERSION = 'v3.4.7';
 
 // ============================================
 // 🔧 KONFIGURASI
@@ -2597,7 +2597,12 @@ async function keStep3() {
         );
       })
       .catch(err => console.warn('[Jimzz] Generator QR lokal tidak tersedia; memakai QR cadangan:', err));
-    if (result.telegramSent === false) console.warn('[Jimzz] Telegram order notification was not sent. Check TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID in Vercel.');
+    if (result.telegramSent === false) {
+      const telegramReason = result.telegramReason || 'unknown';
+      const telegramDetail = result.telegramDetail ? ': ' + String(result.telegramDetail).slice(0, 180) : '';
+      console.warn('[Jimzz] Telegram order notification failed:', telegramReason, result.telegramDetail || '');
+      showToast('⚠️ Order dibuat, tetapi pesan Telegram gagal (' + telegramReason + ')' + telegramDetail, 'warning');
+    }
     document.getElementById('qrisLoading').style.display = 'none';
     document.getElementById('qrisBox').style.display = 'block';
     document.getElementById('waitingBox').style.display = 'block';
