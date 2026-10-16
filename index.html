@@ -504,7 +504,7 @@ header .coin-display { align-items:center; justify-content:center; flex-wrap:wra
 #page-suntik .pengumuman { display:none !important; }
 
 /* Obsidian + Emerald: clean, flat, premium account summary */
-.jimzz-account-summary{box-sizing:border-box;width:min(760px,calc(100% - 28px));margin:0 auto 26px;max-width:760px;text-align:left;border:1px solid #245A40;border-radius:18px;padding:clamp(14px,3.2vw,20px);background:#090D0B;color:#F2F5F3;box-shadow:none;cursor:pointer;position:relative;overflow:hidden}
+.jimzz-account-summary{box-sizing:border-box;width:100vw;max-width:none;margin:0 calc(50% - 50vw) 26px;border:1px solid #245A40;border-left:0;border-right:0;border-radius:0;padding:clamp(14px,3.2vw,20px);background:#090D0B;color:#F2F5F3;box-shadow:none;cursor:pointer;position:relative;overflow:hidden}
 .jimzz-account-summary-top{display:flex;align-items:center;gap:13px;min-width:0}
 .jimzz-account-avatar{width:52px;height:52px;flex:0 0 52px;border-radius:14px;display:grid;place-items:center;background:#173D2C;border:1px solid #245A40;box-shadow:none;font-size:26px}
 .jimzz-account-summary-info{min-width:0;flex:1}.jimzz-account-greeting{font-size:18px;font-weight:750;line-height:1.35;color:#F2F5F3;letter-spacing:-.25px}.jimzz-account-sub{font-size:12px;color:#92A99A;margin-top:4px;overflow-wrap:anywhere}
@@ -655,12 +655,12 @@ header .coin-display { align-items:center; justify-content:center; flex-wrap:wra
             <div class="jimzz-account-chevron" onclick="openAccountModal()">›</div>
           </div>
           <div class="jimzz-account-summary-bottom">
-            <div class="jimzz-account-meta" onclick="openCoinInfo()" style="cursor:pointer;">🪙 Saldo Koin <span class="jimzz-account-coin" id="coinBalance">0</span></div>
+            <div class="jimzz-account-meta" onclick="openCoinInfo()" style="cursor:pointer;">🪙 Saldo koin: <span class="jimzz-account-coin" id="coinBalance">0</span></div>
             <div class="jimzz-account-meta">
               <span id="coinGuestLock" style="font-size:11px;">Login untuk diskon</span>
-              <span style="font-size:11px;font-weight:750;">Diskon Koin</span>
+              <span style="font-size:11px;font-weight:750;">Diskon koin |</span>
               <div class="coin-header-toggle" id="coinHeaderToggle" onclick="event.stopPropagation();toggleCoinHeader()">
-                <span class="coin-header-label" id="coinHeaderLabel">OFF</span><div class="coin-header-switch" id="coinHeaderSwitch"></div>
+                <span class="coin-header-label" id="coinHeaderLabel">off</span><div class="coin-header-switch" id="coinHeaderSwitch"></div>
               </div>
             </div>
           </div>
@@ -1047,7 +1047,7 @@ function closeCoinInfo(){document.getElementById('coinInfoModal')?.classList.rem
 function coinInfoLogin(){closeCoinInfo();openAccountModal();}
 let useCoinMode=!!getLoggedAccount()&&localStorage.getItem('jimzz_use_coin')==='true';
 function toggleCoinHeader(){if(!getLoggedAccount()){useCoinMode=false;localStorage.setItem('jimzz_use_coin','false');renderCoinHeaderToggle();openCoinInfo();return;}useCoinMode=!useCoinMode;localStorage.setItem('jimzz_use_coin',useCoinMode.toString());renderCoinHeaderToggle();if(produkAktif)hitungTotal();showToast(useCoinMode?'⭐ Koin AKTIF — otomatis dipakai di order':'❌ Koin NONAKTIF — tidak dipakai di order',useCoinMode?'success':'info');}
-function renderCoinHeaderToggle(){const sw=document.getElementById('coinHeaderSwitch'),label=document.getElementById('coinHeaderLabel'),toggle=document.getElementById('coinHeaderToggle'),hint=document.getElementById('coinGuestLock'),logged=!!getLoggedAccount();if(sw&&label){if(logged&&useCoinMode){sw.classList.add('active');label.classList.add('active');label.innerText='ON';}else{sw.classList.remove('active');label.classList.remove('active');label.innerText='OFF';}}if(toggle)toggle.classList.toggle('locked',!logged);if(hint)hint.style.display=logged?'none':'inline';}
+function renderCoinHeaderToggle(){const sw=document.getElementById('coinHeaderSwitch'),label=document.getElementById('coinHeaderLabel'),toggle=document.getElementById('coinHeaderToggle'),hint=document.getElementById('coinGuestLock'),logged=!!getLoggedAccount();if(sw&&label){if(logged&&useCoinMode){sw.classList.add('active');label.classList.add('active');label.innerText='on';}else{sw.classList.remove('active');label.classList.remove('active');label.innerText='off';}}if(toggle)toggle.classList.toggle('locked',!logged);if(hint)hint.style.display=logged?'none':'inline';}
 
 // ============================================
 // BACKUP ORDER
