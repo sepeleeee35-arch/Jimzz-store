@@ -506,7 +506,7 @@ header .coin-display { align-items:center; justify-content:center; flex-wrap:wra
 <!-- ACCOUNT_DISABLED_2026_09_27 -->
 </head>
 <body>
-<div id="siteVersion">v3.4.4</div>
+<div id="siteVersion">v3.4.5</div>
 
 
 <div class="toast-container id="toastContainer"></div>
@@ -962,7 +962,7 @@ header .coin-display { align-items:center; justify-content:center; flex-wrap:wra
   <audio id="audioPlayer"></audio>
 </div>
 <script>
-const JIMZZ_VERSION = 'v3.4.1';
+const JIMZZ_VERSION = 'v3.4.5';
 
 // ============================================
 // 🔧 KONFIGURASI
@@ -2432,6 +2432,18 @@ function keStep2() {
   setStep(2);
 }
 let jimzzQrCodeLibraryPromise = null;
+function prepareQrisDownloadBlob(sourceUrl) {
+  if (!sourceUrl) return Promise.reject(new Error('Gambar QR belum tersedia.'));
+  const task = fetch(sourceUrl, { cache: 'force-cache' }).then(response => {
+    if (!response.ok) throw new Error('Server gambar QR gagal merespons (' + response.status + ').');
+    return response.blob();
+  }).then(blob => {
+    if (!blob || !blob.size) throw new Error('File QR kosong.');
+    return blob;
+  });
+  dataPemesan.qrisDownloadBlobPromise = task;
+  return task;
+}
 function loadJimzzQrCodeLibrary() {
   if (window.QRCode && typeof window.QRCode.toCanvas === 'function') {
     return Promise.resolve(window.QRCode);
@@ -2583,12 +2595,21 @@ async function keStep3() {
     const qrImage = document.getElementById('qrisImage');
     const qrImageUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' + encodeURIComponent(result.qrisString);
     qrImage.src = qrImageUrl;
-    // Gambar QR dibuat di perangkat; tidak perlu menunggu layanan gambar eksternal.
+    // Siapkan file QR di latar belakang saat gambar tampil, agar tombol download terasa cepat.
+    prepareQrisDownloadBlob(qrImageUrl).catch(err => {
+      console.warn('[Jimzz] Prefetch QR gagal; akan dicoba lagi saat tombol download ditekan:', err);
+    });
+    // QR lokal tetap dipakai jika generator berhasil, tetapi download tidak bergantung padanya.
     loadJimzzQrCodeLibrary()
       .then(QRCode => QRCode.toDataURL(result.qrisString, {
         width: 420, margin: 2, errorCorrectionLevel: 'M'
       }))
-      .then(dataUrl => { qrImage.src = dataUrl; })
+      .then(dataUrl => {
+        qrImage.src = dataUrl;
+        prepareQrisDownloadBlob(dataUrl).catch(err =>
+          console.warn('[Jimzz] Gagal menyiapkan PNG QR lokal:', err)
+        );
+      })
       .catch(err => console.warn('[Jimzz] QR lokal gagal, memakai QR cadangan:', err));
     if (result.telegramSent === false) console.warn('[Jimzz] Telegram order notification was not sent. Check TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID in Vercel.');
     document.getElementById('qrisLoading').style.display = 'none';
@@ -2601,40 +2622,63 @@ async function keStep3() {
 
     if (potonganKoinActual > 0) {
       setTimeout(() => {
-        showToast(`⭐ ${potonganKoinActual.toLocaleString('id-ID')} koin akan dipakai kalau pembayaran sukses.`, 'info');
-      }, 2000);
-    }
-
-    backupOrder({ order_id: result.orderId, produk: produkAktif.nama, jumlah: dataPemesan.jumlah, total: result.totalAmount, hp: dataPemesan.hp, status: 'pending' });
-  } catch (err) {
-    console.error('QRIS error:', err);
-    const safeMessage = String(err?.message || 'Terjadi kesalahan saat membuat QRIS.')
-      .replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
-    document.getElementById('qrisLoading').innerHTML =
-      '<div style="color:#ff6b6b;font-size:13px;font-weight:800;">❌ Gagal membuat QRIS</div>' +
-      '<div style="color:#999;font-size:11px;margin-top:7px;line-height:1.6;">' + safeMessage + '</div>' +
-      '<button onclick="keStep3()" style="margin-top:14px;padding:10px 16px;border:1px solid #00ff88;border-radius:10px;background:transparent;color:#00ff88;font-weight:800;">🔄 Coba Lagi</button>';
-  }
-}
-async function downloadQris() {
+        showToast(`⭐ ${potonganKoinActual.toLocaleString('id-ID')} koin akan dipakai kalau peasync function downloadQris() {
   const btn = document.getElementById('qrisDownload');
   const originalText = btn.innerText;
   let blobUrl = null;
-  btn.innerText = '⏳ Menyiapkan file PNG...';
+  btn.innerText = '⏳ Menyiapkan PNG...';
   btn.disabled = true;
 
   try {
-    if (!dataPemesan.qrisString) throw new Error('Data QRIS belum tersedia. Buat QRIS terlebih dahulu.');
+    const image = document.getElementById('qrisImage');
+    const sourceUrl = image?.src;
+    if (!sourceUrl || !/^https?:|^data:image\//i.test(sourceUrl)) {
+      throw new Error('Gambar QRIS belum siap. Tunggu sampai QR muncul lalu coba lagi.');
+    }
 
-    const QRCode = await loadJimzzQrCodeLibrary();
-    const canvas = document.createElement('canvas');
-    await QRCode.toCanvas(canvas, dataPemesan.qrisString, {
-      width: 420, margin: 2, errorCorrectionLevel: 'M'
-    });
+    // Ambil Blob yang sudah disiapkan saat QR ditampilkan. Ini menghindari
+    // generator QR/CDN saat tombol download ditekan dan mempercepat unduhan.
+    let blob;
+    try {
+      blob = dataPemesan.qrisDownloadBlobPromise
+        ? await dataPemesan.qrisDownloadBlobPromise
+        : await fetch(sourceUrl, { cache: 'force-cache' }).then(response => {
+            if (!response.ok) throw new Error('Gagal mengambil gambar QR (' + response.status + ').');
+            return response.blob();
+          });
+    } catch (prefetchError) {
+      // Coba sekali lagi menggunakan gambar yang sedang terlihat.
+      blob = await fetch(sourceUrl).then(response => {
+        if (!response.ok) throw new Error('Gagal mengambil gambar QR (' + response.status + ').');
+        return response.blob();
+      });
+    }
 
-    const blob = await new Promise((resolve, reject) => {
-      canvas.toBlob(file => file ? resolve(file) : reject(new Error('Browser gagal membuat file PNG.')), 'image/png');
-    });
+    if (!blob || !blob.size) throw new Error('File QR kosong, coba buat QRIS ulang.');
+    blobUrl = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = blobUrl;
+    link.download = 'QRIS-JimzzStore-' + (dataPemesan.orderId || Date.now()) + '.png';
+    link.style.display = 'none';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+    btn.innerText = '✅ Download dimulai';
+    showToast('File QRIS dikirim ke folder Unduhan/Download HP kamu.', 'success');
+  } catch (err) {
+    console.error('[Jimzz] Download QR gagal:', err);
+    showToast('Download QRIS gagal: ' + (err?.message || 'Coba lagi.'), 'error');
+    btn.innerText = '❌ Gagal — Coba Lagi';
+  } finally {
+    setTimeout(() => {
+      btn.innerText = originalText;
+      btn.disabled = false;
+      if (blobUrl) setTimeout(() => URL.revokeObjectURL(blobUrl), 60000);
+    }, 3000);
+  }
+}
+
     blobUrl = URL.createObjectURL(blob);
 
     // Unduh sebagai file lokal. Jangan pernah membuka URL gambar sebagai fallback.
