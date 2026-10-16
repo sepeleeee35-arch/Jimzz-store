@@ -2433,19 +2433,42 @@ function keStep2() {
 }
 let jimzzQrCodeLibraryPromise = null;
 function loadJimzzQrCodeLibrary() {
-  if (window.QRCode && typeof window.QRCode.toDataURL === 'function') {
+  if (window.QRCode && typeof window.QRCode.toCanvas === 'function') {
     return Promise.resolve(window.QRCode);
   }
   if (!jimzzQrCodeLibraryPromise) {
     jimzzQrCodeLibraryPromise = new Promise((resolve, reject) => {
-      const script = document.createElement('script');
-      script.src = 'https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js';
-      script.async = true;
-      script.onload = () => window.QRCode
-        ? resolve(window.QRCode)
-        : reject(new Error('Library QR belum siap.'));
-      script.onerror = () => reject(new Error('Gagal memuat generator QR lokal.'));
-      document.head.appendChild(script);
+      const sources = [
+        'https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js',
+        'https://unpkg.com/qrcode@1.5.4/build/qrcode.min.js'
+      ];
+      let index = 0;
+      const tryNextSource = () => {
+        if (index >= sources.length) {
+          reject(new Error('Generator QR tidak bisa dimuat. Periksa koneksi internet lalu coba lagi.'));
+          return;
+        }
+        const script = document.createElement('script');
+        script.src = sources[index++];
+        script.async = true;
+        script.onload = () => {
+          if (window.QRCode && typeof window.QRCode.toCanvas === 'function') resolve(window.QRCode);
+          else {
+            script.remove();
+            tryNextSource();
+          }
+        };
+        script.onerror = () => {
+          script.remove();
+          tryNextSource();
+        };
+        document.head.appendChild(script);
+      };
+      tryNextSource();
+    }).catch(err => {
+      // Jangan menyimpan Promise gagal selamanya; tombol bisa dicoba lagi.
+      jimzzQrCodeLibraryPromise = null;
+      throw err;
     });
   }
   return jimzzQrCodeLibraryPromise;
@@ -2633,7 +2656,7 @@ async function downloadQris() {
     setTimeout(() => {
       btn.innerText = originalText;
       btn.disabled = false;
-      if (blobUrl) URL.revokeObjectURL(blobUrl);
+      if (blobUrl) setTimeout(() => URL.revokeObjectURL(blobUrl), 60000);
     }, 3000);
   }
 }
