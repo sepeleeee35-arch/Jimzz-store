@@ -1,0 +1,70 @@
+name: Auto-bump Jimzz Store version
+
+on:
+  push:
+
+permissions:
+  contents: write
+
+jobs:
+  bump-version:
+    # The bot's own version-bump commit must not trigger another bump.
+    if: ${{ !contains(github.event.head_commit.message, '[skip version bump]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout pushed commit
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Increment displayed app version
+        id: bump
+        shell: bash
+        run: |
+          python3 <<'PY'
+          import re
+          from pathlib import Path
+
+          path = Path("index.html")
+          text = path.read_text(encoding="utf-8")
+          patterns = [
+              r'(<div id="siteVersion">)v(\d+)\.(\d+)\.(\d+)(</div>)',
+              r"(const JIMZZ_VERSION = ')v(\d+)\.(\d+)\.(\d+)(';)"
+          ]
+          versions = []
+          for pattern in patterns:
+              match = re.search(pattern, text)
+              if not match:
+                  raise SystemExit(f"Version marker not found: {pattern}")
+              versions.append(tuple(map(int, match.groups()[1:4])))
+
+          major, minor, patch = max(versions)
+          patch += 1
+          new_version = f"v{major}.{minor}.{patch}"
+
+          text, count1 = re.subn(
+              patterns[0], lambda m: f"{m.group(1)}{new_version}{m.group(5)}", text, count=1
+          )
+          text, count2 = re.subn(
+              patterns[1], lambda m: f"{m.group(1)}{new_version}{m.group(5)}", text, count=1
+          )
+          if count1 != 1 or count2 != 1:
+              raise SystemExit("Failed to update both version markers")
+          path.write_text(text, encoding="utf-8")
+          print(f"Updated both version markers to {new_version}")
+          PY
+
+      - name: Commit and push version bump
+        shell: bash
+        run: |
+          if git diff --quiet -- index.html; then
+            echo "Version markers unchanged; nothing to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          VERSION=$(grep -oE 'id="siteVersion">v[0-9]+\.[0-9]+\.[0-9]+' index.html | head -n1 | sed 's/.*>//')
+          git add index.html
+          git commit -m "[skip version bump] Auto-bump Jimzz version to ${VERSION}"
+          git push
