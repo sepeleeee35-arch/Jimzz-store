@@ -502,11 +502,28 @@ header .coin-display { align-items:center; justify-content:center; flex-wrap:wra
 }
 /* Remove the announcement cards from the social-service page, not its products. */
 #page-suntik .pengumuman { display:none !important; }
+
+/* OWNER PRODUCT MANAGER */
+.owner-products-panel{margin:14px 0;padding:16px;border:1px solid rgba(0,255,136,.24);border-radius:16px;background:linear-gradient(145deg,rgba(0,255,136,.045),rgba(12,12,18,.96))}
+.owner-products-form{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:12px 0}
+.owner-products-form input,.owner-products-form select,.owner-products-form textarea{width:100%;min-width:0;padding:11px 12px;border:1px solid #25352d;border-radius:10px;background:#050507;color:#f5f5f5;font:600 12px Inter,Arial;outline:none}
+.owner-products-form textarea{grid-column:1/-1;resize:vertical;min-height:72px}
+.owner-products-form .wide{grid-column:1/-1}
+.owner-products-submit{grid-column:1/-1;padding:12px;border:0;border-radius:10px;background:linear-gradient(135deg,#00ff88,#00c96a);color:#00150b;font:900 12px Inter,Arial;cursor:pointer}
+.owner-products-list{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.owner-product-row{display:flex;align-items:center;gap:10px;padding:10px;border:1px solid #222b26;border-radius:11px;background:#080a09}
+.owner-product-row-info{flex:1;min-width:0}
+.owner-product-row-name{color:#fff;font-size:12px;font-weight:900;overflow-wrap:anywhere}
+.owner-product-row-meta{color:#8a9a90;font-size:10px}
+.owner-product-delete{border:1px solid rgba(255,107,107,.3);border-radius:8px;background:rgba(255,107,107,.1);color:#ff7777;padding:7px 9px;font-size:10px;font-weight:900;cursor:pointer}
+.custom-products-section{margin-top:20px}
+.custom-product-card .produk-icon{display:flex;align-items:center;justify-content:center}
+@media(max-width:480px){.owner-products-form{grid-template-columns:1fr}.owner-products-form textarea,.owner-products-form .wide,.owner-products-submit{grid-column:1}}
 </style>
 <!-- ACCOUNT_DISABLED_2026_09_27 -->
 </head>
 <body>
-<div id="siteVersion">v3.5.3</div>
+<div id="siteVersion">v3.5.4</div>
 
 
 <div class="toast-container" id="toastContainer"></div>
@@ -740,6 +757,30 @@ header .coin-display { align-items:center; justify-content:center; flex-wrap:wra
     </div>
   </section>
 
+  <section class="kategori" id="ownerProductsSection" style="display:none;">
+    <div class="admin-panel owner-products-panel">
+      <div class="admin-panel-header"><span style="font-size:24px;">🛍️</span><span class="admin-panel-title">OWNER — KELOLA PRODUK</span><button onclick="loadCustomProducts(true)" style="margin-left:auto;background:rgba(0,255,136,.1);border:1px solid rgba(0,255,136,.4);color:#00ff88;padding:6px 10px;border-radius:8px;font-size:10px;font-weight:800;cursor:pointer;">↻</button></div>
+      <div style="color:#888;font-size:10px;margin:-5px 0 8px;">Tambah produk ke halaman mana pun. Produk akan tampil untuk semua pengunjung dan bisa dipesan lewat QRIS.</div>
+      <form class="owner-products-form" id="ownerProductForm" onsubmit="saveCustomProduct(event)">
+        <input id="ownerProductName" maxlength="60" required placeholder="Nama produk">
+        <input id="ownerProductIcon" maxlength="12" value="🛍️" placeholder="Ikon / emoji">
+        <textarea id="ownerProductDesc" maxlength="180" required placeholder="Deskripsi produk"></textarea>
+        <input id="ownerProductPrice" type="number" min="1000" max="9999999" step="1" required placeholder="Harga (Rp)">
+        <select id="ownerProductPage" required>
+          <option value="home">🏠 Halaman Home</option>
+          <option value="topup">🎮 Halaman Top Up</option>
+          <option value="suntik">📱 Halaman Suntik</option>
+          <option value="apk">📦 Halaman Jual APK</option>
+          <option value="jpm">🚀 Halaman Lainnya</option>
+        </select>
+        <button class="owner-products-submit" id="ownerProductSubmit" type="submit">＋ Tambahkan Produk</button>
+      </form>
+      <div id="ownerProductsMsg" class="account-msg"></div>
+      <div style="color:#00ff88;font-size:11px;font-weight:900;margin-top:10px;">PRODUK TAMBAHAN</div>
+      <div id="ownerProductsList" class="owner-products-list"><div class="custom-products-empty">Memuat katalog...</div></div>
+    </div>
+  </section>
+
   <section class="kategori" id="adminPanelSection" style="display:none;">
     <div class="admin-panel">
       <div class="admin-panel-header"><span style="font-size:24px;">👑</span><span class="admin-panel-title">ADMIN DASHBOARD</span></div>
@@ -962,7 +1003,7 @@ header .coin-display { align-items:center; justify-content:center; flex-wrap:wra
   <audio id="audioPlayer"></audio>
 </div>
 <script>
-const JIMZZ_VERSION = 'v3.5.3';
+const JIMZZ_VERSION = 'v3.5.4';
 
 // ============================================
 // 🔧 KONFIGURASI
@@ -1883,6 +1924,7 @@ function applyAdminUI(){
   isAdmin=role==='owner'||role==='admin';
   const adminPanel=document.getElementById('adminPanelSection');
   const ownerSection=document.getElementById('ownerAccountsSection');
+  const ownerProductsSection=document.getElementById('ownerProductsSection');
   const visitorPanel=document.getElementById('visitorPanelSection');
   const orderQueue=document.getElementById('orderQueueSection');
   const statsPanel=document.getElementById('statsPanelSection');
@@ -1917,6 +1959,10 @@ function applyAdminUI(){
   if(ownerSection){
     ownerSection.style.display=owner?'block':'none';
     if(owner)renderAccountManager();
+  }
+  if(ownerProductsSection){
+    ownerProductsSection.style.display=owner?'block':'none';
+    if(owner)renderProductManager();
   }
   renderGameList();
 }
@@ -2017,6 +2063,7 @@ applyBgMode();
   if (currentBgMode === 'simple') initCanvasSimple(); else initCanvasNeon();
   initCursorGlow();
   initData();
+  loadCustomProducts();
   renderGameList();
   renderPlaylist();
   initMusicEvents();
@@ -2149,6 +2196,126 @@ function initData() {
   renderProduk('sosmed', produkSosmed, 'SUNTIK ALL');
   renderProduk('jpm', produkJpm, 'LAYANAN LAINNYA');
   renderProduk('apkList', produkApk, 'JUAL APK');
+}
+
+const CUSTOM_PRODUCT_PAGES={
+  home:{label:'Home',title:'🏠 Produk Tambahan'},
+  topup:{label:'Top Up',title:'🎮 Produk Tambahan'},
+  suntik:{label:'Suntik All',title:'📱 Produk Tambahan'},
+  apk:{label:'Jual APK',title:'📦 Produk Tambahan'},
+  jpm:{label:'Lainnya',title:'🚀 Produk Tambahan'}
+};
+let customProducts=[];
+let customProductsLoading=false;
+function ensureCustomProductContainers(){
+  Object.keys(CUSTOM_PRODUCT_PAGES).forEach(page=>{
+    const pageEl=document.getElementById('page-'+page);
+    if(!pageEl)return;
+    const sectionId='customProductsSection-'+page;
+    if(document.getElementById(sectionId))return;
+    const section=document.createElement('section');
+    section.className='kategori custom-products-section';
+    section.id=sectionId;
+    const heading=document.createElement('h2');
+    heading.innerHTML=CUSTOM_PRODUCT_PAGES[page].title.replace('Produk Tambahan','<span class="accent">Produk Tambahan</span>');
+    section.appendChild(heading);
+    const sub=document.createElement('p');
+    sub.className='sub';sub.textContent='Produk khusus dari Jimzz Store';
+    section.appendChild(sub);
+    const list=document.createElement('div');
+    list.className='produk-list';list.id='customProducts-'+page;
+    section.appendChild(list);
+    const footer=pageEl.querySelector('footer');
+    if(footer)pageEl.insertBefore(section,footer);else pageEl.appendChild(section);
+  });
+}
+function renderCustomProducts(){
+  ensureCustomProductContainers();
+  Object.keys(CUSTOM_PRODUCT_PAGES).forEach(page=>{
+    const el=document.getElementById('customProducts-'+page);
+    const section=document.getElementById('customProductsSection-'+page);
+    if(!el||!section)return;
+    const list=customProducts.filter(p=>p.page===page);
+    if(!list.length){section.style.display='none';el.innerHTML='';return;}
+    section.style.display='';
+    el.innerHTML=list.map(p=>`
+      <div class="produk-card custom-product-card">
+        <div class="produk-header"><div class="produk-icon">${escapeAccountHtml(p.icon||'🛍️')}</div><div class="produk-title-block"><div class="produk-label">PRODUK TAMBAHAN</div><div class="produk-nama">${escapeAccountHtml(p.nama)}</div></div></div>
+        <div class="produk-desc">${escapeAccountHtml(p.desc)}</div>
+        <div class="produk-bottom"><div class="produk-harga-info"><div class="produk-harga-label">Harga produk</div><div class="produk-harga">Rp ${Number(p.harga).toLocaleString('id-ID')}</div></div><button class="btn-order" onclick="bukaOrder('custom','${escapeAccountHtml(p.id)}')">Beli</button></div>
+      </div>`).join('');
+  });
+  renderProductManager();
+}
+async function loadCustomProducts(showErrors=false){
+  if(customProductsLoading)return;
+  customProductsLoading=true;
+  try{
+    const res=await fetch(BACKEND_URL+'/api/products',{cache:'no-store'});
+    const data=await res.json();
+    if(!res.ok||!data.success)throw new Error(data.error||'Katalog gagal dimuat.');
+    customProducts=Array.isArray(data.products)?data.products:[];
+    renderCustomProducts();
+  }catch(e){
+    console.warn('Load custom products:',e);
+    if(showErrors)showToast(e.message||'Katalog produk gagal dimuat.','error');
+  }finally{customProductsLoading=false;}
+}
+setInterval(()=>{if(!document.hidden)loadCustomProducts(false);},15000);
+async function saveCustomProduct(event){
+  event?.preventDefault();
+  if(!isOwnerAccount())return;
+  const msg=document.getElementById('ownerProductsMsg');
+  const button=document.getElementById('ownerProductSubmit');
+  const nama=document.getElementById('ownerProductName').value.trim();
+  const desc=document.getElementById('ownerProductDesc').value.trim();
+  const icon=document.getElementById('ownerProductIcon').value.trim()||'🛍️';
+  const harga=Number(document.getElementById('ownerProductPrice').value);
+  const page=document.getElementById('ownerProductPage').value;
+  if(!nama||!desc||!Number.isInteger(harga)||harga<1000||harga>9999999){
+    if(msg){msg.textContent='Harga harus Rp 1.000–9.999.999 dan data produk wajib diisi.';msg.style.color='#ff6b6b';}
+    return;
+  }
+  if(button){button.disabled=true;button.textContent='⏳ Menyimpan...';}
+  if(msg){msg.textContent='Menyimpan produk...';msg.style.color='#aaa';}
+  try{
+    const res=await accountFetch('/api/products',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'add',product:{nama,desc,icon,harga,page}})});
+    const data=await res.json();
+    if(!res.ok||!data.success)throw new Error(data.error||'Produk gagal disimpan.');
+    customProducts=Array.isArray(data.products)?data.products:customProducts;
+    document.getElementById('ownerProductForm').reset();
+    document.getElementById('ownerProductIcon').value='🛍️';
+    document.getElementById('ownerProductPage').value=page;
+    renderCustomProducts();
+    if(msg){msg.textContent='✅ Produk berhasil ditambahkan ke halaman '+CUSTOM_PRODUCT_PAGES[page].label+'.';msg.style.color='#00ff88';}
+    showToast('🛍️ Produk baru berhasil dipublikasikan!','success');
+  }catch(e){
+    if(msg){msg.textContent=e.message||'Produk gagal disimpan.';msg.style.color='#ff6b6b';}
+  }finally{
+    if(button){button.disabled=false;button.textContent='＋ Tambahkan Produk';}
+  }
+}
+function renderProductManager(){
+  const el=document.getElementById('ownerProductsList');
+  if(!el)return;
+  if(!isOwnerAccount()){el.innerHTML='';return;}
+  if(!customProducts.length){el.innerHTML='<div class="custom-products-empty">Belum ada produk tambahan. Isi formulir di atas untuk menambahkannya.</div>';return;}
+  el.innerHTML=customProducts.map(p=>`
+    <div class="owner-product-row"><div style="font-size:24px">${escapeAccountHtml(p.icon||'🛍️')}</div><div class="owner-product-row-info"><div class="owner-product-row-name">${escapeAccountHtml(p.nama)}</div><div class="owner-product-row-meta">Rp ${Number(p.harga).toLocaleString('id-ID')} · Halaman ${escapeAccountHtml(CUSTOM_PRODUCT_PAGES[p.page]?.label||p.page)}</div></div><button class="owner-product-delete" onclick="deleteCustomProduct('${escapeAccountHtml(p.id)}')">Hapus</button></div>
+  `).join('');
+}
+async function deleteCustomProduct(id){
+  if(!isOwnerAccount()||!confirm('Hapus produk ini dari katalog untuk semua pengunjung?'))return;
+  const msg=document.getElementById('ownerProductsMsg');
+  try{
+    const res=await accountFetch('/api/products',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'delete',id})});
+    const data=await res.json();
+    if(!res.ok||!data.success)throw new Error(data.error||'Produk gagal dihapus.');
+    customProducts=Array.isArray(data.products)?data.products:[];
+    renderCustomProducts();
+    if(msg){msg.textContent='Produk berhasil dihapus.';msg.style.color='#00ff88';}
+    showToast('Produk berhasil dihapus.','success');
+  }catch(e){if(msg){msg.textContent=e.message||'Produk gagal dihapus.';msg.style.color='#ff6b6b';}}
 }
 
 function renderProduk(target, data, kategori) {
@@ -2294,12 +2461,19 @@ function pilihPaket(index) {
 }
 function bukaOrder(kategoriId, index) {
   let data, kategori, isApk;
-  if (kategoriId === 'sosmed') { data = produkSosmed; kategori = 'SUNTIK ALL'; isApk = false; }
-  else if (kategoriId === 'jpm') { data = produkJpm; kategori = 'LAYANAN LAINNYA'; isApk = false; }
-  else { data = produkApk; kategori = 'JUAL APK'; isApk = true; }
-  produkAktif = { ...data[index], kategori, isApk };
+  if(kategoriId==='custom'){
+    const custom=customProducts.find(p=>String(p.id)===String(index));
+    if(!custom){showToast('Produk tidak tersedia lagi. Muat ulang katalog.','error');loadCustomProducts(false);return;}
+    produkAktif={...custom,kategori:'PRODUK TAMBAHAN',isApk:true,customProductId:custom.id};
+    kategori='PRODUK TAMBAHAN';isApk=true;
+  }else{
+    if (kategoriId === 'sosmed') { data = produkSosmed; kategori = 'SUNTIK ALL'; isApk = false; }
+    else if (kategoriId === 'jpm') { data = produkJpm; kategori = 'LAYANAN LAINNYA'; isApk = false; }
+    else { data = produkApk; kategori = 'JUAL APK'; isApk = true; }
+    produkAktif = { ...data[index], kategori, isApk };
+  }
   produkAktif._kategoriId = kategoriId;
-  produkAktif._index = index;
+  produkAktif._index = kategoriId==='custom'?null:index;
   document.getElementById('modalLabel').innerText = kategori;
   document.getElementById('modalTitle').innerText = produkAktif.nama;
   document.getElementById('modalSubtitle').innerText = produkAktif.desc;
@@ -2587,7 +2761,8 @@ async function keStep3() {
         productDetail: dataPemesan.jumlah + ' ' + (produkAktif.unit || 'pcs'), 
         link: dataPemesan.link,
         kategoriId: produkAktif._kategoriId,
-        index: produkAktif._index
+        index: produkAktif._index,
+        customProductId: produkAktif.customProductId || null
       })
     });
     const result = await res.json();
