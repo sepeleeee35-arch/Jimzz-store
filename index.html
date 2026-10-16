@@ -504,7 +504,7 @@ header .coin-display { align-items:center; justify-content:center; flex-wrap:wra
 #page-suntik .pengumuman { display:none !important; }
 
 /* Obsidian + Emerald: clean, flat, premium account summary */
-.jimzz-account-summary{margin:0 auto 26px;max-width:760px;text-align:left;border:1px solid #245A40;border-radius:18px;padding:18px 20px;background:#090D0B;color:#F2F5F3;box-shadow:none;cursor:pointer;position:relative;overflow:hidden}
+.jimzz-account-summary{box-sizing:border-box;width:min(760px,calc(100% - 28px));margin:0 auto 26px;max-width:760px;text-align:left;border:1px solid #245A40;border-radius:18px;padding:clamp(14px,3.2vw,20px);background:#090D0B;color:#F2F5F3;box-shadow:none;cursor:pointer;position:relative;overflow:hidden}
 .jimzz-account-summary-top{display:flex;align-items:center;gap:13px;min-width:0}
 .jimzz-account-avatar{width:52px;height:52px;flex:0 0 52px;border-radius:14px;display:grid;place-items:center;background:#173D2C;border:1px solid #245A40;box-shadow:none;font-size:26px}
 .jimzz-account-summary-info{min-width:0;flex:1}.jimzz-account-greeting{font-size:18px;font-weight:750;line-height:1.35;color:#F2F5F3;letter-spacing:-.25px}.jimzz-account-sub{font-size:12px;color:#92A99A;margin-top:4px;overflow-wrap:anywhere}
@@ -1799,12 +1799,12 @@ async function syncAccountMe(){
   try{
     const data=await accountApi('me');
     const next=data.user;if(next?.banned){saveAccountSession(null,next);showBanLockScreen();return false;}checkGift(next);
-    saveAccountSession(null,next);renderCoinBalance();updateAccountUI();applyAdminUI();return true;
+    saveAccountSession(null,next);hideBanLockScreen();renderCoinBalance();updateAccountUI();applyAdminUI();return true;
   }catch{
     try{
       const data=await accountApi('refresh',{refreshToken:getAccountRefreshToken()},false);
       const next=data.user;if(next?.banned){saveAccountSession(null,next);showBanLockScreen();return false;}checkGift(next);
-      saveAccountSession(data.session,next);renderCoinBalance();updateAccountUI();applyAdminUI();return true;
+      saveAccountSession(data.session,next);hideBanLockScreen();renderCoinBalance();updateAccountUI();applyAdminUI();return true;
     }catch{
       // Jangan menghapus sesi lokal hanya karena jaringan/API gagal sementara.
       // Token refresh yang masih valid akan dicoba lagi pada sinkronisasi berikutnya.
@@ -1820,7 +1820,7 @@ async function runAccountSync(){
 }
 // Jalankan satu sinkronisasi awal, lalu cek berkala tanpa refresh-token race.
 setTimeout(runAccountSync,800);
-setInterval(runAccountSync,3000);
+setInterval(runAccountSync,2000);
 // Sinkronkan segera saat pembeli kembali ke tab/aplikasi.
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)runAccountSync();});
 window.addEventListener('focus',()=>runAccountSync());
