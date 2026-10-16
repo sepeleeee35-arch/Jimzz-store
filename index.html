@@ -1386,6 +1386,11 @@ async function loadOrders() {
           📱 WA: <b>${o.customer_phone}</b><br>
           💰 Rp ${o.total_amount.toLocaleString('id-ID')}
         </div>
+        ${o.telegram_sent === true
+          ? '<div style="margin-top:10px;padding:8px 10px;border-radius:8px;background:rgba(0,255,136,.08);border:1px solid rgba(0,255,136,.25);font-size:11px;color:#00ff88;">📨 Telegram: <b>Pesan berhasil dikirim</b></div>'
+          : o.telegram_sent === false
+            ? '<div style="margin-top:10px;padding:8px 10px;border-radius:8px;background:rgba(255,70,70,.08);border:1px solid rgba(255,70,70,.25);font-size:11px;color:#ff7777;">📨 Telegram: <b>Gagal dikirim</b> <span style="color:#aaa;">(' + escapeAccountHtml(o.telegram_reason || 'unknown') + ')</span></div>'
+            : '<div style="margin-top:10px;padding:8px 10px;border-radius:8px;background:rgba(255,200,0,.07);border:1px solid rgba(255,200,0,.2);font-size:11px;color:#ffc800;">📨 Telegram: <b>Status belum tercatat</b></div>'}
         <div class="order-item-buttons">
           <button class="btn-complete-order" onclick="completeOrder('${o.order_id}')">✅ Selesaikan</button>
           <button class="btn-fail-order" onclick="failOrder('${o.order_id}')">❌ Gagal</button>
@@ -2598,16 +2603,11 @@ async function keStep3() {
       })
       .catch(err => console.warn('[Jimzz] Generator QR lokal tidak tersedia; memakai QR cadangan:', err));
     if (result.telegramSent === false) {
-      const telegramReason = result.telegramReason || 'unknown';
-      const telegramDetail = result.telegramDetail ? ': ' + String(result.telegramDetail).slice(0, 180) : '';
-      console.warn('[Jimzz] Telegram order notification failed:', telegramReason, result.telegramDetail || '');
-      showToast('⚠️ Order dibuat, tetapi pesan Telegram gagal (' + telegramReason + ')' + telegramDetail, 'warning');
+      console.warn('[Jimzz] Telegram order notification failed:', result.telegramReason || 'unknown', result.telegramDetail || '');
     } else if (result.telegramSent === true) {
       console.info('[Jimzz] Telegram API accepted the order message for the configured chat.');
-      showToast('ℹ️ Telegram menerima pesan. Jika belum terlihat, periksa chat/grup tujuan bot.', 'info');
     } else {
       console.warn('[Jimzz] Backend tidak mengirim status Telegram. Periksa endpoint/deployment backend.');
-      showToast('⚠️ Status Telegram tidak diterima dari server. Endpoint backend mungkin belum diperbarui.', 'warning');
     }
     document.getElementById('qrisLoading').style.display = 'none';
     document.getElementById('qrisBox').style.display = 'block';
