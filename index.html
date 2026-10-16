@@ -1751,16 +1751,22 @@ async function syncAccountMe(){
       const data=await accountApi('refresh',{refreshToken:getAccountRefreshToken()},false);
       const next=data.user;if(next?.banned){saveAccountSession(null,next);showBanLockScreen();return false;}checkGift(next);
       saveAccountSession(data.session,next);renderCoinBalance();updateAccountUI();applyAdminUI();return true;
-    }catch{clearAccountSession();renderCoinBalance();updateAccountUI();applyAdminUI();return false;}
+    }catch{
+      // Jangan menghapus sesi lokal hanya karena jaringan/API gagal sementara.
+      // Token refresh yang masih valid akan dicoba lagi pada sinkronisasi berikutnya.
+      renderCoinBalance();updateAccountUI();applyAdminUI();return false;
+    }
   }
 }
 let accountSyncBusy=false;
-setInterval(async()=>{
+async function runAccountSync(){
   if(accountSyncBusy || !getAccountRefreshToken()) return;
   accountSyncBusy=true;
   try{await syncAccountMe();}finally{accountSyncBusy=false;}
-},2000);
-setTimeout(()=>{if(getAccountRefreshToken())syncAccountMe();},1200);
+}
+// Jalankan satu sinkronisasi awal, lalu cek berkala tanpa refresh-token race.
+setTimeout(runAccountSync,1200);
+setInterval(runAccountSync,30000);
 
 async function loadCounters(){try{const res=await fetch(BACKEND_URL+'/api/counters');const data=await res.json();if(data.success){const oldTotal=cachedCounters.totalOrder;cachedCounters.totalOrder=data.totalOrder;cachedCounters.produkOrder=data.produkOrder||{};updateOrderCounter();if(oldTotal!==data.totalOrder){renderProduk('sosmed',produkSosmed,'SUNTIK ALL');renderProduk('jpm',produkJpm,'LAYANAN LAINNYA');renderProduk('apkList',produkApk,'JUAL APK');}}}catch(err){console.log('Gagal load counters:',err);}}
 let cachedCounters={totalOrder:1375,produkOrder:{}};
