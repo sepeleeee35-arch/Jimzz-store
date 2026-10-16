@@ -41,6 +41,12 @@ jobs:
 
           major, minor, patch = max(versions)
           patch += 1
+          if patch > 9:
+              patch = 0
+              minor += 1
+              if minor > 9:
+                  minor = 0
+                  major += 1
           new_version = f"v{major}.{minor}.{patch}"
 
           text, count1 = re.subn(
