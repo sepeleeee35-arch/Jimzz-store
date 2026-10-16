@@ -114,7 +114,7 @@ body::after { content: ""; position: fixed; top: 0; left: 0; width: 100vw; heigh
 .jimzz-version-badge{display:inline-flex;align-items:center;gap:7px;margin:8px 0 16px;padding:6px 11px;border:1px solid rgba(0,255,136,.28);border-radius:999px;background:rgba(0,255,136,.06);color:#8a8a8a;font-size:10px;font-weight:700;letter-spacing:.35px;backdrop-filter:blur(8px)}
 .jimzz-version-badge span{color:#00ff88;font-weight:900}
 
-header { text-align: center; padding: 60px 20px 50px; position: relative; z-index: 5; overflow: hidden; }
+header { text-align: center; padding: 28px 20px 50px; position: relative; z-index: 5; overflow: hidden; }
 header::before { content: ""; position: absolute; top: -50%; left: 50%; transform: translateX(-50%); width: 300%; height: 300%; background: conic-gradient(from 0deg, transparent, rgba(0,255,136,0.12), transparent, rgba(0,255,136,0.06), transparent); animation: rotateBg 20s linear infinite; z-index: -1; }
 @keyframes rotateBg { to { transform: translateX(-50%) rotate(360deg); } }
 .jimzz-clickable { display: inline-block; cursor: pointer; user-select: none; transition: 0.3s; }
@@ -503,19 +503,22 @@ header .coin-display { align-items:center; justify-content:center; flex-wrap:wra
 /* Remove the announcement cards from the social-service page, not its products. */
 #page-suntik .pengumuman { display:none !important; }
 
-/* Account summary card above service selection */
-.jimzz-account-summary{margin:14px auto 22px;max-width:760px;text-align:left;border-radius:22px;padding:18px 20px;background:linear-gradient(135deg,#00b86b,#00e676);color:#001b0e;box-shadow:0 12px 28px rgba(0,230,118,.18);cursor:pointer;position:relative;overflow:hidden}
-.jimzz-account-summary:after{content:"";position:absolute;width:150px;height:150px;border-radius:50%;right:-45px;top:-65px;background:rgba(255,255,255,.09);pointer-events:none}
-.jimzz-account-summary-top{display:flex;align-items:center;gap:13px;min-width:0}
-.jimzz-account-avatar{width:56px;height:56px;flex:0 0 56px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.22);font-size:25px}
-.jimzz-account-summary-info{min-width:0;flex:1}.jimzz-account-greeting{font-size:19px;font-weight:850;line-height:1.3}.jimzz-account-sub{font-size:12px;opacity:.86;margin-top:4px;overflow-wrap:anywhere}
-.jimzz-account-chevron{font-size:27px;opacity:.8;padding:0 4px}.jimzz-account-summary-bottom{border-top:1px solid rgba(0,35,18,.22);margin-top:15px;padding-top:13px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:12px;font-weight:650}.jimzz-account-coin{font-size:20px;font-weight:900;margin-left:5px}.jimzz-account-meta{display:flex;align-items:center;gap:7px;opacity:.95}
-@media(max-width:480px){.jimzz-account-summary{padding:16px;border-radius:20px;margin-top:10px}.jimzz-account-greeting{font-size:17px}.jimzz-account-avatar{width:50px;height:50px;flex-basis:50px}.jimzz-account-summary-bottom{font-size:11px}}
-.jimzz-account-summary .jimzz-account-summary-bottom{color:#002b16}
-.jimzz-account-summary .jimzz-account-sub{color:rgba(0,25,12,.78)}
-.jimzz-account-summary .jimzz-account-avatar{background:rgba(0,40,20,.12)}
-.jimzz-account-summary .account-logout{background:rgba(0,35,18,.12);border:1px solid rgba(0,35,18,.25);color:#002b16}
-@media(max-width:480px){header{padding:34px 14px 28px}.jimzz-account-summary{width:100%;margin:14px auto 6px}.jimzz-account-summary-top{gap:10px}.jimzz-account-summary-bottom{align-items:flex-start}.jimzz-account-meta{flex-wrap:wrap}}
+/* Premium Emerald account summary: first card at the top of the page */
+.jimzz-account-summary{margin:0 auto 26px;max-width:760px;text-align:left;border:1px solid rgba(164,255,195,.42);border-radius:24px;padding:20px 22px;background:linear-gradient(125deg,#0b3d24 0%,#087a43 52%,#00b96b 100%);color:#fff;box-shadow:0 14px 34px rgba(0,190,105,.22),inset 0 1px 0 rgba(255,255,255,.12);cursor:pointer;position:relative;overflow:hidden;isolation:isolate}
+.jimzz-account-summary:before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(circle at 100% 0%,rgba(190,255,211,.22),transparent 42%),linear-gradient(110deg,transparent 35%,rgba(255,255,255,.035),transparent 75%);pointer-events:none}
+.jimzz-account-summary:after{content:"";position:absolute;width:190px;height:190px;border-radius:50%;right:-70px;top:-95px;border:1px solid rgba(255,255,255,.13);box-shadow:0 0 0 22px rgba(255,255,255,.025),0 0 0 46px rgba(255,255,255,.02);pointer-events:none}
+.jimzz-account-summary-top{display:flex;align-items:center;gap:13px;min-width:0;position:relative;z-index:1}
+.jimzz-account-avatar{width:58px;height:58px;flex:0 0 58px;border-radius:19px;display:grid;place-items:center;background:rgba(3,30,17,.32);border:1px solid rgba(255,255,255,.23);box-shadow:inset 0 1px 0 rgba(255,255,255,.1);font-size:28px}
+.jimzz-account-summary-info{min-width:0;flex:1}.jimzz-account-greeting{font-size:19px;font-weight:850;line-height:1.3;color:#fff;letter-spacing:-.35px}.jimzz-account-sub{font-size:12px;color:rgba(240,255,245,.82);margin-top:5px;overflow-wrap:anywhere}
+.jimzz-account-chevron{font-size:29px;opacity:.86;padding:0 4px;color:#fff}.jimzz-account-summary-bottom{border-top:1px solid rgba(255,255,255,.2);margin-top:16px;padding-top:13px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:12px;font-weight:650;color:#fff;position:relative;z-index:1}.jimzz-account-coin{font-size:20px;font-weight:900;margin-left:5px;color:#fff}.jimzz-account-meta{display:flex;align-items:center;gap:7px;opacity:1;color:#fff}
+.jimzz-account-summary .jimzz-account-avatar.role-user{background:rgba(3,30,17,.32)}
+.jimzz-account-summary .jimzz-account-avatar.role-admin{background:rgba(255,207,91,.16);border-color:rgba(255,220,135,.55)}
+.jimzz-account-summary .jimzz-account-avatar.role-owner{background:rgba(255,215,0,.17);border-color:rgba(255,225,120,.65);box-shadow:0 0 20px rgba(255,215,0,.12)}
+.jimzz-account-summary .account-logout{background:rgba(0,35,18,.22);border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:9px;padding:7px 9px;position:relative;z-index:2}
+.jimzz-account-summary .coin-header-label{color:#fff;min-width:30px}.jimzz-account-summary .coin-header-label.active{color:#eaffef}
+.jimzz-account-summary .coin-header-switch.active{background:linear-gradient(135deg,#d9ffe4,#fff);box-shadow:0 0 12px rgba(255,255,255,.2)}
+.jimzz-account-summary .coin-header-switch.active:after{background:#087a43}
+@media(max-width:480px){header{padding:20px 14px 28px}.jimzz-account-summary{padding:16px;border-radius:20px;margin-bottom:22px}.jimzz-account-greeting{font-size:17px}.jimzz-account-avatar{width:50px;height:50px;flex-basis:50px;border-radius:16px}.jimzz-account-summary-bottom{font-size:11px;align-items:flex-start}.jimzz-account-summary-top{gap:10px}.jimzz-account-meta{flex-wrap:wrap}}
 
 </style>
 <!-- ACCOUNT_DISABLED_2026_09_27 -->
@@ -639,23 +642,13 @@ header .coin-display { align-items:center; justify-content:center; flex-wrap:wra
 <div class="tab-page active" id="page-home">
   <header>
 
-    <h1><span class="gradient-text">Jimzz Store</span></h1><div id="roleBadge" class="role-badge" aria-hidden="true"></div>
-    <p class="tagline">Top Up Game, Sosmed & Digital Produk Terlengkap</p>
-    <div class="counter"><span class="dot"></span>🔥 <span id="viewCount">1.375</span> orang sudah order</div>
-    <button class="account-btn" id="accountButton" onclick="openAccountModal()" style="display:none;">👤 Login / Register</button>
-    <div class="account-profile" id="accountProfile" style="display:none;"><span>👋 <span id="accountName"></span></span><span class="account-role" id="accountRole"></span><button class="account-logout" onclick="openAccountSettings()">⚙️ Akun</button><button class="account-logout" onclick="accountLogout()">Logout</button></div>
-    <div class="trust-row">
-      <div class="trust-item"><span class="trust-icon">⚡</span> Proses Cepat</div>
-      <div class="trust-item"><span class="trust-icon">🔒</span> Aman & Terpercaya</div>
-      <div class="trust-item"><span class="trust-icon">💰</span> Harga Murah</div>
-    </div>
-    <section class="kategori" style="padding-bottom:0;">
+    <section class="kategori" style="padding:0;">
         <div class="jimzz-account-summary" id="jimzzAccountSummary">
           <div class="jimzz-account-summary-top" onclick="openAccountModal()" style="cursor:pointer;">
-            <div class="jimzz-account-avatar">👤</div>
+            <div class="jimzz-account-avatar role-user" id="jimzzSummaryAvatar" aria-hidden="true">👤</div>
             <div class="jimzz-account-summary-info">
-              <div class="jimzz-account-greeting" id="jimzzSummaryGreeting">Hi Guest, welcome to Jimzz store</div>
-              <div class="jimzz-account-sub" id="jimzzSummarySub">Login atau Register untuk melihat akun dan saldo koin kamu</div>
+              <div class="jimzz-account-greeting" id="jimzzSummaryGreeting">Hi, Guest! 👋</div>
+              <div class="jimzz-account-sub" id="jimzzSummarySub">Welcome to Jimzz store · Login/Register untuk mulai</div>
             </div>
             <button class="account-logout" onclick="event.stopPropagation();openAccountSettings()" id="jimzzSummarySettings" style="display:none;">⚙️ Akun</button><button class="account-logout" onclick="event.stopPropagation();openAccountModal()" id="jimzzSummaryLogin" style="display:none;">👤 Login / Register</button>
             <div class="jimzz-account-chevron" onclick="openAccountModal()">›</div>
@@ -670,9 +663,20 @@ header .coin-display { align-items:center; justify-content:center; flex-wrap:wra
               </div>
             </div>
           </div>
-          <div id="accountName" style="display:none;"></div><div id="accountRole" style="display:none;"></div>
         </div>
       </section>
+
+    <h1><span class="gradient-text">Jimzz Store</span></h1><div id="roleBadge" class="role-badge" aria-hidden="true"></div>
+    <p class="tagline">Top Up Game, Sosmed & Digital Produk Terlengkap</p>
+    <div class="counter"><span class="dot"></span>🔥 <span id="viewCount">1.375</span> orang sudah order</div>
+    <button class="account-btn" id="accountButton" onclick="openAccountModal()" style="display:none;">👤 Login / Register</button>
+    <div class="account-profile" id="accountProfile" style="display:none;"><span>👋 <span id="accountName"></span></span><span class="account-role" id="accountRole"></span><button class="account-logout" onclick="openAccountSettings()">⚙️ Akun</button><button class="account-logout" onclick="accountLogout()">Logout</button></div>
+    <div class="trust-row">
+      <div class="trust-item"><span class="trust-icon">⚡</span> Proses Cepat</div>
+      <div class="trust-item"><span class="trust-icon">🔒</span> Aman & Terpercaya</div>
+      <div class="trust-item"><span class="trust-icon">💰</span> Harga Murah</div>
+    </div>
+
     <div class="share-row">
       <a class="share-btn wa" href="https://wa.me/6283898669427?text=Halo%20Admin%20Jimzz%20Store%2C%20saya%20mau%20tanya..." target="_blank" title="Chat WhatsApp">💬</a>
       <a class="share-btn tg" href="https://t.me/jimzzstore" target="_blank" title="Chat Telegram">✈️</a>
@@ -2023,7 +2027,7 @@ async function changeAccountPassword(){
   catch(e){msg.textContent=e.message;msg.style.color='#ff6b6b';}
 }
 async function accountLogout(){clearAccountSession();renderCoinBalance();updateAccountUI();applyAdminUI();showToast('Berhasil logout','info');}
-function updateAccountUI(){const user=getLoggedAccount(),btn=document.getElementById('accountButton'),profile=document.getElementById('accountProfile'),nameEl=document.getElementById('accountName'),roleEl=document.getElementById('accountRole');if(btn){btn.classList.add('account-hidden');btn.style.display='none';}if(profile){profile.classList.remove('show');profile.style.display='none';}if(nameEl)nameEl.textContent=user?.username||'';if(roleEl){const role=user?.role||'user';roleEl.textContent=role==='owner'?'OWNER':role==='admin'?'ADMIN':'';roleEl.className='account-role '+role;roleEl.style.display='none';}const greeting=document.getElementById('jimzzSummaryGreeting'),sub=document.getElementById('jimzzSummarySub'),settings=document.getElementById('jimzzSummarySettings'),login=document.getElementById('jimzzSummaryLogin');if(greeting)greeting.textContent='Hi '+(user?(user.username||'pengguna'):'Guest')+', welcome to Jimzz store';if(sub)sub.textContent=user?(user.email||'Akun Jimzz Store'):'Login atau Register untuk melihat akun dan saldo koin kamu';if(settings)settings.style.display=user?'inline-flex':'none';if(login)login.style.display=user?'none':'inline-flex';updateRoleBadge(user?.role||'user');renderCoinBalance();renderCoinHeaderToggle();}
+function updateAccountUI(){const user=getLoggedAccount(),btn=document.getElementById('accountButton'),profile=document.getElementById('accountProfile'),nameEl=document.getElementById('accountName'),roleEl=document.getElementById('accountRole');if(btn){btn.classList.add('account-hidden');btn.style.display='none';}if(profile){profile.classList.remove('show');profile.style.display='none';}if(nameEl)nameEl.textContent=user?.username||'';if(roleEl){const role=user?.role||'user';roleEl.textContent=role==='owner'?'OWNER':role==='admin'?'ADMIN':'';roleEl.className='account-role '+role;roleEl.style.display='none';}const role=user?.role||'user',name=user?(user.username||'pengguna'):'Guest',greeting=document.getElementById('jimzzSummaryGreeting'),sub=document.getElementById('jimzzSummarySub'),avatar=document.getElementById('jimzzSummaryAvatar'),settings=document.getElementById('jimzzSummarySettings'),login=document.getElementById('jimzzSummaryLogin');if(greeting)greeting.textContent='Hi, '+name+'! 👋';if(sub)sub.textContent=role==='owner'?'Welcome to Jimzz store · Owner access':role==='admin'?'Welcome to Jimzz store · Admin access':user?'Welcome to Jimzz store · Akun pengguna':'Welcome to Jimzz store · Login/Register untuk mulai';if(avatar){avatar.textContent=role==='owner'?'👑':role==='admin'?'🛡️':'👤';avatar.className='jimzz-account-avatar role-'+(role==='owner'?'owner':role==='admin'?'admin':'user');}if(settings)settings.style.display=user?'inline-flex':'none';if(login)login.style.display=user?'none':'inline-flex';updateRoleBadge(role);renderCoinBalance();renderCoinHeaderToggle();}
 function updateRoleBadge(role){const badge=document.getElementById('roleBadge');if(!badge)return;if(role==='owner'){badge.innerHTML='<span class="role-crown">👑</span><span class="role-title">OWNER</span>';badge.className='role-badge owner show';}else if(role==='admin'){badge.innerHTML='<span class="role-crown">👑</span><span>ADMIN</span>';badge.className='role-badge admin show';}else{badge.innerHTML='';badge.className='role-badge';}}
 window.addEventListener('storage',e=>{if([JIMZZ_SESSION_KEY,JIMZZ_CACHE_KEY,GUEST_COINS_KEY].includes(e.key)){accountCache=null;updateAccountUI();renderCoinBalance();applyAdminUI();}});
 async function handleRecoveryLink(){
