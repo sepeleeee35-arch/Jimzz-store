@@ -504,7 +504,7 @@ header .coin-display { align-items:center; justify-content:center; flex-wrap:wra
 #page-suntik .pengumuman { display:none !important; }
 
 /* Obsidian + Emerald: clean, flat, premium account summary */
-.jimzz-account-summary{box-sizing:border-box;width:min(880px,calc(100% - clamp(32px,13.5vw,92px)));margin:0 auto 26px;max-width:880px;text-align:left;border:1px solid #245A40;border-radius:18px;padding:clamp(14px,3.2vw,20px);background:#090D0B;color:#F2F5F3;box-shadow:none;cursor:pointer;position:relative;overflow:hidden}
+.jimzz-account-summary{box-sizing:border-box;position:relative;left:50%;transform:translateX(-50%);width:min(1100px,calc(100vw - 24px));margin:0 auto 26px;max-width:1100px;text-align:left;border:1px solid #245A40;border-radius:18px;padding:clamp(14px,3.2vw,20px);background:#090D0B;color:#F2F5F3;box-shadow:none;cursor:pointer;overflow:hidden}
 .jimzz-account-summary-top{display:flex;align-items:center;gap:13px;min-width:0}
 .jimzz-account-avatar{width:52px;height:52px;flex:0 0 52px;border-radius:14px;display:grid;place-items:center;background:#173D2C;border:1px solid #245A40;box-shadow:none;font-size:26px}
 .jimzz-account-summary-info{min-width:0;flex:1}.jimzz-account-greeting{font-size:18px;font-weight:750;line-height:1.35;color:#F2F5F3;letter-spacing:-.25px}.jimzz-account-sub{font-size:12px;color:#92A99A;margin-top:4px;overflow-wrap:anywhere}
@@ -519,7 +519,7 @@ header .coin-display { align-items:center; justify-content:center; flex-wrap:wra
 .jimzz-account-summary .coin-header-switch.active:after{background:#EAF3ED}
 #banLockCard h2{font-size:22px;letter-spacing:.2px}
 #banLockCard p{margin-top:8px}
-@media(max-width:480px){header{padding:20px 14px 28px}.jimzz-account-summary{padding:16px;border-radius:16px;margin-bottom:22px}.jimzz-account-greeting{font-size:17px}.jimzz-account-avatar{width:46px;height:46px;flex-basis:46px;border-radius:13px}.jimzz-account-summary-bottom{font-size:11px;align-items:flex-start}.jimzz-account-summary-top{gap:10px}.jimzz-account-meta{flex-wrap:wrap}}
+@media(max-width:480px){header{padding:20px 14px 28px}.jimzz-account-summary{width:calc(100vw - 24px);padding:16px;border-radius:16px;margin-bottom:22px}.jimzz-account-greeting{font-size:17px}.jimzz-account-avatar{width:46px;height:46px;flex-basis:46px;border-radius:13px}.jimzz-account-summary-bottom{font-size:11px;align-items:flex-start}.jimzz-account-summary-top{gap:10px}.jimzz-account-meta{flex-wrap:wrap}}
 
 
 /* Jimzz side navigation and private order history */
