@@ -506,7 +506,7 @@ header .coin-display { align-items:center; justify-content:center; flex-wrap:wra
 <!-- ACCOUNT_DISABLED_2026_09_27 -->
 </head>
 <body>
-<div id="siteVersion">v3.4.8</div>
+<div id="siteVersion">v3.4.9</div>
 
 
 <div class="toast-container id="toastContainer"></div>
@@ -962,7 +962,7 @@ header .coin-display { align-items:center; justify-content:center; flex-wrap:wra
   <audio id="audioPlayer"></audio>
 </div>
 <script>
-const JIMZZ_VERSION = 'v3.4.8';
+const JIMZZ_VERSION = 'v3.4.9';
 
 // ============================================
 // 🔧 KONFIGURASI
@@ -2602,6 +2602,12 @@ async function keStep3() {
       const telegramDetail = result.telegramDetail ? ': ' + String(result.telegramDetail).slice(0, 180) : '';
       console.warn('[Jimzz] Telegram order notification failed:', telegramReason, result.telegramDetail || '');
       showToast('⚠️ Order dibuat, tetapi pesan Telegram gagal (' + telegramReason + ')' + telegramDetail, 'warning');
+    } else if (result.telegramSent === true) {
+      console.info('[Jimzz] Telegram API accepted the order message for the configured chat.');
+      showToast('ℹ️ Telegram menerima pesan. Jika belum terlihat, periksa chat/grup tujuan bot.', 'info');
+    } else {
+      console.warn('[Jimzz] Backend tidak mengirim status Telegram. Periksa endpoint/deployment backend.');
+      showToast('⚠️ Status Telegram tidak diterima dari server. Endpoint backend mungkin belum diperbarui.', 'warning');
     }
     document.getElementById('qrisLoading').style.display = 'none';
     document.getElementById('qrisBox').style.display = 'block';
