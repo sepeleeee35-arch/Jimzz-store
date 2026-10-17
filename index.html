@@ -659,6 +659,37 @@ body::before,body::after{background:none!important;animation:none!important;filt
 #page-home .home-services-grid .maintenance-badge{display:inline-flex;align-items:center;justify-content:center;padding:4px 8px;border-radius:7px;background:rgba(250,204,21,.08);border:1px solid rgba(250,204,21,.2);color:#facc15;font-size:9px;font-weight:800}
 @media(max-width:480px){.home-services-grid{gap:7px;margin-top:8px;max-width:100%;padding:0 8px}#page-home .home-services-grid .menu-home{padding:9px 6px;gap:6px;border-radius:15px}#page-home .home-services-grid .menu-home-icon{width:46px;height:46px;min-width:46px;font-size:24px;border-radius:14px}#page-home .home-services-grid .menu-home-title{font-size:12px}#page-home .home-services-grid .menu-home-desc{font-size:9px;line-height:1.45}}
 
+/* Compact-only adjustments requested: horizontal rectangles and smaller service cards */
+.home-quick-tools{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;max-width:600px;margin:2px auto 12px;padding:0 12px}
+.home-quick-order,.home-quick-speed{min-height:0;height:54px;padding:7px 9px;gap:7px;border-radius:10px;box-shadow:none}
+.home-quick-order{font-size:9px;line-height:1.25}
+.home-quick-order-icon{width:26px;height:26px;font-size:15px;border-radius:8px}
+.home-quick-order strong{font-size:14px;margin-bottom:0}
+.home-quick-speed-copy{gap:2px}
+.home-quick-speed-title{font-size:10px;line-height:1.1}
+.home-quick-speed-result{font-size:8px;line-height:1.15}
+.home-speed-test-button{min-width:0;min-height:24px;padding:4px 6px;font-size:9px;border-radius:7px}
+.home-services-grid{gap:7px;max-width:500px;margin:8px auto 0}
+#page-home .home-services-grid .menu-home{aspect-ratio:1.12/1;padding:8px 6px;gap:5px;border-radius:12px;box-shadow:none}
+#page-home .home-services-grid .menu-home-icon{width:34px;height:34px;min-width:34px;font-size:19px;border-radius:10px}
+#page-home .home-services-grid .menu-home-title{font-size:11px;line-height:1.25}
+#page-home .home-services-grid .menu-home-desc{margin-top:2px;font-size:8px;line-height:1.3}
+@media(max-width:480px){
+ .home-quick-tools{gap:6px;padding:0 10px;margin-bottom:12px}
+ .home-quick-order,.home-quick-speed{height:50px;min-height:0;padding:6px 7px;gap:5px}
+ .home-quick-order-icon{width:23px;height:23px;font-size:13px}
+ .home-quick-order strong{font-size:13px}
+ .home-quick-order{font-size:8px}
+ .home-quick-speed-title{font-size:9px}
+ .home-quick-speed-result{font-size:7px}
+ .home-speed-test-button{min-height:22px;padding:3px 5px;font-size:8px}
+ .home-services-grid{gap:6px;margin-top:7px;padding:0 8px;max-width:100%}
+ #page-home .home-services-grid .menu-home{aspect-ratio:1.08/1;padding:7px 5px;gap:4px;border-radius:11px}
+ #page-home .home-services-grid .menu-home-icon{width:31px;height:31px;min-width:31px;font-size:17px}
+ #page-home .home-services-grid .menu-home-title{font-size:10px}
+ #page-home .home-services-grid .menu-home-desc{font-size:7px;line-height:1.25}
+}
+@media(max-width:340px){.home-quick-tools{grid-template-columns:repeat(2,minmax(0,1fr))}.home-quick-order,.home-quick-speed{height:48px;padding:5px}.home-quick-order-icon{display:none}}
 </style>
 <!-- ACCOUNT_DISABLED_2026_09_27 -->
 </head>
@@ -957,7 +988,7 @@ body::before,body::after{background:none!important;animation:none!important;filt
   <section class="home-quick-tools" aria-label="Informasi pesanan dan tes kecepatan internet">
     <div class="home-quick-order">
       <span class="home-quick-order-icon">🛍️</span>
-      <span><strong id="viewCount">1.375</strong>Jumlah pesanan</span>
+      <span><strong id="viewCount">1.375</strong> orang sudah order</span>
     </div>
     <div class="home-quick-speed">
       <span class="home-quick-order-icon">⚡</span>
