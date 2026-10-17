@@ -2342,7 +2342,7 @@ async function verifyAccountEmailOtp(){
 }
 async function startTelegramLink(){
   const status=document.getElementById('telegramLinkStatus');
-  try{const data=await accountApi('telegram-link-start');if(data.url)window.open(data.url,'_blank','noopener');if(status){status.textContent='Buka bot Telegram lalu tekan Start. Setelah itu periksa status di sini.';status.style.color='#ffbb55';}showToast('Bot Telegram dibuka. Tekan Start untuk menyelesaikan pengaitan.','info');}
+  try{const data=await accountApi('telegram-link-start');if(data.url)window.location.href=data.url;if(status){status.textContent='Buka bot Telegram lalu tekan Start. Setelah itu kembali ke Jimzz Store dan periksa status.';status.style.color='#ffbb55';}showToast('Buka bot Telegram dan tekan Start untuk menyelesaikan pengaitan.','info');}
   catch(e){if(status){status.textContent=e.message;status.style.color='#ff6b6b';}}
 }
 async function refreshTelegramLinkStatus(){
