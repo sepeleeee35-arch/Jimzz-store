@@ -596,6 +596,24 @@ body::before,body::after{background:none!important;animation:none!important;filt
   #page-home *{scroll-behavior:auto!important;animation:none!important;transition:none!important}
 }
 
+/* HOME CONTACT: compact order proof and clearly labeled contact actions */
+.home-contact-section { max-width: 760px; margin: 0 auto; padding-top: 8px !important; }
+.home-order-counter { display: flex; width: fit-content; max-width: 100%; margin: 0 auto 22px; align-items: center; justify-content: center; flex-wrap: wrap; gap: 6px; padding: 10px 16px; border-radius: 12px; background: #0b0b0b; border: 1px solid #242424; color: #bdbdbd; box-shadow: none; font-size: 12px; }
+.home-order-counter .dot { flex: 0 0 7px; animation: none; box-shadow: none; }
+.home-order-counter strong { color: #4ade80; font-weight: 800; }
+.home-contact-heading { margin-top: 4px; color: #f5f5f5; font-size: 18px; font-weight: 800; text-align: center; }
+.home-contact-sub { margin: 3px 0 14px; color: #888; font-size: 12px; text-align: center; }
+.home-share-row { gap: 10px; margin: 0 auto 10px; }
+.home-contact-btn { width: auto; min-height: 44px; height: auto; flex: 1 1 145px; max-width: 230px; padding: 10px 14px; gap: 8px; border-radius: 10px; font-size: 12px; font-weight: 750; box-shadow: none !important; }
+.home-contact-btn:hover { transform: none; }
+.home-contact-icon { font-size: 17px; line-height: 1; }
+.home-copy-link { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; max-width: 470px; min-height: 42px; margin: 0 auto; padding: 10px 14px; border: 1px solid #292929; border-radius: 10px; background: #0a0a0a; color: #d4d4d4; font-size: 12px; font-weight: 700; cursor: pointer; }
+.home-copy-link:active { background: #141414; }
+@media (max-width: 480px) {
+  .home-contact-section { padding-left: 16px !important; padding-right: 16px !important; }
+  .home-order-counter { margin-bottom: 18px; }
+  .home-contact-btn { min-width: 0; padding: 10px 8px; }
+}
 </style>
 <!-- ACCOUNT_DISABLED_2026_09_27 -->
 </head>
@@ -783,17 +801,8 @@ body::before,body::after{background:none!important;animation:none!important;filt
       </section>
 
     <div id="roleBadge" class="role-badge" aria-hidden="true"></div>
-    <p class="tagline">Top Up Game, Sosmed & Digital Produk Terlengkap</p>
-    <div class="counter"><span class="dot"></span>🔥 <span id="viewCount">1.375</span> orang sudah order</div>
     <button class="account-btn" id="accountButton" onclick="openAccountModal()" style="display:none;">👤 Login / Register</button>
     <div class="account-profile" id="accountProfile" style="display:none;"><span>👋 <span id="accountName"></span></span><span class="account-role" id="accountRole"></span><button class="account-logout" onclick="openAccountSettings()">⚙️ Akun</button><button class="account-logout" onclick="accountLogout()">Logout</button></div>
-    <div class="share-row">
-      <a class="share-btn wa" href="https://wa.me/6283898669427?text=Halo%20Admin%20Jimzz%20Store%2C%20saya%20mau%20tanya..." target="_blank" title="Chat WhatsApp">💬</a>
-      <a class="share-btn tg" href="https://t.me/jimzzstore" target="_blank" title="Chat Telegram">✈️</a>
-      <button class="share-btn copy" onclick="copyLink()" title="Copy Link">🔗</button>
-    </div>
-    <div>
-      </div>
 
   </header>
 
@@ -932,6 +941,17 @@ body::before,body::after{background:none!important;animation:none!important;filt
         <div class="menu-home-desc">Website dan aplikasi digital</div>
       </div>
     </div>
+  </section>
+
+  <section class="kategori home-contact-section" aria-label="Informasi pesanan dan kontak admin">
+    <div class="counter home-order-counter"><span class="dot"></span>🛍️ <span class="home-order-copy">Sudah melayani</span> <strong id="viewCount">1.375</strong> <span class="home-order-copy">pesanan</span></div>
+    <div class="home-contact-heading">Butuh bantuan?</div>
+    <p class="home-contact-sub">Hubungi admin atau bagikan Jimzz Store.</p>
+    <div class="share-row home-share-row">
+      <a class="share-btn wa home-contact-btn" href="https://wa.me/6283898669427?text=Halo%20Admin%20Jimzz%20Store%2C%20saya%20mau%20tanya..." target="_blank" rel="noopener noreferrer" aria-label="WhatsApp Admin"><span class="home-contact-icon">💬</span><span>WhatsApp Admin</span></a>
+      <a class="share-btn tg home-contact-btn" href="https://t.me/jimzzstore" target="_blank" rel="noopener noreferrer" aria-label="Telegram Admin"><span class="home-contact-icon">✈️</span><span>Telegram</span></a>
+    </div>
+    <button class="home-copy-link" type="button" onclick="copyLink()">🔗 Salin tautan toko</button>
   </section>
 
   <footer><p>© 2025 Jimzz Store — All Rights Reserved 😈</p></footer>
