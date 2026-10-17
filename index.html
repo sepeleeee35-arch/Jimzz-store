@@ -558,87 +558,42 @@ header .coin-display { align-items:center; justify-content:center; flex-wrap:wra
 @media(min-width:760px){#accountSettingsModal .account-settings-content{padding-top:30px}}
 
 
-/* JIMZZ HOME VISUAL PASS: editorial layout, emerald accents, calmer spacing */
-#page-home header{
-  position:relative;
-  isolation:isolate;
-  padding:clamp(22px,5vw,46px) clamp(14px,3vw,24px) 30px;
-  text-align:center;
-  background:
-    radial-gradient(ellipse at 8% 0%,rgba(0,255,136,.10),transparent 42%),
-    radial-gradient(ellipse at 100% 28%,rgba(38,110,74,.12),transparent 38%),
-    linear-gradient(180deg,#080d0a 0%,#050706 78%,#000 100%);
-  border-bottom:1px solid rgba(105,190,135,.12);
-}
-#page-home header:before{
-  content:"";position:absolute;z-index:-1;top:0;left:clamp(14px,4vw,34px);width:42px;height:3px;
-  border-radius:0 0 4px 4px;background:#00e781;box-shadow:0 0 20px rgba(0,255,136,.4)
-}
-#page-home .jimzz-account-summary{
-  margin-bottom:24px;
-  border-color:rgba(65,137,91,.48);
-  background:linear-gradient(120deg,#0c120e 0%,#080b09 62%,#0b1510 100%);
-  box-shadow:0 12px 34px rgba(0,0,0,.18);
-}
-#page-home header .tagline{
-  max-width:390px;margin:18px auto 0;padding:0 8px;
-  color:#a5b4aa;font-size:clamp(13px,2vw,15px);line-height:1.75;letter-spacing:.08px
-}
-#page-home .counter{
-  margin-top:15px;padding:8px 13px;
-  background:rgba(11,24,16,.8);border-color:rgba(73,160,103,.28);
-  color:#b8c8bd;box-shadow:none;font-size:11px
-}
-#page-home .share-row{gap:10px;margin-top:22px}
-#page-home .share-row .share-btn{
-  width:42px;height:42px;border-radius:14px;
-  border:1px solid rgba(120,170,137,.18);
-  box-shadow:0 5px 14px rgba(0,0,0,.2);
-  transition:transform .18s ease,border-color .18s ease,background .18s ease
-}
-#page-home .share-row .share-btn:active{transform:scale(.94)}
-#page-home .kategori{
-  box-sizing:border-box;max-width:1040px;
-  padding:clamp(26px,5vw,44px) clamp(14px,3.5vw,28px);
-}
-#page-home .kategori>h2{
-  position:relative;display:flex;align-items:center;gap:10px;
-  width:fit-content;max-width:100%;margin:0 auto 24px;
-  padding:0 0 0 13px;text-align:left;
-  font-size:clamp(21px,4vw,29px);line-height:1.25;letter-spacing:-.65px
-}
-#page-home .kategori>h2:before{
-  content:"";position:absolute;left:0;top:4px;bottom:4px;width:3px;
-  border-radius:5px;background:linear-gradient(180deg,#00ff88,#188b56);
-  box-shadow:0 0 14px rgba(0,255,136,.18)
-}
-#page-home .kategori>h2 .accent{color:#65e6a0}
-#page-home .kategori:has(.produk-list){
-  margin-top:5px;margin-bottom:10px;
-  border-top:1px solid rgba(115,160,128,.08)
-}
-#page-home .produk-card{
-  border-color:rgba(83,123,96,.24);
-  background:linear-gradient(145deg,rgba(14,22,17,.98),rgba(8,12,9,.98));
-  border-radius:16px;box-shadow:0 8px 22px rgba(0,0,0,.12);
-  transition:transform .2s ease,border-color .2s ease,background .2s ease
-}
-#page-home .produk-card:hover{
-  transform:translateY(-2px);border-color:rgba(0,255,136,.42);
-  background:linear-gradient(145deg,#101d14,#090e0b)
-}
-#page-home .produk-list{gap:13px}
+/* JIMZZ HOME LITE: pure black, simple layout, low-end device friendly */
+html,body{background:#000!important;background-image:none!important}
+body::before,body::after{background:none!important;animation:none!important;filter:none!important}
+#bgContainer,#bgSimple,#bgNeon,#jimzz-neon-bg,#neonCanvas,.jimzzz-neon,.neon-grid,.neon-horizon,.wave,.laser,.neon-ring,.scanlines,.edge-glow{display:none!important;animation:none!important;filter:none!important;box-shadow:none!important}
+#page-home{background:#000!important}
+#page-home header{max-width:100%;margin:0 auto 10px;padding:18px 14px 20px;background:#000!important;background-image:none!important;border:0;border-radius:0;box-shadow:none!important;overflow:visible}
+#page-home header h1{text-shadow:none!important}
+#page-home header .tagline{margin-top:10px;color:#999;font-size:13px;line-height:1.55}
+#page-home .counter{margin-top:12px;padding:6px 10px;background:#080808;border:1px solid #202020;color:#bdbdbd;box-shadow:none!important}
+#page-home .trust-row{gap:8px;margin-top:16px}
+#page-home .trust-item{min-height:54px;padding:8px 5px;border-radius:10px;background:#080808;border:1px solid #1d1d1d;box-shadow:none!important}
+#page-home .share-row{gap:9px;margin-top:15px}
+#page-home .share-btn{box-shadow:none!important;filter:none!important}
+#page-home .kategori{max-width:900px;margin-left:auto;margin-right:auto;padding:24px 14px;background:#000!important}
+#page-home .kategori>h2{margin:0 0 16px;font-size:clamp(20px,4.8vw,25px);line-height:1.3;letter-spacing:-.25px;text-shadow:none!important}
+#page-home .kategori>.sub{margin-bottom:14px;color:#888}
+#page-home .menu-home{min-height:70px;gap:12px;margin:8px 0;padding:12px;border:1px solid #202020;border-radius:12px;background:#080808;box-shadow:none!important;transition:border-color .12s ease}
+#page-home .menu-home:not(.disabled):hover{transform:none;border-color:#365642;box-shadow:none!important}
+#page-home .menu-home-icon{width:44px;height:44px;min-width:44px;border-radius:10px;background:#101810;border:1px solid #243528;font-size:23px}
+#page-home .menu-home-title{font-size:14px}
+#page-home .menu-home-desc{color:#888;font-size:11px;line-height:1.45}
+#page-home .produk-list{gap:10px}
+#page-home .produk-card{background:#080808!important;background-image:none!important;border:1px solid #202020;border-radius:12px;box-shadow:none!important;transition:border-color .12s ease!important;filter:none!important;backdrop-filter:none!important}
+#page-home .produk-card:hover{transform:none!important;border-color:#365642;background:#080808!important;box-shadow:none!important}
+#page-home .produk-card::before,#page-home .produk-card::after{animation:none!important;filter:none!important;box-shadow:none!important}
+#page-home footer{max-width:900px;margin-left:auto;margin-right:auto}
 @media(max-width:520px){
-  #page-home header{padding:18px 12px 25px}
-  #page-home .jimzz-account-summary{margin-bottom:20px}
-  #page-home .kategori{padding:27px 13px}
-  #page-home .kategori>h2{margin-bottom:19px;font-size:22px}
-  #page-home .produk-list{gap:10px}
-  #page-home .produk-card{border-radius:14px}
-  #page-home .share-row .share-btn{width:40px;height:40px}
+  #page-home header{padding:14px 12px 18px;margin-bottom:4px}
+  #page-home .kategori{padding:20px 12px}
+  #page-home .kategori>h2{margin-bottom:13px;font-size:21px}
+  #page-home .menu-home{min-height:64px;padding:10px;gap:10px}
+  #page-home .menu-home-icon{width:40px;height:40px;min-width:40px;font-size:21px}
+  #page-home .trust-row{gap:6px}
 }
 @media(prefers-reduced-motion:reduce){
-  #page-home .share-row .share-btn,#page-home .produk-card{transition:none}
+  #page-home *{scroll-behavior:auto!important;animation:none!important;transition:none!important}
 }
 
 </style>
