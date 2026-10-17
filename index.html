@@ -598,7 +598,7 @@ body::before,body::after{background:none!important;animation:none!important;filt
 
 /* HOME CONTACT: compact order proof and clearly labeled contact actions */
 .home-contact-section { max-width: 760px; margin: 0 auto; padding-top: 8px !important; }
-.home-order-counter { display: flex; width: fit-content; max-width: 100%; margin: 0 auto 22px; align-items: center; justify-content: center; flex-wrap: wrap; gap: 6px; padding: 10px 16px; border-radius: 12px; background: #0b0b0b; border: 1px solid #242424; color: #bdbdbd; box-shadow: none; font-size: 12px; }
+.home-order-counter { display: flex; width: fit-content; max-width: 100%; margin: 0 auto 16px; align-items: center; justify-content: center; flex-wrap: wrap; gap: 5px; padding: 7px 11px; border-radius: 10px; background: #0b0b0b; border: 1px solid #242424; color: #bdbdbd; box-shadow: none; font-size: 10px; }
 .home-order-counter .dot { flex: 0 0 7px; animation: none; box-shadow: none; }
 .home-order-counter strong { color: #4ade80; font-weight: 800; }
 .home-contact-heading { margin-top: 4px; color: #f5f5f5; font-size: 18px; font-weight: 800; text-align: center; }
@@ -616,11 +616,11 @@ body::before,body::after{background:none!important;animation:none!important;filt
 }
 
 /* Classic compact info row — keep these as horizontal info panels, not square tiles */
-.home-quick-tools{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;max-width:760px;margin:4px auto 22px;padding:0 20px;box-sizing:border-box}
-.home-quick-order,.home-quick-speed{aspect-ratio:auto;min-width:0;width:100%;min-height:88px;display:flex;flex-direction:row;align-items:center;justify-content:flex-start;text-align:left;gap:12px;padding:14px 16px;background:linear-gradient(115deg,#111713 0%,#0a0c0b 72%);border:1px solid rgba(74,222,128,.2);border-radius:13px;box-sizing:border-box;overflow:hidden;box-shadow:0 5px 18px rgba(0,0,0,.2)}
+.home-quick-tools{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;max-width:620px;margin:2px auto 14px;padding:0 14px;box-sizing:border-box}
+.home-quick-order,.home-quick-speed{aspect-ratio:auto;min-width:0;width:100%;min-height:64px;display:flex;flex-direction:row;align-items:center;justify-content:flex-start;text-align:left;gap:8px;padding:9px 10px;background:linear-gradient(115deg,#111713 0%,#0a0c0b 72%);border:1px solid rgba(74,222,128,.2);border-radius:13px;box-sizing:border-box;overflow:hidden;box-shadow:0 5px 18px rgba(0,0,0,.2)}
 .home-quick-order{color:#a8b0aa;font-size:11px;line-height:1.45}
-.home-quick-order-icon{width:40px;height:40px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;border-radius:11px;background:rgba(74,222,128,.09);border:1px solid rgba(74,222,128,.15)}
-.home-quick-order strong{display:block;color:#4ade80;font-size:21px;font-weight:850;letter-spacing:-.4px;margin-bottom:2px}
+.home-quick-order-icon{width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;border-radius:11px;background:rgba(74,222,128,.09);border:1px solid rgba(74,222,128,.15)}
+.home-quick-order strong{display:block;color:#4ade80;font-size:16px;font-weight:850;letter-spacing:-.4px;margin-bottom:2px}
 .home-quick-order>span:last-child{min-width:0;overflow-wrap:anywhere}
 .home-quick-speed-copy{display:flex;flex:1;min-width:0;flex-direction:column;align-items:flex-start;gap:4px}
 .home-quick-speed-title{font-size:12px;font-weight:800;color:#ededed}
@@ -647,17 +647,17 @@ body::before,body::after{background:none!important;animation:none!important;filt
 
 
 /* Premium polish for the four service cards below "Pilih Layanan" */
-.home-services-grid{gap:13px;max-width:660px;margin:18px auto 0}
-#page-home .home-services-grid .menu-home{position:relative;isolation:isolate;aspect-ratio:1/1;min-height:0;padding:18px 14px;gap:13px;border:1px solid #252d28;border-radius:18px;background:radial-gradient(ellipse at 50% 0%,rgba(34,197,94,.11),transparent 58%),linear-gradient(145deg,#121713 0%,#080a09 78%);box-shadow:0 9px 24px rgba(0,0,0,.26),inset 0 1px 0 rgba(255,255,255,.035);transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}
+.home-services-grid{gap:8px;max-width:520px;margin:10px auto 0}
+#page-home .home-services-grid .menu-home{position:relative;isolation:isolate;aspect-ratio:.94/1;min-height:0;padding:11px 9px;gap:7px;border:1px solid #252d28;border-radius:18px;background:radial-gradient(ellipse at 50% 0%,rgba(34,197,94,.11),transparent 58%),linear-gradient(145deg,#121713 0%,#080a09 78%);box-shadow:0 9px 24px rgba(0,0,0,.26),inset 0 1px 0 rgba(255,255,255,.035);transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}
 #page-home .home-services-grid .menu-home::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;background:linear-gradient(135deg,rgba(74,222,128,.07),transparent 45%);opacity:.8;pointer-events:none}
 #page-home .home-services-grid .menu-home:active{transform:scale(.985)}
 #page-home .home-services-grid .menu-home:not(.disabled):hover{border-color:rgba(74,222,128,.55);box-shadow:0 10px 28px rgba(0,0,0,.32),0 0 0 1px rgba(74,222,128,.07)}
-#page-home .home-services-grid .menu-home-icon{width:58px;height:58px;min-width:58px;font-size:29px;border-radius:17px;background:linear-gradient(145deg,rgba(74,222,128,.15),rgba(74,222,128,.045));border:1px solid rgba(74,222,128,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.04)}
-#page-home .home-services-grid .menu-home-title{font-size:14px;line-height:1.35;font-weight:850;letter-spacing:-.2px;color:#f3f7f4}
+#page-home .home-services-grid .menu-home-icon{width:42px;height:42px;min-width:42px;font-size:22px;border-radius:17px;background:linear-gradient(145deg,rgba(74,222,128,.15),rgba(74,222,128,.045));border:1px solid rgba(74,222,128,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.04)}
+#page-home .home-services-grid .menu-home-title{font-size:12px;line-height:1.35;font-weight:850;letter-spacing:-.2px;color:#f3f7f4}
 #page-home .home-services-grid .menu-home-desc{margin-top:5px;font-size:10px;line-height:1.5;color:#9da69f}
 #page-home .home-services-grid .menu-home.disabled{background:linear-gradient(145deg,#141614,#090a09);border-color:#282c29}
 #page-home .home-services-grid .maintenance-badge{display:inline-flex;align-items:center;justify-content:center;padding:4px 8px;border-radius:7px;background:rgba(250,204,21,.08);border:1px solid rgba(250,204,21,.2);color:#facc15;font-size:9px;font-weight:800}
-@media(max-width:480px){.home-services-grid{gap:10px;margin-top:15px}#page-home .home-services-grid .menu-home{padding:13px 9px;gap:10px;border-radius:15px}#page-home .home-services-grid .menu-home-icon{width:46px;height:46px;min-width:46px;font-size:24px;border-radius:14px}#page-home .home-services-grid .menu-home-title{font-size:12px}#page-home .home-services-grid .menu-home-desc{font-size:9px;line-height:1.45}}
+@media(max-width:480px){.home-services-grid{gap:7px;margin-top:8px;max-width:100%;padding:0 8px}#page-home .home-services-grid .menu-home{padding:9px 6px;gap:6px;border-radius:15px}#page-home .home-services-grid .menu-home-icon{width:46px;height:46px;min-width:46px;font-size:24px;border-radius:14px}#page-home .home-services-grid .menu-home-title{font-size:12px}#page-home .home-services-grid .menu-home-desc{font-size:9px;line-height:1.45}}
 
 </style>
 <!-- ACCOUNT_DISABLED_2026_09_27 -->
