@@ -939,6 +939,21 @@ body::before,body::after{background:none!important;animation:none!important;filt
 
   
 
+  <section class="home-quick-tools" aria-label="Informasi pesanan dan tes kecepatan internet">
+    <div class="home-quick-order">
+      <span class="home-quick-order-icon">🛍️</span>
+      <span><strong id="viewCount">1.375</strong>Jumlah pesanan</span>
+    </div>
+    <div class="home-quick-speed">
+      <span class="home-quick-order-icon">⚡</span>
+      <div class="home-quick-speed-copy">
+        <span class="home-quick-speed-title">Tes Kecepatan</span>
+        <span class="home-quick-speed-result" id="homeSpeedResult">Cek kecepatan internet</span>
+        <button class="home-speed-test-button" id="homeSpeedTestButton" type="button" onclick="runHomeSpeedTest()">TES Mbps</button>
+      </div>
+    </div>
+  </section>
+
   <section class="kategori" style="text-align:center;">
     <h2>Pilih <span class="accent">Layanan</span></h2>
     <p class="sub">Semua kebutuhan digital kamu ada di sini</p>
@@ -975,11 +990,7 @@ body::before,body::after{background:none!important;animation:none!important;filt
     </div>
   </section>
 
-  <section class="home-order-only" aria-label="Jumlah pesanan">
-    <div class="counter home-order-counter"><span class="dot"></span>🛍️ <span class="home-order-copy">Sudah melayani</span> <strong id="viewCount">1.375</strong> <span class="home-order-copy">pesanan</span></div>
-  </section>
-
-  <section class="kategori home-contact-section" aria-label="Informasi pesanan dan kontak admin">
+    <section class="kategori home-contact-section" aria-label="Informasi pesanan dan kontak admin">
     
     <div class="home-contact-heading">Butuh bantuan?</div>
     <p class="home-contact-sub">Hubungi admin atau bagikan Jimzz Store.</p>
