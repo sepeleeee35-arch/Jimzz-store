@@ -652,16 +652,6 @@ header .coin-display { align-items:center; justify-content:center; flex-wrap:wra
           <div class="account-msg" id="passwordMsg" role="status"></div>
         </form>
       </section>
-      <section class="account-settings-section">
-        <h3>🛡️ Privasi dan akun</h3><p>Jangan berikan kode OTP atau password kepada orang lain. Pastikan kamu logout jika memakai perangkat bersama.</p>
-        <button type="button" class="btn-next" style="width:100%;" aria-expanded="false" aria-controls="accountSecurityTips" onclick="toggleAccountSecurityTips(this)">ℹ️ Tips keamanan</button>
-        <div id="accountSecurityTips" hidden style="margin-top:12px;padding:13px 14px;border-radius:12px;background:#101a14;border:1px solid #284a36;color:#c6d8cb;font-size:13px;line-height:1.7">
-          <div>• Jangan bagikan password atau kode OTP kepada siapa pun.</div>
-          <div>• Gunakan password unik dengan minimal 8 karakter.</div>
-          <div>• Pastikan email dan nomor WhatsApp yang tersimpan masih aktif.</div>
-          <div>• Logout jika menggunakan perangkat milik orang lain.</div>
-        </div>
-      </section>
       <section class="account-settings-section account-settings-switch">
         <h3>👥 Ganti akun</h3>
         <p>Keluar dari sesi sekarang untuk masuk menggunakan akun Jimzz Store yang berbeda.</p>
@@ -2112,10 +2102,6 @@ function openAccountSettings(){
   if(nameEl)nameEl.textContent=name;if(roleEl)roleEl.textContent=role==='owner'?'Developer':role==='admin'?'Admin':'User';if(iconEl)iconEl.textContent=role==='owner'?'👑':role==='admin'?'⭐':'👤';
   document.body.style.overflow='hidden';
 }
-function toggleAccountSecurityTips(button){
-  const panel=document.getElementById('accountSecurityTips');if(!panel)return;
-  const open=panel.hidden;panel.hidden=!open;button.setAttribute('aria-expanded',String(open));
-}
 function logoutFromAccountSettings(){closeAccountSettings();accountLogout();}
 function switchAccountFromSettings(){
   clearAccountSession();
@@ -2157,7 +2143,7 @@ async function accountLogout(){
   applyAdminUI();
   showToast('Berhasil logout','info');
 }
-function updateAccountUI(){const user=getLoggedAccount(),btn=document.getElementById('accountButton'),profile=document.getElementById('accountProfile'),nameEl=document.getElementById('accountName'),roleEl=document.getElementById('accountRole');if(btn){btn.classList.add('account-hidden');btn.style.display='none';}if(profile){profile.classList.remove('show');profile.style.display='none';}if(nameEl)nameEl.textContent=user?.username||'';if(roleEl){const r=user?.role||'user';roleEl.textContent=r==='owner'?'Jimzz':r==='admin'?'ADMIN':'';roleEl.className='account-role '+r;roleEl.style.display='none';}const role=user?.role||'user',name=user?(role==='owner'?'Jimzz':(user.username||'pengguna')):'Guest',greeting=document.getElementById('jimzzSummaryGreeting'),sub=document.getElementById('jimzzSummarySub'),roleline=document.getElementById('jimzzSummaryRoleline'),avatar=document.getElementById('jimzzSummaryAvatar'),login=document.getElementById('jimzzSummaryLogin');if(greeting){const safeName=escapeAccountHtml(name);const mark=role==='user'?(user?'<span class="jimzz-user-star" aria-label="User">⭐</span>':''):(role==='admin'||role==='owner')?'<span class="jimzz-verified-mark" aria-label="Verified"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#1D9BF0" d="M12 1.8l2.6 1.55 3.02-.15 1.33 2.72 2.72 1.33-.15 3.02L23.1 13l-1.55 2.6.15 3.02-2.72 1.33-1.33 2.72-3.02-.15L12 24.1l-2.6-1.55-3.02.15-1.33-2.72-2.72-1.33.15-3.02L.9 13l1.55-2.6-.15-3.02 2.72-1.33 1.33-2.72 3.02.15L12 1.8z"/><path fill="#fff" d="M10.1 15.9 6.7 12.5l1.6-1.6 1.8 1.8 5-5 1.6 1.6z"/></svg></span>':'';greeting.innerHTML=safeName+mark;}if(sub)sub.textContent='Welcome to Jimzz store';if(roleline){roleline.textContent=role==='admin'?'Admin':role==='owner'?'Developer':'User';roleline.style.display=user?'inline-flex':'none';roleline.className='jimzz-account-roleline role-'+role;}if(avatar){avatar.textContent=role==='owner'?'👑':role==='admin'?'⭐':'👤';avatar.className='jimzz-account-avatar role-'+(role==='owner'?'owner':role==='admin'?'admin':'user');}if(login)login.style.display=user?'none':'inline-flex';updateRoleBadge(role);renderCoinBalance();renderCoinHeaderToggle();}
+function updateAccountUI(){const user=getLoggedAccount(),btn=document.getElementById('accountButton'),profile=document.getElementById('accountProfile'),nameEl=document.getElementById('accountName'),roleEl=document.getElementById('accountRole');if(btn){btn.classList.add('account-hidden');btn.style.display='none';}if(profile){profile.classList.remove('show');profile.style.display='none';}if(nameEl)nameEl.textContent=user?.username||'';if(roleEl){const r=user?.role||'user';roleEl.textContent=r==='owner'?'Jimzz':r==='admin'?'ADMIN':'';roleEl.className='account-role '+r;roleEl.style.display='none';}const role=user?.role||'user',name=user?(role==='owner'?'Jimzz':(user.username||'pengguna')):'Guest',greeting=document.getElementById('jimzzSummaryGreeting'),sub=document.getElementById('jimzzSummarySub'),roleline=document.getElementById('jimzzSummaryRoleline'),avatar=document.getElementById('jimzzSummaryAvatar'),login=document.getElementById('jimzzSummaryLogin');if(greeting){const safeName=escapeAccountHtml(name);const mark=role==='user'?(user?'<span class="jimzz-user-star" aria-label="User">⭐</span>':''):(role==='admin'||role==='owner')?'<span class="jimzz-verified-mark" aria-label="Verified"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#1D9BF0" d="M12 1.8l2.6 1.55 3.02-.15 1.33 2.72 2.72 1.33-.15 3.02L23.1 13l-1.55 2.6.15 3.02-2.72 1.33-1.33 2.72-3.02-.15L12 24.1l-2.6-1.55-3.02.15-1.33-2.72-2.72-1.33.15-3.02L.9 13l1.55-2.6-.15-3.02 2.72-1.33 1.33-2.72 3.02.15L12 1.8z"/><path fill="#fff" d="M10.1 15.9 6.7 12.5l1.6-1.6 1.8 1.8 5-5 1.6 1.6z"/></svg></span>':'';greeting.innerHTML=safeName+mark;}if(sub)sub.textContent='Welcome to Jimzz store';if(roleline){roleline.textContent=role==='admin'?'Admin':role==='owner'?'Developer':'';roleline.style.display=user&&(role==='admin'||role==='owner')?'inline-flex':'none';roleline.className='jimzz-account-roleline role-'+role;}if(avatar){avatar.textContent=role==='owner'?'👑':role==='admin'?'⭐':'👤';avatar.className='jimzz-account-avatar role-'+(role==='owner'?'owner':role==='admin'?'admin':'user');}if(login)login.style.display=user?'none':'inline-flex';updateRoleBadge(role);renderCoinBalance();renderCoinHeaderToggle();}
 function updateRoleBadge(role){const badge=document.getElementById('roleBadge');if(!badge)return;badge.innerHTML='';badge.className='role-badge';}
 window.addEventListener('storage',e=>{if([JIMZZ_SESSION_KEY,JIMZZ_CACHE_KEY,GUEST_COINS_KEY].includes(e.key)){accountCache=null;updateAccountUI();renderCoinBalance();applyAdminUI();}});
 async function handleRecoveryLink(){
