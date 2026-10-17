@@ -549,6 +549,10 @@ header .coin-display { align-items:center; justify-content:center; flex-wrap:wra
 #accountSettingsModal .account-settings-section input{box-sizing:border-box;width:100%;min-height:45px}
 #accountSettingsModal .account-settings-section .btn-next{width:100%;margin-top:8px}
 #accountSettingsModal .account-settings-danger{border-color:#57302d;background:#160d0c}
+#accountSettingsModal .account-settings-switch{border-color:#28523a;background:linear-gradient(135deg,#10231a,#0b100d)}
+#accountSettingsModal .account-settings-switch h3{color:#baf2cb}
+#accountSettingsModal .account-settings-switch p{color:#a9bdb0;line-height:1.6}
+
 #accountSettingsModal .account-settings-logout{width:100%;min-height:46px;border:1px solid #a74740;border-radius:12px;background:#351715;color:#ffe9e6;font-weight:800;font-size:14px;cursor:pointer}
 #accountSettingsModal .account-settings-logout:active{transform:scale(.99)}
 @media(min-width:760px){#accountSettingsModal .account-settings-content{padding-top:30px}}
@@ -658,10 +662,15 @@ header .coin-display { align-items:center; justify-content:center; flex-wrap:wra
           <div>• Logout jika menggunakan perangkat milik orang lain.</div>
         </div>
       </section>
+      <section class="account-settings-section account-settings-switch">
+        <h3>👥 Ganti akun</h3>
+        <p>Keluar dari sesi sekarang untuk masuk menggunakan akun Jimzz Store yang berbeda.</p>
+        <button type="button" class="btn-next" style="width:100%;" onclick="switchAccountFromSettings()">🔄 Ganti akun</button>
+      </section>
       <section class="account-settings-section account-settings-danger">
         <h3>Keluar dari akun</h3><p>Sesi akun di perangkat ini akan dihapus. Kamu bisa login kembali kapan saja.</p>
         <button type="button" class="account-settings-logout" onclick="logoutFromAccountSettings()">↪ Logout akun</button>
-        <button type="button" class="btn-next" style="width:100%;margin-top:10px;" onclick="switchAccountFromSettings()">🔄 Ganti akun</button>
+
       </section>
     </main>
   </div>
@@ -2866,6 +2875,8 @@ async function downloadQris() {
 // SWITCH TAB
 // ============================================
 function switchTab(tab) {
+  const settings=document.getElementById('accountSettingsModal');
+  if(settings?.classList.contains('show'))closeAccountSettings();
   const page=document.getElementById('page-'+tab);
   if(!page)return;
   document.querySelectorAll('.tab-page').forEach(p=>p.classList.remove('active'));
