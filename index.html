@@ -624,9 +624,6 @@ header .coin-display { align-items:center; justify-content:center; flex-wrap:wra
 
 <div class="modal-overlay" id="accountSettingsModal" aria-label="Pengaturan akun">
   <div class="account-settings-page">
-    <header class="account-settings-header">
-      <button class="account-settings-back" type="button" aria-label="Kembali" onclick="closeAccountSettings()"><span aria-hidden="true">←</span></button>
-    </header>
     <main class="account-settings-content">
       <div class="account-settings-profile">
         <div class="account-settings-profile-icon" id="settingsProfileIcon">👤</div>
@@ -2097,8 +2094,6 @@ async function verifyPhoneReset(){
 function openAccountSettings(){
   const u=getLoggedAccount();if(!u)return;
   const modal=document.getElementById('accountSettingsModal');
-  const topbar=document.getElementById('jimzzTopbar'),menu=document.getElementById('jimzzSideMenu');
-  if(topbar)topbar.style.display='none';if(menu)menu.style.visibility='hidden';
   modal?.classList.add('show');
   document.getElementById('accountEmail').value=u.email||'';
   document.getElementById('accountPhone').value=u.phone||'';
@@ -2120,8 +2115,6 @@ function openSettingsFromMenu(){
 }
 function closeAccountSettings(){
   document.getElementById('accountSettingsModal')?.classList.remove('show');
-  const topbar=document.getElementById('jimzzTopbar'),menu=document.getElementById('jimzzSideMenu');
-  if(topbar)topbar.style.display='';if(menu)menu.style.visibility='';
   document.body.style.overflow='';
 }
 async function saveAccountContact(){
