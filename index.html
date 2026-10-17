@@ -557,6 +557,90 @@ header .coin-display { align-items:center; justify-content:center; flex-wrap:wra
 #accountSettingsModal .account-settings-logout:active{transform:scale(.99)}
 @media(min-width:760px){#accountSettingsModal .account-settings-content{padding-top:30px}}
 
+
+/* JIMZZ HOME VISUAL PASS: editorial layout, emerald accents, calmer spacing */
+#page-home header{
+  position:relative;
+  isolation:isolate;
+  padding:clamp(22px,5vw,46px) clamp(14px,3vw,24px) 30px;
+  text-align:center;
+  background:
+    radial-gradient(ellipse at 8% 0%,rgba(0,255,136,.10),transparent 42%),
+    radial-gradient(ellipse at 100% 28%,rgba(38,110,74,.12),transparent 38%),
+    linear-gradient(180deg,#080d0a 0%,#050706 78%,#000 100%);
+  border-bottom:1px solid rgba(105,190,135,.12);
+}
+#page-home header:before{
+  content:"";position:absolute;z-index:-1;top:0;left:clamp(14px,4vw,34px);width:42px;height:3px;
+  border-radius:0 0 4px 4px;background:#00e781;box-shadow:0 0 20px rgba(0,255,136,.4)
+}
+#page-home .jimzz-account-summary{
+  margin-bottom:24px;
+  border-color:rgba(65,137,91,.48);
+  background:linear-gradient(120deg,#0c120e 0%,#080b09 62%,#0b1510 100%);
+  box-shadow:0 12px 34px rgba(0,0,0,.18);
+}
+#page-home header .tagline{
+  max-width:390px;margin:18px auto 0;padding:0 8px;
+  color:#a5b4aa;font-size:clamp(13px,2vw,15px);line-height:1.75;letter-spacing:.08px
+}
+#page-home .counter{
+  margin-top:15px;padding:8px 13px;
+  background:rgba(11,24,16,.8);border-color:rgba(73,160,103,.28);
+  color:#b8c8bd;box-shadow:none;font-size:11px
+}
+#page-home .share-row{gap:10px;margin-top:22px}
+#page-home .share-row .share-btn{
+  width:42px;height:42px;border-radius:14px;
+  border:1px solid rgba(120,170,137,.18);
+  box-shadow:0 5px 14px rgba(0,0,0,.2);
+  transition:transform .18s ease,border-color .18s ease,background .18s ease
+}
+#page-home .share-row .share-btn:active{transform:scale(.94)}
+#page-home .kategori{
+  box-sizing:border-box;max-width:1040px;
+  padding:clamp(26px,5vw,44px) clamp(14px,3.5vw,28px);
+}
+#page-home .kategori>h2{
+  position:relative;display:flex;align-items:center;gap:10px;
+  width:fit-content;max-width:100%;margin:0 auto 24px;
+  padding:0 0 0 13px;text-align:left;
+  font-size:clamp(21px,4vw,29px);line-height:1.25;letter-spacing:-.65px
+}
+#page-home .kategori>h2:before{
+  content:"";position:absolute;left:0;top:4px;bottom:4px;width:3px;
+  border-radius:5px;background:linear-gradient(180deg,#00ff88,#188b56);
+  box-shadow:0 0 14px rgba(0,255,136,.18)
+}
+#page-home .kategori>h2 .accent{color:#65e6a0}
+#page-home .kategori:has(.produk-list){
+  margin-top:5px;margin-bottom:10px;
+  border-top:1px solid rgba(115,160,128,.08)
+}
+#page-home .produk-card{
+  border-color:rgba(83,123,96,.24);
+  background:linear-gradient(145deg,rgba(14,22,17,.98),rgba(8,12,9,.98));
+  border-radius:16px;box-shadow:0 8px 22px rgba(0,0,0,.12);
+  transition:transform .2s ease,border-color .2s ease,background .2s ease
+}
+#page-home .produk-card:hover{
+  transform:translateY(-2px);border-color:rgba(0,255,136,.42);
+  background:linear-gradient(145deg,#101d14,#090e0b)
+}
+#page-home .produk-list{gap:13px}
+@media(max-width:520px){
+  #page-home header{padding:18px 12px 25px}
+  #page-home .jimzz-account-summary{margin-bottom:20px}
+  #page-home .kategori{padding:27px 13px}
+  #page-home .kategori>h2{margin-bottom:19px;font-size:22px}
+  #page-home .produk-list{gap:10px}
+  #page-home .produk-card{border-radius:14px}
+  #page-home .share-row .share-btn{width:40px;height:40px}
+}
+@media(prefers-reduced-motion:reduce){
+  #page-home .share-row .share-btn,#page-home .produk-card{transition:none}
+}
+
 </style>
 <!-- ACCOUNT_DISABLED_2026_09_27 -->
 </head>
