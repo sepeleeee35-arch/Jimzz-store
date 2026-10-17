@@ -718,6 +718,11 @@ body::before,body::after{background:none!important;animation:none!important;filt
  #page-home .home-services-grid .menu-home-title{font-size:13px;line-height:1.3}
  #page-home .home-services-grid .menu-home-desc{font-size:9px;line-height:1.4}
 }
+/* Official-style messaging logos with compact labels */
+.home-contact-btn{gap:7px;padding:9px 12px;font-size:10px;font-weight:700}
+.home-contact-icon{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;width:27px;height:27px;font-size:0;line-height:1}
+.home-contact-icon svg{display:block;width:27px;height:27px;flex:0 0 auto}
+@media(max-width:480px){.home-contact-btn{gap:6px;padding:8px 7px;font-size:10px}.home-contact-icon,.home-contact-icon svg{width:28px;height:28px}}
 </style>
 <!-- ACCOUNT_DISABLED_2026_09_27 -->
 </head>
@@ -1067,8 +1072,8 @@ body::before,body::after{background:none!important;animation:none!important;filt
     <div class="home-contact-heading">Butuh bantuan?</div>
     <p class="home-contact-sub">Hubungi admin atau bagikan Jimzz Store.</p>
     <div class="share-row home-share-row">
-      <a class="share-btn wa home-contact-btn" href="https://wa.me/6283898669427?text=Halo%20Admin%20Jimzz%20Store%2C%20saya%20mau%20tanya..." target="_blank" rel="noopener noreferrer" aria-label="WhatsApp Admin"><span class="home-contact-icon">💬</span><span>WhatsApp Admin</span></a>
-      <a class="share-btn tg home-contact-btn" href="https://t.me/jimzzstore" target="_blank" rel="noopener noreferrer" aria-label="Telegram Admin"><span class="home-contact-icon">✈️</span><span>Telegram</span></a>
+      <a class="share-btn wa home-contact-btn" href="https://wa.me/6283898669427?text=Halo%20Admin%20Jimzz%20Store%2C%20saya%20mau%20tanya..." target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><span class="home-contact-icon" aria-hidden="true"><svg viewBox="0 0 32 32" role="img" focusable="false"><path fill="#25D366" d="M16 2.5A13.35 13.35 0 0 0 4.55 22.72L2.8 29.1l6.54-1.71A13.4 13.4 0 1 0 16 2.5Z"/><path fill="#fff" d="M23.52 19.42c-.32-.16-1.9-.94-2.2-1.05-.3-.11-.51-.16-.73.16-.21.32-.83 1.05-1.02 1.26-.19.21-.38.24-.7.08-.32-.16-1.35-.5-2.57-1.59-.95-.85-1.59-1.9-1.78-2.22-.19-.32-.02-.49.14-.65.14-.14.32-.38.48-.56.16-.19.21-.32.32-.54.11-.21.05-.4-.03-.56-.08-.16-.73-1.75-1-2.4-.26-.62-.53-.54-.73-.55h-.62c-.21 0-.56.08-.86.4-.3.32-1.13 1.1-1.13 2.68s1.16 3.11 1.32 3.33c.16.21 2.28 3.48 5.53 4.88.77.33 1.37.53 1.84.67.77.24 1.47.21 2.02.13.62-.09 1.9-.78 2.17-1.53.27-.75.27-1.39.19-1.53-.08-.13-.29-.21-.62-.37Z"/></svg></span><span>WhatsApp</span></a>
+      <a class="share-btn tg home-contact-btn" href="https://t.me/jimzzstore" target="_blank" rel="noopener noreferrer" aria-label="Telegram"><span class="home-contact-icon" aria-hidden="true"><svg viewBox="0 0 32 32" role="img" focusable="false"><circle cx="16" cy="16" r="14" fill="#229ED9"/><path fill="#fff" d="m7.2 15.4 16.1-6.2c.75-.27 1.4.18 1.16 1.3l-2.74 12.92c-.2.92-.75 1.14-1.52.71l-4.25-3.13-2.05 1.98c-.23.23-.43.43-.88.43l.3-4.33 7.88-7.12c.34-.3-.08-.47-.53-.17l-9.74 6.13-4.2-1.31c-.91-.29-.93-.91.46-1.45Z"/></svg></span><span>Telegram</span></a>
     </div>
     <button class="home-copy-link" type="button" onclick="copyLink()">🔗 Salin tautan toko</button>
   </section>
