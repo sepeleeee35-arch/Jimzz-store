@@ -818,7 +818,7 @@ body::before,body::after{background:none!important;animation:none!important;filt
         <form onsubmit="event.preventDefault();saveAccountContact()">
           <div class="form-box"><label for="accountEmail">Alamat Gmail</label><input id="accountEmail" type="email" required autocomplete="email" placeholder="nama@gmail.com"></div>
           <div id="emailLinkStatus" class="account-msg linked-status" role="status" style="margin:8px 0 12px;">Status Gmail: belum diverifikasi</div>
-          <button class="btn-next linked-primary-btn" type="submit"><span aria-hidden="true">✉</span> Kirim kode verifikasi</button>
+          <button id="accountEmailOtpSubmit" class="btn-next linked-primary-btn" type="submit"><span aria-hidden="true">✉</span> Kirim kode verifikasi</button>
           <div id="accountEmailOtpPanel" class="linked-otp-panel" style="display:none;margin-top:12px;">
             <div class="form-box"><label for="accountEmailOtp">Kode OTP dari Gmail</label><input id="accountEmailOtp" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="Masukkan 6 digit kode"></div>
             <button class="btn-next linked-primary-btn" type="button" onclick="verifyAccountEmailOtp()">Verifikasi Gmail</button>
@@ -2320,7 +2320,10 @@ function openAccountSettings(){
   modal?.classList.add('show');
   document.getElementById('accountEmail').value=u.email||'';
   const emailStatus=document.getElementById('emailLinkStatus');
+  const emailOtpSubmit=document.getElementById('accountEmailOtpSubmit');
   if(emailStatus){emailStatus.textContent=u.emailVerified?'Status Gmail: terverifikasi':'Status Gmail: belum diverifikasi';emailStatus.style.color=u.emailVerified?'#00ff88':'#ffbb55';}
+  if(emailOtpSubmit)emailOtpSubmit.hidden=Boolean(u.emailVerified);
+  if(u.emailVerified){const otpPanel=document.getElementById('accountEmailOtpPanel');if(otpPanel)otpPanel.style.display='none';}
   const telegramStatus=document.getElementById('telegramLinkStatus');
   if(telegramStatus){telegramStatus.textContent=u.telegramLinked?'Status Telegram: tertaut'+(u.telegramUsername?' (@'+u.telegramUsername+')':''):'Status Telegram: belum tertaut';telegramStatus.style.color=u.telegramLinked?'#00ff88':'#ffbb55';}
   const role=u.role||'user',name=role==='owner'?'Jimzz':(u.username||'pengguna');
@@ -2350,13 +2353,14 @@ function closeAccountSettings(){
   document.body.style.overflow='';
 }
 async function saveAccountContact(){
-  const email=document.getElementById('accountEmail').value.trim(),msg=document.getElementById('contactMsg');
+  const user=getLoggedAccount(),email=document.getElementById('accountEmail').value.trim(),msg=document.getElementById('contactMsg');
+  if(user?.emailVerified){const btn=document.getElementById('accountEmailOtpSubmit');if(btn)btn.hidden=true;if(msg){msg.textContent='Gmail kamu sudah terverifikasi.';msg.style.color='#00ff88';}return;}
   try{const data=await accountApi('request-email-otp',{email});document.getElementById('accountEmailOtpPanel').style.display='block';msg.textContent=data.message||'OTP verifikasi dikirim ke Gmail.';msg.style.color='#00ff88';}
   catch(e){msg.textContent=e.message;msg.style.color='#ff6b6b';}
 }
 async function verifyAccountEmailOtp(){
   const token=document.getElementById('accountEmailOtp').value.trim(),msg=document.getElementById('contactMsg');
-  try{const data=await accountApi('verify-email-otp',{token});saveAccountSession(null,data.user);document.getElementById('accountEmailOtpPanel').style.display='none';const status=document.getElementById('emailLinkStatus');if(status){status.textContent='Status Gmail: terverifikasi';status.style.color='#00ff88';}msg.textContent=data.message||'Gmail berhasil diverifikasi.';msg.style.color='#00ff88';}
+  try{const data=await accountApi('verify-email-otp',{token});saveAccountSession(null,data.user);document.getElementById('accountEmailOtpPanel').style.display='none';const status=document.getElementById('emailLinkStatus');if(status){status.textContent='Status Gmail: terverifikasi';status.style.color='#00ff88';}const submit=document.getElementById('accountEmailOtpSubmit');if(submit)submit.hidden=true;msg.textContent=data.message||'Gmail berhasil diverifikasi.';msg.style.color='#00ff88';}
   catch(e){msg.textContent=e.message;msg.style.color='#ff6b6b';}
 }
 async function startTelegramLink(){
