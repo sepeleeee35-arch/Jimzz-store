@@ -2320,7 +2320,9 @@ function openAccountSettings(){
   modal?.classList.add('show');
   document.getElementById('accountEmail').value=u.email||'';
   const emailStatus=document.getElementById('emailLinkStatus');
-  if(emailStatus){emailStatus.textContent=u.emailVerified?'Status Gmail: terverifikasi':'Status Gmail: belum diverifikasi';emailStatus.style.color=u.emailVerified?'#00ff88':'#ffbb55';}
+  const emailButton=document.querySelector('#accountSettingsModal form button[type="submit"]');
+  if(emailStatus){emailStatus.textContent=u.emailVerified?'✓ Gmail sudah terverifikasi':'Status Gmail: belum diverifikasi';emailStatus.style.color=u.emailVerified?'#00ff88':'#ffbb55';}
+  if(emailButton){emailButton.disabled=!!u.emailVerified;emailButton.textContent=u.emailVerified?'✓ Gmail sudah terverifikasi':'✉ Kirim kode verifikasi';emailButton.setAttribute('aria-label',u.emailVerified?'Gmail sudah terverifikasi':'Kirim kode verifikasi');}
   const telegramStatus=document.getElementById('telegramLinkStatus');
   if(telegramStatus){telegramStatus.textContent=u.telegramLinked?'Status Telegram: tertaut'+(u.telegramUsername?' (@'+u.telegramUsername+')':''):'Status Telegram: belum tertaut';telegramStatus.style.color=u.telegramLinked?'#00ff88':'#ffbb55';}
   const role=u.role||'user',name=role==='owner'?'Jimzz':(u.username||'pengguna');
@@ -2351,12 +2353,22 @@ function closeAccountSettings(){
 }
 async function saveAccountContact(){
   const email=document.getElementById('accountEmail').value.trim(),msg=document.getElementById('contactMsg');
+  const user=getLoggedAccount();
+  if(user?.emailVerified){
+    const status=document.getElementById('emailLinkStatus');
+    if(status){status.textContent='✓ Gmail sudah terverifikasi';status.style.color='#00ff88';}
+    const button=document.querySelector('#accountSettingsModal form button[type="submit"]');
+    if(button){button.disabled=true;button.textContent='✓ Gmail sudah terverifikasi';}
+    msg.textContent='Email akun ini sudah terverifikasi. Kamu tidak perlu meminta kode lagi.';
+    msg.style.color='#00ff88';
+    return;
+  }
   try{const data=await accountApi('request-email-otp',{email});document.getElementById('accountEmailOtpPanel').style.display='block';msg.textContent=data.message||'OTP verifikasi dikirim ke Gmail.';msg.style.color='#00ff88';}
   catch(e){msg.textContent=e.message;msg.style.color='#ff6b6b';}
 }
 async function verifyAccountEmailOtp(){
   const token=document.getElementById('accountEmailOtp').value.trim(),msg=document.getElementById('contactMsg');
-  try{const data=await accountApi('verify-email-otp',{token});saveAccountSession(null,data.user);document.getElementById('accountEmailOtpPanel').style.display='none';const status=document.getElementById('emailLinkStatus');if(status){status.textContent='Status Gmail: terverifikasi';status.style.color='#00ff88';}msg.textContent=data.message||'Gmail berhasil diverifikasi.';msg.style.color='#00ff88';}
+  try{const data=await accountApi('verify-email-otp',{token});saveAccountSession(null,data.user);document.getElementById('accountEmailOtpPanel').style.display='none';const status=document.getElementById('emailLinkStatus');if(status){status.textContent='✓ Gmail sudah terverifikasi';status.style.color='#00ff88';}const emailButton=document.querySelector('#accountSettingsModal form button[type="submit"]');if(emailButton){emailButton.disabled=true;emailButton.textContent='✓ Gmail sudah terverifikasi';}msg.textContent=data.message||'Gmail berhasil diverifikasi.';msg.style.color='#00ff88';}
   catch(e){msg.textContent=e.message;msg.style.color='#ff6b6b';}
 }
 async function startTelegramLink(){
@@ -3334,6 +3346,7 @@ async function runHomeSpeedTest(){
 #accountSettingsModal .linked-service-card input{min-height:48px!important;background:#090d0b!important;border:1px solid #354239!important;border-radius:12px!important;padding:13px 14px!important;color:#f5fff8!important;font-size:14px!important}
 #accountSettingsModal .linked-service-card input:focus{border-color:#54d98b!important;box-shadow:0 0 0 3px rgba(84,217,139,.12)!important;outline:none}
 #accountSettingsModal .linked-status{font-size:12px!important;line-height:1.5;padding:10px 12px;border-radius:11px;background:#171e19;border:1px solid #2c3930}
+#accountSettingsModal .linked-primary-btn:disabled{opacity:.62!important;cursor:not-allowed!important;filter:saturate(.55)}
 #accountSettingsModal .linked-primary-btn{min-height:47px!important;padding:13px 15px!important;margin-top:8px!important;border-radius:12px!important;box-shadow:none!important;font-size:13px!important;letter-spacing:0!important}
 #accountSettingsModal .gmail-service-card .linked-primary-btn{background:#e8f0fe!important;color:#174ea6!important}
 #accountSettingsModal .telegram-service-card .linked-primary-btn{background:#229ed9!important;color:#fff!important}
