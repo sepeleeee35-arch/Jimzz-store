@@ -774,15 +774,15 @@ body::before,body::after{background:none!important;animation:none!important;filt
 <div class="account-modal" id="recoveryModal" onclick="if(event.target===this)closeRecoveryModal()">
   <div class="account-box">
     <button class="account-close" onclick="closeRecoveryModal()" aria-label="Tutup">×</button><div class="account-icon">🔐</div>
-    <h2>Melihat Password</h2><div class="account-sub">Pilih metode OTP untuk akun yang sedang login.</div>
+    <h2 style="color:#e5e7eb!important">Melihat Password</h2><div class="account-sub">Password lama tidak bisa ditampilkan. Verifikasi OTP untuk membuat password baru dan melihatnya saat mengetik.</div>
     <input id="recoveryUsername" type="hidden">
     <div id="recoveryMethods" style="display:none;margin-top:14px;">
       <div style="font-size:12px;font-weight:800;margin-bottom:9px;color:#ddd;">PILIH METODE PENGIRIMAN KODE</div>
       <button id="recoveryGmailBtn" class="account-submit" type="button" onclick="requestEmailReset()" disabled>📧 Kirim kode OTP ke Gmail</button><div id="recoveryGmailStatus" style="font-size:11px;color:#ffbb55;margin:5px 0 12px;">Akun Gmail Anda belum tertaut di akun ini.</div>
       <button id="recoveryTelegramBtn" class="account-submit" type="button" onclick="requestTelegramReset()" disabled>✈️ Kirim kode OTP ke Telegram</button><div id="recoveryTelegramStatus" style="font-size:11px;color:#ffbb55;margin:5px 0 12px;">Akun Telegram Anda belum tertaut di akun ini.</div>
     </div>
-    <div id="emailResetOtpPanel" style="display:none;margin-top:12px;"><div id="emailOtpStep"><div class="account-field"><label>OTP GMAIL 6 DIGIT</label><input id="resetEmailOtp" inputmode="numeric" maxlength="6" autocomplete="one-time-code"></div><button class="account-submit" type="button" onclick="verifyEmailReset()">Verifikasi OTP</button></div><div id="emailPasswordStep" style="display:none;"><div class="account-field"><label>PASSWORD BARU</label><input id="resetEmailPassword" type="password" minlength="8" autocomplete="new-password"></div><button class="account-submit" type="button" onclick="setEmailResetPassword()">Simpan Password Baru</button></div></div>
-    <div id="telegramResetOtpPanel" style="display:none;margin-top:12px;"><div id="telegramOtpStep"><div class="account-field"><label>OTP TELEGRAM 6 DIGIT</label><input id="resetTelegramOtp" inputmode="numeric" maxlength="6" autocomplete="one-time-code"></div><button class="account-submit" type="button" onclick="verifyTelegramReset()">Verifikasi OTP</button></div><div id="telegramPasswordStep" style="display:none;"><div class="account-field"><label>PASSWORD BARU</label><input id="resetTelegramPassword" type="password" minlength="8" autocomplete="new-password"></div><button class="account-submit" type="button" onclick="setTelegramResetPassword()">Simpan Password Baru</button></div></div>
+    <div id="emailResetOtpPanel" style="display:none;margin-top:12px;"><div id="emailOtpStep"><div class="account-field"><label>OTP GMAIL 6 DIGIT</label><input id="resetEmailOtp" inputmode="numeric" maxlength="6" autocomplete="one-time-code"></div><button class="account-submit" type="button" onclick="verifyEmailReset()">Verifikasi OTP</button></div><div id="emailPasswordStep" style="display:none;"><div class="account-field"><label>PASSWORD BARU</label><div class="password-reveal-wrap"><input id="resetEmailPassword" type="password" minlength="8" autocomplete="new-password"><button class="password-reveal-btn" type="button" onclick="toggleRecoveryPassword('resetEmailPassword',this)" aria-label="Lihat password">Lihat</button></div></div><button class="account-submit recovery-neutral-btn" type="button" onclick="setEmailResetPassword()">Simpan Password Baru</button></div></div>
+    <div id="telegramResetOtpPanel" style="display:none;margin-top:12px;"><div id="telegramOtpStep"><div class="account-field"><label>OTP TELEGRAM 6 DIGIT</label><input id="resetTelegramOtp" inputmode="numeric" maxlength="6" autocomplete="one-time-code"></div><button class="account-submit" type="button" onclick="verifyTelegramReset()">Verifikasi OTP</button></div><div id="telegramPasswordStep" style="display:none;"><div class="account-field"><label>PASSWORD BARU</label><div class="password-reveal-wrap"><input id="resetTelegramPassword" type="password" minlength="8" autocomplete="new-password"><button class="password-reveal-btn" type="button" onclick="toggleRecoveryPassword('resetTelegramPassword',this)" aria-label="Lihat password">Lihat</button></div></div><button class="account-submit recovery-neutral-btn" type="button" onclick="setTelegramResetPassword()">Simpan Password Baru</button></div></div>
     <div class="account-msg" id="recoveryMsg" role="status"></div>
   </div>
 </div>
@@ -3579,6 +3579,31 @@ async function runHomeSpeedTest(){
 #accountSettingsModal .linked-security-dot{width:6px;height:6px;flex:0 0 6px;margin-top:4px;border-radius:50%;background:#51d88b}
 @media(min-width:760px){#accountSettingsModal .linked-service-card{padding:22px!important}}
 </style>
+
+
+<style id="jimzz-recovery-neutral-password">
+#recoveryModal .account-box{border-color:#343840!important;background:#111318!important;box-shadow:0 24px 70px rgba(0,0,0,.65)!important}
+#recoveryModal .account-box h2{color:#e5e7eb!important}
+#recoveryModal .account-submit,#recoveryModal .recovery-neutral-btn{background:#292d34!important;color:#f3f4f6!important;border:1px solid #414650!important;box-shadow:none!important;font-weight:700!important}
+#recoveryModal .account-submit:not(:disabled):active{background:#363b44!important}
+#recoveryModal .account-close{background:#292d34!important;color:#f3f4f6!important;border:1px solid #414650!important;z-index:2}
+#recoveryModal .account-field input{border-color:#3a3f48!important}
+#recoveryModal .account-field input:focus{border-color:#777f8c!important;box-shadow:0 0 0 2px rgba(180,190,205,.1)!important}
+#recoveryModal .password-reveal-wrap{display:flex;gap:8px;align-items:center}
+#recoveryModal .password-reveal-wrap input{flex:1;min-width:0}
+#recoveryModal .password-reveal-btn{flex:0 0 auto;padding:12px 13px;border:1px solid #414650;border-radius:10px;background:#292d34;color:#f3f4f6;font-size:12px;font-weight:700;cursor:pointer}
+#recoveryModal .password-reveal-btn:active{background:#363b44}
+</style>
+<script>
+function toggleRecoveryPassword(inputId,button){
+ const input=document.getElementById(inputId);
+ if(!input||!button)return;
+ const reveal=input.type==='password';
+ input.type=reveal?'text':'password';
+ button.textContent=reveal?'Sembunyikan':'Lihat';
+ button.setAttribute('aria-label',reveal?'Sembunyikan password':'Lihat password');
+}
+</script>
 
 </body>
 </html>
