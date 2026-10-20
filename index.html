@@ -726,6 +726,10 @@ body::before,body::after{background:none!important;animation:none!important;filt
 @media(max-width:480px){.home-contact-btn{gap:6px;padding:8px 7px;font-size:10px}.home-contact-icon,.home-contact-icon svg{width:28px;height:28px}}
 </style>
 <!-- ACCOUNT_DISABLED_2026_09_27 -->
+<style id="jimzz-settings-real-page">/* Account settings behaves as its own page; it never overlays another page */
+#accountSettingsModal.show{display:block!important;position:relative!important;inset:auto!important;width:100%;height:auto!important;min-height:calc(100vh - 54px);z-index:auto!important;background:#070b09;overflow:visible!important;padding:0!important;backdrop-filter:none!important}
+#accountSettingsModal .account-settings-page{min-height:calc(100vh - 54px)!important}
+</style>
 </head>
 <body>
 <div id="siteVersion">v4.2.9</div>
@@ -787,7 +791,7 @@ body::before,body::after{background:none!important;animation:none!important;filt
   </div>
 </div>
 
-<div class="modal-overlay" id="accountSettingsModal" aria-label="Pengaturan akun">
+<div class="modal-overlay tab-page" id="accountSettingsModal" aria-label="Pengaturan akun">
   <div class="account-settings-page">
     <main class="account-settings-content">
       <div class="account-settings-profile">
@@ -2373,10 +2377,17 @@ function openAccountLinksFromPrompt(){
   const section=document.querySelector(target==='gmail'?'#accountSettingsModal .gmail-service-card':target==='telegram'?'#accountSettingsModal .telegram-service-card':'#accountSettingsModal .link-accounts-intro');
   if(section)section.scrollIntoView({behavior:'smooth',block:'start'});
 }
+let jimzzSettingsReturnPage='home';
 function openAccountSettings(){
   const u=getLoggedAccount();if(!u)return;
   const modal=document.getElementById('accountSettingsModal');
-  modal?.classList.add('show');
+  const activePage=document.querySelector('.tab-page.active:not(#accountSettingsModal)');
+  if(activePage)jimzzSettingsReturnPage=activePage.id.replace(/^page-/,'');
+  document.querySelectorAll('.tab-page').forEach(p=>p.classList.remove('active'));
+  modal?.classList.add('active','show');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const title=document.getElementById('jimzzTopbarTitle');if(title)title.textContent='Pengaturan akun';
+  window.scrollTo({top:0,behavior:'auto'});
   const emailInput=document.getElementById('accountEmail');
   emailInput.value=u.email||'';
   emailInput.dataset.savedEmail=u.email||'';
@@ -2400,7 +2411,7 @@ function openAccountSettings(){
   const role=u.role||'user',name=role==='owner'?'Jimzz':(u.username||'pengguna');
   const nameEl=document.getElementById('settingsProfileName'),roleEl=document.getElementById('settingsProfileRole'),iconEl=document.getElementById('settingsProfileIcon');
   if(nameEl)nameEl.textContent=name;if(roleEl)roleEl.textContent=role==='owner'?'Developer':role==='admin'?'Admin':'User';if(iconEl)iconEl.textContent=role==='owner'?'👑':role==='admin'?'⭐':'👤';
-  document.body.style.overflow='hidden';
+  document.body.style.overflow='';
 }
 function logoutFromAccountSettings(){closeAccountSettings();accountLogout();}
 function switchAccountFromSettings(){
@@ -2420,8 +2431,17 @@ function openSettingsFromMenu(){
   openAccountSettings();
 }
 function closeAccountSettings(){
-  document.getElementById('accountSettingsModal')?.classList.remove('show');
+  const settings=document.getElementById('accountSettingsModal');
+  settings?.classList.remove('show','active');
+  const target=document.getElementById('page-'+jimzzSettingsReturnPage)||document.getElementById('page-home');
+  document.querySelectorAll('.tab-page').forEach(p=>p.classList.remove('active'));
+  target?.classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active',n.dataset.tab===jimzzSettingsReturnPage));
+  const titles={home:'Jimzz Store',suntik:'Suntik All Sosmed',topup:'Top Up Game',apk:'Web/APK',jpm:'Layanan lainnya',orders:'Riwayat Order',music:'Musik',tools:'Tools'};
+  const title=document.getElementById('jimzzTopbarTitle');
+  if(title)title.textContent=titles[jimzzSettingsReturnPage]||target?.querySelector('h2')?.innerText?.replace(/\\s+/g,' ').trim()||'Jimzz Store';
   document.body.style.overflow='';
+  window.scrollTo({top:0,behavior:'auto'});
 }
 async function toggleAccountEmailVisibility(){
   const input=document.getElementById('accountEmail'),btn=document.getElementById('accountEmailVisibilityBtn');
