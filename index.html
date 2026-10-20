@@ -727,7 +727,7 @@ body::before,body::after{background:none!important;animation:none!important;filt
 <!-- ACCOUNT_DISABLED_2026_09_27 -->
 </head>
 <body>
-<div id="siteVersion">v4.0.1</div>
+<div id="siteVersion">v4.0.2</div>
 
 
 <div class="toast-container" id="toastContainer"></div>
@@ -804,25 +804,44 @@ body::before,body::after{background:none!important;animation:none!important;filt
         <div class="account-settings-profile-icon" id="settingsProfileIcon">👤</div>
         <div><div id="settingsProfileName" style="font-size:17px;font-weight:850;">Akun Jimzz Store</div><div id="settingsProfileRole" style="font-size:12px;color:#8fb99c;margin-top:4px;">Pengaturan profil</div></div>
       </div>
-      <section class="account-settings-section">
-        <h3>📇 Gmail & Telegram</h3><p>Verifikasi Gmail untuk pemulihan akun dan tautkan Telegram untuk menerima notifikasi keamanan dari admin.</p>
+      <section class="account-settings-section link-accounts-intro">
+        <div class="link-section-eyebrow">PUSAT KONEKSI</div>
+        <h3>Hubungkan akun kamu</h3>
+        <p>Kelola metode pemulihan dan notifikasi akun Jimzz Store di satu tempat.</p>
+      </section>
+      <section class="account-settings-section linked-service-card gmail-service-card">
+        <div class="linked-service-head">
+          <div class="linked-service-brand gmail-brand" aria-hidden="true"><span>G</span></div>
+          <div class="linked-service-heading"><h3>Google Gmail</h3><p>Verifikasi email untuk membantu pemulihan akun.</p></div>
+          <span class="linked-service-tag">EMAIL</span>
+        </div>
         <form onsubmit="event.preventDefault();saveAccountContact()">
-          <div class="form-box"><label>📧 Alamat Gmail</label><input id="accountEmail" type="email" required autocomplete="email" placeholder="nama@gmail.com"></div>
-          <div id="emailLinkStatus" class="account-msg" role="status" style="margin:6px 0 10px;">Status Gmail: belum diverifikasi</div>
-          <button class="btn-next" type="submit">📩 Kirim OTP Verifikasi Gmail</button>
-          <div id="accountEmailOtpPanel" style="display:none;margin-top:10px;">
-            <div class="form-box"><label>OTP dari Gmail</label><input id="accountEmailOtp" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="6 digit kode"></div>
-            <button class="btn-next" type="button" onclick="verifyAccountEmailOtp()">✅ Verifikasi Gmail</button>
+          <div class="form-box"><label for="accountEmail">Alamat Gmail</label><input id="accountEmail" type="email" required autocomplete="email" placeholder="nama@gmail.com"></div>
+          <div id="emailLinkStatus" class="account-msg linked-status" role="status" style="margin:8px 0 12px;">Status Gmail: belum diverifikasi</div>
+          <button class="btn-next linked-primary-btn" type="submit"><span aria-hidden="true">✉</span> Kirim kode verifikasi</button>
+          <div id="accountEmailOtpPanel" class="linked-otp-panel" style="display:none;margin-top:12px;">
+            <div class="form-box"><label for="accountEmailOtp">Kode OTP dari Gmail</label><input id="accountEmailOtp" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="Masukkan 6 digit kode"></div>
+            <button class="btn-next linked-primary-btn" type="button" onclick="verifyAccountEmailOtp()">Verifikasi Gmail</button>
           </div>
           <div class="account-msg" id="contactMsg" role="status"></div>
         </form>
+        <div class="linked-service-foot"><span class="linked-security-dot"></span> Kode verifikasi berlaku terbatas. Jangan bagikan kepada siapa pun.</div>
       </section>
-      <section class="account-settings-section">
-        <h3>✈️ Kaitkan Telegram</h3>
-        <p>Telegram digunakan untuk notifikasi gift koin, pengurangan koin, ban, unban, dan OTP pemulihan akun.</p>
-        <div id="telegramLinkStatus" class="account-msg" role="status" style="margin:6px 0 10px;">Status Telegram: belum tertaut</div>
-        <button class="btn-next" type="button" style="width:100%;" onclick="startTelegramLink()">✈️ Kaitkan Telegram</button>
-        <button class="btn-next" type="button" style="width:100%;margin-top:8px;" onclick="refreshTelegramLinkStatus()">🔄 Periksa Status Telegram</button>
+      <section class="account-settings-section linked-service-card telegram-service-card">
+        <div class="linked-service-head">
+          <div class="linked-service-brand telegram-brand" aria-hidden="true"><span>➤</span></div>
+          <div class="linked-service-heading"><h3>Telegram</h3><p>Terima OTP pemulihan dan notifikasi keamanan.</p></div>
+          <span class="linked-service-tag">BOT</span>
+        </div>
+        <div class="telegram-benefit-list">
+          <span><i>✓</i> OTP pemulihan akun</span>
+          <span><i>✓</i> Notifikasi perubahan koin</span>
+          <span><i>✓</i> Informasi status keamanan</span>
+        </div>
+        <div id="telegramLinkStatus" class="account-msg linked-status" role="status" style="margin:10px 0 12px;">Status Telegram: belum tertaut</div>
+        <button class="btn-next linked-primary-btn telegram-link-btn" type="button" onclick="startTelegramLink()"><span aria-hidden="true">➤</span> Hubungkan Telegram</button>
+        <button class="linked-secondary-btn" type="button" onclick="refreshTelegramLinkStatus()"><span aria-hidden="true">↻</span> Periksa status koneksi</button>
+        <div class="linked-service-foot"><span class="linked-security-dot"></span> Hubungkan melalui bot resmi untuk memastikan akun Telegram benar-benar milikmu.</div>
       </section>
       <section class="account-settings-section">
         <h3>🔐 Keamanan akun</h3><p>Gunakan password yang kuat dan jangan bagikan kepada siapa pun.</p>
@@ -1282,7 +1301,7 @@ body::before,body::after{background:none!important;animation:none!important;filt
   <audio id="audioPlayer"></audio>
 </div>
 <script>
-const JIMZZ_VERSION = 'v4.0.1';
+const JIMZZ_VERSION = 'v4.0.2';
 
 // ============================================
 // 🔧 KONFIGURASI
@@ -3291,6 +3310,42 @@ async function runHomeSpeedTest(){
   }
 }
 </script>
+
+
+<style id="jimzz-linked-accounts-ui">
+#accountSettingsModal .link-accounts-intro{padding:4px 2px 2px!important;margin:6px 0 18px!important;background:transparent!important;border:0!important}
+#accountSettingsModal .link-section-eyebrow{font-size:10px;font-weight:850;letter-spacing:1.8px;color:#45d483;margin-bottom:8px}
+#accountSettingsModal .link-accounts-intro h3{font-size:23px!important;letter-spacing:-.6px;color:#f5fff8!important;margin-bottom:7px!important}
+#accountSettingsModal .link-accounts-intro p{font-size:13px!important;color:#9caea3!important;margin:0!important}
+#accountSettingsModal .linked-service-card{position:relative;padding:19px!important;margin:14px 0!important;border:1px solid #29372f!important;border-radius:20px!important;background:#101512!important;box-shadow:0 8px 24px rgba(0,0,0,.16)}
+#accountSettingsModal .gmail-service-card{border-top:2px solid #4285f4!important}
+#accountSettingsModal .telegram-service-card{border-top:2px solid #2aabee!important}
+#accountSettingsModal .linked-service-head{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+#accountSettingsModal .linked-service-brand{width:46px;height:46px;flex:0 0 46px;display:grid;place-items:center;border-radius:15px;background:#1b2420;border:1px solid #303c35;font-weight:900;font-size:24px}
+#accountSettingsModal .gmail-brand{background:#fff;border-color:#e4e8ed}
+#accountSettingsModal .gmail-brand span{font-family:Arial,sans-serif;background:conic-gradient(from -45deg,#4285f4 0 25%,#34a853 25% 48%,#fbbc05 48% 70%,#ea4335 70% 86%,#4285f4 86%);color:transparent;background-clip:text;-webkit-background-clip:text}
+#accountSettingsModal .telegram-brand{color:#fff;background:#229ed9;border-color:#229ed9;font-size:23px}
+#accountSettingsModal .linked-service-heading{min-width:0;flex:1}
+#accountSettingsModal .linked-service-heading h3{font-size:16px!important;color:#f3fff7!important;margin:0 0 4px!important}
+#accountSettingsModal .linked-service-heading p{font-size:11px!important;line-height:1.45!important;margin:0!important;color:#9ba9a0!important}
+#accountSettingsModal .linked-service-tag{font-size:9px;font-weight:850;letter-spacing:1px;padding:6px 8px;border-radius:8px;color:#aebdb3;background:#1c2520;border:1px solid #2c3a31}
+#accountSettingsModal .linked-service-card .form-box{margin:14px 0 8px!important}
+#accountSettingsModal .linked-service-card .form-box label{font-size:11px!important;letter-spacing:.25px!important;text-transform:none!important;color:#c5d1c9!important}
+#accountSettingsModal .linked-service-card input{min-height:48px!important;background:#090d0b!important;border:1px solid #354239!important;border-radius:12px!important;padding:13px 14px!important;color:#f5fff8!important;font-size:14px!important}
+#accountSettingsModal .linked-service-card input:focus{border-color:#54d98b!important;box-shadow:0 0 0 3px rgba(84,217,139,.12)!important;outline:none}
+#accountSettingsModal .linked-status{font-size:12px!important;line-height:1.5;padding:10px 12px;border-radius:11px;background:#171e19;border:1px solid #2c3930}
+#accountSettingsModal .linked-primary-btn{min-height:47px!important;padding:13px 15px!important;margin-top:8px!important;border-radius:12px!important;box-shadow:none!important;font-size:13px!important;letter-spacing:0!important}
+#accountSettingsModal .gmail-service-card .linked-primary-btn{background:#e8f0fe!important;color:#174ea6!important}
+#accountSettingsModal .telegram-service-card .linked-primary-btn{background:#229ed9!important;color:#fff!important}
+#accountSettingsModal .linked-secondary-btn{width:100%;min-height:44px;margin-top:9px;padding:11px 14px;border:1px solid #354239;border-radius:12px;background:#151c17;color:#d5e2d9;font-family:inherit;font-size:13px;font-weight:750;cursor:pointer}
+#accountSettingsModal .linked-secondary-btn:active{transform:scale(.99);background:#1b2820}
+#accountSettingsModal .telegram-benefit-list{display:grid;gap:8px;margin:16px 0;padding:13px;border-radius:12px;background:#0b100d;border:1px solid #26352c}
+#accountSettingsModal .telegram-benefit-list span{font-size:12px;color:#c5d3ca;display:flex;align-items:center;gap:9px}
+#accountSettingsModal .telegram-benefit-list i{font-style:normal;font-size:10px;display:grid;place-items:center;width:18px;height:18px;border-radius:50%;background:#163b2a;color:#65e69b;font-weight:900}
+#accountSettingsModal .linked-service-foot{display:flex;align-items:flex-start;gap:8px;margin-top:15px;padding-top:13px;border-top:1px solid #253129;color:#84948a;font-size:10px;line-height:1.5}
+#accountSettingsModal .linked-security-dot{width:6px;height:6px;flex:0 0 6px;margin-top:4px;border-radius:50%;background:#51d88b}
+@media(min-width:760px){#accountSettingsModal .linked-service-card{padding:22px!important}}
+</style>
 
 </body>
 </html>
