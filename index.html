@@ -2262,10 +2262,14 @@ document.addEventListener('click',function(event){const button=event.target.clos
 async function openRecoveryModal(){
   const modal=document.getElementById('recoveryModal');
   if(!modal)return;
+  // Keep the recovery modal at document level so settings-page containers
+  // cannot trap it behind their own stacking/transform context.
+  if(modal.parentElement!==document.body)document.body.appendChild(modal);
   modal.classList.add('show');
   modal.style.display='flex';
   modal.style.visibility='visible';
   modal.style.pointerEvents='auto';
+  modal.style.zIndex='2147483000';
   const msg=document.getElementById('recoveryMsg');
   if(msg){msg.textContent='Memuat metode pemulihan...';msg.style.color='#ffbb55';}
   const input=document.getElementById('recoveryUsername');
