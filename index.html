@@ -2370,7 +2370,7 @@ function openAccountSettings(){
   if(u.emailVerified){emailInput.type='password';}
   renderTelegramAccounts(u);
   const telegramButton=document.querySelector('.telegram-link-btn'),unlinkButton=document.getElementById('telegramUnlinkBtn');
-  if(telegramButton){telegramButton.hidden=false;telegramButton.innerHTML='<span aria-hidden="true">➤</span> '+(u.telegramLinked?'Tambah Akun Telegram':'Hubungkan Telegram');}
+  if(telegramButton){telegramButton.hidden=false;telegramButton.innerHTML='<span aria-hidden="true">➤</span> '+(u.telegramLinked?'Ganti Akun Telegram':'Hubungkan Telegram');}
   if(unlinkButton)unlinkButton.hidden=!u.telegramLinked;
   const role=u.role||'user',name=role==='owner'?'Jimzz':(u.username||'pengguna');
   const nameEl=document.getElementById('settingsProfileName'),roleEl=document.getElementById('settingsProfileRole'),iconEl=document.getElementById('settingsProfileIcon');
@@ -2431,8 +2431,8 @@ function getTelegramAccountsFromUser(user){
 function renderTelegramAccounts(user){
   const status=document.getElementById('telegramLinkStatus'),list=document.getElementById('telegramAccountsList');
   const accounts=getTelegramAccountsFromUser(user),button=document.querySelector('.telegram-link-btn'),unlink=document.getElementById('telegramUnlinkBtn');
-  if(status){status.textContent=accounts.length?'Status Telegram: '+accounts.length+' akun tertaut':'Status Telegram: belum tertaut';status.style.color=accounts.length?'#00ff88':'#ffbb55';}
-  if(button){button.hidden=false;button.innerHTML='<span aria-hidden="true">➤</span> '+(accounts.length?'Tambah Akun Telegram':'Hubungkan Telegram');}
+  if(status){status.textContent=accounts.length?'Status Telegram: akun tertaut':'Status Telegram: belum tertaut';status.style.color=accounts.length?'#00ff88':'#ffbb55';}
+  if(button){button.hidden=false;button.innerHTML='<span aria-hidden="true">➤</span> '+(accounts.length?'Ganti Akun Telegram':'Hubungkan Telegram');}
   if(unlink)unlink.hidden=!accounts.length;
   if(list){
     list.hidden=!accounts.length;
@@ -2452,19 +2452,19 @@ async function startTelegramLink(){
     if(botTab&&!botTab.closed){botTab.location.href=data.url;}
     else{window.location.href=data.url;return;}
     if(status){status.textContent='Bot Telegram terbuka. Tekan Start untuk menambahkan akun.';status.style.color='#ffbb55';}
-    showToast('Tekan Start pada bot Telegram untuk menambahkan akun.','info');
+    showToast('Tekan Start pada bot Telegram untuk mengganti akun Telegram yang tertaut.','info');
     if(telegramLinkPollTimer)clearInterval(telegramLinkPollTimer);
-    const startedAt=Date.now(),before=getTelegramAccountsFromUser(getLoggedAccount()).length;
+    const startedAt=Date.now(),before=getTelegramAccountsFromUser(getLoggedAccount())[0]?.chatId||'';
     telegramLinkPollTimer=setInterval(async()=>{
       if(Date.now()-startedAt>120000){clearInterval(telegramLinkPollTimer);telegramLinkPollTimer=null;if(status)status.textContent='Belum terdeteksi. Tekan Start di bot lalu periksa status.';return;}
       try{
         const latest=await accountApi('telegram-status');
         if(latest.user)saveAccountSession(null,latest.user);
-        const count=getTelegramAccountsFromUser(latest.user).length;
-        if(count>before){
+        const currentChatId=getTelegramAccountsFromUser(latest.user)[0]?.chatId||'';
+        if(currentChatId&&currentChatId!==before){
           clearInterval(telegramLinkPollTimer);telegramLinkPollTimer=null;
           renderTelegramAccounts(latest.user);
-          showToast('Akun Telegram berhasil ditambahkan!','success');
+          showToast(before?'Akun Telegram berhasil diganti!':'Akun Telegram berhasil ditautkan!','success');
         }
       }catch(e){console.warn('[Jimzz] Pemeriksaan status Telegram:',e.message);}
     },3000);
@@ -2480,7 +2480,7 @@ async function unlinkTelegramAccount(){
   if(!accounts.length)return;
   let chatId='',all=false;
   if(accounts.length===1){
-    if(!confirm('Batalkan tautan akun Telegram '+(accounts[0].username?'@'+accounts[0].username:'ini')+'?'))return;
+    if(!confirm('Batalkan tautan Telegram '+(accounts[0].username?'@'+accounts[0].username:'ini')+'?'))return;
     chatId=accounts[0].chatId;
   }else{
     const choices=accounts.map((a,i)=>(i+1)+'. '+(a.username?'@'+a.username:'Akun Telegram '+(i+1))).join('\n');
