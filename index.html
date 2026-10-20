@@ -844,7 +844,7 @@ body::before,body::after{background:none!important;animation:none!important;filt
           <button class="btn-next" type="submit">🔑 Ganti password</button>
           <div class="account-msg" id="passwordMsg" role="status"></div>
         </form>
-        <button type="button" class="forgot-current-password-link" onclick="openRecoveryModal();return false;" style="position:relative;z-index:2;pointer-events:auto;">Lupa password saat ini?</button>
+        <button type="button" id="forgotCurrentPasswordButton" class="forgot-current-password-link" style="position:relative;z-index:20;pointer-events:auto;touch-action:manipulation;">Lupa password saat ini?</button>
       </section>
       <section class="account-settings-section account-settings-switch">
         <h3>👥 Ganti akun</h3>
@@ -2258,6 +2258,7 @@ function openAccountModal(){document.getElementById('accountModal')?.classList.a
 function closeAccountModal(){document.getElementById('accountModal')?.classList.remove('show');}
 let recoveryResetToken = "";
 let recoveryAvailableMethods={gmail:false,telegram:false};
+document.addEventListener('click',function(event){const button=event.target.closest('#forgotCurrentPasswordButton');if(!button)return;event.preventDefault();event.stopPropagation();openRecoveryModal();},true);
 async function openRecoveryModal(){
   const modal=document.getElementById('recoveryModal');
   if(!modal)return;
