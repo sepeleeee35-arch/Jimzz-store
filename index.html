@@ -778,7 +778,7 @@ body::before,body::after{background:none!important;animation:none!important;filt
     <input id="recoveryUsername" type="hidden">
     <div id="recoveryMethods" style="display:none;margin-top:14px;">
       <div style="font-size:12px;font-weight:800;margin-bottom:9px;color:#ddd;">PILIH METODE PENGIRIMAN KODE</div>
-      <button id="recoveryGmailBtn" class="account-submit" type="button" onclick="requestEmailReset()" disabled>📧 Kirim kode OTP ke Gmail</button><div id="recoveryGmailStatus" style="font-size:11px;color:#ffbb55;margin:5px 0 12px;">Akun Gmail Anda belum tertaut di akun ini.</div>
+      <button id="recoveryGmailBtn" class="account-submit" type="button" onclick="requestEmailReset()" disabled><img src="https://www.gstatic.com/images/branding/product/1x/gmail_48dp.png" alt="Gmail" width="22" height="22" style="object-fit:contain;vertical-align:middle;margin-right:9px">Kirim kode OTP ke Gmail</button><div id="recoveryGmailStatus" style="font-size:11px;color:#ffbb55;margin:5px 0 12px;">Akun Gmail Anda belum tertaut di akun ini.</div>
       <button id="recoveryTelegramBtn" class="account-submit" type="button" onclick="requestTelegramReset()" disabled>✈️ Kirim kode OTP ke Telegram</button><div id="recoveryTelegramStatus" style="font-size:11px;color:#ffbb55;margin:5px 0 12px;">Akun Telegram Anda belum tertaut di akun ini.</div>
     </div>
     <div id="emailResetOtpPanel" style="display:none;margin-top:12px;"><div id="emailOtpStep"><div class="account-field"><label>OTP GMAIL 6 DIGIT</label><input id="resetEmailOtp" inputmode="numeric" maxlength="6" autocomplete="one-time-code"></div><button class="account-submit" type="button" onclick="verifyEmailReset()">Verifikasi OTP</button></div><div id="emailPasswordStep" style="display:none;"><div class="account-field"><label>PASSWORD BARU</label><div class="password-reveal-wrap"><input id="resetEmailPassword" type="password" minlength="8" autocomplete="new-password"><button class="password-reveal-btn" type="button" onclick="toggleRecoveryPassword('resetEmailPassword',this)" aria-label="Lihat password">Lihat</button></div></div><button class="account-submit recovery-neutral-btn" type="button" onclick="setEmailResetPassword()">Simpan Password Baru</button></div></div>
@@ -3585,8 +3585,8 @@ async function runHomeSpeedTest(){
 #recoveryModal .account-box{border-color:#343840!important;background:#111318!important;box-shadow:0 24px 70px rgba(0,0,0,.65)!important}
 #recoveryModal .account-box h2{color:#e5e7eb!important}
 #recoveryModal .account-submit,#recoveryModal .recovery-neutral-btn{background:#292d34!important;color:#f3f4f6!important;border:1px solid #414650!important;box-shadow:none!important;font-weight:700!important}
-#recoveryModal #recoveryGmailBtn{background:#EA4335!important;color:#fff!important;border:1px solid #EA4335!important;box-shadow:0 5px 16px rgba(234,67,53,.18)!important}
-#recoveryModal #recoveryGmailBtn:not(:disabled):active{background:#C5221F!important}
+#recoveryModal #recoveryGmailBtn{background:#fff!important;color:#202124!important;border:1px solid #dadce0!important;box-shadow:0 2px 5px rgba(0,0,0,.16)!important;display:flex!important;align-items:center!important;justify-content:center!important}
+#recoveryModal #recoveryGmailBtn:not(:disabled):active{background:#f1f3f4!important}
 #recoveryModal #recoveryTelegramBtn{background:#229ed9!important;color:#fff!important;border:1px solid #48b8ed!important;box-shadow:0 5px 16px rgba(34,158,217,.18)!important}
 #recoveryModal #recoveryTelegramBtn:not(:disabled):active{background:#197eaf!important}
 #recoveryModal .account-submit:not(:disabled):active{filter:brightness(.92)}
