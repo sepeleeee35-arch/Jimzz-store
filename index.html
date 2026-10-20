@@ -818,7 +818,7 @@ body::before,body::after{background:none!important;animation:none!important;filt
           <span class="linked-service-tag">EMAIL</span>
         </div>
         <form onsubmit="event.preventDefault();saveAccountContact()">
-          <div class="form-box"><label for="accountEmail">Alamat Gmail</label><div style="display:flex;gap:8px;align-items:center"><input id="accountEmail" type="email" required autocomplete="email" placeholder="nama@gmail.com" style="flex:1;min-width:0"><button id="accountEmailVisibilityBtn" type="button" class="linked-secondary-btn" style="width:auto;min-width:48px;padding:10px 12px" aria-label="Tampilkan email" title="Tampilkan/sembunyikan email" onclick="accountEmailVisibilityBtn()">👁</button></div></div>
+          <div class="form-box"><label for="accountEmail">Alamat Gmail</label><div style="display:flex;gap:8px;align-items:center"><input id="accountEmail" type="email" required autocomplete="email" placeholder="nama@gmail.com" style="flex:1;min-width:0"><button id="accountEmailVisibilityBtn" type="button" class="linked-secondary-btn" style="width:auto;min-width:48px;padding:10px 12px" aria-label="Tampilkan email" title="Tampilkan/sembunyikan email" onclick="toggleAccountEmailVisibility()">👁</button></div></div>
           <div id="emailLinkStatus" class="account-msg linked-status" role="status" style="margin:8px 0 12px;">Status Gmail: belum diverifikasi</div>
           <button id="changeAccountEmailBtn" class="linked-secondary-btn" type="button" style="margin-bottom:10px" onclick="enableAccountEmailChange()">Ganti email</button>
           <button id="accountEmailOtpSubmit" class="btn-next linked-primary-btn" type="submit"><span aria-hidden="true">✉</span> Kirim kode verifikasi</button>
