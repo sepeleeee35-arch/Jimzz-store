@@ -816,8 +816,9 @@ body::before,body::after{background:none!important;animation:none!important;filt
           <span class="linked-service-tag">EMAIL</span>
         </div>
         <form onsubmit="event.preventDefault();saveAccountContact()">
-          <div class="form-box"><label for="accountEmail">Alamat Gmail</label><input id="accountEmail" type="email" required autocomplete="email" placeholder="nama@gmail.com"></div>
+          <div class="form-box"><label for="accountEmail">Alamat Gmail</label><div style="display:flex;gap:8px;align-items:center"><input id="accountEmail" type="email" required autocomplete="email" placeholder="nama@gmail.com" style="flex:1;min-width:0"><button id="toggleAccountEmailVisibility" type="button" class="linked-secondary-btn" style="width:auto;min-width:48px;padding:10px 12px" aria-label="Tampilkan email" title="Tampilkan/sembunyikan email" onclick="toggleAccountEmailVisibility()">👁</button></div></div>
           <div id="emailLinkStatus" class="account-msg linked-status" role="status" style="margin:8px 0 12px;">Status Gmail: belum diverifikasi</div>
+          <button id="changeAccountEmailBtn" class="linked-secondary-btn" type="button" style="margin-bottom:10px" onclick="enableAccountEmailChange()">Ganti email</button>
           <button id="accountEmailOtpSubmit" class="btn-next linked-primary-btn" type="submit"><span aria-hidden="true">✉</span> Kirim kode verifikasi</button>
           <div id="accountEmailOtpPanel" class="linked-otp-panel" style="display:none;margin-top:12px;">
             <div class="form-box"><label for="accountEmailOtp">Kode OTP dari Gmail</label><input id="accountEmailOtp" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="Masukkan 6 digit kode"></div>
@@ -2318,12 +2319,22 @@ function openAccountSettings(){
   const u=getLoggedAccount();if(!u)return;
   const modal=document.getElementById('accountSettingsModal');
   modal?.classList.add('show');
-  document.getElementById('accountEmail').value=u.email||'';
+  const emailInput=document.getElementById('accountEmail');
+  emailInput.value=u.email||'';
+  emailInput.dataset.savedEmail=u.email||'';
+  emailInput.readOnly=Boolean(u.emailVerified);
+  emailInput.type=u.emailVerified?'password':'email';
+  const revealBtn=document.getElementById('toggleAccountEmailVisibility');
+  if(revealBtn){revealBtn.hidden=!u.emailVerified;revealBtn.textContent='👁';revealBtn.setAttribute('aria-label','Tampilkan email');}
+  const changeBtn=document.getElementById('changeAccountEmailBtn');
+  if(changeBtn)changeBtn.hidden=!u.emailVerified;
   const emailStatus=document.getElementById('emailLinkStatus');
   const emailOtpSubmit=document.getElementById('accountEmailOtpSubmit');
   if(emailStatus){emailStatus.textContent=u.emailVerified?'Status Gmail: terverifikasi':'Status Gmail: belum diverifikasi';emailStatus.style.color=u.emailVerified?'#00ff88':'#ffbb55';}
-  if(emailOtpSubmit)emailOtpSubmit.hidden=Boolean(u.emailVerified);
-  if(u.emailVerified){const otpPanel=document.getElementById('accountEmailOtpPanel');if(otpPanel)otpPanel.style.display='none';}
+  if(emailOtpSubmit){emailOtpSubmit.hidden=Boolean(u.emailVerified);emailOtpSubmit.textContent='✉ Kirim kode verifikasi';}
+  const otpPanel=document.getElementById('accountEmailOtpPanel');if(otpPanel)otpPanel.style.display='none';
+  document.getElementById('contactMsg').textContent='';
+  if(u.emailVerified){emailInput.type='password';}
   const telegramStatus=document.getElementById('telegramLinkStatus');
   if(telegramStatus){telegramStatus.textContent=u.telegramLinked?'Status Telegram: tertaut'+(u.telegramUsername?' (@'+u.telegramUsername+')':''):'Status Telegram: belum tertaut';telegramStatus.style.color=u.telegramLinked?'#00ff88':'#ffbb55';}
   const role=u.role||'user',name=role==='owner'?'Jimzz':(u.username||'pengguna');
@@ -2352,15 +2363,30 @@ function closeAccountSettings(){
   document.getElementById('accountSettingsModal')?.classList.remove('show');
   document.body.style.overflow='';
 }
+async function toggleAccountEmailVisibility(){
+  const input=document.getElementById('accountEmail'),btn=document.getElementById('toggleAccountEmailVisibility');
+  if(!input||!getLoggedAccount()?.emailVerified||!input.readOnly)return;
+  const showing=input.type==='email';input.type=showing?'password':'email';
+  if(btn){btn.textContent=showing?'👁':'🙈';btn.setAttribute('aria-label',showing?'Tampilkan email':'Sembunyikan email');}
+}
+function enableAccountEmailChange(){
+  const input=document.getElementById('accountEmail'),btn=document.getElementById('changeAccountEmailBtn'),send=document.getElementById('accountEmailOtpSubmit'),reveal=document.getElementById('toggleAccountEmailVisibility'),status=document.getElementById('emailLinkStatus'),msg=document.getElementById('contactMsg');
+  if(!input)return;input.readOnly=false;input.type='email';input.focus();
+  if(btn)btn.hidden=true;if(reveal)reveal.hidden=true;if(send){send.hidden=false;send.textContent='✉ Kirim kode ke email baru';}
+  const panel=document.getElementById('accountEmailOtpPanel');if(panel)panel.style.display='none';
+  if(status){status.textContent='Masukkan email baru lalu minta kode verifikasi.';status.style.color='#ffbb55';}
+  if(msg)msg.textContent='';
+}
 async function saveAccountContact(){
-  const user=getLoggedAccount(),email=document.getElementById('accountEmail').value.trim(),msg=document.getElementById('contactMsg');
-  if(user?.emailVerified){const btn=document.getElementById('accountEmailOtpSubmit');if(btn)btn.hidden=true;if(msg){msg.textContent='Gmail kamu sudah terverifikasi.';msg.style.color='#00ff88';}return;}
-  try{const data=await accountApi('request-email-otp',{email});document.getElementById('accountEmailOtpPanel').style.display='block';msg.textContent=data.message||'OTP verifikasi dikirim ke Gmail.';msg.style.color='#00ff88';}
-  catch(e){msg.textContent=e.message;msg.style.color='#ff6b6b';}
+  const user=getLoggedAccount(),input=document.getElementById('accountEmail'),email=input.value.trim(),msg=document.getElementById('contactMsg');
+  if(!input||!email){if(msg)msg.textContent='Masukkan alamat email yang valid.';return;}
+  if(user?.emailVerified&&input.readOnly){if(msg)msg.textContent='Email sudah terverifikasi. Tekan “Ganti email” untuk mengubahnya.';return;}
+  try{const data=await accountApi('request-email-otp',{email});const panel=document.getElementById('accountEmailOtpPanel');if(panel)panel.style.display='block';if(msg){msg.textContent=data.message||'OTP verifikasi dikirim ke email.';msg.style.color='#00ff88';}}
+  catch(e){if(msg){msg.textContent=e.message;msg.style.color='#ff6b6b';}}
 }
 async function verifyAccountEmailOtp(){
   const token=document.getElementById('accountEmailOtp').value.trim(),msg=document.getElementById('contactMsg');
-  try{const data=await accountApi('verify-email-otp',{token});saveAccountSession(null,data.user);document.getElementById('accountEmailOtpPanel').style.display='none';const status=document.getElementById('emailLinkStatus');if(status){status.textContent='Status Gmail: terverifikasi';status.style.color='#00ff88';}const submit=document.getElementById('accountEmailOtpSubmit');if(submit)submit.hidden=true;msg.textContent=data.message||'Gmail berhasil diverifikasi.';msg.style.color='#00ff88';}
+  try{const data=await accountApi('verify-email-otp',{token});saveAccountSession(null,data.user);document.getElementById('accountEmailOtpPanel').style.display='none';const input=document.getElementById('accountEmail');if(input){input.value=data.user.email||input.value;input.dataset.savedEmail=input.value;input.readOnly=true;input.type='password';}const status=document.getElementById('emailLinkStatus');if(status){status.textContent='Status Gmail: terverifikasi';status.style.color='#00ff88';}const submit=document.getElementById('accountEmailOtpSubmit');if(submit)submit.hidden=true;const change=document.getElementById('changeAccountEmailBtn');if(change)change.hidden=false;const reveal=document.getElementById('toggleAccountEmailVisibility');if(reveal){reveal.hidden=false;reveal.textContent='👁';reveal.setAttribute('aria-label','Tampilkan email');}msg.textContent=data.message||'Gmail berhasil diverifikasi.';msg.style.color='#00ff88';}
   catch(e){msg.textContent=e.message;msg.style.color='#ff6b6b';}
 }
 async function startTelegramLink(){
