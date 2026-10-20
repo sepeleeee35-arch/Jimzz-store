@@ -532,6 +532,7 @@ header .coin-display { align-items:center; justify-content:center; flex-wrap:wra
 @media(max-width:520px){.jimzz-topbar{height:52px;min-height:52px;gap:11px;padding-left:14px;padding-right:12px}.jimzz-menu-trigger{flex-basis:24px;width:24px;height:30px}.jimzz-menu-trigger span{width:21px}.jimzz-topbar-title{font-size:17px}header{padding-top:18px}}
 
 
+.forgot-current-password-link{display:block;margin:12px 0 0;padding:4px 0;border:0;background:transparent;color:#80e7a6;font-size:12px;font-weight:800;text-decoration:underline;text-underline-offset:3px;cursor:pointer}.account-password-recovery{margin-top:14px;padding:15px;border:1px solid #28523a;border-radius:14px;background:#0d1711}.account-password-recovery[hidden],.recovery-methods[hidden],#recoveryOtpArea[hidden],#recoveryNewPasswordArea[hidden]{display:none!important}.account-password-recovery h4{margin:0 0 6px;color:#e5f7eb;font-size:14px}.account-password-recovery>p,.recovery-methods>p{font-size:12px;line-height:1.6;color:#9ab5a2;margin:0 0 12px}.recovery-methods{display:grid;gap:8px;margin:12px 0}.recovery-method-option{display:flex;flex-direction:column;gap:5px;width:100%;padding:12px;border:1px solid #31543d;border-radius:11px;background:#101e15;color:#e5f7eb;text-align:left;cursor:pointer}.recovery-method-option strong{font-size:12px}.recovery-method-option span{font-size:11px;line-height:1.5;color:#9ab5a2}.recovery-method-option:disabled{opacity:.48;cursor:not-allowed}.account-password-recovery .btn-next:disabled{opacity:.6;cursor:wait}
 /* Account settings is a full-page view, not a floating modal */
 #accountSettingsModal.show{display:block!important;position:fixed;top:54px;right:0;bottom:0;left:0;height:calc(100dvh - 54px);z-index:10050;background:#070b09;overflow-y:auto;padding:0;backdrop-filter:none}
 #accountSettingsModal .account-settings-page{box-sizing:border-box;min-height:100dvh;width:100%;max-width:none;margin:0;padding:0 0 36px;background:#070b09;color:#eef7f0;border:0;border-radius:0;box-shadow:none;overflow:visible}
@@ -843,6 +844,24 @@ body::before,body::after{background:none!important;animation:none!important;filt
           <button class="btn-next" type="submit">🔑 Ganti password</button>
           <div class="account-msg" id="passwordMsg" role="status"></div>
         </form>
+        <button type="button" class="forgot-current-password-link" onclick="openAccountPasswordRecovery()">Lupa password saat ini?</button>
+        <div id="accountPasswordRecovery" class="account-password-recovery" hidden>
+          <h4>🔐 Pulihkan password</h4>
+          <p>Masukkan username Jimzz Store untuk memeriksa metode pemulihan yang sudah tertaut.</p>
+          <div class="form-box"><label>Username Jimzz Store</label><input id="recoveryUsername" type="text" autocomplete="username" placeholder="Masukkan username"></div>
+          <button id="recoveryCheckMethodsBtn" type="button" class="btn-next" onclick="checkAccountRecoveryMethods()">Periksa metode pemulihan</button>
+          <div id="recoveryMethods" class="recovery-methods" hidden></div>
+          <div id="recoveryOtpArea" hidden>
+            <div class="form-box"><label>Kode OTP 6 digit</label><input id="recoveryOtp" type="text" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" placeholder="Masukkan OTP"></div>
+            <button type="button" class="btn-next" onclick="verifyAccountRecoveryOtp()">Verifikasi OTP</button>
+          </div>
+          <div id="recoveryNewPasswordArea" hidden>
+            <div class="form-box"><label>Password baru</label><input id="recoveryNewPassword" type="password" minlength="8" autocomplete="new-password" placeholder="Minimal 8 karakter"></div>
+            <div class="form-box"><label>Ulangi password baru</label><input id="recoveryNewPassword2" type="password" minlength="8" autocomplete="new-password" placeholder="Ulangi password baru"></div>
+            <button type="button" class="btn-next" onclick="submitAccountPasswordRecovery()">Simpan password baru</button>
+          </div>
+          <div id="recoveryPasswordMsg" class="account-msg" role="status"></div>
+        </div>
       </section>
       <section class="account-settings-section account-settings-switch">
         <h3>👥 Ganti akun</h3>
@@ -2491,6 +2510,79 @@ async function refreshTelegramLinkStatus(){
     saveAccountSession(null,data.user);renderTelegramAccounts(data.user);
     return Boolean(data.user?.telegramLinked);
   }catch(e){if(status){status.textContent=e.message;status.style.color='#ff6b6b';}return false;}
+}
+let accountPasswordRecoveryState={username:'',method:'',resetToken:'',methods:null};
+function openAccountPasswordRecovery(){
+  const panel=document.getElementById('accountPasswordRecovery');if(!panel)return;
+  panel.hidden=false;panel.scrollIntoView({behavior:'smooth',block:'nearest'});
+  const user=getLoggedAccount(),input=document.getElementById('recoveryUsername');
+  if(input&&!input.value&&user?.username)input.value=user.username;
+  setAccountRecoveryMessage('');
+}
+function setAccountRecoveryMessage(message,ok=false){
+  const el=document.getElementById('recoveryPasswordMsg');if(el){el.textContent=message;el.style.color=ok?'#00ff88':'#ff7777';}
+}
+function resetAccountRecoveryStep(){
+  accountPasswordRecoveryState={username:'',method:'',resetToken:'',methods:null};
+  for(const id of ['recoveryMethods','recoveryOtpArea','recoveryNewPasswordArea']){const el=document.getElementById(id);if(el){el.hidden=true;if(id==='recoveryMethods')el.innerHTML='';}}
+  for(const id of ['recoveryOtp','recoveryNewPassword','recoveryNewPassword2']){const el=document.getElementById(id);if(el)el.value='';}
+}
+async function checkAccountRecoveryMethods(){
+  const input=document.getElementById('recoveryUsername'),username=(input?.value||'').trim(),btn=document.getElementById('recoveryCheckMethodsBtn'),wrap=document.getElementById('recoveryMethods');
+  if(!username){setAccountRecoveryMessage('Masukkan username Jimzz Store terlebih dahulu.');return;}
+  resetAccountRecoveryStep();setAccountRecoveryMessage('');accountPasswordRecoveryState.username=username;
+  if(btn){btn.disabled=true;btn.textContent='Memeriksa...';}
+  try{
+    const data=await accountApi('recovery-methods',{username},false),methods=data.methods||{};
+    const items=[
+      {key:'gmail',label:'OTP Gmail',available:Boolean(methods.gmail),reason:methods.gmail?'OTP akan dikirim ke Gmail yang tertaut.':'Gmail belum tertaut atau belum terverifikasi.'},
+      {key:'telegram',label:'OTP Telegram',available:Boolean(methods.telegram),reason:methods.telegram?'OTP akan dikirim ke Telegram yang tertaut.':'Telegram belum tertaut.'}
+    ];
+    accountPasswordRecoveryState.methods=methods;wrap.hidden=false;
+    wrap.innerHTML='<p>Pilih salah satu metode yang aktif:</p>'+items.map(item=>'<button type="button" class="recovery-method-option" '+(item.available?'':'disabled')+' onclick="requestAccountRecoveryOtp(\''+item.key+'\')"><strong>'+item.label+'</strong><span>'+item.reason+'</span></button>').join('');
+    if(!methods.gmail&&!methods.telegram)setAccountRecoveryMessage('Akun ini tidak tertaut dengan metode mana pun. Silakan chat admin untuk meminta reset password.');
+  }catch(e){setAccountRecoveryMessage(e.message||'Gagal memeriksa metode pemulihan.');}
+  finally{if(btn){btn.disabled=false;btn.textContent='Periksa metode pemulihan';}}
+}
+async function requestAccountRecoveryOtp(method){
+  const methods=accountPasswordRecoveryState.methods||{};if(!accountPasswordRecoveryState.username||!methods[method])return;
+  setAccountRecoveryMessage('Mengirim OTP...',true);
+  try{
+    const action=method==='gmail'?'request-reset':'request-telegram-reset';
+    const data=await accountApi(action,{username:accountPasswordRecoveryState.username},false);
+    accountPasswordRecoveryState.method=method;accountPasswordRecoveryState.resetToken='';
+    document.getElementById('recoveryOtpArea').hidden=false;document.getElementById('recoveryNewPasswordArea').hidden=true;
+    setAccountRecoveryMessage(data.message||(method==='gmail'?'OTP dikirim ke Gmail tertaut.':'OTP dikirim ke Telegram tertaut.'),true);
+  }catch(e){setAccountRecoveryMessage(e.message||'Gagal mengirim OTP.');}
+}
+async function verifyAccountRecoveryOtp(){
+  const token=(document.getElementById('recoveryOtp')?.value||'').trim();
+  if(!/^\d{6}$/.test(token)){setAccountRecoveryMessage('Masukkan OTP yang terdiri dari 6 digit.');return;}
+  const method=accountPasswordRecoveryState.method;if(!method){setAccountRecoveryMessage('Pilih metode pemulihan dan minta OTP terlebih dahulu.');return;}
+  setAccountRecoveryMessage('Memverifikasi OTP...',true);
+  try{
+    const action=method==='gmail'?'verify-email-reset':'verify-telegram-reset';
+    const data=await accountApi(action,{username:accountPasswordRecoveryState.username,token},false);
+    accountPasswordRecoveryState.resetToken=data.resetToken||'';
+    if(!accountPasswordRecoveryState.resetToken)throw new Error('Token verifikasi tidak diterima. Minta OTP baru.');
+    document.getElementById('recoveryNewPasswordArea').hidden=false;document.getElementById('recoveryOtpArea').hidden=true;
+    setAccountRecoveryMessage('OTP benar. Sekarang masukkan password baru.',true);
+  }catch(e){setAccountRecoveryMessage(e.message||'OTP salah atau kedaluwarsa.');}
+}
+async function submitAccountPasswordRecovery(){
+  const password=document.getElementById('recoveryNewPassword')?.value||'',confirm=document.getElementById('recoveryNewPassword2')?.value||'';
+  if(!accountPasswordRecoveryState.resetToken){setAccountRecoveryMessage('Verifikasi OTP terlebih dahulu.');return;}
+  if(password.length<8){setAccountRecoveryMessage('Password baru minimal 8 karakter.');return;}
+  if(password!==confirm){setAccountRecoveryMessage('Kedua password baru tidak sama.');return;}
+  setAccountRecoveryMessage('Menyimpan password baru...',true);
+  try{
+    const action=accountPasswordRecoveryState.method==='gmail'?'set-email-reset-password':'set-telegram-reset-password';
+    const data=await accountApi(action,{username:accountPasswordRecoveryState.username,password,resetToken:accountPasswordRecoveryState.resetToken},false);
+    accountPasswordRecoveryState.resetToken='';
+    document.getElementById('recoveryNewPasswordArea').hidden=true;document.getElementById('recoveryOtpArea').hidden=true;
+    for(const id of ['recoveryOtp','recoveryNewPassword','recoveryNewPassword2'])document.getElementById(id).value='';
+    setAccountRecoveryMessage((data.message||'Password berhasil direset.')+' Silakan login kembali dengan password baru.',true);
+  }catch(e){setAccountRecoveryMessage(e.message||'Gagal menyimpan password baru.');}
 }
 async function changeAccountPassword(){
   const currentPassword=document.getElementById('currentAccountPassword').value,password=document.getElementById('newAccountPassword').value,password2=document.getElementById('newAccountPassword2').value,msg=document.getElementById('passwordMsg');
