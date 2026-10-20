@@ -2263,8 +2263,11 @@ async function openRecoveryModal(){
   const modal=document.getElementById('recoveryModal');
   if(!modal)return;
   modal.classList.add('show');
+  modal.style.display='flex';
+  modal.style.visibility='visible';
+  modal.style.pointerEvents='auto';
   const msg=document.getElementById('recoveryMsg');
-  if(msg)msg.textContent='';
+  if(msg){msg.textContent='Memuat metode pemulihan...';msg.style.color='#ffbb55';}
   const input=document.getElementById('recoveryUsername');
   const methodsPanel=document.getElementById('recoveryMethods');
   const emailPanel=document.getElementById('emailResetOtpPanel');
@@ -2276,8 +2279,8 @@ async function openRecoveryModal(){
   if(emailPanel)emailPanel.style.display='none';
   if(telegramPanel)telegramPanel.style.display='none';
   recoveryAvailableMethods={gmail:false,telegram:false};
-  if(!username){if(msg)msg.textContent='Sesi akun tidak ditemukan. Silakan login kembali.';return;}
-  try{await checkRecoveryMethods();}catch(e){if(msg)msg.textContent=e?.message||'Gagal memuat metode pemulihan.';}
+  if(!username){if(msg){msg.textContent='Sesi akun tidak ditemukan. Silakan login kembali.';msg.style.color='#ff6b6b';}return;}
+  try{await checkRecoveryMethods();}catch(e){if(msg){msg.textContent='Metode pemulihan belum bisa dimuat. Coba lagi sebentar.';msg.style.color='#ff6b6b';}}
 }
 function closeRecoveryModal(){document.getElementById('recoveryModal')?.classList.remove('show');}
 async function checkRecoveryMethods(){
@@ -2327,14 +2330,14 @@ async function requestEmailReset(){
  if(!recoveryAvailableMethods.gmail){msg.textContent='Gmail belum tertaut atau belum terverifikasi di akun ini.';msg.style.color='#ffbb55';return;}
  try{const data=await accountApi('request-reset',{username},false);document.getElementById('emailResetOtpPanel').style.display='block';document.getElementById('telegramResetOtpPanel').style.display='none';msg.textContent=data.message||'Kode OTP dikirim ke Gmail tertaut.';msg.style.color='#00ff88';}catch(e){msg.textContent=e.message;msg.style.color='#ff6b6b';}
 }
-async function verifyEmailReset(){const username=document.getElementById('recoveryUsername').value.trim(),token=document.getElementById('resetEmailOtp').value.trim(),msg=document.getElementById('recoveryMsg');if(!/^\d{6}$/.test(token)){msg.textContent='Masukkan OTP 6 digit.';msg.style.color='#ff6b6b';return;}try{const d=await accountApi('verify-email-reset',{username,token},false);recoveryResetToken=d.resetToken;document.getElementById('emailOtpStep').style.display='none';document.getElementById('emailPasswordStep').style.display='block';msg.textContent='OTP benar. Masukkan password baru.';msg.style.color='#00ff88';}catch(e){msg.textContent=e.message;msg.style.color='#ff6b6b';}}
+async function verifyEmailReset(){const username=document.getElementById('recoveryUsername').value.trim(),token=document.getElementById('resetEmailOtp').value.trim(),msg=document.getElementById('recoveryMsg');if(!/^\d{6}$/.test(token)){msg.textContent='Masukkan kode OTP 6 digit yang lengkap.';msg.style.color='#ffbb55';return;}try{const d=await accountApi('verify-email-reset',{username,token},false);if(!d?.resetToken)throw new Error('verify-failed');recoveryResetToken=d.resetToken;document.getElementById('emailOtpStep').style.display='none';document.getElementById('emailPasswordStep').style.display='block';msg.textContent='Kode berhasil diverifikasi.';msg.style.color='#00ff88';}catch(e){msg.textContent='Kode belum bisa diverifikasi. Periksa kembali kode yang dimasukkan, atau minta kode baru jika sudah tidak berlaku.';msg.style.color='#ffbb55';}}
 async function setEmailResetPassword(){const username=document.getElementById('recoveryUsername').value.trim(),password=document.getElementById('resetEmailPassword').value,msg=document.getElementById('recoveryMsg');if(password.length<8){msg.textContent='Password minimal 8 karakter.';msg.style.color='#ff6b6b';return;}try{const d=await accountApi('set-email-reset-password',{username,password,resetToken:recoveryResetToken},false);msg.textContent=d.message||'Password berhasil direset.';msg.style.color='#00ff88';setTimeout(closeRecoveryModal,900);}catch(e){msg.textContent=e.message;msg.style.color='#ff6b6b';}}
 async function requestTelegramReset(){
  const username=document.getElementById('recoveryUsername').value.trim(),msg=document.getElementById('recoveryMsg');
  if(!recoveryAvailableMethods.telegram){msg.textContent='Telegram belum tertaut di akun ini.';msg.style.color='#ffbb55';return;}
  try{const data=await accountApi('request-telegram-reset',{username},false);document.getElementById('telegramResetOtpPanel').style.display='block';document.getElementById('emailResetOtpPanel').style.display='none';msg.textContent=data.message||'Kode OTP dikirim ke Telegram tertaut.';msg.style.color='#00ff88';}catch(e){msg.textContent=e.message;msg.style.color='#ff6b6b';}
 }
-async function verifyTelegramReset(){const username=document.getElementById('recoveryUsername').value.trim(),token=document.getElementById('resetTelegramOtp').value.trim(),msg=document.getElementById('recoveryMsg');if(!/^\d{6}$/.test(token)){msg.textContent='Masukkan OTP 6 digit.';msg.style.color='#ff6b6b';return;}try{const d=await accountApi('verify-telegram-reset',{username,token},false);recoveryResetToken=d.resetToken;document.getElementById('telegramOtpStep').style.display='none';document.getElementById('telegramPasswordStep').style.display='block';msg.textContent='OTP benar. Masukkan password baru.';msg.style.color='#00ff88';}catch(e){msg.textContent=e.message;msg.style.color='#ff6b6b';}}
+async function verifyTelegramReset(){const username=document.getElementById('recoveryUsername').value.trim(),token=document.getElementById('resetTelegramOtp').value.trim(),msg=document.getElementById('recoveryMsg');if(!/^\d{6}$/.test(token)){msg.textContent='Masukkan kode OTP 6 digit yang lengkap.';msg.style.color='#ffbb55';return;}try{const d=await accountApi('verify-telegram-reset',{username,token},false);if(!d?.resetToken)throw new Error('verify-failed');recoveryResetToken=d.resetToken;document.getElementById('telegramOtpStep').style.display='none';document.getElementById('telegramPasswordStep').style.display='block';msg.textContent='Kode berhasil diverifikasi.';msg.style.color='#00ff88';}catch(e){msg.textContent='Kode belum bisa diverifikasi. Periksa kembali kode yang dimasukkan, atau minta kode baru jika sudah tidak berlaku.';msg.style.color='#ffbb55';}}
 async function setTelegramResetPassword(){const username=document.getElementById('recoveryUsername').value.trim(),password=document.getElementById('resetTelegramPassword').value,msg=document.getElementById('recoveryMsg');if(password.length<8){msg.textContent='Password minimal 8 karakter.';msg.style.color='#ff6b6b';return;}try{const d=await accountApi('set-telegram-reset-password',{username,password,resetToken:recoveryResetToken},false);msg.textContent=d.message||'Password berhasil direset.';msg.style.color='#00ff88';setTimeout(closeRecoveryModal,900);}catch(e){msg.textContent=e.message;msg.style.color='#ff6b6b';}}
 function openAccountLinkPrompt(){
   const u=getLoggedAccount();if(!u)return;
