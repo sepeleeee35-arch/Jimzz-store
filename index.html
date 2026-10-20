@@ -534,7 +534,7 @@ header .coin-display { align-items:center; justify-content:center; flex-wrap:wra
 
 .forgot-current-password-link{display:block;margin:12px 0 0;padding:4px 0;border:0;background:transparent;color:#80e7a6;font-size:12px;font-weight:800;text-decoration:underline;text-underline-offset:3px;cursor:pointer}.account-password-recovery{margin-top:14px;padding:15px;border:1px solid #28523a;border-radius:14px;background:#0d1711}.account-password-recovery[hidden],.recovery-methods[hidden],#recoveryOtpArea[hidden],#recoveryNewPasswordArea[hidden]{display:none!important}.account-password-recovery h4{margin:0 0 6px;color:#e5f7eb;font-size:14px}.account-password-recovery>p,.recovery-methods>p{font-size:12px;line-height:1.6;color:#9ab5a2;margin:0 0 12px}.recovery-methods{display:grid;gap:8px;margin:12px 0}.recovery-method-option{display:flex;flex-direction:column;gap:5px;width:100%;padding:12px;border:1px solid #31543d;border-radius:11px;background:#101e15;color:#e5f7eb;text-align:left;cursor:pointer}.recovery-method-option strong{font-size:12px}.recovery-method-option span{font-size:11px;line-height:1.5;color:#9ab5a2}.recovery-method-option:disabled{opacity:.48;cursor:not-allowed}.account-password-recovery .btn-next:disabled{opacity:.6;cursor:wait}
 /* Account settings is a full-page view, not a floating modal */
-#accountSettingsModal.show{display:block!important;position:fixed!important;top:54px!important;right:0!important;bottom:0!important;left:0!important;width:100%!important;height:auto!important;min-height:0!important;z-index:12000!important;background:#070b09!important;overflow-x:hidden!important;overflow-y:auto!important;padding:0!important;backdrop-filter:none!important;overscroll-behavior:contain!important}
+#accountSettingsModal.show{display:block!important;position:fixed!important;top:54px!important;right:0!important;bottom:0!important;left:0!important;width:100%!important;height:auto!important;min-height:0!important;z-index:12000!important;background:#070b09!important;overflow-x:hidden!important;overflow-y:auto!important;padding:0!important;backdrop-filter:none!important;overscroll-behavior-y:auto!important}
 #accountSettingsModal .account-settings-page{box-sizing:border-box;min-height:100dvh;width:100%;max-width:none;margin:0;padding:0 0 36px;background:#070b09;color:#eef7f0;border:0;border-radius:0;box-shadow:none;overflow:visible}
 #accountSettingsModal .account-settings-header{position:relative;z-index:3;display:flex;align-items:center;padding:14px clamp(16px,4vw,30px);background:#070b09;border-bottom:1px solid #20392b}
 #accountSettingsModal .account-settings-back{width:42px;height:42px;flex:0 0 42px;display:grid;place-items:center;border:1px solid #284a36;border-radius:13px;background:#101a14;color:#baf2cb;font-size:24px;font-weight:500;cursor:pointer;transition:background .18s,border-color .18s}
@@ -729,6 +729,19 @@ body::before,body::after{background:none!important;animation:none!important;filt
 <style id="jimzz-settings-real-page">/* Account settings behaves as its own page; it never overlays another page */
 #accountSettingsModal.tab-page.active{display:block!important;position:fixed!important;top:54px!important;right:0!important;bottom:0!important;left:0!important;width:100%!important;height:auto!important;min-height:0!important;z-index:12000!important;background:#070b09!important;overflow-x:hidden!important;overflow-y:auto!important;padding:0!important;backdrop-filter:none!important;overscroll-behavior:contain!important}
 #accountSettingsModal .account-settings-page{min-height:100%!important;padding-bottom:calc(28px + env(safe-area-inset-bottom))!important}
+</style>
+<style id="jimzz-live-visitor-plus">
+.visitor-tools{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:8px;margin:0 0 10px}
+.visitor-tools input,.visitor-tools select{box-sizing:border-box;min-width:0;width:100%;padding:10px 11px;border:1px solid rgba(0,200,255,.28);border-radius:10px;background:#080d10;color:#eafaff;font:inherit;font-size:11px}
+.visitor-tools select{max-width:130px}
+.visitor-tools button{padding:9px 12px;border:1px solid rgba(0,200,255,.45);border-radius:10px;background:rgba(0,200,255,.12);color:#8eeaff;font-size:11px;font-weight:800;white-space:nowrap}
+.visitor-tools button:disabled{opacity:.55}
+.visitor-meta{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin:0 0 10px;color:#7e9aa2;font-size:10px}
+.visitor-page-summary{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin:0 0 12px}
+.visitor-summary-label{width:100%;font-size:10px;color:#8a9ca1;margin-bottom:2px}
+.visitor-page-chip{padding:5px 8px;border-radius:8px;border:1px solid rgba(0,200,255,.18);background:rgba(0,200,255,.06);color:#b8dce5;font-size:10px}
+.visitor-page-chip b{color:#00c8ff;margin-left:4px}
+@media(max-width:520px){.visitor-tools{grid-template-columns:minmax(0,1fr) auto}.visitor-tools input{grid-column:1/-1}.visitor-tools select{max-width:none}.visitor-tools button{min-width:88px}}
 </style>
 </head>
 <body>
@@ -1001,6 +1014,15 @@ body::before,body::after{background:none!important;animation:none!important;filt
           <div class="visitor-stat-label">Total</div>
         </div>
       </div>
+      <div class="visitor-tools">
+        <input id="visitorSearch" type="search" placeholder="Cari IP, perangkat, browser, halaman..." oninput="renderVisitorList()" aria-label="Cari visitor">
+        <select id="visitorFilter" onchange="renderVisitorList()" aria-label="Filter status visitor">
+          <option value="all">Semua status</option><option value="online">Online</option><option value="offline">Offline</option>
+        </select>
+        <button type="button" id="visitorRefreshBtn" onclick="loadVisitors(true)">↻ Refresh</button>
+      </div>
+      <div class="visitor-meta"><span id="visitorUpdatedAt">Menunggu data…</span><span id="visitorShownCount">0 visitor</span></div>
+      <div class="visitor-page-summary" id="visitorPageSummary"></div>
       <div class="visitor-list" id="visitorList">
         <div class="visitor-empty">Belum ada data visitor</div>
       </div>
@@ -1527,30 +1549,54 @@ async function pingVisitor() {
     await fetch(BACKEND_URL + '/api/visitor-ping', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ sessionId, page: currentPage }) });
   } catch (err) { console.log('Ping error:', err); }
 }
-async function loadVisitors() {
+let visitorCache = [];
+function visitorEscape(value) { return String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch])); }
+function renderVisitorList() {
+  const listEl=document.getElementById('visitorList'); if(!listEl)return;
+  const query=(document.getElementById('visitorSearch')?.value||'').trim().toLowerCase();
+  const filter=document.getElementById('visitorFilter')?.value||'all';
+  const rows=visitorCache.map(v=>{
+    const stamp=new Date(v.lastPing).getTime();
+    const diffSec=Number.isFinite(stamp)?Math.max(0,Math.floor((Date.now()-stamp)/1000)):999999;
+    return {...v,_diffSec:diffSec,_online:diffSec<60};
+  }).filter(v=>{
+    const hay=[v.ip,v.device,v.browser,v.page].join(' ').toLowerCase();
+    return (!query||hay.includes(query))&&(filter==='all'||(filter==='online'?v._online:!v._online));
+  });
+  const count=document.getElementById('visitorShownCount');
+  if(count)count.textContent=rows.length+' dari '+visitorCache.length+' visitor';
+  if(!rows.length){listEl.innerHTML='<div class="visitor-empty">'+(visitorCache.length?'Tidak ada visitor yang cocok dengan filter.':'Belum ada data visitor')+'</div>';return;}
+  listEl.innerHTML=rows.map(v=>{
+    const timeAgo=v._diffSec<5?'baru saja':v._diffSec<60?v._diffSec+' detik lalu':v._diffSec<3600?Math.floor(v._diffSec/60)+' menit lalu':Math.floor(v._diffSec/3600)+' jam lalu';
+    let deviceIcon='💻';if(v.device==='Android'||v.device==='iOS')deviceIcon='📱';else if(v.device==='Mac')deviceIcon='🍎';else if(v.device==='Windows')deviceIcon='🪟';else if(v.device==='Linux')deviceIcon='🐧';
+    const page=visitorEscape(v.page||'halaman tidak diketahui'),device=visitorEscape(v.device||'Perangkat tidak diketahui'),browser=visitorEscape(v.browser||'Browser tidak diketahui'),ip=visitorEscape(v.ip||'IP tidak tersedia');
+    return '<div class="visitor-item '+(v._online?'online':'')+'"><div class="visitor-avatar">'+deviceIcon+'</div><div class="visitor-info"><div class="visitor-name">'+ip+'</div><div class="visitor-detail">'+device+' • '+browser+' • '+page+'</div><div class="visitor-time">Aktivitas: '+timeAgo+'</div></div><div class="visitor-status '+(v._online?'online':'offline')+'" title="'+(v._online?'Online':'Offline')+'"></div></div>';
+  }).join('');
+}
+async function loadVisitors(manual=false) {
   if (!isPrivilegedAccount()) return;
+  const refreshBtn=document.getElementById('visitorRefreshBtn');
+  if(manual&&refreshBtn){refreshBtn.disabled=true;refreshBtn.textContent='Memuat…';}
   try {
     const res = await accountFetch('/api/visitors', { headers: {} });
     const data = await res.json();
     if (!res.ok || !data.success) throw new Error(data.error || data.detail || ('HTTP '+res.status));
+    visitorCache=Array.isArray(data.visitors)?data.visitors:[];
     document.getElementById('visitorOnline').innerText = data.onlineCount || 0;
     document.getElementById('visitorToday').innerText = data.todayCount || 0;
     document.getElementById('visitorTotal').innerText = data.totalCount || 0;
-    const listEl = document.getElementById('visitorList');
-    if (!data.visitors || data.visitors.length === 0) { listEl.innerHTML = '<div class="visitor-empty">Belum ada data visitor</div>'; return; }
-    listEl.innerHTML = data.visitors.map(v => {
-      const lastPingTime = new Date(v.lastPing);
-      const diffSec = Math.floor((Date.now() - lastPingTime.getTime()) / 1000);
-      const isOnline = diffSec < 60;
-      const timeAgo = diffSec < 5 ? 'baru aja' : diffSec < 60 ? diffSec + ' detik lalu' : Math.floor(diffSec / 60) + ' menit lalu';
-      let deviceIcon = '💻';
-      if (v.device === 'Android' || v.device === 'iOS') deviceIcon = '📱';
-      else if (v.device === 'Mac') deviceIcon = '🍎';
-      else if (v.device === 'Windows') deviceIcon = '🪟';
-      else if (v.device === 'Linux') deviceIcon = '🐧';
-      return `<div class="visitor-item ${isOnline ? 'online' : ''}"><div class="visitor-avatar">${deviceIcon}</div><div class="visitor-info"><div class="visitor-name">${v.ip || 'Unknown IP'}</div><div class="visitor-detail">${v.device} • ${v.browser} • ${v.page}</div><div class="visitor-time">${timeAgo}</div></div><div class="visitor-status ${isOnline ? 'online' : 'offline'}"></div></div>`;
-    }).join('');
-  } catch (err) { console.log('Load visitors error:', err); }
+    const updated=document.getElementById('visitorUpdatedAt');
+    if(updated)updated.textContent='Diperbarui '+new Date().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    const pages={};visitorCache.forEach(v=>{const p=String(v.page||'Lainnya');pages[p]=(pages[p]||0)+1;});
+    const summary=document.getElementById('visitorPageSummary');
+    if(summary){const items=Object.entries(pages).sort((a,b)=>b[1]-a[1]).slice(0,5);summary.innerHTML=items.length?'<span class="visitor-summary-label">Halaman dikunjungi</span>'+items.map(([p,n])=>'<span class="visitor-page-chip">'+visitorEscape(p)+' <b>'+n+'</b></span>').join(''):'<span class="visitor-summary-label">Belum ada aktivitas halaman</span>';}
+    renderVisitorList();
+  } catch (err) {
+    console.log('Load visitors error:', err);
+    const updated=document.getElementById('visitorUpdatedAt');if(updated)updated.textContent='Gagal memuat • coba refresh';
+  } finally {
+    if(manual&&refreshBtn){refreshBtn.disabled=false;refreshBtn.textContent='↻ Refresh';}
+  }
 }
 setInterval(pingVisitor, 30000);
 setInterval(loadVisitors, 10000);
