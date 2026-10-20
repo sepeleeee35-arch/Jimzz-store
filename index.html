@@ -774,7 +774,7 @@ body::before,body::after{background:none!important;animation:none!important;filt
 <div class="account-modal" id="recoveryModal" onclick="if(event.target===this)closeRecoveryModal()">
   <div class="account-box">
     <button class="account-close" onclick="closeRecoveryModal()" aria-label="Tutup">×</button><div class="account-icon">🔐</div>
-    <h2>Pulihkan Akun</h2><div class="account-sub">Pilih metode OTP untuk akun yang sedang login.</div>
+    <h2>Melihat Password</h2><div class="account-sub">Pilih metode OTP untuk akun yang sedang login.</div>
     <input id="recoveryUsername" type="hidden">
     <div id="recoveryMethods" style="display:none;margin-top:14px;">
       <div style="font-size:12px;font-weight:800;margin-bottom:9px;color:#ddd;">PILIH METODE PENGIRIMAN KODE</div>
@@ -2286,7 +2286,7 @@ async function openRecoveryModal(){
   if(!username){if(msg){msg.textContent='Sesi akun tidak ditemukan. Silakan login kembali.';msg.style.color='#ff6b6b';}return;}
   try{await checkRecoveryMethods();}catch(e){if(msg){msg.textContent='Metode pemulihan belum bisa dimuat. Coba lagi sebentar.';msg.style.color='#ff6b6b';}}
 }
-function closeRecoveryModal(){document.getElementById('recoveryModal')?.classList.remove('show');}
+function closeRecoveryModal(){const modal=document.getElementById('recoveryModal');if(!modal)return;modal.classList.remove('show');modal.style.display='none';modal.style.visibility='hidden';modal.style.pointerEvents='none';}
 async function checkRecoveryMethods(){
  const username=document.getElementById('recoveryUsername').value.trim(),msg=document.getElementById('recoveryMsg');
  if(!/^[A-Za-z0-9_]{3,24}$/.test(username)){msg.textContent='Username harus 3–24 karakter.';msg.style.color='#ff6b6b';return;}
