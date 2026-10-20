@@ -2420,15 +2420,54 @@ async function verifyAccountEmailOtp(){
   try{const data=await accountApi('verify-email-otp',{token});saveAccountSession(null,data.user);document.getElementById('accountEmailOtpPanel').style.display='none';const input=document.getElementById('accountEmail');if(input){input.value=data.user.email||input.value;input.dataset.savedEmail=input.value;input.readOnly=true;input.type='password';}const status=document.getElementById('emailLinkStatus');if(status){status.textContent='Status Gmail: terverifikasi';status.style.color='#00ff88';}const submit=document.getElementById('accountEmailOtpSubmit');if(submit)submit.hidden=true;const change=document.getElementById('changeAccountEmailBtn');if(change)change.hidden=false;const reveal=document.getElementById('accountEmailVisibilityBtn');if(reveal){reveal.hidden=false;reveal.textContent='👁';reveal.setAttribute('aria-label','Tampilkan email');}msg.textContent=data.message||'Gmail berhasil diverifikasi.';msg.style.color='#00ff88';}
   catch(e){msg.textContent=e.message;msg.style.color='#ff6b6b';}
 }
+let telegramLinkPollTimer=null;
 async function startTelegramLink(){
   const status=document.getElementById('telegramLinkStatus');
-  try{const data=await accountApi('telegram-link-start');if(data.url)window.location.href=data.url;if(status){status.textContent='Buka bot Telegram lalu tekan Start. Setelah itu kembali ke Jimzz Store dan periksa status.';status.style.color='#ffbb55';}showToast('Buka bot Telegram dan tekan Start untuk menyelesaikan pengaitan.','info');}
-  catch(e){if(status){status.textContent=e.message;status.style.color='#ff6b6b';}}
+  const button=document.querySelector('.telegram-link-btn');
+  if(!getLoggedAccount()){if(status){status.textContent='Login dulu untuk mengaitkan Telegram.';status.style.color='#ff6b6b';}return;}
+  if(button){button.disabled=true;button.dataset.originalText=button.innerHTML;button.textContent='Menyiapkan tautan…';}
+  // Buka tab saat masih berada di klik pengguna agar browser Android tidak memblokirnya.
+  const botTab=window.open('about:blank','_blank');
+  try{
+    const data=await accountApi('telegram-link-start');
+    if(!data.url)throw new Error('Tautan Telegram tidak diterima. Coba lagi.');
+    if(botTab&&!botTab.closed){botTab.location.href=data.url;}
+    else{window.location.href=data.url;return;}
+    if(status){status.textContent='Bot Telegram terbuka. Tekan Start di bot; status akan diperiksa otomatis.';status.style.color='#ffbb55';}
+    showToast('Tekan Start pada bot Telegram untuk menyelesaikan pengaitan.','info');
+    if(telegramLinkPollTimer)clearInterval(telegramLinkPollTimer);
+    const startedAt=Date.now();
+    telegramLinkPollTimer=setInterval(async()=>{
+      if(Date.now()-startedAt>120000){clearInterval(telegramLinkPollTimer);telegramLinkPollTimer=null;if(status&&!getLoggedAccount()?.telegramLinked){status.textContent='Belum terdeteksi. Pastikan kamu menekan Start di bot, lalu tekan Periksa status koneksi.';status.style.color='#ffbb55';}return;}
+      try{
+        const latest=await accountApi('telegram-status');
+        if(latest.user){saveAccountSession(null,latest.user);}
+        if(latest.user?.telegramLinked){
+          clearInterval(telegramLinkPollTimer);telegramLinkPollTimer=null;
+          if(status){status.textContent='Status Telegram: tertaut'+(latest.user.telegramUsername?' (@'+latest.user.telegramUsername+')':'');status.style.color='#00ff88';}
+          if(button)button.textContent='✓ Telegram tertaut';
+          showToast('Telegram berhasil ditautkan ke akunmu!','success');
+        }
+      }catch(e){console.warn('[Jimzz] Pemeriksaan status Telegram:',e.message);}
+    },3000);
+  }catch(e){
+    if(botTab&&!botTab.closed)botTab.close();
+    if(status){status.textContent=e.message||'Gagal membuat tautan Telegram.';status.style.color='#ff6b6b';}
+  }finally{
+    if(button){button.disabled=false;if(!getLoggedAccount()?.telegramLinked)button.innerHTML=button.dataset.originalText||'<span aria-hidden="true">➤</span> Hubungkan Telegram';}
+  }
 }
 async function refreshTelegramLinkStatus(){
   const status=document.getElementById('telegramLinkStatus');
-  try{const data=await accountApi('telegram-status');saveAccountSession(null,data.user);if(status){status.textContent=data.user.telegramLinked?'Status Telegram: tertaut'+(data.user.telegramUsername?' (@'+data.user.telegramUsername+')':''):'Status Telegram: belum tertaut. Pastikan kamu sudah menekan Start pada bot.';status.style.color=data.user.telegramLinked?'#00ff88':'#ffbb55';}}
-  catch(e){if(status){status.textContent=e.message;status.style.color='#ff6b6b';}}
+  const button=document.querySelector('.telegram-link-btn');
+  try{
+    const data=await accountApi('telegram-status');
+    saveAccountSession(null,data.user);
+    const linked=Boolean(data.user?.telegramLinked);
+    if(status){status.textContent=linked?'Status Telegram: tertaut'+(data.user.telegramUsername?' (@'+data.user.telegramUsername+')':''):'Status Telegram: belum tertaut. Tekan Start pada bot Telegram untuk menyelesaikan pengaitan.';status.style.color=linked?'#00ff88':'#ffbb55';}
+    if(linked&&button)button.textContent='✓ Telegram tertaut';
+    return linked;
+  }catch(e){if(status){status.textContent=e.message;status.style.color='#ff6b6b';}return false;}
 }
 async function changeAccountPassword(){
   const currentPassword=document.getElementById('currentAccountPassword').value,password=document.getElementById('newAccountPassword').value,password2=document.getElementById('newAccountPassword2').value,msg=document.getElementById('passwordMsg');
