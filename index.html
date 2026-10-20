@@ -772,31 +772,19 @@ body::before,body::after{background:none!important;animation:none!important;filt
 
 <div class="account-modal" id="recoveryModal" onclick="if(event.target===this)closeRecoveryModal()">
   <div class="account-box">
-    <button class="account-close" onclick="closeRecoveryModal()" aria-label="Tutup">×</button>
-    <div class="account-icon">🔑</div>
-    <h2>Lupa Password?</h2>
-    <div class="account-sub">Pulihkan akun menggunakan Gmail atau Telegram yang sudah terhubung.</div>
-    <form onsubmit="event.preventDefault();requestEmailReset()">
-      <div class="account-field"><label>📧 GMAIL</label><input id="resetEmail" type="email" placeholder="nama@gmail.com" autocomplete="email" required></div>
-      <button class="account-submit" type="submit">📩 Kirim OTP ke Gmail</button>
-    </form>
-    <div id="emailResetOtpPanel" style="display:none;margin-top:10px;">
-      <div class="account-field"><label>OTP GMAIL 6 DIGIT</label><input id="resetEmailOtp" inputmode="numeric" maxlength="6" autocomplete="one-time-code"></div>
-      <div class="account-field"><label>PASSWORD BARU</label><input id="resetEmailPassword" type="password" minlength="8" autocomplete="new-password"></div>
-      <button class="account-submit" type="button" onclick="verifyEmailReset()">🔐 Reset dengan Gmail</button>
+    <button class="account-close" onclick="closeRecoveryModal()" aria-label="Tutup">×</button><div class="account-icon">🔐</div>
+    <h2>Pulihkan Akun</h2><div class="account-sub">Masukkan username Jimzz Store terlebih dahulu.</div>
+    <form onsubmit="event.preventDefault();checkRecoveryMethods()"><div class="account-field"><label>USERNAME JIMZZ STORE</label><input id="recoveryUsername" maxlength="24" autocomplete="username" placeholder="Username akun kamu" required></div><button class="account-submit" type="submit">Lanjutkan</button></form>
+    <div id="recoveryMethods" style="display:none;margin-top:14px;">
+      <div style="font-size:12px;font-weight:800;margin-bottom:9px;color:#ddd;">PILIH METODE PENGIRIMAN KODE</div>
+      <button id="recoveryGmailBtn" class="account-submit" type="button" onclick="requestEmailReset()" disabled>📧 Kirim kode OTP ke Gmail</button><div id="recoveryGmailStatus" style="font-size:11px;color:#ffbb55;margin:5px 0 12px;">Akun Gmail Anda belum tertaut di akun ini.</div>
+      <button id="recoveryTelegramBtn" class="account-submit" type="button" onclick="requestTelegramReset()" disabled>✈️ Kirim kode OTP ke Telegram</button><div id="recoveryTelegramStatus" style="font-size:11px;color:#ffbb55;margin:5px 0 12px;">Akun Telegram Anda belum tertaut di akun ini.</div>
     </div>
-    <div style="text-align:center;color:#777;font-size:11px;margin:14px 0;">— ATAU —</div>
-    <form onsubmit="event.preventDefault();requestTelegramReset()">
-      <div class="account-field"><label>👤 USERNAME JIMZZ STORE</label><input id="resetTelegramUsername" placeholder="Username akun Jimzz Store" autocomplete="username"></div>
-      <button class="account-submit" type="submit">✈️ Kirim OTP ke Telegram</button>
-    </form>
-    <div id="telegramResetOtpPanel" style="display:none;margin-top:10px;">
-      <div class="account-field"><label>OTP TELEGRAM 6 DIGIT</label><input id="resetTelegramOtp" inputmode="numeric" maxlength="6" autocomplete="one-time-code"></div>
-      <div class="account-field"><label>PASSWORD BARU</label><input id="resetTelegramPassword" type="password" minlength="8" autocomplete="new-password"></div>
-      <button class="account-submit" type="button" onclick="verifyTelegramReset()">🔐 Reset dengan Telegram</button>
-    </div>
-    <div class="account-msg" id="recoveryMsg"></div>
+    <div id="emailResetOtpPanel" style="display:none;margin-top:12px;"><div class="account-field"><label>OTP GMAIL 6 DIGIT</label><input id="resetEmailOtp" inputmode="numeric" maxlength="6" autocomplete="one-time-code"></div><div class="account-field"><label>PASSWORD BARU</label><input id="resetEmailPassword" type="password" minlength="8" autocomplete="new-password"></div><button class="account-submit" type="button" onclick="verifyEmailReset()">🔐 Verifikasi OTP & Reset Password</button></div>
+    <div id="telegramResetOtpPanel" style="display:none;margin-top:12px;"><div class="account-field"><label>OTP TELEGRAM 6 DIGIT</label><input id="resetTelegramOtp" inputmode="numeric" maxlength="6" autocomplete="one-time-code"></div><div class="account-field"><label>PASSWORD BARU</label><input id="resetTelegramPassword" type="password" minlength="8" autocomplete="new-password"></div><button class="account-submit" type="button" onclick="verifyTelegramReset()">🔐 Verifikasi OTP & Reset Password</button></div>
+    <div class="account-msg" id="recoveryMsg" role="status"></div>
   </div>
+</div>
 </div>
 
 <div class="modal-overlay" id="accountSettingsModal" aria-label="Pengaturan akun">
@@ -2267,8 +2255,23 @@ function handleTopupClick(){if(isAdmin)switchTab('topup');else showToast('Top Up
 
 function openAccountModal(){document.getElementById('accountModal')?.classList.add('show');switchAccountForm('login');}
 function closeAccountModal(){document.getElementById('accountModal')?.classList.remove('show');}
-function openRecoveryModal(){document.getElementById('recoveryModal')?.classList.add('show');document.getElementById('recoveryMsg').textContent='';}
+let recoveryAvailableMethods={gmail:false,telegram:false};
+function openRecoveryModal(){document.getElementById('recoveryModal')?.classList.add('show');document.getElementById('recoveryMsg').textContent='';document.getElementById('recoveryUsername').value=document.getElementById('loginUsername')?.value.trim()||'';document.getElementById('recoveryMethods').style.display='none';document.getElementById('emailResetOtpPanel').style.display='none';document.getElementById('telegramResetOtpPanel').style.display='none';recoveryAvailableMethods={gmail:false,telegram:false};}
 function closeRecoveryModal(){document.getElementById('recoveryModal')?.classList.remove('show');}
+async function checkRecoveryMethods(){
+ const username=document.getElementById('recoveryUsername').value.trim(),msg=document.getElementById('recoveryMsg');
+ if(!/^[A-Za-z0-9_]{3,24}$/.test(username)){msg.textContent='Username harus 3–24 karakter.';msg.style.color='#ff6b6b';return;}
+ msg.textContent='Memeriksa metode pemulihan...';msg.style.color='#aaa';
+ try{
+  const data=await accountApi('recovery-methods',{username},false);recoveryAvailableMethods={gmail:Boolean(data.methods?.gmail),telegram:Boolean(data.methods?.telegram)};
+  document.getElementById('recoveryMethods').style.display='block';
+  const gb=document.getElementById('recoveryGmailBtn'),tb=document.getElementById('recoveryTelegramBtn'),gs=document.getElementById('recoveryGmailStatus'),ts=document.getElementById('recoveryTelegramStatus');
+  gb.disabled=!recoveryAvailableMethods.gmail;tb.disabled=!recoveryAvailableMethods.telegram;gb.style.opacity=gb.disabled?'.45':'1';tb.style.opacity=tb.disabled?'.45':'1';
+  gs.textContent=recoveryAvailableMethods.gmail?'Gmail terverifikasi dan tertaut.':'Akun Gmail Anda belum tertaut di akun ini.';ts.textContent=recoveryAvailableMethods.telegram?'Telegram tertaut dan dapat menerima OTP.':'Akun Telegram Anda belum tertaut di akun ini.';
+  gs.style.color=recoveryAvailableMethods.gmail?'#00ff88':'#ffbb55';ts.style.color=recoveryAvailableMethods.telegram?'#00ff88':'#ffbb55';
+  msg.textContent=(!recoveryAvailableMethods.gmail&&!recoveryAvailableMethods.telegram)?'Akun ini tidak tertaut dengan metode mana pun, silakan chat admin untuk meminta reset password.':'Pilih metode yang aktif untuk menerima kode OTP.';msg.style.color=(!recoveryAvailableMethods.gmail&&!recoveryAvailableMethods.telegram)?'#ffbb55':'#ddd';
+ }catch(e){msg.textContent=e.message||'Gagal memeriksa metode pemulihan.';msg.style.color='#ff6b6b';}
+}
 function switchAccountForm(type){const login=type==='login';document.getElementById('accountLoginForm')?.classList.toggle('active',login);document.getElementById('accountRegisterForm')?.classList.toggle('active',!login);document.getElementById('accountLoginTab')?.classList.toggle('active',login);document.getElementById('accountRegisterTab')?.classList.toggle('active',!login);const lm=document.getElementById('loginMsg'),rm=document.getElementById('registerMsg');if(lm)lm.textContent='';if(rm)rm.textContent='';}
 async function accountRegister(){
   const username=document.getElementById('registerUsername').value.trim(),password=document.getElementById('registerPassword').value,password2=document.getElementById('registerPassword2').value,msg=document.getElementById('registerMsg');
@@ -2298,24 +2301,24 @@ async function accountLogin(){
   catch(e){msg.textContent=e.message||'Username atau password salah.';msg.style.color='#ff6b6b';}
 }
 async function requestEmailReset(){
-  const email=document.getElementById('resetEmail').value.trim(),msg=document.getElementById('recoveryMsg');
-  try{const data=await accountApi('request-reset',{email},false);document.getElementById('emailResetOtpPanel').style.display='block';msg.textContent=data.message||'Jika email terdaftar, OTP telah dikirim.';msg.style.color='#00ff88';}
-  catch(e){msg.textContent=e.message;msg.style.color='#ff6b6b';}
+ const username=document.getElementById('recoveryUsername').value.trim(),msg=document.getElementById('recoveryMsg');
+ if(!recoveryAvailableMethods.gmail){msg.textContent='Gmail belum tertaut atau belum terverifikasi di akun ini.';msg.style.color='#ffbb55';return;}
+ try{const data=await accountApi('request-reset',{username},false);document.getElementById('emailResetOtpPanel').style.display='block';document.getElementById('telegramResetOtpPanel').style.display='none';msg.textContent=data.message||'Kode OTP dikirim ke Gmail tertaut.';msg.style.color='#00ff88';}catch(e){msg.textContent=e.message;msg.style.color='#ff6b6b';}
 }
 async function verifyEmailReset(){
-  const email=document.getElementById('resetEmail').value.trim(),token=document.getElementById('resetEmailOtp').value.trim(),password=document.getElementById('resetEmailPassword').value,msg=document.getElementById('recoveryMsg');
-  try{const data=await accountApi('verify-email-reset',{email,token,password},false);msg.textContent=data.message||'Password berhasil direset.';msg.style.color='#00ff88';setTimeout(closeRecoveryModal,700);}
-  catch(e){msg.textContent=e.message;msg.style.color='#ff6b6b';}
+ const username=document.getElementById('recoveryUsername').value.trim(),token=document.getElementById('resetEmailOtp').value.trim(),password=document.getElementById('resetEmailPassword').value,msg=document.getElementById('recoveryMsg');
+ if(!/^\d{6}$/.test(token)||password.length<8){msg.textContent='Masukkan OTP 6 digit dan password minimal 8 karakter.';msg.style.color='#ff6b6b';return;}
+ try{const data=await accountApi('verify-email-reset',{username,token,password},false);msg.textContent=data.message||'Password berhasil direset.';msg.style.color='#00ff88';setTimeout(closeRecoveryModal,900);}catch(e){msg.textContent=e.message;msg.style.color='#ff6b6b';}
 }
 async function requestTelegramReset(){
-  const username=document.getElementById('resetTelegramUsername').value.trim(),msg=document.getElementById('recoveryMsg');
-  try{const data=await accountApi('request-telegram-reset',{username},false);document.getElementById('telegramResetOtpPanel').style.display='block';msg.textContent=data.message||'Jika akun tertaut, OTP dikirim ke Telegram.';msg.style.color='#00ff88';}
-  catch(e){msg.textContent=e.message;msg.style.color='#ff6b6b';}
+ const username=document.getElementById('recoveryUsername').value.trim(),msg=document.getElementById('recoveryMsg');
+ if(!recoveryAvailableMethods.telegram){msg.textContent='Telegram belum tertaut di akun ini.';msg.style.color='#ffbb55';return;}
+ try{const data=await accountApi('request-telegram-reset',{username},false);document.getElementById('telegramResetOtpPanel').style.display='block';document.getElementById('emailResetOtpPanel').style.display='none';msg.textContent=data.message||'Kode OTP dikirim ke Telegram tertaut.';msg.style.color='#00ff88';}catch(e){msg.textContent=e.message;msg.style.color='#ff6b6b';}
 }
 async function verifyTelegramReset(){
-  const username=document.getElementById('resetTelegramUsername').value.trim(),token=document.getElementById('resetTelegramOtp').value.trim(),password=document.getElementById('resetTelegramPassword').value,msg=document.getElementById('recoveryMsg');
-  try{const data=await accountApi('verify-telegram-reset',{username,token,password},false);msg.textContent=data.message||'Password berhasil direset.';msg.style.color='#00ff88';setTimeout(closeRecoveryModal,700);}
-  catch(e){msg.textContent=e.message;msg.style.color='#ff6b6b';}
+ const username=document.getElementById('recoveryUsername').value.trim(),token=document.getElementById('resetTelegramOtp').value.trim(),password=document.getElementById('resetTelegramPassword').value,msg=document.getElementById('recoveryMsg');
+ if(!/^\d{6}$/.test(token)||password.length<8){msg.textContent='Masukkan OTP 6 digit dan password minimal 8 karakter.';msg.style.color='#ff6b6b';return;}
+ try{const data=await accountApi('verify-telegram-reset',{username,token,password},false);msg.textContent=data.message||'Password berhasil direset.';msg.style.color='#00ff88';setTimeout(closeRecoveryModal,900);}catch(e){msg.textContent=e.message;msg.style.color='#ff6b6b';}
 }
 function openAccountLinkPrompt(){
   const u=getLoggedAccount();if(!u)return;
