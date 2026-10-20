@@ -774,8 +774,8 @@ body::before,body::after{background:none!important;animation:none!important;filt
 <div class="account-modal" id="recoveryModal" onclick="if(event.target===this)closeRecoveryModal()">
   <div class="account-box">
     <button class="account-close" onclick="closeRecoveryModal()" aria-label="Tutup">×</button><div class="account-icon">🔐</div>
-    <h2>Pulihkan Akun</h2><div class="account-sub">Masukkan username Jimzz Store terlebih dahulu.</div>
-    <form onsubmit="event.preventDefault();checkRecoveryMethods()"><div class="account-field"><label>USERNAME JIMZZ STORE</label><input id="recoveryUsername" maxlength="24" autocomplete="username" placeholder="Username akun kamu" required></div><button class="account-submit" type="submit">Lanjutkan</button></form>
+    <h2>Pulihkan Akun</h2><div class="account-sub">Pilih metode OTP untuk akun yang sedang login.</div>
+    <input id="recoveryUsername" type="hidden">
     <div id="recoveryMethods" style="display:none;margin-top:14px;">
       <div style="font-size:12px;font-weight:800;margin-bottom:9px;color:#ddd;">PILIH METODE PENGIRIMAN KODE</div>
       <button id="recoveryGmailBtn" class="account-submit" type="button" onclick="requestEmailReset()" disabled>📧 Kirim kode OTP ke Gmail</button><div id="recoveryGmailStatus" style="font-size:11px;color:#ffbb55;margin:5px 0 12px;">Akun Gmail Anda belum tertaut di akun ini.</div>
@@ -844,24 +844,7 @@ body::before,body::after{background:none!important;animation:none!important;filt
           <button class="btn-next" type="submit">🔑 Ganti password</button>
           <div class="account-msg" id="passwordMsg" role="status"></div>
         </form>
-        <button type="button" class="forgot-current-password-link" onclick="openAccountPasswordRecovery()">Lupa password saat ini?</button>
-        <div id="accountPasswordRecovery" class="account-password-recovery" hidden>
-          <h4>🔐 Pulihkan password</h4>
-          <p>Masukkan username Jimzz Store untuk memeriksa metode pemulihan yang sudah tertaut.</p>
-          <div class="form-box"><label>Username Jimzz Store</label><input id="recoveryUsername" type="text" autocomplete="username" placeholder="Masukkan username"></div>
-          <button id="recoveryCheckMethodsBtn" type="button" class="btn-next" onclick="checkAccountRecoveryMethods()">Periksa metode pemulihan</button>
-          <div id="recoveryMethods" class="recovery-methods" hidden></div>
-          <div id="recoveryOtpArea" hidden>
-            <div class="form-box"><label>Kode OTP 6 digit</label><input id="recoveryOtp" type="text" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" placeholder="Masukkan OTP"></div>
-            <button type="button" class="btn-next" onclick="verifyAccountRecoveryOtp()">Verifikasi OTP</button>
-          </div>
-          <div id="recoveryNewPasswordArea" hidden>
-            <div class="form-box"><label>Password baru</label><input id="recoveryNewPassword" type="password" minlength="8" autocomplete="new-password" placeholder="Minimal 8 karakter"></div>
-            <div class="form-box"><label>Ulangi password baru</label><input id="recoveryNewPassword2" type="password" minlength="8" autocomplete="new-password" placeholder="Ulangi password baru"></div>
-            <button type="button" class="btn-next" onclick="submitAccountPasswordRecovery()">Simpan password baru</button>
-          </div>
-          <div id="recoveryPasswordMsg" class="account-msg" role="status"></div>
-        </div>
+        <button type="button" class="forgot-current-password-link" onclick="openRecoveryModal()">Lupa password saat ini?</button>
       </section>
       <section class="account-settings-section account-settings-switch">
         <h3>👥 Ganti akun</h3>
@@ -2275,7 +2258,7 @@ function openAccountModal(){document.getElementById('accountModal')?.classList.a
 function closeAccountModal(){document.getElementById('accountModal')?.classList.remove('show');}
 let recoveryResetToken = "";
 let recoveryAvailableMethods={gmail:false,telegram:false};
-function openRecoveryModal(){document.getElementById('recoveryModal')?.classList.add('show');document.getElementById('recoveryMsg').textContent='';document.getElementById('recoveryUsername').value=document.getElementById('loginUsername')?.value.trim()||'';document.getElementById('recoveryMethods').style.display='none';document.getElementById('emailResetOtpPanel').style.display='none';document.getElementById('telegramResetOtpPanel').style.display='none';recoveryAvailableMethods={gmail:false,telegram:false};}
+async function openRecoveryModal(){const modal=document.getElementById('recoveryModal');modal?.classList.add('show');const msg=document.getElementById('recoveryMsg');if(msg)msg.textContent='';const account=getLoggedAccount(),username=account?.username||'';document.getElementById('recoveryUsername').value=username;document.getElementById('recoveryMethods').style.display='none';document.getElementById('emailResetOtpPanel').style.display='none';document.getElementById('telegramResetOtpPanel').style.display='none';recoveryAvailableMethods={gmail:false,telegram:false};if(!username){if(msg)msg.textContent='Sesi akun tidak ditemukan. Silakan login kembali.';return;}await checkRecoveryMethods();}
 function closeRecoveryModal(){document.getElementById('recoveryModal')?.classList.remove('show');}
 async function checkRecoveryMethods(){
  const username=document.getElementById('recoveryUsername').value.trim(),msg=document.getElementById('recoveryMsg');
