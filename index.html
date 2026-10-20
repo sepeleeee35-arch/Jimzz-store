@@ -843,6 +843,7 @@ body::before,body::after{background:none!important;animation:none!important;filt
         </div>
         <div id="telegramLinkStatus" class="account-msg linked-status" role="status" style="margin:10px 0 12px;">Status Telegram: belum tertaut</div>
         <button class="btn-next linked-primary-btn telegram-link-btn" type="button" onclick="startTelegramLink()"><span aria-hidden="true">➤</span> Hubungkan Telegram</button>
+        <button id="telegramUnlinkBtn" class="linked-secondary-btn" type="button" hidden onclick="unlinkTelegramAccount()"><span aria-hidden="true">↗</span> Batalkan tautan Telegram</button>
         <button class="linked-secondary-btn" type="button" onclick="refreshTelegramLinkStatus()"><span aria-hidden="true">↻</span> Periksa status koneksi</button>
         <div class="linked-service-foot"><span class="linked-security-dot"></span> Hubungkan melalui bot resmi untuk memastikan akun Telegram benar-benar milikmu.</div>
       </section>
@@ -2368,6 +2369,9 @@ function openAccountSettings(){
   if(u.emailVerified){emailInput.type='password';}
   const telegramStatus=document.getElementById('telegramLinkStatus');
   if(telegramStatus){telegramStatus.textContent=u.telegramLinked?'Status Telegram: tertaut'+(u.telegramUsername?' (@'+u.telegramUsername+')':''):'Status Telegram: belum tertaut';telegramStatus.style.color=u.telegramLinked?'#00ff88':'#ffbb55';}
+  const telegramButton=document.querySelector('.telegram-link-btn'),unlinkButton=document.getElementById('telegramUnlinkBtn');
+  if(telegramButton){telegramButton.hidden=Boolean(u.telegramLinked);telegramButton.innerHTML='<span aria-hidden="true">➤</span> Hubungkan Telegram';}
+  if(unlinkButton)unlinkButton.hidden=!u.telegramLinked;
   const role=u.role||'user',name=role==='owner'?'Jimzz':(u.username||'pengguna');
   const nameEl=document.getElementById('settingsProfileName'),roleEl=document.getElementById('settingsProfileRole'),iconEl=document.getElementById('settingsProfileIcon');
   if(nameEl)nameEl.textContent=name;if(roleEl)roleEl.textContent=role==='owner'?'Developer':role==='admin'?'Admin':'User';if(iconEl)iconEl.textContent=role==='owner'?'👑':role==='admin'?'⭐':'👤';
@@ -2456,6 +2460,21 @@ async function startTelegramLink(){
   }finally{
     if(button){button.disabled=false;if(!getLoggedAccount()?.telegramLinked)button.innerHTML=button.dataset.originalText||'<span aria-hidden="true">➤</span> Hubungkan Telegram';}
   }
+}
+async function unlinkTelegramAccount(){
+  if(!confirm('Batalkan tautan Telegram dari akun Jimzz Store ini? Telegram tidak lagi menerima OTP pemulihan dan notifikasi keamanan.'))return;
+  const status=document.getElementById('telegramLinkStatus'),button=document.getElementById('telegramUnlinkBtn');
+  if(button){button.disabled=true;button.textContent='Memutuskan tautan…';}
+  try{
+    const data=await accountApi('telegram-unlink');
+    saveAccountSession(null,data.user);
+    if(status){status.textContent='Status Telegram: belum tertaut';status.style.color='#ffbb55';}
+    const linkButton=document.querySelector('.telegram-link-btn');
+    if(linkButton){linkButton.hidden=false;linkButton.innerHTML='<span aria-hidden="true">➤</span> Hubungkan Telegram';}
+    if(button)button.hidden=true;
+    showToast('Tautan Telegram berhasil dibatalkan.','success');
+  }catch(e){if(status){status.textContent=e.message||'Gagal membatalkan tautan Telegram.';status.style.color='#ff6b6b';}}
+  finally{if(button){button.disabled=false;button.innerHTML='<span aria-hidden="true">↗</span> Batalkan tautan Telegram';}}
 }
 async function refreshTelegramLinkStatus(){
   const status=document.getElementById('telegramLinkStatus');
