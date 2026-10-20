@@ -774,7 +774,7 @@ body::before,body::after{background:none!important;animation:none!important;filt
 <div class="account-modal" id="recoveryModal" onclick="if(event.target===this)closeRecoveryModal()">
   <div class="account-box">
     <button class="account-close" onclick="closeRecoveryModal()" aria-label="Tutup">×</button><div class="account-icon">🔐</div>
-    <h2 style="color:#e5e7eb!important">Melihat Password</h2><div class="account-sub">Password lama tidak bisa ditampilkan. Verifikasi OTP untuk membuat password baru dan melihatnya saat mengetik.</div>
+    <h2 style="color:#e5e7eb!important">Melihat Password</h2><div class="account-sub">Password lama tidak bisa ditampilkan karena tersimpan secara aman. Verifikasi OTP untuk membuat password baru; password baru bisa dilihat saat diketik.</div>
     <input id="recoveryUsername" type="hidden">
     <div id="recoveryMethods" style="display:none;margin-top:14px;">
       <div style="font-size:12px;font-weight:800;margin-bottom:9px;color:#ddd;">PILIH METODE PENGIRIMAN KODE</div>
@@ -3585,7 +3585,11 @@ async function runHomeSpeedTest(){
 #recoveryModal .account-box{border-color:#343840!important;background:#111318!important;box-shadow:0 24px 70px rgba(0,0,0,.65)!important}
 #recoveryModal .account-box h2{color:#e5e7eb!important}
 #recoveryModal .account-submit,#recoveryModal .recovery-neutral-btn{background:#292d34!important;color:#f3f4f6!important;border:1px solid #414650!important;box-shadow:none!important;font-weight:700!important}
-#recoveryModal .account-submit:not(:disabled):active{background:#363b44!important}
+#recoveryModal #recoveryGmailBtn{background:#00c878!important;color:#06130d!important;border:1px solid #00e58a!important;box-shadow:0 5px 16px rgba(0,255,136,.14)!important}
+#recoveryModal #recoveryGmailBtn:not(:disabled):active{background:#00a963!important}
+#recoveryModal #recoveryTelegramBtn{background:#229ed9!important;color:#fff!important;border:1px solid #48b8ed!important;box-shadow:0 5px 16px rgba(34,158,217,.18)!important}
+#recoveryModal #recoveryTelegramBtn:not(:disabled):active{background:#197eaf!important}
+#recoveryModal .account-submit:not(:disabled):active{filter:brightness(.92)}
 #recoveryModal .account-close{background:#292d34!important;color:#f3f4f6!important;border:1px solid #414650!important;z-index:2}
 #recoveryModal .account-field input{border-color:#3a3f48!important}
 #recoveryModal .account-field input:focus{border-color:#777f8c!important;box-shadow:0 0 0 2px rgba(180,190,205,.1)!important}
