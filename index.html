@@ -2272,8 +2272,7 @@ function switchAccountForm(type){const login=type==='login';document.getElementB
 async function accountRegister(){
   const username=document.getElementById('registerUsername').value.trim(),password=document.getElementById('registerPassword').value,password2=document.getElementById('registerPassword2').value,msg=document.getElementById('registerMsg');
   if(!/^[A-Za-z0-9_]{3,24}$/.test(username)){msg.textContent='Username 3–24 karakter.';msg.style.color='#ff6b6b';return;}
-  if(email && !/^\S+@\S+\.\S+$/.test(email)){msg.textContent='Format email tidak valid.';msg.style.color='#ff6b6b';return;}
-  if(password.length<8){msg.textContent='Password minimal 8 karakter.';msg.style.color='#ff6b6b';return;}
+    if(password.length<8){msg.textContent='Password minimal 8 karakter.';msg.style.color='#ff6b6b';return;}
   if(password!==password2){msg.textContent='Konfirmasi password tidak sama.';msg.style.color='#ff6b6b';return;}
   const guestCoinsBefore=getGuestPoints();
   try{
@@ -2368,7 +2367,7 @@ function closeAccountSettings(){
   document.getElementById('accountSettingsModal')?.classList.remove('show');
   document.body.style.overflow='';
 }
-async function accountEmailVisibilityBtn(){
+async function toggleAccountEmailVisibility(){
   const input=document.getElementById('accountEmail'),btn=document.getElementById('accountEmailVisibilityBtn');
   if(!input||!getLoggedAccount()?.emailVerified||!input.readOnly)return;
   const showing=input.type==='email';input.type=showing?'password':'email';
