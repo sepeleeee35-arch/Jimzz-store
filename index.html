@@ -534,7 +534,7 @@ header .coin-display { align-items:center; justify-content:center; flex-wrap:wra
 
 .forgot-current-password-link{display:block;margin:12px 0 0;padding:4px 0;border:0;background:transparent;color:#80e7a6;font-size:12px;font-weight:800;text-decoration:underline;text-underline-offset:3px;cursor:pointer}.account-password-recovery{margin-top:14px;padding:15px;border:1px solid #28523a;border-radius:14px;background:#0d1711}.account-password-recovery[hidden],.recovery-methods[hidden],#recoveryOtpArea[hidden],#recoveryNewPasswordArea[hidden]{display:none!important}.account-password-recovery h4{margin:0 0 6px;color:#e5f7eb;font-size:14px}.account-password-recovery>p,.recovery-methods>p{font-size:12px;line-height:1.6;color:#9ab5a2;margin:0 0 12px}.recovery-methods{display:grid;gap:8px;margin:12px 0}.recovery-method-option{display:flex;flex-direction:column;gap:5px;width:100%;padding:12px;border:1px solid #31543d;border-radius:11px;background:#101e15;color:#e5f7eb;text-align:left;cursor:pointer}.recovery-method-option strong{font-size:12px}.recovery-method-option span{font-size:11px;line-height:1.5;color:#9ab5a2}.recovery-method-option:disabled{opacity:.48;cursor:not-allowed}.account-password-recovery .btn-next:disabled{opacity:.6;cursor:wait}
 /* Account settings is a full-page view, not a floating modal */
-#accountSettingsModal.show{position:relative!important;inset:auto!important;width:100%;height:auto!important;min-height:calc(100vh - 110px);z-index:auto!important;background:#070b09;overflow:visible!important;padding:0!important;backdrop-filter:none!important}
+#accountSettingsModal.show{display:block!important;position:fixed!important;top:54px!important;right:0!important;bottom:0!important;left:0!important;width:100%!important;height:auto!important;min-height:0!important;z-index:12000!important;background:#070b09!important;overflow-x:hidden!important;overflow-y:auto!important;padding:0!important;backdrop-filter:none!important;overscroll-behavior:contain!important}
 #accountSettingsModal .account-settings-page{box-sizing:border-box;min-height:100dvh;width:100%;max-width:none;margin:0;padding:0 0 36px;background:#070b09;color:#eef7f0;border:0;border-radius:0;box-shadow:none;overflow:visible}
 #accountSettingsModal .account-settings-header{position:relative;z-index:3;display:flex;align-items:center;padding:14px clamp(16px,4vw,30px);background:#070b09;border-bottom:1px solid #20392b}
 #accountSettingsModal .account-settings-back{width:42px;height:42px;flex:0 0 42px;display:grid;place-items:center;border:1px solid #284a36;border-radius:13px;background:#101a14;color:#baf2cb;font-size:24px;font-weight:500;cursor:pointer;transition:background .18s,border-color .18s}
@@ -727,8 +727,8 @@ body::before,body::after{background:none!important;animation:none!important;filt
 </style>
 <!-- ACCOUNT_DISABLED_2026_09_27 -->
 <style id="jimzz-settings-real-page">/* Account settings behaves as its own page; it never overlays another page */
-#accountSettingsModal.tab-page.active{display:block!important;position:relative!important;inset:auto!important;width:100%;height:auto!important;min-height:calc(100vh - 110px);z-index:auto!important;background:#070b09;overflow:visible!important;padding:0!important;backdrop-filter:none!important}
-#accountSettingsModal .account-settings-page{min-height:calc(100vh - 54px)!important}
+#accountSettingsModal.tab-page.active{display:block!important;position:fixed!important;top:54px!important;right:0!important;bottom:0!important;left:0!important;width:100%!important;height:auto!important;min-height:0!important;z-index:12000!important;background:#070b09!important;overflow-x:hidden!important;overflow-y:auto!important;padding:0!important;backdrop-filter:none!important;overscroll-behavior:contain!important}
+#accountSettingsModal .account-settings-page{min-height:100%!important;padding-bottom:calc(28px + env(safe-area-inset-bottom))!important}
 </style>
 </head>
 <body>
@@ -2411,7 +2411,7 @@ function openAccountSettings(){
   const role=u.role||'user',name=role==='owner'?'Jimzz':(u.username||'pengguna');
   const nameEl=document.getElementById('settingsProfileName'),roleEl=document.getElementById('settingsProfileRole'),iconEl=document.getElementById('settingsProfileIcon');
   if(nameEl)nameEl.textContent=name;if(roleEl)roleEl.textContent=role==='owner'?'Developer':role==='admin'?'Admin':'User';if(iconEl)iconEl.textContent=role==='owner'?'👑':role==='admin'?'⭐':'👤';
-  document.body.style.overflow='';
+  document.body.style.overflow='hidden';
 }
 function logoutFromAccountSettings(){closeAccountSettings();accountLogout();}
 function switchAccountFromSettings(){
