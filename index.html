@@ -741,7 +741,7 @@ body::before,body::after{background:none!important;animation:none!important;filt
 </div></div>
 
 <!-- JIMZZ_ACCOUNT_SYSTEM_V1 -->
-<div class="account-modal" id="accountLinkPrompt" onclick="if(event.target===this)closeAccountLinkPrompt()"><div class="account-box" style="max-width:430px;text-align:center"><button class="account-close" type="button" onclick="closeAccountLinkPrompt()" aria-label="Tutup">×</button><div style="font-size:42px;margin:8px 0 14px">🔗</div><h2>Hubungkan akun Anda</h2><div class="account-sub">Hubungkan email untuk verifikasi dan pemulihan akun, serta Telegram untuk fitur tambahan. Kamu bisa melewati langkah ini dan mengaturnya nanti.</div><button class="account-submit" type="button" onclick="openAccountLinksFromPrompt()">⚙️ Hubungkan akun sekarang</button><button class="linked-secondary-btn" type="button" style="margin-top:10px;width:100%" onclick="closeAccountLinkPrompt()">Nanti saja</button></div></div>
+<div class="account-modal" id="accountLinkPrompt" onclick="if(event.target===this)closeAccountLinkPrompt()"><div class="account-box" style="max-width:430px;text-align:center"><button class="account-close" type="button" onclick="closeAccountLinkPrompt()" aria-label="Tutup">×</button><div style="font-size:42px;margin:8px 0 14px">🔗</div><h2 id="accountLinkPromptTitle">Hubungkan akun Anda</h2><div class="account-sub" id="accountLinkPromptText">Hubungkan Gmail dan Telegram untuk melengkapi keamanan akun.</div><button class="account-submit" id="accountLinkPromptAction" type="button" onclick="openAccountLinksFromPrompt()">⚙️ Hubungkan akun sekarang</button></div></div>
 
 <div class="account-modal" id="accountModal" onclick="if(event.target===this)closeAccountModal()">
   <div class="account-box">
@@ -818,7 +818,7 @@ body::before,body::after{background:none!important;animation:none!important;filt
           <span class="linked-service-tag">EMAIL</span>
         </div>
         <form onsubmit="event.preventDefault();saveAccountContact()">
-          <div class="form-box"><label for="accountEmail">Alamat Gmail</label><div style="display:flex;gap:8px;align-items:center"><input id="accountEmail" type="email" required autocomplete="email" placeholder="nama@gmail.com" style="flex:1;min-width:0"><button id="accountEmailVisibilityBtn" type="button" class="linked-secondary-btn" style="width:auto;min-width:48px;padding:10px 12px" aria-label="Tampilkan email" title="Tampilkan/sembunyikan email" onclick="toggleAccountEmailVisibility()">👁</button></div></div>
+          <div class="form-box"><label for="accountEmail">Alamat Gmail</label><div style="display:flex;gap:8px;align-items:center"><input id="accountEmail" type="email" required autocomplete="email" placeholder="nama@gmail.com" style="flex:1;min-width:0"><button id="accountEmailVisibilityBtn" type="button" class="linked-secondary-btn" style="width:auto;min-width:48px;padding:10px 12px" aria-label="Tampilkan email" title="Tampilkan/sembunyikan email" onclick="toggleAccountEmailVisibility()"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></button></div></div>
           <div id="emailLinkStatus" class="account-msg linked-status" role="status" style="margin:8px 0 12px;">Status Gmail: belum diverifikasi</div>
           <button id="changeAccountEmailBtn" class="linked-secondary-btn" type="button" style="margin-bottom:10px" onclick="enableAccountEmailChange()">Ganti email</button>
           <button id="accountEmailOtpSubmit" class="btn-next linked-primary-btn" type="submit"><span aria-hidden="true">✉</span> Kirim kode verifikasi</button>
@@ -2316,9 +2316,36 @@ async function verifyTelegramReset(){
   try{const data=await accountApi('verify-telegram-reset',{username,token,password},false);msg.textContent=data.message||'Password berhasil direset.';msg.style.color='#00ff88';setTimeout(closeRecoveryModal,700);}
   catch(e){msg.textContent=e.message;msg.style.color='#ff6b6b';}
 }
-function openAccountLinkPrompt(){if(!getLoggedAccount())return;document.getElementById('accountLinkPrompt')?.classList.add('show');}
+function openAccountLinkPrompt(){
+  const u=getLoggedAccount();if(!u)return;
+  const needsGmail=!Boolean(u.emailVerified),needsTelegram=!Boolean(u.telegramLinked);
+  if(!needsGmail&&!needsTelegram){closeAccountLinkPrompt();return;}
+  const title=document.getElementById('accountLinkPromptTitle');
+  const desc=document.getElementById('accountLinkPromptText');
+  const action=document.getElementById('accountLinkPromptAction');
+  if(needsGmail&&needsTelegram){
+    title.textContent='Hubungkan akun Anda';
+    desc.textContent='Hubungkan Gmail untuk pemulihan akun dan Telegram untuk OTP serta notifikasi keamanan.';
+    action.textContent='⚙️ Hubungkan akun sekarang';
+  }else if(needsGmail){
+    title.textContent='Kaitkan akun Gmail Anda';
+    desc.textContent='Telegram sudah terhubung. Kaitkan Gmail untuk melengkapi pemulihan dan keamanan akun.';
+    action.textContent='📧 Kaitkan akun Gmail';
+  }else{
+    title.textContent='Kaitkan akun Telegram Anda';
+    desc.textContent='Gmail sudah terverifikasi. Kaitkan Telegram untuk OTP pemulihan dan notifikasi keamanan.';
+    action.textContent='✈️ Kaitkan akun Telegram';
+  }
+  document.getElementById('accountLinkPrompt')?.classList.add('show');
+}
 function closeAccountLinkPrompt(){document.getElementById('accountLinkPrompt')?.classList.remove('show');}
-function openAccountLinksFromPrompt(){closeAccountLinkPrompt();openAccountSettings();}
+function openAccountLinksFromPrompt(){
+  const u=getLoggedAccount();if(!u)return;
+  const target=!u.emailVerified?'gmail':(!u.telegramLinked?'telegram':null);
+  closeAccountLinkPrompt();openAccountSettings();
+  const section=document.querySelector(target==='gmail'?'#accountSettingsModal .gmail-service-card':target==='telegram'?'#accountSettingsModal .telegram-service-card':'#accountSettingsModal .link-accounts-intro');
+  if(section)section.scrollIntoView({behavior:'smooth',block:'start'});
+}
 function openAccountSettings(){
   const u=getLoggedAccount();if(!u)return;
   const modal=document.getElementById('accountSettingsModal');
@@ -2329,7 +2356,7 @@ function openAccountSettings(){
   emailInput.readOnly=Boolean(u.emailVerified);
   emailInput.type=u.emailVerified?'password':'email';
   const revealBtn=document.getElementById('accountEmailVisibilityBtn');
-  if(revealBtn){revealBtn.hidden=!u.emailVerified;revealBtn.textContent='👁';revealBtn.setAttribute('aria-label','Tampilkan email');}
+  if(revealBtn){revealBtn.hidden=!u.emailVerified;revealBtn.setAttribute('aria-label','Tampilkan email');revealBtn.setAttribute('title','Tampilkan/sembunyikan email');}
   const changeBtn=document.getElementById('changeAccountEmailBtn');
   if(changeBtn)changeBtn.hidden=!u.emailVerified;
   const emailStatus=document.getElementById('emailLinkStatus');
@@ -2371,7 +2398,7 @@ async function toggleAccountEmailVisibility(){
   const input=document.getElementById('accountEmail'),btn=document.getElementById('accountEmailVisibilityBtn');
   if(!input||!getLoggedAccount()?.emailVerified||!input.readOnly)return;
   const showing=input.type==='email';input.type=showing?'password':'email';
-  if(btn){btn.textContent=showing?'👁':'🙈';btn.setAttribute('aria-label',showing?'Tampilkan email':'Sembunyikan email');}
+  if(btn){btn.setAttribute('aria-label',showing?'Tampilkan email':'Sembunyikan email');btn.setAttribute('title',showing?'Tampilkan email':'Sembunyikan email');btn.innerHTML=showing?'<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l18 18"/><path d="M10.6 10.6a2 2 0 0 0 2.8 2.8"/><path d="M9.9 5.2A11 11 0 0 1 12 5c6.4 0 10 7 10 7a16 16 0 0 1-4 4.8M6.2 6.2C3.5 8 2 12 2 12s3.6 7 10 7a10 10 0 0 0 3.4-.6"/></svg>':'<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>';}
 }
 function enableAccountEmailChange(){
   const input=document.getElementById('accountEmail'),btn=document.getElementById('changeAccountEmailBtn'),send=document.getElementById('accountEmailOtpSubmit'),reveal=document.getElementById('accountEmailVisibilityBtn'),status=document.getElementById('emailLinkStatus'),msg=document.getElementById('contactMsg');
