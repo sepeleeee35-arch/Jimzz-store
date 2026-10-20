@@ -842,7 +842,6 @@ body::before,body::after{background:none!important;animation:none!important;filt
           <span><i>✓</i> Informasi status keamanan</span>
         </div>
         <div id="telegramLinkStatus" class="account-msg linked-status" role="status" style="margin:10px 0 12px;">Status Telegram: belum tertaut</div>
-        <div id="telegramAccountsList" class="telegram-accounts-list" hidden></div>
         <button class="btn-next linked-primary-btn telegram-link-btn" type="button" onclick="startTelegramLink()"><span aria-hidden="true">➤</span> Hubungkan Telegram</button>
         <button id="telegramUnlinkBtn" class="linked-secondary-btn" type="button" hidden onclick="unlinkTelegramAccount()"><span aria-hidden="true">↗</span> Batalkan tautan Telegram</button>
         <button class="linked-secondary-btn" type="button" onclick="refreshTelegramLinkStatus()"><span aria-hidden="true">↻</span> Periksa status koneksi</button>
@@ -2429,15 +2428,11 @@ function getTelegramAccountsFromUser(user){
   return user?.telegramLinked&&user?.telegramChatId?[{chatId:String(user.telegramChatId),username:user.telegramUsername||''}]:[];
 }
 function renderTelegramAccounts(user){
-  const status=document.getElementById('telegramLinkStatus'),list=document.getElementById('telegramAccountsList');
+  const status=document.getElementById('telegramLinkStatus');
   const accounts=getTelegramAccountsFromUser(user),button=document.querySelector('.telegram-link-btn'),unlink=document.getElementById('telegramUnlinkBtn');
-  if(status){status.textContent=accounts.length?'Status Telegram: akun tertaut':'Status Telegram: belum tertaut';status.style.color=accounts.length?'#00ff88':'#ffbb55';}
+  if(status){status.textContent=accounts.length?'Status Telegram: tertaut':'Status Telegram: belum tertaut';status.style.color=accounts.length?'#00ff88':'#ffbb55';}
   if(button){button.hidden=false;button.innerHTML='<span aria-hidden="true">➤</span> '+(accounts.length?'Ganti Akun Telegram':'Hubungkan Telegram');}
   if(unlink)unlink.hidden=!accounts.length;
-  if(list){
-    list.hidden=!accounts.length;
-    list.innerHTML=accounts.map((a,i)=>'<div class="telegram-account-row"><span class="telegram-account-icon">➤</span><span class="telegram-account-name">'+escapeAccountHtml(a.username?'@'+a.username:'Akun Telegram '+(i+1))+'</span><span class="telegram-account-check">✓ Tertaut</span></div>').join('');
-  }
 }
 let telegramLinkPollTimer=null;
 async function startTelegramLink(){
@@ -2478,30 +2473,19 @@ async function startTelegramLink(){
 async function unlinkTelegramAccount(){
   const user=getLoggedAccount(),accounts=getTelegramAccountsFromUser(user);
   if(!accounts.length)return;
-  let chatId='',all=false;
-  if(accounts.length===1){
-    if(!confirm('Batalkan tautan Telegram '+(accounts[0].username?'@'+accounts[0].username:'ini')+'?'))return;
-    chatId=accounts[0].chatId;
-  }else{
-    const choices=accounts.map((a,i)=>(i+1)+'. '+(a.username?'@'+a.username:'Akun Telegram '+(i+1))).join('\n');
-    const answer=prompt('Pilih akun Telegram yang ingin dibatalkan dengan memasukkan nomornya.\n\n'+choices+'\n\nKetik ALL untuk membatalkan semua tautan.');
-    if(answer===null)return;
-    if(answer.trim().toUpperCase()==='ALL'){all=true;if(!confirm('Yakin ingin membatalkan SEMUA tautan Telegram?'))return;}
-    else{
-      const index=Number(answer)-1;
-      if(!Number.isInteger(index)||index<0||index>=accounts.length){showToast('Pilihan akun tidak valid.','warning');return;}
-      chatId=accounts[index].chatId;
-      if(!confirm('Batalkan tautan '+(accounts[index].username?'@'+accounts[index].username:'akun Telegram ini')+'?'))return;
-    }
-  }
+  if(!confirm('Batalkan tautan Telegram dari akun Jimzz Store ini?'))return;
   const status=document.getElementById('telegramLinkStatus'),button=document.getElementById('telegramUnlinkBtn');
   if(button){button.disabled=true;button.textContent='Memutuskan tautan…';}
   try{
-    const data=await accountApi('telegram-unlink',{chatId,all});
-    saveAccountSession(null,data.user);renderTelegramAccounts(data.user);
-    showToast(data.message||'Tautan Telegram diperbarui.','success');
-  }catch(e){if(status){status.textContent=e.message||'Gagal membatalkan tautan Telegram.';status.style.color='#ff6b6b';}}
-  finally{if(button){button.disabled=false;button.innerHTML='<span aria-hidden="true">↗</span> Batalkan tautan Telegram';}}
+    const data=await accountApi('telegram-unlink',{all:true});
+    if(data.user)saveAccountSession(null,data.user);
+    await refreshTelegramLinkStatus();
+    showToast(data.message||'Tautan Telegram berhasil dibatalkan.','success');
+  }catch(e){
+    if(status){status.textContent=e.message||'Gagal membatalkan tautan Telegram.';status.style.color='#ff6b6b';}
+  }finally{
+    if(button){button.disabled=false;button.innerHTML='<span aria-hidden="true">↗</span> Batalkan tautan Telegram';}
+  }
 }
 async function refreshTelegramLinkStatus(){
   const status=document.getElementById('telegramLinkStatus');
