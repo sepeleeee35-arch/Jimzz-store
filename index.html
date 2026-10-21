@@ -2195,9 +2195,28 @@ async function renderAccountManager(){
       else action='<button class="owner-account-action '+(role==='admin'?'demote':'')+'" onclick="setAccountRole(\''+escapeAccountHtml(u.id)+'\',\''+(role==='admin'?'user':'admin')+'\')">'+(role==='admin'?'Jadikan User':'Jadikan Admin')+'</button>';
       const ban='<button class="owner-account-action '+(u.banned?'unban':'ban')+'" onclick="setAccountBan(\''+escapeAccountHtml(u.id)+'\','+(!u.banned)+')">'+(u.banned?'Unban':'Ban')+'</button>';
       const del='<button class="owner-account-action delete-account" onclick="deleteAccountOwner(\''+escapeAccountHtml(u.id)+'\')">Hapus</button><button class="owner-account-action reset-password" onclick="ownerResetPassword(\''+escapeAccountHtml(u.id)+'\',\''+escapeAccountHtml(u.username)+'\')">Reset Password</button>';
-      return '<div class="owner-account-item"><div class="owner-account-info"><div class="owner-account-name">'+escapeAccountHtml(u.username)+'</div><div class="owner-account-meta">'+escapeAccountHtml(u.createdAt?new Date(u.createdAt).toLocaleString('id-ID'):'Tanggal tidak tersedia')+'</div></div><span class="owner-account-role '+role+'">'+label+'</span>'+action+(role!=='owner'?ban+del:'')+'</div>';
+      return '<div class="owner-account-item"><div class="owner-account-info"><button type="button" class="owner-account-name" style="background:none;border:0;padding:0;color:inherit;text-align:left;font:inherit;font-weight:800;cursor:pointer;text-decoration:underline;text-decoration-color:#27d17f;text-underline-offset:3px;" onclick="showAccountDetails(\\''+escapeAccountHtml(u.id)+'\\',\\''+escapeAccountHtml(u.username)+'\\')">'+escapeAccountHtml(u.username)+'</button><div class="owner-account-meta">'+escapeAccountHtml(u.createdAt?new Date(u.createdAt).toLocaleString('id-ID'):'Tanggal tidak tersedia')+'</div></div><span class="owner-account-role '+role+'">'+label+'</span>'+action+(role!=='owner'?ban+del:'')+'</div>';
     }).join('');
   }catch(e){if(list)list.innerHTML='<div class="owner-account-empty">Gagal memuat akun: '+escapeAccountHtml(e.message)+'</div>';}
+}
+async function showAccountDetails(userId,username){
+  if(!isOwnerAccount())return;
+  const pin=prompt('Masukkan PIN untuk melihat detail akun '+username+':');
+  if(pin===null)return;
+  if(!pin.trim()){showToast('PIN wajib diisi.','error');return;}
+  try{
+    const data=await accountApi('owner-account-details',{userId,pin});
+    const d=data.details||{};
+    const esc=escapeAccountHtml;
+    const fmt=value=>value?new Date(value).toLocaleString('id-ID',{dateStyle:'medium',timeStyle:'short'}):'Belum tersedia';
+    const devices=Array.isArray(d.devices)&&d.devices.length?d.devices.map(x=>'<div style="padding:10px 12px;border:1px solid #263a2d;border-radius:10px;margin-top:8px;background:#0b130e"><b>'+esc(x.device||'Perangkat tidak diketahui')+' · '+esc(x.browser||'Browser tidak diketahui')+'</b><div style="font-size:11px;color:#a9b9ae;margin-top:4px">Login: '+esc(fmt(x.at))+'</div><div style="font-size:10px;color:#77867c;margin-top:4px;word-break:break-word">'+esc(x.userAgent||'')+'</div></div>').join(''):'<div style="color:#9aa79e;font-size:12px;padding:10px 0">Belum ada riwayat login perangkat. Riwayat mulai dicatat setelah fitur ini aktif.</div>';
+    let modal=document.getElementById('ownerAccountDetailsModal');
+    if(!modal){modal=document.createElement('div');modal.id='ownerAccountDetailsModal';modal.style.cssText='position:fixed;inset:0;z-index:999999;background:rgba(0,0,0,.78);display:flex;align-items:center;justify-content:center;padding:16px';document.body.appendChild(modal);}
+    modal.innerHTML='<div style="width:100%;max-width:520px;max-height:85vh;overflow:auto;background:#0a100c;border:1px solid #245237;border-radius:18px;padding:18px;color:#edf7ef"><div style="display:flex;align-items:center;justify-content:space-between;gap:12px"><h3 style="margin:0;color:#4de38e">DETAIL AKUN</h3><button type="button" onclick="document.getElementById(\\'ownerAccountDetailsModal\\')?.remove()" style="background:#19251d;border:1px solid #345640;color:#fff;border-radius:9px;padding:8px 12px">Tutup ✕</button></div><div style="font-size:12px;color:#9db3a3;margin:6px 0 14px">Data server akun · password asli tidak dapat dibaca</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'+[
+      ['Username',d.username],['ID Akun',d.id],['Email',d.email||'Tidak tersedia'],['Nomor HP',d.phone||'Tidak tersedia'],['Role',d.role],['Status',d.banned?'DIBANNED':'Aktif'],['Koin',d.coins],['Dibuat',fmt(d.createdAt)],['Update terakhir',fmt(d.updatedAt)],['Login terakhir',fmt(d.lastSignInAt)],['Email dikonfirmasi',fmt(d.emailConfirmedAt)],['Email verifikasi Jimzz',d.emailVerified?'Ya':'Belum']
+    ].map(([k,v])=>'<div style="padding:10px;border-radius:10px;background:#101a13;border:1px solid #203729;min-width:0"><div style="font-size:10px;color:#8da697;margin-bottom:5px">'+esc(k)+'</div><div style="font-size:12px;font-weight:700;overflow-wrap:anywhere">'+esc(v??'Tidak tersedia')+'</div></div>').join('')+'</div><h4 style="margin:18px 0 6px">📱 Perangkat yang pernah login</h4>'+devices+'<div style="font-size:11px;color:#9aa79e;margin-top:14px;padding-top:12px;border-top:1px solid #203729">Password tidak disimpan dalam bentuk yang bisa ditampilkan. Jika perlu, gunakan tombol “Reset Password” di daftar akun.</div></div>';
+    modal.addEventListener('click',event=>{if(event.target===modal)modal.remove();});
+  }catch(e){showToast(e.message||'Gagal memuat detail akun.','error');}
 }
 async function giftCoinsToUser(){ return adjustCoinsToUser(1); }
 async function adjustCoinsToUser(direction){
