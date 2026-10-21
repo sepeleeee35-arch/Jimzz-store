@@ -724,6 +724,53 @@ body::before,body::after{background:none!important;animation:none!important;filt
 .home-contact-icon{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;width:27px;height:27px;font-size:0;line-height:1}
 .home-contact-icon svg{display:block;width:27px;height:27px;flex:0 0 auto}
 @media(max-width:480px){.home-contact-btn{gap:6px;padding:8px 7px;font-size:10px}.home-contact-icon,.home-contact-icon svg{width:28px;height:28px}}
+
+/* Virtual number purchase UI preview */
+.vn-shell{max-width:900px;margin:20px auto 28px;color:#e8f4ed}
+.vn-dev-banner{display:flex;align-items:flex-start;gap:12px;padding:15px 16px;margin-bottom:16px;border:1px solid rgba(0,255,136,.28);border-radius:16px;background:linear-gradient(135deg,rgba(0,255,136,.09),rgba(10,18,14,.96))}
+.vn-dev-icon{display:grid;place-items:center;flex:0 0 42px;height:42px;border-radius:13px;background:rgba(0,255,136,.12);font-size:22px}
+.vn-dev-banner strong{display:block;color:#00ff88;font-size:12px;letter-spacing:.7px}
+.vn-dev-banner p{margin:5px 0 0;color:#a4b7ab;font-size:12px;line-height:1.6}
+.vn-main-card{padding:clamp(15px,3vw,24px);border:1px solid rgba(0,255,136,.22);border-radius:20px;background:linear-gradient(160deg,#0b120e,#050706 65%);box-shadow:0 18px 50px rgba(0,0,0,.25)}
+.vn-heading{display:flex;align-items:center;gap:13px;margin-bottom:22px}
+.vn-heading-icon{display:grid;place-items:center;flex:0 0 52px;height:52px;border:1px solid rgba(0,255,136,.2);border-radius:16px;background:rgba(0,255,136,.1);font-size:27px}
+.vn-heading h2{margin:0;font-size:clamp(22px,4vw,29px)}
+.vn-heading .sub{margin:4px 0 0;color:#8c9a91;font-size:12px}
+.vn-filter-row{display:grid;grid-template-columns:1fr 1.2fr;gap:12px;margin-bottom:23px}
+.vn-field{min-width:0}.vn-field label{display:block;margin:0 0 7px;color:#b6c8bd;font-size:12px;font-weight:800}
+.vn-field select,.vn-field input{width:100%;min-height:46px;padding:12px 13px;border:1px solid #26372d;border-radius:12px;outline:none;background:#0b100d;color:#f1fff6;font:inherit;font-size:13px}
+.vn-field select:focus,.vn-field input:focus{border-color:#00ff88;box-shadow:0 0 0 3px rgba(0,255,136,.08)}
+.vn-section-title{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:0 0 12px;font-weight:900;font-size:14px}
+.vn-section-title small{color:#7d9184;font-size:10px;font-weight:600}
+.vn-service-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.vn-service-card{display:flex;flex-direction:column;min-width:0;padding:15px;border:1px solid #203328;border-radius:16px;background:linear-gradient(155deg,#101a14,#080c09);transition:border-color .18s,transform .18s,background .18s}
+.vn-service-card:hover,.vn-service-card.selected{border-color:rgba(0,255,136,.65);background:linear-gradient(155deg,rgba(0,255,136,.09),#080c09);transform:translateY(-2px)}
+.vn-service-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:13px}
+.vn-service-icon{display:grid;place-items:center;width:43px;height:43px;border-radius:13px;background:rgba(0,255,136,.1);font-size:23px}
+.vn-demo-pill{padding:4px 6px;border:1px solid rgba(255,199,64,.25);border-radius:7px;color:#eacb7b;background:rgba(255,199,64,.06);font-size:8px;font-weight:900;letter-spacing:.5px}
+.vn-service-card h3{margin:0;color:#f0fff5;font-size:15px}
+.vn-service-card>p{min-height:40px;margin:6px 0 14px;color:#91a196;font-size:11px;line-height:1.55}
+.vn-service-meta{display:flex;flex-direction:column;gap:4px;margin-top:auto;margin-bottom:14px}
+.vn-service-meta strong{color:#00ff88;font-size:17px}
+.vn-service-meta span{color:#7d9184;font-size:10px}
+.vn-select-btn,.vn-buy-btn{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;min-height:43px;padding:11px 13px;border:0;border-radius:11px;background:linear-gradient(135deg,#00ff88,#00c96a);color:#00170b;font:inherit;font-size:12px;font-weight:900;cursor:pointer}
+.vn-select-btn span,.vn-buy-btn span{font-size:16px}
+.vn-selected-panel,.vn-review-panel{margin-top:17px;padding:16px;border:1px solid rgba(0,255,136,.34);border-radius:15px;background:rgba(0,255,136,.045)}
+.vn-panel-kicker{margin-bottom:10px;color:#00ff88;font-size:9px;font-weight:900;letter-spacing:1px}
+.vn-selected-row{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}
+.vn-selected-row strong{font-size:15px}.vn-selected-row>strong{color:#00ff88;font-size:17px}
+.vn-selected-row p{margin:4px 0 0;color:#8c9a91;font-size:11px}
+.vn-review-panel h3{margin:0 0 13px;font-size:17px}
+.vn-review-line{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.07);font-size:12px}
+.vn-review-line span{color:#91a196}.vn-review-line strong{text-align:right;color:#e9f6ed}
+.vn-review-total{margin-bottom:14px;border-bottom:0}.vn-review-total strong{color:#00ff88;font-size:18px}
+.vn-review-notice{margin:0 0 14px;padding:11px;border:1px solid rgba(255,199,64,.2);border-radius:10px;background:rgba(255,199,64,.05);color:#d7c58e;font-size:11px;line-height:1.6}
+.vn-back-btn{display:block;width:100%;margin-top:9px;padding:10px;border:1px solid #28392f;border-radius:10px;background:#0b100d;color:#c1d0c6;font:inherit;font-size:11px;font-weight:800;cursor:pointer}
+.vn-secure-note{display:flex;align-items:flex-start;gap:9px;margin-top:16px;color:#788a7e;font-size:10px;line-height:1.6}
+.vn-secure-note>span:first-child{font-size:14px}
+@media(max-width:680px){.vn-service-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.vn-filter-row{grid-template-columns:1fr}.vn-service-card{padding:12px}.vn-service-card h3{font-size:14px}.vn-service-meta strong{font-size:15px}}
+@media(max-width:390px){.vn-service-grid{grid-template-columns:1fr}.vn-service-card>p{min-height:0}.vn-section-title small{font-size:9px}}
+
 </style>
 <!-- ACCOUNT_DISABLED_2026_09_27 -->
 <style id="jimzz-settings-real-page">/* Account settings behaves as its own page; it never overlays another page */
@@ -1160,32 +1207,68 @@ body::before,body::after{background:none!important;animation:none!important;filt
         <span class="product-banner" style="display:inline-flex;margin-top:16px">FITUR DINONAKTIFKAN SEMENTARA</span>
       </div>
     </div>
-    <div id="virtualNumberDeveloperPreview" style="display:none;max-width:900px;margin:20px auto 28px">
-      <div class="pengumuman" style="border-color:rgba(0,255,136,.45);margin-bottom:16px">
-        <div class="pengumuman-header"><span class="pengumuman-icon">🧰</span><span class="pengumuman-title">MODE PENGEMBANGAN — NOMOR VIRTUAL</span></div>
-        <p class="pengumuman-text">Pratinjau internal. Data katalog dan harga di bawah ini belum terhubung ke API dan bukan penawaran pembelian sungguhan.</p>
+    <div id="virtualNumberDeveloperPreview" class="vn-shell" style="display:none">
+      <div class="vn-dev-banner">
+        <div class="vn-dev-icon">🧰</div>
+        <div><strong>PRATINJAU PENGEMBANGAN</strong><p>Alur pilih layanan sampai tombol beli. Harga, stok, dan pembelian di halaman ini masih simulasi UI—belum membuat order sungguhan.</p></div>
       </div>
-      <div class="pengumuman" style="border-color:rgba(0,255,136,.3);padding:18px">
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
-          <div style="width:48px;height:48px;display:flex;align-items:center;justify-content:center;border-radius:14px;background:rgba(0,255,136,.12);font-size:26px">📲</div>
-          <div><h2 style="margin:0">Nomor <span class="accent">Virtual</span></h2><p class="sub" style="margin:4px 0 0">Pilih negara dan layanan</p></div>
+      <div class="vn-main-card">
+        <div class="vn-heading">
+          <div class="vn-heading-icon">📲</div>
+          <div><h2>Nomor <span class="accent">Virtual</span></h2><p class="sub">Pilih negara, tentukan layanan, lalu tinjau pembelian.</p></div>
         </div>
-        <label for="virtualNumberCountry" style="display:block;margin-bottom:7px;font-weight:700">Negara</label>
-        <select id="virtualNumberCountry" style="width:100%;padding:13px;border-radius:12px;background:#101713;color:inherit;border:1px solid rgba(0,255,136,.25);margin-bottom:15px">
-          <option value="id">🇮🇩 Indonesia — contoh UI</option>
-          <option value="us">🇺🇸 Amerika Serikat — contoh UI</option>
-          <option value="gb">🇬🇧 Inggris — contoh UI</option>
-        </select>
-        <label for="virtualNumberServiceSearch" style="display:block;margin-bottom:7px;font-weight:700">Cari layanan</label>
-        <input id="virtualNumberServiceSearch" type="search" placeholder="Cari nama layanan..." style="width:100%;padding:13px;border-radius:12px;background:#101713;color:inherit;border:1px solid rgba(0,255,136,.25);margin-bottom:15px">
-        <div id="virtualNumberServiceList" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">
-          <div class="pengumuman" data-vn-service="WhatsApp" style="margin:0;padding:14px"><div style="font-size:24px;margin-bottom:8px">💬</div><strong>WhatsApp</strong><p class="sub" style="margin:6px 0">Harga dan stok menunggu koneksi API</p><span class="product-banner">BELUM TERSEDIA</span></div>
-          <div class="pengumuman" data-vn-service="Telegram" style="margin:0;padding:14px"><div style="font-size:24px;margin-bottom:8px">✈️</div><strong>Telegram</strong><p class="sub" style="margin:6px 0">Harga dan stok menunggu koneksi API</p><span class="product-banner">BELUM TERSEDIA</span></div>
-          <div class="pengumuman" data-vn-service="SMS / Layanan lain" style="margin:0;padding:14px"><div style="font-size:24px;margin-bottom:8px">✉️</div><strong>SMS / Layanan lain</strong><p class="sub" style="margin:6px 0">Daftar mengikuti katalog penyedia</p><span class="product-banner">BELUM TERSEDIA</span></div>
+        <div class="vn-filter-row">
+          <div class="vn-field">
+            <label for="virtualNumberCountry">Pilih negara</label>
+            <select id="virtualNumberCountry">
+              <option value="id">🇮🇩 Indonesia</option>
+              <option value="us">🇺🇸 Amerika Serikat</option>
+              <option value="gb">🇬🇧 Inggris</option>
+            </select>
+          </div>
+          <div class="vn-field">
+            <label for="virtualNumberServiceSearch">Cari layanan</label>
+            <input id="virtualNumberServiceSearch" type="search" placeholder="WhatsApp, Telegram, SMS...">
+          </div>
         </div>
-        <div style="margin-top:18px;padding:13px;border-radius:12px;background:rgba(255,200,0,.08);border:1px solid rgba(255,200,0,.25)">
-          <p class="pengumuman-text" style="margin:0">🔒 Pembelian dinonaktifkan sampai API, harga, stok, dan validasi pembayaran selesai diuji.</p>
+        <div class="vn-section-title"><span>Pilih layanan</span><small>Harga dan stok contoh</small></div>
+        <div id="virtualNumberServiceList" class="vn-service-grid">
+          <article class="vn-service-card" data-vn-service="WhatsApp" data-vn-key="whatsapp">
+            <div class="vn-service-top"><div class="vn-service-icon">💬</div><span class="vn-demo-pill">SIMULASI</span></div>
+            <h3>WhatsApp</h3><p>Nomor untuk menerima kode verifikasi WhatsApp.</p>
+            <div class="vn-service-meta"><strong data-vn-price="whatsapp">Rp 5.000</strong><span data-vn-stock="whatsapp">Stok demo: 12</span></div>
+            <button type="button" class="vn-select-btn" onclick="selectVirtualService('whatsapp')">Pilih layanan <span>→</span></button>
+          </article>
+          <article class="vn-service-card" data-vn-service="Telegram" data-vn-key="telegram">
+            <div class="vn-service-top"><div class="vn-service-icon">✈️</div><span class="vn-demo-pill">SIMULASI</span></div>
+            <h3>Telegram</h3><p>Nomor untuk menerima kode verifikasi Telegram.</p>
+            <div class="vn-service-meta"><strong data-vn-price="telegram">Rp 4.000</strong><span data-vn-stock="telegram">Stok demo: 8</span></div>
+            <button type="button" class="vn-select-btn" onclick="selectVirtualService('telegram')">Pilih layanan <span>→</span></button>
+          </article>
+          <article class="vn-service-card" data-vn-service="sms" data-vn-key="sms">
+            <div class="vn-service-top"><div class="vn-service-icon">✉️</div><span class="vn-demo-pill">SIMULASI</span></div>
+            <h3>SMS / Layanan lain</h3><p>Pilihan layanan SMS umum sesuai katalog penyedia.</p>
+            <div class="vn-service-meta"><strong data-vn-price="sms">Rp 2.000</strong><span data-vn-stock="sms">Stok demo: 20</span></div>
+            <button type="button" class="vn-select-btn" onclick="selectVirtualService('sms')">Pilih layanan <span>→</span></button>
+          </article>
         </div>
+        <div id="virtualNumberSelectedPanel" class="vn-selected-panel" style="display:none">
+          <div class="vn-panel-kicker">PILIHAN KAMU</div>
+          <div class="vn-selected-row"><div><strong id="virtualNumberSelectedService">WhatsApp</strong><p id="virtualNumberSelectedCountry">🇮🇩 Indonesia</p></div><strong id="virtualNumberSelectedPrice">Rp 5.000</strong></div>
+          <button type="button" class="vn-buy-btn" onclick="openVirtualNumberReview()">Lanjut ke pembelian <span>→</span></button>
+        </div>
+        <div id="virtualNumberReviewPanel" class="vn-review-panel" style="display:none">
+          <div class="vn-panel-kicker">KONFIRMASI PESANAN</div>
+          <h3>Periksa pilihanmu</h3>
+          <div class="vn-review-line"><span>Negara</span><strong id="virtualNumberReviewCountry">Indonesia</strong></div>
+          <div class="vn-review-line"><span>Layanan</span><strong id="virtualNumberReviewService">WhatsApp</strong></div>
+          <div class="vn-review-line"><span>Jumlah</span><strong>1 nomor</strong></div>
+          <div class="vn-review-line vn-review-total"><span>Total simulasi</span><strong id="virtualNumberReviewPrice">Rp 5.000</strong></div>
+          <p class="vn-review-notice">ℹ️ Ini hanya pratinjau. Tombol beli tidak memotong saldo, tidak memproses pembayaran, dan tidak membuat pesanan karena API nomor virtual belum dihubungkan.</p>
+          <button type="button" class="vn-buy-btn" onclick="submitVirtualNumberDemoPurchase()">Beli nomor (simulasi)</button>
+          <button type="button" class="vn-back-btn" onclick="backToVirtualNumberSelection()">← Ubah pilihan</button>
+        </div>
+        <div class="vn-secure-note"><span>🔒</span><span>Transaksi nyata baru diaktifkan setelah API penyedia, validasi harga/stok, dan pembayaran selesai diuji.</span></div>
       </div>
     </div>
   </section>
@@ -3459,20 +3542,96 @@ async function downloadQris() {
   }
 }
 
+let selectedVirtualNumberService = null;
+const VIRTUAL_NUMBER_DEMO_CATALOG = {
+  id: { country: '🇮🇩 Indonesia', whatsapp: { price: 5000, stock: 12 }, telegram: { price: 4000, stock: 8 }, sms: { price: 2000, stock: 20 } },
+  us: { country: '🇺🇸 Amerika Serikat', whatsapp: { price: 8000, stock: 9 }, telegram: { price: 7000, stock: 10 }, sms: { price: 3500, stock: 18 } },
+  gb: { country: '🇬🇧 Inggris', whatsapp: { price: 9000, stock: 7 }, telegram: { price: 7500, stock: 6 }, sms: { price: 4000, stock: 12 } }
+};
+const VIRTUAL_NUMBER_SERVICE_NAMES = { whatsapp: 'WhatsApp', telegram: 'Telegram', sms: 'SMS / Layanan lain' };
+function formatVirtualNumberRupiah(value) { return 'Rp ' + Number(value || 0).toLocaleString('id-ID'); }
+function getVirtualNumberDemoChoice() {
+  const countrySelect = document.getElementById('virtualNumberCountry');
+  const countryKey = countrySelect?.value || 'id';
+  const serviceKey = selectedVirtualNumberService;
+  const country = VIRTUAL_NUMBER_DEMO_CATALOG[countryKey] || VIRTUAL_NUMBER_DEMO_CATALOG.id;
+  return { countryKey, country, serviceKey, service: VIRTUAL_NUMBER_SERVICE_NAMES[serviceKey], item: serviceKey ? country[serviceKey] : null };
+}
+function updateVirtualNumberCatalog() {
+  const choice = getVirtualNumberDemoChoice();
+  document.querySelectorAll('[data-vn-price]').forEach(el => {
+    const item = choice.country[el.dataset.vnPrice];
+    if (item) el.textContent = formatVirtualNumberRupiah(item.price);
+  });
+  document.querySelectorAll('[data-vn-stock]').forEach(el => {
+    const item = choice.country[el.dataset.vnStock];
+    if (item) el.textContent = 'Stok demo: ' + item.stock;
+  });
+  if (selectedVirtualNumberService && choice.item) {
+    const serviceEl = document.getElementById('virtualNumberSelectedService');
+    const countryEl = document.getElementById('virtualNumberSelectedCountry');
+    const priceEl = document.getElementById('virtualNumberSelectedPrice');
+    if (serviceEl) serviceEl.textContent = choice.service;
+    if (countryEl) countryEl.textContent = choice.country.country;
+    if (priceEl) priceEl.textContent = formatVirtualNumberRupiah(choice.item.price);
+    const reviewCountry = document.getElementById('virtualNumberReviewCountry');
+    const reviewService = document.getElementById('virtualNumberReviewService');
+    const reviewPrice = document.getElementById('virtualNumberReviewPrice');
+    if (reviewCountry) reviewCountry.textContent = choice.country.country;
+    if (reviewService) reviewService.textContent = choice.service;
+    if (reviewPrice) reviewPrice.textContent = formatVirtualNumberRupiah(choice.item.price);
+  }
+}
+function selectVirtualService(serviceKey) {
+  if (!VIRTUAL_NUMBER_SERVICE_NAMES[serviceKey]) return;
+  selectedVirtualNumberService = serviceKey;
+  document.querySelectorAll('[data-vn-key]').forEach(card => card.classList.toggle('selected', card.dataset.vnKey === serviceKey));
+  const selectedPanel = document.getElementById('virtualNumberSelectedPanel');
+  const reviewPanel = document.getElementById('virtualNumberReviewPanel');
+  if (selectedPanel) selectedPanel.style.display = 'block';
+  if (reviewPanel) reviewPanel.style.display = 'none';
+  updateVirtualNumberCatalog();
+  selectedPanel?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+function openVirtualNumberReview() {
+  const choice = getVirtualNumberDemoChoice();
+  if (!choice.item) {
+    showToast('Pilih layanan terlebih dahulu.', 'error');
+    return;
+  }
+  updateVirtualNumberCatalog();
+  const reviewPanel = document.getElementById('virtualNumberReviewPanel');
+  if (reviewPanel) reviewPanel.style.display = 'block';
+  reviewPanel?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+function backToVirtualNumberSelection() {
+  const reviewPanel = document.getElementById('virtualNumberReviewPanel');
+  if (reviewPanel) reviewPanel.style.display = 'none';
+  document.getElementById('virtualNumberSelectedPanel')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+function submitVirtualNumberDemoPurchase() {
+  if (!selectedVirtualNumberService) {
+    showToast('Pilih layanan terlebih dahulu.', 'error');
+    return;
+  }
+  showToast('Ini masih simulasi UI. Belum ada pesanan atau pembayaran yang dibuat.', 'info');
+}
+
 // ============================================
 // ============================================
 // SWITCH TAB
 // ============================================
 function switchTab(tab) {
   if(tab==='jpm'){
-    const role=getCurrentRole();
-    const canPreview=role==='owner'||role==='admin';
+    const role=String(getCurrentRole()||'').toLowerCase();
+    const canPreview=role==='owner'||role==='admin'||role==='developer';
     const maintenance=document.getElementById('virtualNumberMaintenance');
     const preview=document.getElementById('virtualNumberDeveloperPreview');
     if(maintenance)maintenance.style.display=canPreview?'none':'';
     if(preview)preview.style.display=canPreview?'':'none';
     const search=document.getElementById('virtualNumberServiceSearch');
     const list=document.getElementById('virtualNumberServiceList');
+    const country=document.getElementById('virtualNumberCountry');
     if(search&&list&&!search.dataset.bound){
       search.dataset.bound='1';
       search.addEventListener('input',()=>{
@@ -3482,6 +3641,15 @@ function switchTab(tab) {
         });
       });
     }
+    if(country&&!country.dataset.bound){
+      country.dataset.bound='1';
+      country.addEventListener('change',()=>{
+        updateVirtualNumberCatalog();
+        const review=document.getElementById('virtualNumberReviewPanel');
+        if(review)review.style.display='none';
+      });
+    }
+    updateVirtualNumberCatalog();
   }
   const settings=document.getElementById('accountSettingsModal');
   if(settings?.classList.contains('show'))closeAccountSettings();
