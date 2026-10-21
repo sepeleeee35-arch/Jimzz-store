@@ -1160,14 +1160,32 @@ body::before,body::after{background:none!important;animation:none!important;filt
         <span class="product-banner" style="display:inline-flex;margin-top:16px">FITUR DINONAKTIFKAN SEMENTARA</span>
       </div>
     </div>
-    <div id="virtualNumberDeveloperPreview" class="pengumuman" style="display:none;max-width:850px;margin:20px auto 28px;border-color:rgba(0,255,136,.45)">
-      <div class="pengumuman-header"><span class="pengumuman-icon">🧰</span><span class="pengumuman-title">MODE PENGEMBANGAN — NOMOR VIRTUAL</span></div>
-      <div style="text-align:center;padding:12px 8px 8px">
-        <div style="font-size:54px;margin-bottom:12px">📲</div>
-        <h2 style="margin-bottom:10px">Nomor <span class="accent">Virtual</span></h2>
-        <p class="pengumuman-text">Halaman ini hanya terlihat oleh Developer dan Admin selama proses pembuatan fitur.</p>
-        <p class="pengumuman-text">Katalog negara/layanan, harga, pembelian nomor, status OTP, dan riwayat pesanan belum dibuat. Fitur akan dibuka untuk semua role setelah pengembangan dan pengujian selesai.</p>
-        <span class="product-banner" style="display:inline-flex;margin-top:16px">PRATINJAU INTERNAL</span>
+    <div id="virtualNumberDeveloperPreview" style="display:none;max-width:900px;margin:20px auto 28px">
+      <div class="pengumuman" style="border-color:rgba(0,255,136,.45);margin-bottom:16px">
+        <div class="pengumuman-header"><span class="pengumuman-icon">🧰</span><span class="pengumuman-title">MODE PENGEMBANGAN — NOMOR VIRTUAL</span></div>
+        <p class="pengumuman-text">Pratinjau internal. Data katalog dan harga di bawah ini belum terhubung ke API dan bukan penawaran pembelian sungguhan.</p>
+      </div>
+      <div class="pengumuman" style="border-color:rgba(0,255,136,.3);padding:18px">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
+          <div style="width:48px;height:48px;display:flex;align-items:center;justify-content:center;border-radius:14px;background:rgba(0,255,136,.12);font-size:26px">📲</div>
+          <div><h2 style="margin:0">Nomor <span class="accent">Virtual</span></h2><p class="sub" style="margin:4px 0 0">Pilih negara dan layanan</p></div>
+        </div>
+        <label for="virtualNumberCountry" style="display:block;margin-bottom:7px;font-weight:700">Negara</label>
+        <select id="virtualNumberCountry" style="width:100%;padding:13px;border-radius:12px;background:#101713;color:inherit;border:1px solid rgba(0,255,136,.25);margin-bottom:15px">
+          <option value="id">🇮🇩 Indonesia — contoh UI</option>
+          <option value="us">🇺🇸 Amerika Serikat — contoh UI</option>
+          <option value="gb">🇬🇧 Inggris — contoh UI</option>
+        </select>
+        <label for="virtualNumberServiceSearch" style="display:block;margin-bottom:7px;font-weight:700">Cari layanan</label>
+        <input id="virtualNumberServiceSearch" type="search" placeholder="Cari nama layanan..." style="width:100%;padding:13px;border-radius:12px;background:#101713;color:inherit;border:1px solid rgba(0,255,136,.25);margin-bottom:15px">
+        <div id="virtualNumberServiceList" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">
+          <div class="pengumuman" data-vn-service="WhatsApp" style="margin:0;padding:14px"><div style="font-size:24px;margin-bottom:8px">💬</div><strong>WhatsApp</strong><p class="sub" style="margin:6px 0">Harga dan stok menunggu koneksi API</p><span class="product-banner">BELUM TERSEDIA</span></div>
+          <div class="pengumuman" data-vn-service="Telegram" style="margin:0;padding:14px"><div style="font-size:24px;margin-bottom:8px">✈️</div><strong>Telegram</strong><p class="sub" style="margin:6px 0">Harga dan stok menunggu koneksi API</p><span class="product-banner">BELUM TERSEDIA</span></div>
+          <div class="pengumuman" data-vn-service="SMS / Layanan lain" style="margin:0;padding:14px"><div style="font-size:24px;margin-bottom:8px">✉️</div><strong>SMS / Layanan lain</strong><p class="sub" style="margin:6px 0">Daftar mengikuti katalog penyedia</p><span class="product-banner">BELUM TERSEDIA</span></div>
+        </div>
+        <div style="margin-top:18px;padding:13px;border-radius:12px;background:rgba(255,200,0,.08);border:1px solid rgba(255,200,0,.25)">
+          <p class="pengumuman-text" style="margin:0">🔒 Pembelian dinonaktifkan sampai API, harga, stok, dan validasi pembayaran selesai diuji.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -3453,6 +3471,17 @@ function switchTab(tab) {
     const preview=document.getElementById('virtualNumberDeveloperPreview');
     if(maintenance)maintenance.style.display=canPreview?'none':'';
     if(preview)preview.style.display=canPreview?'':'none';
+    const search=document.getElementById('virtualNumberServiceSearch');
+    const list=document.getElementById('virtualNumberServiceList');
+    if(search&&list&&!search.dataset.bound){
+      search.dataset.bound='1';
+      search.addEventListener('input',()=>{
+        const q=search.value.trim().toLowerCase();
+        list.querySelectorAll('[data-vn-service]').forEach(card=>{
+          card.style.display=card.dataset.vnService.toLowerCase().includes(q)?'':'none';
+        });
+      });
+    }
   }
   const settings=document.getElementById('accountSettingsModal');
   if(settings?.classList.contains('show'))closeAccountSettings();
