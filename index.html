@@ -745,7 +745,7 @@ body::before,body::after{background:none!important;animation:none!important;filt
 </style>
 </head>
 <body>
-<div id="siteVersion">v4.3.7</div>
+<div id="siteVersion">v4.3.3</div>
 
 
 <div class="toast-container" id="toastContainer"></div>
@@ -1320,7 +1320,7 @@ body::before,body::after{background:none!important;animation:none!important;filt
   <audio id="audioPlayer"></audio>
 </div>
 <script>
-const JIMZZ_VERSION = 'v4.3.7';
+const JIMZZ_VERSION = 'v4.3.3';
 
 // ============================================
 // 🔧 KONFIGURASI
@@ -2284,7 +2284,6 @@ function applyAdminUI(){
       info.innerHTML='<div class="pengumuman-header" style="justify-content:center;"><span style="font-size:20px;">👑</span><span class="pengumuman-title">MODE ADMIN — TEST ORDER</span></div><p class="pengumuman-text" style="text-align:center;">Kamu bisa <b>test order</b> produk yang masih maintenance.</p>';
     }
     loadVisitors();
-    loadAccountVisitors();
     if(owner){loadOrders();loadStats();}
   }else{
     if(adminPanel)adminPanel.style.display='none';
@@ -2490,30 +2489,6 @@ function closeAccountSettings(){
   document.body.style.overflow='';
   window.scrollTo({top:0,behavior:'auto'});
 }
-
-// Allow a deliberate pull-down gesture to refresh while account settings is open.
-// It only fires when the settings page is already at the top and the swipe is long.
-(function enableSettingsPullToRefresh(){
-  const settings=document.getElementById('accountSettingsModal');
-  if(!settings)return;
-  let startY=0, tracking=false;
-  settings.addEventListener('touchstart',event=>{
-    if(!settings.classList.contains('show')||event.touches.length!==1)return;
-    startY=event.touches[0].clientY;
-    tracking=settings.scrollTop<=0;
-  },{passive:true});
-  settings.addEventListener('touchend',event=>{
-    if(!tracking||!settings.classList.contains('show')||!event.changedTouches.length)return;
-    const delta=event.changedTouches[0].clientY-startY;
-    tracking=false;
-    if(settings.scrollTop<=0&&delta>=120){
-      const status=document.getElementById('settingsProfileRole');
-      if(status)status.textContent='Memuat ulang Jimzz Store…';
-      window.location.reload();
-    }
-  },{passive:true});
-})();
-
 async function toggleAccountEmailVisibility(){
   const input=document.getElementById('accountEmail'),btn=document.getElementById('accountEmailVisibilityBtn');
   if(!input||!getLoggedAccount()?.emailVerified||!input.readOnly)return;
