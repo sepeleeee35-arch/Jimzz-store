@@ -2205,7 +2205,19 @@ async function showAccountDetails(userId,username){
   if(pin===null)return;
   if(!pin.trim()){showToast('PIN wajib diisi.','error');return;}
   try{
-    const data=await accountApi('owner-account-details',{userId,pin});
+    let data;
+    try{
+      data=await accountApi('owner-account-details',{userId,pin});
+    }catch(firstError){
+      if(!String(firstError.message||'').includes('PIN detail belum dibuat'))throw firstError;
+      const newPin=prompt('PIN belum dibuat. Buat PIN baru 4–12 digit angka:');
+      if(newPin===null)return;
+      if(!/^\\d{4,12}$/.test(newPin)){showToast('PIN harus 4–12 digit angka.','error');return;}
+      const confirmPin=prompt('Ulangi PIN baru untuk konfirmasi:');
+      if(confirmPin!==newPin){showToast('Konfirmasi PIN tidak cocok.','error');return;}
+      await accountApi('owner-set-details-pin',{pin:newPin});
+      data=await accountApi('owner-account-details',{userId,pin:newPin});
+    }
     const d=data.details||{};
     const esc=escapeAccountHtml;
     const fmt=value=>value?new Date(value).toLocaleString('id-ID',{dateStyle:'medium',timeStyle:'short'}):'Belum tersedia';
