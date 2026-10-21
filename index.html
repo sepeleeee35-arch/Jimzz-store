@@ -1150,14 +1150,24 @@ body::before,body::after{background:none!important;animation:none!important;filt
 
 <div class="tab-page" id="page-jpm">
   <section class="kategori">
-    <div class="pengumuman" style="max-width:650px;margin:20px auto 28px;border-color:rgba(255,200,0,.45)">
+    <div id="virtualNumberMaintenance" class="pengumuman" style="max-width:650px;margin:20px auto 28px;border-color:rgba(255,200,0,.45)">
       <div class="pengumuman-header"><span class="pengumuman-icon">🛠️</span><span class="pengumuman-title">SEDANG MAINTENANCE</span></div>
       <div style="text-align:center;padding:12px 8px 8px">
         <div style="font-size:54px;margin-bottom:12px">📲</div>
         <h2 style="margin-bottom:10px">Nomor <span class="accent">Virtual</span></h2>
         <p class="pengumuman-text">Layanan nomor virtual sedang dalam tahap konfigurasi dan pengujian.</p>
-        <p class="pengumuman-text">Untuk sementara, fitur ini belum bisa digunakan oleh pengguna maupun tamu (guest). Silakan kembali lagi nanti setelah pemeliharaan selesai.</p>
+        <p class="pengumuman-text">Fitur ini sementara belum tersedia untuk pembeli maupun tamu (guest). Silakan kembali lagi setelah pemeliharaan selesai.</p>
         <span class="product-banner" style="display:inline-flex;margin-top:16px">FITUR DINONAKTIFKAN SEMENTARA</span>
+      </div>
+    </div>
+    <div id="virtualNumberDeveloperPreview" class="pengumuman" style="display:none;max-width:850px;margin:20px auto 28px;border-color:rgba(0,255,136,.45)">
+      <div class="pengumuman-header"><span class="pengumuman-icon">🧰</span><span class="pengumuman-title">MODE PENGEMBANGAN — NOMOR VIRTUAL</span></div>
+      <div style="text-align:center;padding:12px 8px 8px">
+        <div style="font-size:54px;margin-bottom:12px">📲</div>
+        <h2 style="margin-bottom:10px">Nomor <span class="accent">Virtual</span></h2>
+        <p class="pengumuman-text">Halaman ini hanya terlihat oleh Developer dan Admin selama proses pembuatan fitur.</p>
+        <p class="pengumuman-text">Katalog negara/layanan, harga, pembelian nomor, status OTP, dan riwayat pesanan belum dibuat. Fitur akan dibuka untuk semua role setelah pengembangan dan pengujian selesai.</p>
+        <span class="product-banner" style="display:inline-flex;margin-top:16px">PRATINJAU INTERNAL</span>
       </div>
     </div>
   </section>
@@ -3436,6 +3446,14 @@ async function downloadQris() {
 // SWITCH TAB
 // ============================================
 function switchTab(tab) {
+  if(tab==='jpm'){
+    const role=getCurrentRole();
+    const canPreview=role==='owner'||role==='admin';
+    const maintenance=document.getElementById('virtualNumberMaintenance');
+    const preview=document.getElementById('virtualNumberDeveloperPreview');
+    if(maintenance)maintenance.style.display=canPreview?'none':'';
+    if(preview)preview.style.display=canPreview?'':'none';
+  }
   const settings=document.getElementById('accountSettingsModal');
   if(settings?.classList.contains('show'))closeAccountSettings();
   const page=document.getElementById('page-'+tab);
