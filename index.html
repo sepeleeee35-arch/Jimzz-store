@@ -3712,5 +3712,48 @@ function toggleRecoveryPassword(inputId,button){
 }
 </script>
 
+
+<style id="copy-protection-guard">
+  /* Deterrence only: browser controls and editable fields remain usable. */
+  body.copy-guard-active { -webkit-user-select:none; user-select:none; }
+  body.copy-guard-active input,
+  body.copy-guard-active textarea,
+  body.copy-guard-active [contenteditable="true"],
+  body.copy-guard-active .allow-copy {
+    -webkit-user-select:text;
+    user-select:text;
+  }
+</style>
+<script id="copy-protection-guard-script">
+(function(){
+  'use strict';
+  document.body.classList.add('copy-guard-active');
+  function isEditable(target){
+    return !!(target && target.closest && target.closest('input,textarea,[contenteditable="true"],.allow-copy'));
+  }
+  document.addEventListener('contextmenu',function(e){
+    if(!isEditable(e.target)) e.preventDefault();
+  },{capture:true});
+  document.addEventListener('selectstart',function(e){
+    if(!isEditable(e.target)) e.preventDefault();
+  },{capture:true});
+  document.addEventListener('copy',function(e){
+    if(!isEditable(e.target)) e.preventDefault();
+  },{capture:true});
+  document.addEventListener('cut',function(e){
+    if(!isEditable(e.target)) e.preventDefault();
+  },{capture:true});
+  document.addEventListener('keydown',function(e){
+    if(isEditable(e.target)) return;
+    const key=String(e.key||'').toLowerCase();
+    if(e.key==='F12' || (e.ctrlKey||e.metaKey) && ['u','s','c','x','a','p'].includes(key) ||
+       (e.ctrlKey||e.metaKey) && e.shiftKey && ['i','j','c'].includes(key)){
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  },{capture:true});
+})();
+</script>
+
 </body>
 </html>
