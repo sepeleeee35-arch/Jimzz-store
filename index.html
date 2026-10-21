@@ -2224,6 +2224,2255 @@ async function showAccountDetails(userId,username){
     const devices=Array.isArray(d.devices)&&d.devices.length?d.devices.map(x=>'<div style="padding:10px 12px;border:1px solid #263a2d;border-radius:10px;margin-top:8px;background:#0b130e"><b>'+esc(x.device||'Perangkat tidak diketahui')+' · '+esc(x.browser||'Browser tidak diketahui')+'</b><div style="font-size:11px;color:#a9b9ae;margin-top:4px">Login: '+esc(fmt(x.at))+'</div><div style="font-size:10px;color:#77867c;margin-top:4px;word-break:break-word">'+esc(x.userAgent||'')+'</div></div>').join(''):'<div style="color:#9aa79e;font-size:12px;padding:10px 0">Belum ada riwayat login perangkat. Riwayat mulai dicatat setelah fitur ini aktif.</div>';
     let modal=document.getElementById('ownerAccountDetailsModal');
     if(!modal){modal=document.createElement('div');modal.id='ownerAccountDetailsModal';modal.style.cssText='position:fixed;inset:0;z-index:999999;background:rgba(0,0,0,.78);display:flex;align-items:center;justify-content:center;padding:16px';document.body.appendChild(modal);}
+    modal.innerHTML='<div style="width:100%;max-width:520px;max-height:85vh;overflow:auto;background:#0a100c;border:1px solid #245237;border-radius:18px;padding:18px;color:#edf7ef"><div style="display:flex;align-items:center;justify-content:space-between;gap:12px"><h3 style="margin:0;color:#4de38e">DETAIL AKUN</h3><button type="button" onclick="document.getElementById(\'ownerAccountDetailsModal\')?.remove()" style="background:#19251d;border:1px solid #345640;color:#fff;border-radius:9px;padding:8px 12px">Tutup ✕</button></div><div style="font-size:12px;color:#9db3a3;margin:6px 0 14px">Data server akun · password asli tidak dapat dibaca</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'+[
+      ['Username',d.username],['ID Akun',d.id],['Email',d.email||'Tidak tersedia'],['Nomor HP',d.phone||'Tidak tersedia'],['Role',d.role],['Status',d.banned?'DIBANNED':'Aktif'],['Koin',d.coins],['Dibuat',fmt(d.createdAt)],['Update terakhir',fmt(d.updatedAt)],['Login terakhir',fmt(d.lastSignInAt)],['Email dikonfirmasi',fmt(d.emailConfirmedAt)],['Email verifikasi Jimzz',d.emailVerified?'Ya':'Belum']
+    ].map(([k,v])=>'<div style="padding:10px;border-radius:10px;background:#101a13;border:1px solid #203729;min-width:0"><div style="font-size:10px;color:#8da697;margin-bottom:5px">'+esc(k)+'</div><div style="font-size:12px;font-weight:700;overflow-wrap:anywhere">'+esc(v??'Tidak tersedia')+'</div></div>').join('')+'</div><h4 style="margin:18px 0 6px">📱 Perangkat yang pernah login</h4>'+devices+'<div style="font-size:11px;color:#9aa79e;margin-top:14px;padding-top:12px;border-top:1px solid #203729">Password tidak disimpan dalam bentuk yang bisa ditampilkan. Jika perlu, gunakan tombol “Reset Password” di daftar akun.</div></div>';
+    modal.addEventListener('click',event=>{if(event.target===modal)modal.remove();});
+  }catch(e){showToast(e.message||'Gagal memuat detail akun.','error');}
+}
+async function giftCoinsToUser(){ return adjustCoinsToUser(1); }
+async function adjustCoinsToUser(direction){
+  if(!isOwnerAccount())return;
+  const select=document.getElementById('giftTargetUser'),input=document.getElementById('giftAmount'),msg=document.getElementById('giftCoinsMsg');
+  const userId=select?.value||'', raw=String(input?.value||'').replace(/[^0-9]/g,'');
+  const delta=(direction>0?'':'-')+raw;
+  if(!userId){if(msg){msg.textContent='Pilih akun dulu.';msg.style.color='#ff6b6b';}return;}
+  if(!raw||!/^[0-9]+$/.test(raw)||BigInt(raw||'0')<=0n){if(msg){msg.textContent='Jumlah koin tidak valid.';msg.style.color='#ff6b6b';}return;}
+  try{
+    const data=await accountApi('adjust-coins',{userId,delta});
+    if(msg){msg.textContent=(data.message||'Saldo koin berhasil diubah.')+' Saldo sekarang: '+formatCoinValue(data.newCoins)+' koin.';msg.style.color='#00ff88';}
+    if(input)input.value='';
+    await renderAccountManager();
+    showToast((direction>0?'➕ ':'➖ ')+(direction>0?'Koin ditambahkan.':'Koin dikurangi.'),'success');
+  }catch(e){if(msg){msg.textContent=e.message;msg.style.color='#ff6b6b';}}
+}
+async function setAccountRole(userId,role){
+  if(!isOwnerAccount())return;
+  try{await accountApi('set-role',{userId,role});await renderAccountManager();showToast(role==='admin'?'👑 Akun sekarang ADMIN.':'Akun kembali menjadi USER.','success');}
+  catch(e){showToast(e.message,'error');}
+}
+async function ownerResetPassword(userId,username){
+  if(!isOwnerAccount())return;
+  const password=prompt('Buat password baru untuk akun '+username+' (minimal 8 karakter):');
+  if(password===null)return;
+  if(password.length<8){showToast('Password minimal 8 karakter.','error');return;}
+  const confirmPassword=prompt('Ulangi password baru:');
+  if(confirmPassword!==password){showToast('Konfirmasi password tidak sama.','error');return;}
+  try{
+    await accountApi('owner-reset-password',{userId,password});
+    showToast('🔐 Password akun '+username+' berhasil diubah. Password tidak ditampilkan.','success');
+  }catch(e){showToast(e.message,'error');}
+}
+async function deleteAccountOwner(userId){
+  if(!isOwnerAccount())return;
+  if(!confirm('Hapus akun ini secara permanen? Semua sesi akun akan tidak berlaku.'))return;
+  try{
+    await accountApi('delete-account',{userId});
+    await renderAccountManager();
+    showToast('🗑️ Akun berhasil dihapus.','success');
+  }catch(e){showToast(e.message,'error');}
+}
+async function setAccountBan(userId,banned){
+  if(!isOwnerAccount())return;
+  try{await accountApi('set-ban',{userId,banned});await renderAccountManager();showToast(banned?'🚫 Akun langsung dikunci di perangkat pengguna.':'✅ Akun di-unban.','success');}
+  catch(e){showToast(e.message,'error');}
+}
+function showBanLockScreen(){
+  const el=document.getElementById('banLockScreen');if(el)el.classList.add('show');
+  document.body.style.overflow='hidden';
+  const modal=document.querySelectorAll('.account-modal,.modal-overlay');
+  modal.forEach(x=>x.classList.remove('show'));
+}
+function hideBanLockScreen(){
+  const el=document.getElementById('banLockScreen');if(el)el.classList.remove('show');
+  document.body.style.overflow='';
+}
+function logoutFromBanScreen(){
+  clearAccountSession();hideBanLockScreen();renderCoinBalance();updateAccountUI();applyAdminUI();showToast('Berhasil logout.','info');
+}
+
+function applyAdminUI(){
+  const role=getCurrentRole();
+  isAdmin=role==='owner'||role==='admin';
+  const adminPanel=document.getElementById('adminPanelSection');
+  const ownerSection=document.getElementById('ownerAccountsSection');
+  const visitorPanel=document.getElementById('visitorPanelSection');
+  const orderQueue=document.getElementById('orderQueueSection');
+  const statsPanel=document.getElementById('statsPanelSection');
+  const menuTopup=document.getElementById('menuTopup');
+  const info=document.getElementById('topupMaintenanceInfo');
+  const owner=role==='owner';
+
+  // Admin/Owner mewarisi semua fitur Buyer/User.
+  if(isAdmin){
+    if(adminPanel)adminPanel.style.display='block';
+    if(visitorPanel)visitorPanel.style.display='block';
+    if(orderQueue)orderQueue.style.display=owner?'block':'none';
+    if(statsPanel)statsPanel.style.display=owner?'block':'none';
+    if(menuTopup){menuTopup.classList.remove('disabled');menuTopup.classList.add('admin-view');}
+    if(info){
+      info.className='pengumuman admin-preview-info';
+      info.innerHTML='<div class="pengumuman-header" style="justify-content:center;"><span style="font-size:20px;">👑</span><span class="pengumuman-title">MODE ADMIN — TEST ORDER</span></div><p class="pengumuman-text" style="text-align:center;">Kamu bisa <b>test order</b> produk yang masih maintenance.</p>';
+    }
+    loadVisitors();
+    if(owner){loadOrders();loadStats();}
+  }else{
+    if(adminPanel)adminPanel.style.display='none';
+    if(visitorPanel)visitorPanel.style.display='none';
+    if(orderQueue)orderQueue.style.display='none';
+    if(statsPanel)statsPanel.style.display='none';
+    if(menuTopup){menuTopup.classList.add('disabled');menuTopup.classList.remove('admin-view');}
+    if(info){
+      info.className='pengumuman maintenance';
+      info.innerHTML='<div class="pengumuman-header" style="justify-content:center;"><span style="font-size:20px;">🔧</span><span class="pengumuman-title">SEDANG MAINTENANCE</span></div><p class="pengumuman-text" style="text-align:center;">Fitur <b>Top Up Game</b> sedang dalam perbaikan.</p>';
+    }
+  }
+  if(ownerSection){
+    ownerSection.style.display=owner?'block':'none';
+    if(owner)renderAccountManager();
+  }
+  renderGameList();
+}
+function handleTopupClick(){if(isAdmin)switchTab('topup');else showToast('Top Up Game sedang MAINTENANCE','warning');}
+
+function openAccountModal(){document.getElementById('accountModal')?.classList.add('show');switchAccountForm('login');}
+function closeAccountModal(){document.getElementById('accountModal')?.classList.remove('show');}
+let recoveryResetToken = "";
+let recoveryAvailableMethods={gmail:false,telegram:false};
+document.addEventListener('click',function(event){const button=event.target.closest('#forgotCurrentPasswordButton');if(!button)return;event.preventDefault();event.stopPropagation();openRecoveryModal();},true);
+async function openRecoveryModal(){
+  const modal=document.getElementById('recoveryModal');
+  if(!modal)return;
+  // Keep the recovery modal at document level so settings-page containers
+  // cannot trap it behind their own stacking/transform context.
+  if(modal.parentElement!==document.body)document.body.appendChild(modal);
+  modal.classList.add('show');
+  modal.style.display='flex';
+  modal.style.visibility='visible';
+  modal.style.pointerEvents='auto';
+  modal.style.zIndex='2147483000';
+  const msg=document.getElementById('recoveryMsg');
+  if(msg){msg.textContent='Memuat metode pemulihan...';msg.style.color='#ffbb55';}
+  const input=document.getElementById('recoveryUsername');
+  const methodsPanel=document.getElementById('recoveryMethods');
+  const emailPanel=document.getElementById('emailResetOtpPanel');
+  const telegramPanel=document.getElementById('telegramResetOtpPanel');
+  const account=typeof getLoggedAccount==='function'?getLoggedAccount():null;
+  const username=account?.username||'';
+  if(input)input.value=username;
+  if(methodsPanel)methodsPanel.style.display='none';
+  if(emailPanel)emailPanel.style.display='none';
+  if(telegramPanel)telegramPanel.style.display='none';
+  recoveryAvailableMethods={gmail:false,telegram:false};
+  if(!username){if(msg){msg.textContent='Sesi akun tidak ditemukan. Silakan login kembali.';msg.style.color='#ff6b6b';}return;}
+  try{await checkRecoveryMethods();}catch(e){if(msg){msg.textContent='Metode pemulihan belum bisa dimuat. Coba lagi sebentar.';msg.style.color='#ff6b6b';}}
+}
+function closeRecoveryModal(){const modal=document.getElementById('recoveryModal');if(!modal)return;modal.classList.remove('show');modal.style.display='none';modal.style.visibility='hidden';modal.style.pointerEvents='none';}
+async function checkRecoveryMethods(){
+ const username=document.getElementById('recoveryUsername').value.trim(),msg=document.getElementById('recoveryMsg');
+ if(!/^[A-Za-z0-9_]{3,24}$/.test(username)){msg.textContent='Username harus 3–24 karakter.';msg.style.color='#ff6b6b';return;}
+ msg.textContent='Memeriksa metode pemulihan...';msg.style.color='#aaa';
+ try{
+  const data=await accountApi('recovery-methods',{username},false);recoveryAvailableMethods={gmail:Boolean(data.methods?.gmail),telegram:Boolean(data.methods?.telegram)};
+  document.getElementById('recoveryMethods').style.display='block';
+  const gb=document.getElementById('recoveryGmailBtn'),tb=document.getElementById('recoveryTelegramBtn'),gs=document.getElementById('recoveryGmailStatus'),ts=document.getElementById('recoveryTelegramStatus');
+  gb.disabled=!recoveryAvailableMethods.gmail;tb.disabled=!recoveryAvailableMethods.telegram;gb.style.opacity=gb.disabled?'.45':'1';tb.style.opacity=tb.disabled?'.45':'1';
+  gs.textContent=recoveryAvailableMethods.gmail?'Gmail terverifikasi dan tertaut.':'Akun Gmail Anda belum tertaut di akun ini.';ts.textContent=recoveryAvailableMethods.telegram?'Telegram tertaut dan dapat menerima OTP.':'Akun Telegram Anda belum tertaut di akun ini.';
+  gs.style.color=recoveryAvailableMethods.gmail?'#00ff88':'#ffbb55';ts.style.color=recoveryAvailableMethods.telegram?'#00ff88':'#ffbb55';
+  msg.textContent=(!recoveryAvailableMethods.gmail&&!recoveryAvailableMethods.telegram)?'Akun ini tidak tertaut dengan metode mana pun, silakan chat admin untuk meminta reset password.':'Pilih metode yang aktif untuk menerima kode OTP.';msg.style.color=(!recoveryAvailableMethods.gmail&&!recoveryAvailableMethods.telegram)?'#ffbb55':'#ddd';
+ }catch(e){msg.textContent=e.message||'Gagal memeriksa metode pemulihan.';msg.style.color='#ff6b6b';}
+}
+function switchAccountForm(type){const login=type==='login';document.getElementById('accountLoginForm')?.classList.toggle('active',login);document.getElementById('accountRegisterForm')?.classList.toggle('active',!login);document.getElementById('accountLoginTab')?.classList.toggle('active',login);document.getElementById('accountRegisterTab')?.classList.toggle('active',!login);const lm=document.getElementById('loginMsg'),rm=document.getElementById('registerMsg');if(lm)lm.textContent='';if(rm)rm.textContent='';}
+async function accountRegister(){
+  const username=document.getElementById('registerUsername').value.trim(),password=document.getElementById('registerPassword').value,password2=document.getElementById('registerPassword2').value,msg=document.getElementById('registerMsg');
+  if(!/^[A-Za-z0-9_]{3,24}$/.test(username)){msg.textContent='Username 3–24 karakter.';msg.style.color='#ff6b6b';return;}
+    if(password.length<8){msg.textContent='Password minimal 8 karakter.';msg.style.color='#ff6b6b';return;}
+  if(password!==password2){msg.textContent='Konfirmasi password tidak sama.';msg.style.color='#ff6b6b';return;}
+  const guestCoinsBefore=getGuestPoints();
+  try{
+    const data=await accountApi('register',{username,password},false);
+    saveAccountSession(data.session,data.user);
+    if(guestCoinsBefore>0){
+      const upd=await accountApi('claim-guest-coins',{coins:guestCoinsBefore});
+      saveAccountSession(null,upd.user);
+      localStorage.setItem(GUEST_COINS_KEY,'0');
+    }else{
+      localStorage.setItem(GUEST_COINS_KEY,'0');
+    }
+    renderCoinBalance();updateAccountUI();applyAdminUI();
+    msg.textContent='Akun berhasil dibuat dan kamu langsung masuk ke akun.';msg.style.color='#00ff88';
+    showToast(guestCoinsBefore>0?'🎉 Akun dibuat. Koin tamu dipindahkan ke akun baru.':'🎉 Akun berhasil dibuat dan langsung login.','success');
+    setTimeout(()=>{closeAccountModal();openAccountLinkPrompt();},500);
+  }catch(e){msg.textContent=e.message;msg.style.color='#ff6b6b';}
+}
+async function accountLogin(){
+  const username=document.getElementById('loginUsername').value.trim(),password=document.getElementById('loginPassword').value,msg=document.getElementById('loginMsg');
+  try{const data=await accountApi('login',{username,password},false);saveAccountSession(data.session,data.user);renderCoinBalance();updateAccountUI();applyAdminUI();msg.textContent='Login berhasil.';msg.style.color='#00ff88';setTimeout(()=>{closeAccountModal();openAccountLinkPrompt();},400);}
+  catch(e){msg.textContent=e.message||'Username atau password salah.';msg.style.color='#ff6b6b';}
+}
+async function requestEmailReset(){
+ const username=document.getElementById('recoveryUsername').value.trim(),msg=document.getElementById('recoveryMsg');
+ if(!recoveryAvailableMethods.gmail){msg.textContent='Gmail belum tertaut atau belum terverifikasi di akun ini.';msg.style.color='#ffbb55';return;}
+ try{const data=await accountApi('request-reset',{username},false);document.getElementById('emailResetOtpPanel').style.display='block';document.getElementById('telegramResetOtpPanel').style.display='none';msg.textContent=data.message||'Kode OTP dikirim ke Gmail tertaut.';msg.style.color='#00ff88';}catch(e){msg.textContent=e.message;msg.style.color='#ff6b6b';}
+}
+async function verifyEmailReset(){const username=document.getElementById('recoveryUsername').value.trim(),token=document.getElementById('resetEmailOtp').value.trim(),msg=document.getElementById('recoveryMsg');if(!/^\d{6}$/.test(token)){msg.textContent='Masukkan kode OTP 6 digit yang lengkap.';msg.style.color='#ffbb55';return;}try{const d=await accountApi('verify-email-reset',{username,token},false);if(!d?.resetToken)throw new Error('verify-failed');recoveryResetToken=d.resetToken;document.getElementById('emailOtpStep').style.display='none';document.getElementById('emailPasswordStep').style.display='block';msg.textContent='Kode berhasil diverifikasi.';msg.style.color='#00ff88';}catch(e){msg.textContent='Kode belum bisa diverifikasi. Periksa kembali kode yang dimasukkan, atau minta kode baru jika sudah tidak berlaku.';msg.style.color='#ffbb55';}}
+async function setEmailResetPassword(){const username=document.getElementById('recoveryUsername').value.trim(),password=document.getElementById('resetEmailPassword').value,msg=document.getElementById('recoveryMsg');if(password.length<8){msg.textContent='Password minimal 8 karakter.';msg.style.color='#ff6b6b';return;}try{const d=await accountApi('set-email-reset-password',{username,password,resetToken:recoveryResetToken},false);msg.textContent=d.message||'Password berhasil direset.';msg.style.color='#00ff88';setTimeout(closeRecoveryModal,900);}catch(e){msg.textContent=e.message;msg.style.color='#ff6b6b';}}
+async function requestTelegramReset(){
+ const username=document.getElementById('recoveryUsername').value.trim(),msg=document.getElementById('recoveryMsg');
+ if(!recoveryAvailableMethods.telegram){msg.textContent='Telegram belum tertaut di akun ini.';msg.style.color='#ffbb55';return;}
+ try{const data=await accountApi('request-telegram-reset',{username},false);document.getElementById('telegramResetOtpPanel').style.display='block';document.getElementById('emailResetOtpPanel').style.display='none';msg.textContent=data.message||'Kode OTP dikirim ke Telegram tertaut.';msg.style.color='#00ff88';}catch(e){msg.textContent=e.message;msg.style.color='#ff6b6b';}
+}
+async function verifyTelegramReset(){const username=document.getElementById('recoveryUsername').value.trim(),token=document.getElementById('resetTelegramOtp').value.trim(),msg=document.getElementById('recoveryMsg');if(!/^\d{6}$/.test(token)){msg.textContent='Masukkan kode OTP 6 digit yang lengkap.';msg.style.color='#ffbb55';return;}try{const d=await accountApi('verify-telegram-reset',{username,token},false);if(!d?.resetToken)throw new Error('verify-failed');recoveryResetToken=d.resetToken;document.getElementById('telegramOtpStep').style.display='none';document.getElementById('telegramPasswordStep').style.display='block';msg.textContent='Kode berhasil diverifikasi.';msg.style.color='#00ff88';}catch(e){msg.textContent='Kode belum bisa diverifikasi. Periksa kembali kode yang dimasukkan, atau minta kode baru jika sudah tidak berlaku.';msg.style.color='#ffbb55';}}
+async function setTelegramResetPassword(){const username=document.getElementById('recoveryUsername').value.trim(),password=document.getElementById('resetTelegramPassword').value,msg=document.getElementById('recoveryMsg');if(password.length<8){msg.textContent='Password minimal 8 karakter.';msg.style.color='#ff6b6b';return;}try{const d=await accountApi('set-telegram-reset-password',{username,password,resetToken:recoveryResetToken},false);msg.textContent=d.message||'Password berhasil direset.';msg.style.color='#00ff88';setTimeout(closeRecoveryModal,900);}catch(e){msg.textContent=e.message;msg.style.color='#ff6b6b';}}
+function openAccountLinkPrompt(){
+  const u=getLoggedAccount();if(!u)return;
+  const needsGmail=!Boolean(u.emailVerified),needsTelegram=!Boolean(u.telegramLinked);
+  if(!needsGmail&&!needsTelegram){closeAccountLinkPrompt();return;}
+  const title=document.getElementById('accountLinkPromptTitle');
+  const desc=document.getElementById('accountLinkPromptText');
+  const action=document.getElementById('accountLinkPromptAction');
+  if(needsGmail&&needsTelegram){
+    title.textContent='Hubungkan akun Anda';
+    desc.textContent='Hubungkan Gmail untuk pemulihan akun dan Telegram untuk OTP serta notifikasi keamanan.';
+    action.textContent='⚙️ Hubungkan akun sekarang';
+  }else if(needsGmail){
+    title.textContent='Kaitkan akun Gmail Anda';
+    desc.textContent='Telegram sudah terhubung. Kaitkan Gmail untuk melengkapi pemulihan dan keamanan akun.';
+    action.textContent='📧 Kaitkan akun Gmail';
+  }else{
+    title.textContent='Kaitkan akun Telegram Anda';
+    desc.textContent='Gmail sudah terverifikasi. Kaitkan Telegram untuk OTP pemulihan dan notifikasi keamanan.';
+    action.textContent='✈️ Kaitkan akun Telegram';
+  }
+  document.getElementById('accountLinkPrompt')?.classList.add('show');
+}
+function closeAccountLinkPrompt(){document.getElementById('accountLinkPrompt')?.classList.remove('show');}
+function openAccountLinksFromPrompt(){
+  const u=getLoggedAccount();if(!u)return;
+  const target=!u.emailVerified?'gmail':(!u.telegramLinked?'telegram':null);
+  closeAccountLinkPrompt();openAccountSettings();
+  const section=document.querySelector(target==='gmail'?'#accountSettingsModal .gmail-service-card':target==='telegram'?'#accountSettingsModal .telegram-service-card':'#accountSettingsModal .link-accounts-intro');
+  if(section)section.scrollIntoView({behavior:'smooth',block:'start'});
+}
+let jimzzSettingsReturnPage='home';
+function openAccountSettings(){
+  const u=getLoggedAccount();if(!u)return;
+  const modal=document.getElementById('accountSettingsModal');
+  const activePage=document.querySelector('.tab-page.active:not(#accountSettingsModal)');
+  if(activePage)jimzzSettingsReturnPage=activePage.id.replace(/^page-/,'');
+  document.querySelectorAll('.tab-page').forEach(p=>p.classList.remove('active'));
+  modal?.classList.add('active','show');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const title=document.getElementById('jimzzTopbarTitle');if(title)title.textContent='Pengaturan akun';
+  window.scrollTo({top:0,behavior:'auto'});
+  const emailInput=document.getElementById('accountEmail');
+  emailInput.value=u.email||'';
+  emailInput.dataset.savedEmail=u.email||'';
+  emailInput.readOnly=Boolean(u.emailVerified);
+  emailInput.type=u.emailVerified?'password':'email';
+  const revealBtn=document.getElementById('accountEmailVisibilityBtn');
+  if(revealBtn){revealBtn.hidden=!u.emailVerified;revealBtn.setAttribute('aria-label','Tampilkan email');revealBtn.setAttribute('title','Tampilkan/sembunyikan email');}
+  const changeBtn=document.getElementById('changeAccountEmailBtn');
+  if(changeBtn)changeBtn.hidden=!u.emailVerified;
+  const emailStatus=document.getElementById('emailLinkStatus');
+  const emailOtpSubmit=document.getElementById('accountEmailOtpSubmit');
+  if(emailStatus){emailStatus.textContent=u.emailVerified?'Status Gmail: terverifikasi':'Status Gmail: belum diverifikasi';emailStatus.style.color=u.emailVerified?'#00ff88':'#ffbb55';}
+  if(emailOtpSubmit){emailOtpSubmit.hidden=Boolean(u.emailVerified);emailOtpSubmit.textContent='✉ Kirim kode verifikasi';}
+  const otpPanel=document.getElementById('accountEmailOtpPanel');if(otpPanel)otpPanel.style.display='none';
+  document.getElementById('contactMsg').textContent='';
+  if(u.emailVerified){emailInput.type='password';}
+  renderTelegramAccounts(u);
+  const telegramButton=document.querySelector('.telegram-link-btn'),unlinkButton=document.getElementById('telegramUnlinkBtn');
+  if(telegramButton){telegramButton.hidden=false;telegramButton.innerHTML='<span aria-hidden="true">➤</span> '+(u.telegramLinked?'Ganti Akun Telegram':'Hubungkan Telegram');}
+  if(unlinkButton)unlinkButton.hidden=!u.telegramLinked;
+  const role=u.role||'user',name=role==='owner'?'Jimzz':(u.username||'pengguna');
+  const nameEl=document.getElementById('settingsProfileName'),roleEl=document.getElementById('settingsProfileRole'),iconEl=document.getElementById('settingsProfileIcon');
+  if(nameEl)nameEl.textContent=name;if(roleEl)roleEl.textContent=role==='owner'?'Developer':role==='admin'?'Admin':'User';if(iconEl)iconEl.textContent=role==='owner'?'👑':role==='admin'?'⭐':'👤';
+  document.body.style.overflow='hidden';
+}
+function logoutFromAccountSettings(){closeAccountSettings();accountLogout();}
+function switchAccountFromSettings(){
+  clearAccountSession();
+  closeAccountSettings();
+  renderCoinBalance();
+  updateAccountUI();
+  applyAdminUI();
+  closeAccountModal();
+  openAccountModal();
+  showToast('Silakan login dengan akun lain.','info');
+}
+
+function openSettingsFromMenu(){
+  toggleJimzzMenu(false);
+  if(!getLoggedAccount()){openAccountModal();showToast('Login dulu untuk membuka pengaturan akun.','info');return;}
+  openAccountSettings();
+}
+function closeAccountSettings(){
+  const settings=document.getElementById('accountSettingsModal');
+  settings?.classList.remove('show','active');
+  const target=document.getElementById('page-'+jimzzSettingsReturnPage)||document.getElementById('page-home');
+  document.querySelectorAll('.tab-page').forEach(p=>p.classList.remove('active'));
+  target?.classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active',n.dataset.tab===jimzzSettingsReturnPage));
+  const titles={home:'Jimzz Store',suntik:'Suntik All Sosmed',topup:'Top Up Game',apk:'Web/APK',jpm:'Layanan lainnya',orders:'Riwayat Order',music:'Musik',tools:'Tools'};
+  const title=document.getElementById('jimzzTopbarTitle');
+  if(title)title.textContent=titles[jimzzSettingsReturnPage]||target?.querySelector('h2')?.innerText?.replace(/\\s+/g,' ').trim()||'Jimzz Store';
+  document.body.style.overflow='';
+  window.scrollTo({top:0,behavior:'auto'});
+}
+
+// Allow a deliberate pull-down gesture to refresh while account settings is open.
+// It only fires when the settings page is already at the top and the swipe is long.
+(function enableSettingsPullToRefresh(){
+  const settings=document.getElementById('accountSettingsModal');
+  if(!settings)return;
+  let startY=0, tracking=false;
+  settings.addEventListener('touchstart',event=>{
+    if(!settings.classList.contains('show')||event.touches.length!==1)return;
+    startY=event.touches[0].clientY;
+    tracking=settings.scrollTop<=0;
+  },{passive:true});
+  settings.addEventListener('touchend',event=>{
+    if(!tracking||!settings.classList.contains('show')||!event.changedTouches.length)return;
+    const delta=event.changedTouches[0].clientY-startY;
+    tracking=false;
+    if(settings.scrollTop<=0&&delta>=120){
+      const status=document.getElementById('settingsProfileRole');
+      if(status)status.textContent='Memuat ulang Jimzz Store…';
+      window.location.reload();
+    }
+  },{passive:true});
+})();
+
+async function toggleAccountEmailVisibility(){
+  const input=document.getElementById('accountEmail'),btn=document.getElementById('accountEmailVisibilityBtn');
+  if(!input||!getLoggedAccount()?.emailVerified||!input.readOnly)return;
+  const showing=input.type==='email';input.type=showing?'password':'email';
+  if(btn){btn.setAttribute('aria-label',showing?'Tampilkan email':'Sembunyikan email');btn.setAttribute('title',showing?'Tampilkan email':'Sembunyikan email');btn.innerHTML=showing?'<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l18 18"/><path d="M10.6 10.6a2 2 0 0 0 2.8 2.8"/><path d="M9.9 5.2A11 11 0 0 1 12 5c6.4 0 10 7 10 7a16 16 0 0 1-4 4.8M6.2 6.2C3.5 8 2 12 2 12s3.6 7 10 7a10 10 0 0 0 3.4-.6"/></svg>':'<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>';}
+}
+function enableAccountEmailChange(){
+  const input=document.getElementById('accountEmail'),btn=document.getElementById('changeAccountEmailBtn'),send=document.getElementById('accountEmailOtpSubmit'),reveal=document.getElementById('accountEmailVisibilityBtn'),status=document.getElementById('emailLinkStatus'),msg=document.getElementById('contactMsg');
+  if(!input)return;input.readOnly=false;input.type='email';input.focus();
+  if(btn)btn.hidden=true;if(reveal)reveal.hidden=true;if(send){send.hidden=false;send.textContent='✉ Kirim kode ke email baru';}
+  const panel=document.getElementById('accountEmailOtpPanel');if(panel)panel.style.display='none';
+  if(status){status.textContent='Masukkan email baru lalu minta kode verifikasi.';status.style.color='#ffbb55';}
+  if(msg)msg.textContent='';
+}
+async function saveAccountContact(){
+  const user=getLoggedAccount(),input=document.getElementById('accountEmail'),email=input.value.trim(),msg=document.getElementById('contactMsg');
+  if(!input||!email){if(msg)msg.textContent='Masukkan alamat email yang valid.';return;}
+  if(user?.emailVerified&&input.readOnly){if(msg)msg.textContent='Email sudah terverifikasi. Tekan “Ganti email” untuk mengubahnya.';return;}
+  try{const data=await accountApi('request-email-otp',{email});const panel=document.getElementById('accountEmailOtpPanel');if(panel)panel.style.display='block';if(msg){msg.textContent=data.message||'OTP verifikasi dikirim ke email.';msg.style.color='#00ff88';}}
+  catch(e){if(msg){msg.textContent=e.message;msg.style.color='#ff6b6b';}}
+}
+async function verifyAccountEmailOtp(){
+  const token=document.getElementById('accountEmailOtp').value.trim(),msg=document.getElementById('contactMsg');
+  try{const data=await accountApi('verify-email-otp',{token});saveAccountSession(null,data.user);document.getElementById('accountEmailOtpPanel').style.display='none';const input=document.getElementById('accountEmail');if(input){input.value=data.user.email||input.value;input.dataset.savedEmail=input.value;input.readOnly=true;input.type='password';}const status=document.getElementById('emailLinkStatus');if(status){status.textContent='Status Gmail: terverifikasi';status.style.color='#00ff88';}const submit=document.getElementById('accountEmailOtpSubmit');if(submit)submit.hidden=true;const change=document.getElementById('changeAccountEmailBtn');if(change)change.hidden=false;const reveal=document.getElementById('accountEmailVisibilityBtn');if(reveal){reveal.hidden=false;reveal.textContent='👁';reveal.setAttribute('aria-label','Tampilkan email');}msg.textContent=data.message||'Gmail berhasil diverifikasi.';msg.style.color='#00ff88';}
+  catch(e){msg.textContent=e.message;msg.style.color='#ff6b6b';}
+}
+function getTelegramAccountsFromUser(user){
+  if(Array.isArray(user?.telegramAccounts))return user.telegramAccounts.filter(a=>a&&a.chatId);
+  return user?.telegramLinked&&user?.telegramChatId?[{chatId:String(user.telegramChatId),username:user.telegramUsername||''}]:[];
+}
+function renderTelegramAccounts(user){
+  const status=document.getElementById('telegramLinkStatus');
+  const accounts=getTelegramAccountsFromUser(user),button=document.querySelector('.telegram-link-btn'),unlink=document.getElementById('telegramUnlinkBtn');
+  if(status){status.textContent=accounts.length?'Status Telegram: tertaut':'Status Telegram: belum tertaut';status.style.color=accounts.length?'#00ff88':'#ffbb55';}
+  if(button){button.hidden=false;button.innerHTML='<span aria-hidden="true">➤</span> '+(accounts.length?'Ganti Akun Telegram':'Hubungkan Telegram');}
+  if(unlink)unlink.hidden=!accounts.length;
+}
+let telegramLinkPollTimer=null;
+async function startTelegramLink(){
+  const status=document.getElementById('telegramLinkStatus');
+  const button=document.querySelector('.telegram-link-btn');
+  if(!getLoggedAccount()){if(status){status.textContent='Login dulu untuk menautkan Telegram.';status.style.color='#ff6b6b';}return;}
+  if(button){button.disabled=true;button.dataset.originalText=button.innerHTML;button.textContent='Menyiapkan tautan…';}
+  const botTab=window.open('about:blank','_blank');
+  try{
+    const data=await accountApi('telegram-link-start');
+    if(!data.url)throw new Error('Tautan Telegram tidak diterima. Coba lagi.');
+    if(botTab&&!botTab.closed){botTab.location.href=data.url;}
+    else{window.location.href=data.url;return;}
+    if(status){status.textContent='Bot Telegram terbuka. Tekan Start untuk menambahkan akun.';status.style.color='#ffbb55';}
+    showToast('Tekan Start pada bot Telegram untuk mengganti akun Telegram yang tertaut.','info');
+    if(telegramLinkPollTimer)clearInterval(telegramLinkPollTimer);
+    const startedAt=Date.now(),before=getTelegramAccountsFromUser(getLoggedAccount())[0]?.chatId||'';
+    telegramLinkPollTimer=setInterval(async()=>{
+      if(Date.now()-startedAt>120000){clearInterval(telegramLinkPollTimer);telegramLinkPollTimer=null;if(status)status.textContent='Belum terdeteksi. Tekan Start di bot lalu periksa status.';return;}
+      try{
+        const latest=await accountApi('telegram-status');
+        if(latest.user)saveAccountSession(null,latest.user);
+        const currentChatId=getTelegramAccountsFromUser(latest.user)[0]?.chatId||'';
+        if(currentChatId&&currentChatId!==before){
+          clearInterval(telegramLinkPollTimer);telegramLinkPollTimer=null;
+          renderTelegramAccounts(latest.user);
+          showToast(before?'Akun Telegram berhasil diganti!':'Akun Telegram berhasil ditautkan!','success');
+        }
+      }catch(e){console.warn('[Jimzz] Pemeriksaan status Telegram:',e.message);}
+    },3000);
+  }catch(e){
+    if(botTab&&!botTab.closed)botTab.close();
+    if(status){status.textContent=e.message||'Gagal membuat tautan Telegram.';status.style.color='#ff6b6b';}
+  }finally{
+    if(button){button.disabled=false;renderTelegramAccounts(getLoggedAccount());}
+  }
+}
+async function unlinkTelegramAccount(){
+  const user=getLoggedAccount(),accounts=getTelegramAccountsFromUser(user);
+  if(!accounts.length)return;
+  if(!confirm('Batalkan tautan Telegram dari akun Jimzz Store ini?'))return;
+  const status=document.getElementById('telegramLinkStatus'),button=document.getElementById('telegramUnlinkBtn');
+  if(button){button.disabled=true;button.textContent='Memutuskan tautan…';}
+  try{
+    const data=await accountApi('telegram-unlink',{all:true});
+    if(data.user)saveAccountSession(null,data.user);
+    await refreshTelegramLinkStatus();
+    showToast(data.message||'Tautan Telegram berhasil dibatalkan.','success');
+  }catch(e){
+    if(status){status.textContent=e.message||'Gagal membatalkan tautan Telegram.';status.style.color='#ff6b6b';}
+  }finally{
+    if(button){button.disabled=false;button.innerHTML='<span aria-hidden="true">↗</span> Batalkan tautan Telegram';}
+  }
+}
+async function refreshTelegramLinkStatus(){
+  const status=document.getElementById('telegramLinkStatus');
+  try{
+    const data=await accountApi('telegram-status');
+    saveAccountSession(null,data.user);renderTelegramAccounts(data.user);
+    return Boolean(data.user?.telegramLinked);
+  }catch(e){if(status){status.textContent=e.message;status.style.color='#ff6b6b';}return false;}
+}
+let accountPasswordRecoveryState={username:'',method:'',resetToken:'',methods:null};
+function openAccountPasswordRecovery(){
+  const panel=document.getElementById('accountPasswordRecovery');if(!panel)return;
+  panel.hidden=false;panel.scrollIntoView({behavior:'smooth',block:'nearest'});
+  const user=getLoggedAccount(),input=document.getElementById('recoveryUsername');
+  if(input&&!input.value&&user?.username)input.value=user.username;
+  setAccountRecoveryMessage('');
+}
+function setAccountRecoveryMessage(message,ok=false){
+  const el=document.getElementById('recoveryPasswordMsg');if(el){el.textContent=message;el.style.color=ok?'#00ff88':'#ff7777';}
+}
+function resetAccountRecoveryStep(){
+  accountPasswordRecoveryState={username:'',method:'',resetToken:'',methods:null};
+  for(const id of ['recoveryMethods','recoveryOtpArea','recoveryNewPasswordArea']){const el=document.getElementById(id);if(el){el.hidden=true;if(id==='recoveryMethods')el.innerHTML='';}}
+  for(const id of ['recoveryOtp','recoveryNewPassword','recoveryNewPassword2']){const el=document.getElementById(id);if(el)el.value='';}
+}
+async function checkAccountRecoveryMethods(){
+  const input=document.getElementById('recoveryUsername'),username=(input?.value||'').trim(),btn=document.getElementById('recoveryCheckMethodsBtn'),wrap=document.getElementById('recoveryMethods');
+  if(!username){setAccountRecoveryMessage('Masukkan username Jimzz Store terlebih dahulu.');return;}
+  resetAccountRecoveryStep();setAccountRecoveryMessage('');accountPasswordRecoveryState.username=username;
+  if(btn){btn.disabled=true;btn.textContent='Memeriksa...';}
+  try{
+    const data=await accountApi('recovery-methods',{username},false),methods=data.methods||{};
+    const items=[
+      {key:'gmail',label:'OTP Gmail',available:Boolean(methods.gmail),reason:methods.gmail?'OTP akan dikirim ke Gmail yang tertaut.':'Gmail belum tertaut atau belum terverifikasi.'},
+      {key:'telegram',label:'OTP Telegram',available:Boolean(methods.telegram),reason:methods.telegram?'OTP akan dikirim ke Telegram yang tertaut.':'Telegram belum tertaut.'}
+    ];
+    accountPasswordRecoveryState.methods=methods;wrap.hidden=false;
+    wrap.innerHTML='<p>Pilih salah satu metode yang aktif:</p>'+items.map(item=>'<button type="button" class="recovery-method-option" '+(item.available?'':'disabled')+' onclick="requestAccountRecoveryOtp(\''+item.key+'\')"><strong>'+item.label+'</strong><span>'+item.reason+'</span></button>').join('');
+    if(!methods.gmail&&!methods.telegram)setAccountRecoveryMessage('Akun ini tidak tertaut dengan metode mana pun. Silakan chat admin untuk meminta reset password.');
+  }catch(e){setAccountRecoveryMessage(e.message||'Gagal memeriksa metode pemulihan.');}
+  finally{if(btn){btn.disabled=false;btn.textContent='Periksa metode pemulihan';}}
+}
+async function requestAccountRecoveryOtp(method){
+  const methods=accountPasswordRecoveryState.methods||{};if(!accountPasswordRecoveryState.username||!methods[method])return;
+  setAccountRecoveryMessage('Mengirim OTP...',true);
+  try{
+    const action=method==='gmail'?'request-reset':'request-telegram-reset';
+    const data=await accountApi(action,{username:accountPasswordRecoveryState.username},false);
+    accountPasswordRecoveryState.method=method;accountPasswordRecoveryState.resetToken='';
+    document.getElementById('recoveryOtpArea').hidden=false;document.getElementById('recoveryNewPasswordArea').hidden=true;
+    setAccountRecoveryMessage(data.message||(method==='gmail'?'OTP dikirim ke Gmail tertaut.':'OTP dikirim ke Telegram tertaut.'),true);
+  }catch(e){setAccountRecoveryMessage(e.message||'Gagal mengirim OTP.');}
+}
+async function verifyAccountRecoveryOtp(){
+  const token=(document.getElementById('recoveryOtp')?.value||'').trim();
+  if(!/^\d{6}$/.test(token)){setAccountRecoveryMessage('Masukkan OTP yang terdiri dari 6 digit.');return;}
+  const method=accountPasswordRecoveryState.method;if(!method){setAccountRecoveryMessage('Pilih metode pemulihan dan minta OTP terlebih dahulu.');return;}
+  setAccountRecoveryMessage('Memverifikasi OTP...',true);
+  try{
+    const action=method==='gmail'?'verify-email-reset':'verify-telegram-reset';
+    const data=await accountApi(action,{username:accountPasswordRecoveryState.username,token},false);
+    accountPasswordRecoveryState.resetToken=data.resetToken||'';
+    if(!accountPasswordRecoveryState.resetToken)throw new Error('Token verifikasi tidak diterima. Minta OTP baru.');
+    document.getElementById('recoveryNewPasswordArea').hidden=false;document.getElementById('recoveryOtpArea').hidden=true;
+    setAccountRecoveryMessage('OTP benar. Sekarang masukkan password baru.',true);
+  }catch(e){setAccountRecoveryMessage(e.message||'OTP salah atau kedaluwarsa.');}
+}
+async function submitAccountPasswordRecovery(){
+  const password=document.getElementById('recoveryNewPassword')?.value||'',confirm=document.getElementById('recoveryNewPassword2')?.value||'';
+  if(!accountPasswordRecoveryState.resetToken){setAccountRecoveryMessage('Verifikasi OTP terlebih dahulu.');return;}
+  if(password.length<8){setAccountRecoveryMessage('Password baru minimal 8 karakter.');return;}
+  if(password!==confirm){setAccountRecoveryMessage('Kedua password baru tidak sama.');return;}
+  setAccountRecoveryMessage('Menyimpan password baru...',true);
+  try{
+    const action=accountPasswordRecoveryState.method==='gmail'?'set-email-reset-password':'set-telegram-reset-password';
+    const data=await accountApi(action,{username:accountPasswordRecoveryState.username,password,resetToken:accountPasswordRecoveryState.resetToken},false);
+    accountPasswordRecoveryState.resetToken='';
+    document.getElementById('recoveryNewPasswordArea').hidden=true;document.getElementById('recoveryOtpArea').hidden=true;
+    for(const id of ['recoveryOtp','recoveryNewPassword','recoveryNewPassword2'])document.getElementById(id).value='';
+    setAccountRecoveryMessage((data.message||'Password berhasil direset.')+' Silakan login kembali dengan password baru.',true);
+  }catch(e){setAccountRecoveryMessage(e.message||'Gagal menyimpan password baru.');}
+}
+async function changeAccountPassword(){
+  const currentPassword=document.getElementById('currentAccountPassword').value,password=document.getElementById('newAccountPassword').value,password2=document.getElementById('newAccountPassword2').value,msg=document.getElementById('passwordMsg');
+  if(password.length<8||password!==password2){msg.textContent='Password baru minimal 8 karakter dan harus sama.';msg.style.color='#ff6b6b';return;}
+  try{const data=await accountApi('change-password',{currentPassword,password});msg.textContent=data.message||'Password berhasil diganti.';msg.style.color='#00ff88';}
+  catch(e){msg.textContent=e.message;msg.style.color='#ff6b6b';}
+}
+async function accountLogout(){
+  clearAccountSession();
+  closeAccountSettings();
+  closeAccountModal();
+  renderCoinBalance();
+  updateAccountUI();
+  applyAdminUI();
+  showToast('Berhasil logout','info');
+}
+function updateAccountUI(){const user=getLoggedAccount(),btn=document.getElementById('accountButton'),profile=document.getElementById('accountProfile'),nameEl=document.getElementById('accountName'),roleEl=document.getElementById('accountRole');if(btn){btn.classList.add('account-hidden');btn.style.display='none';}if(profile){profile.classList.remove('show');profile.style.display='none';}if(nameEl)nameEl.textContent=user?.username||'';if(roleEl){const r=user?.role||'user';roleEl.textContent=r==='owner'?'Jimzz':r==='admin'?'ADMIN':'';roleEl.className='account-role '+r;roleEl.style.display='none';}const role=user?.role||'user',name=user?(role==='owner'?'Jimzz':(user.username||'pengguna')):'Guest',greeting=document.getElementById('jimzzSummaryGreeting'),sub=document.getElementById('jimzzSummarySub'),roleline=document.getElementById('jimzzSummaryRoleline'),avatar=document.getElementById('jimzzSummaryAvatar'),login=document.getElementById('jimzzSummaryLogin');if(greeting){const safeName=escapeAccountHtml(name);const mark=role==='user'?(user?'<span class="jimzz-user-star" aria-label="User">⭐</span>':''):(role==='admin'||role==='owner')?'<span class="jimzz-verified-mark" aria-label="Verified"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#1D9BF0" d="M12 1.8l2.6 1.55 3.02-.15 1.33 2.72 2.72 1.33-.15 3.02L23.1 13l-1.55 2.6.15 3.02-2.72 1.33-1.33 2.72-3.02-.15L12 24.1l-2.6-1.55-3.02.15-1.33-2.72-2.72-1.33.15-3.02L.9 13l1.55-2.6-.15-3.02 2.72-1.33 1.33-2.72 3.02.15L12 1.8z"/><path fill="#fff" d="M10.1 15.9 6.7 12.5l1.6-1.6 1.8 1.8 5-5 1.6 1.6z"/></svg></span>':'';greeting.innerHTML=safeName+mark;}if(sub)sub.textContent='Welcome to Jimzz store';if(roleline){roleline.textContent=role==='admin'?'Admin':role==='owner'?'Developer':'';roleline.style.display=user&&(role==='admin'||role==='owner')?'inline-flex':'none';roleline.className='jimzz-account-roleline role-'+role;}if(avatar){avatar.textContent=role==='owner'?'👑':role==='admin'?'⭐':'👤';avatar.className='jimzz-account-avatar role-'+(role==='owner'?'owner':role==='admin'?'admin':'user');}if(login)login.style.display=user?'none':'inline-flex';updateRoleBadge(role);renderCoinBalance();renderCoinHeaderToggle();}
+function updateRoleBadge(role){const badge=document.getElementById('roleBadge');if(!badge)return;badge.innerHTML='';badge.className='role-badge';}
+window.addEventListener('storage',e=>{if([JIMZZ_SESSION_KEY,JIMZZ_CACHE_KEY,GUEST_COINS_KEY].includes(e.key)){accountCache=null;updateAccountUI();renderCoinBalance();applyAdminUI();}});
+async function handleRecoveryLink(){
+  try{
+    const params=new URLSearchParams(window.location.search),code=params.get('code');
+    if(!code)return;
+    const data=await accountApi('exchange-recovery',{code},false);
+    saveAccountSession(data.session,data.user);
+    const p1=prompt('Masukkan password baru (minimal 8 karakter):');
+    const p2=prompt('Ulangi password baru:');
+    if(!p1||p1.length<8||p1!==p2) throw new Error('Password baru tidak valid.');
+    await accountApi('complete-recovery',{password:p1});
+    clearAccountSession();
+    showToast('✅ Password berhasil direset. Silakan login lagi.','success');
+    history.replaceState({},'',window.location.pathname);
+  }catch(e){showToast(e.message||'Link recovery tidak valid.','error');}
+}
+function startApp() {
+  // Jangan biarkan cache OWNER/ADMIN lama tampil sebagai sesi aktif
+  // jika browser sudah kehilangan kedua token autentikasinya.
+  if(getLoggedAccount() && !getAccountToken() && !getAccountRefreshToken()){
+    clearAccountSession();
+  }
+applyBgMode();
+  if (currentBgMode === 'simple') initCanvasSimple(); else initCanvasNeon();
+  initCursorGlow();
+  initData();
+  renderGameList();
+  renderPlaylist();
+  initMusicEvents();
+  updateAccountUI();
+  renderCoinBalance();
+  applyAdminUI();
+  loadCounters();
+  updateBgLabel();
+  pingVisitor();
+  renderCoinBalance();
+  if(!getLoggedAccount()) useCoinMode=false;
+  renderCoinHeaderToggle();
+  handleRecoveryLink();
+
+  // Resume order yang belum kelar (kalau user refresh / tutup web)
+  const orderAktif = getOrderAktif();
+  if (orderAktif) {
+    console.log('🔄 Resume polling order:', orderAktif.orderId);
+    showToast(`🔄 Cek pesanan ${orderAktif.orderId}...`, 'info');
+    startBackgroundPolling();
+  }
+
+  // Bersihin flag processed lama (max 50)
+  try {
+    const keysToRemove = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && key.startsWith('jimzz_processed_')) keysToRemove.push(key);
+    }
+    if (keysToRemove.length > 50) {
+      keysToRemove.slice(0, keysToRemove.length - 50).forEach(k => localStorage.removeItem(k));
+    }
+  } catch(e) {}
+}
+
+// ============================================
+// PRODUK DATA
+// ============================================
+const produkSosmed = [
+  { icon: "📱", nama: "Suntik Saluran WA", desc: "Tambah pengikut saluran WhatsApp kamu secara aman & cepat.", hargaPerUnit: 10, unit: "pengikut", min: 100, max: MAX_SUNTIK, baseOrder: 324, inputLabel: "🔗 Link Saluran WA", inputPlaceholder: "Contoh: https://whatsapp.com/channel/xxxxx", inputValidasi: "whatsapp.com/channel", inputError: "Link harus link SALURAN WhatsApp" },
+  { icon: "😀", nama: "Suntik Random Emoji Reaction", desc: "Tambah reaction emoji random ke postingan kamu.", hargaPerUnit: 1, unit: "reaction", min: 1000, max: MAX_SUNTIK, baseOrder: 187, inputLabel: "🔗 Link Postingan", inputPlaceholder: "Contoh: https://www.tiktok.com/@user/video/xxx", inputValidasi: "tiktok.com", inputError: "Link harus link postingan TikTok" },
+  { icon: "📊", nama: "Suntik Polling Vote", desc: "Tambah vote ke polling kamu secara aman & cepat.", hargaPerUnit: 20, unit: "vote", min: 50, max: MAX_SUNTIK, baseOrder: 92, inputLabel: "🔗 Link Polling", inputPlaceholder: "Contoh: link polling", inputValidasi: "", inputError: "" },
+  { icon: "👥", nama: "Suntik Follower TikTok", desc: "Tambah follower akun TikTok kamu secara aman & cepat.", hargaPerUnit: 80, unit: "follower", min: 25, max: 20000, baseOrder: 189, warnText: "⚠️ Proses produk ini SANGAT LAMBAT — mohon bersabar ya!", inputLabel: "🔗 Link Akun TikTok", inputPlaceholder: "Contoh: https://www.tiktok.com/@username", inputValidasi: "tiktok.com", inputError: "Link harus link akun TikTok" },
+  { icon: "❤️", nama: "Suntik Like TikTok", desc: "Tambah like video TikTok kamu secara aman & cepat.", hargaPerUnit: 10, unit: "like", min: 100, max: MAX_SUNTIK, baseOrder: 256, inputLabel: "🔗 Link Video TikTok", inputPlaceholder: "Contoh: https://www.tiktok.com/@user/video/xxx", inputValidasi: "tiktok.com", inputError: "Link harus link video TikTok" },
+  { icon: "👁️", nama: "Suntik Views TikTok", desc: "Tambah views video TikTok kamu secara aman & cepat.", hargaPerUnit: 1, unit: "views", min: 1000, max: MAX_SUNTIK, baseOrder: 143, inputLabel: "🔗 Link Video TikTok", inputPlaceholder: "Contoh: https://www.tiktok.com/@user/video/xxx", inputValidasi: "tiktok.com", inputError: "Link harus link video TikTok" },
+  { icon: "💾", nama: "Suntik Save Video TikTok", desc: "Tambah save video TikTok kamu secara aman & cepat.", hargaPerUnit: 0.5, unit: "save", min: 2000, max: 99999999, baseOrder: 87, inputLabel: "🔗 Link Video TikTok", inputPlaceholder: "Contoh: https://www.tiktok.com/@user/video/xxx", inputValidasi: "tiktok.com", inputError: "Link harus link video TikTok" },
+  { icon: "📤", nama: "Suntik Share Video TikTok", desc: "Tambah share video TikTok kamu secara aman & cepat.", hargaPerUnit: 4, unit: "share", min: 250, max: 99999999, baseOrder: 56, inputLabel: "🔗 Link Video TikTok", inputPlaceholder: "Contoh: https://www.tiktok.com/@user/video/xxx", inputValidasi: "tiktok.com", inputError: "Link harus link video TikTok" }
+];
+
+const produkJpm = [
+  { icon: "🚀", nama: "JPM (Jasa Push Member)", desc: "Push member ke grup / channel kamu dengan cepat & aman.", hargaPerUnit: 200, unit: "member", min: 5, max: 1000000, baseOrder: 178, bonusMinTotal: 4000, bonusUnit: 5, inputLabel: "🔗 Link Grup WA", inputPlaceholder: "Contoh: https://chat.whatsapp.com/xxxxx", inputValidasi: "chat.whatsapp.com", inputError: "Link harus link GRUP WhatsApp" },
+  { icon: "📱", nama: "Nokos WA Indo", desc: "Nomor kosong WhatsApp Indonesia siap pakai.", hargaPerUnit: 5000, unit: "nomor", min: 1, max: 100, baseOrder: 63, inputLabel: "👤 Nama Pemesan", inputPlaceholder: "Contoh: Bilzz", inputValidasi: "", inputError: "" }
+];
+
+const produkApk = [
+  { icon: "💾", nama: "Auto Save Kontak", desc: "Aplikasi auto save kontak WhatsApp secara otomatis.", harga: 1000, baseOrder: 37 },
+  { icon: "🎨", nama: "APK Bikin Logo", desc: "Aplikasi bikin logo profesional langsung dari HP.", harga: 1000, baseOrder: 28 },
+  { icon: "🛠️", nama: "APK Kebutuhan JB", desc: "Kumpulan APK kebutuhan Jual Beli online.", harga: 1000, baseOrder: 15 },
+  { icon: "🦏", nama: "APK WA Badak", desc: "Aplikasi WhatsApp mod dengan fitur lengkap & anti-banned.", harga: 1000, baseOrder: 10 },
+  { icon: "💸", nama: "Web Penghasil Cuan", desc: "Web penghasil cuan hanya modal WhatsApp.", harga: 5000, unit: "layanan", hargaTetap: true, baseOrder: 0 },
+  { icon: "🌐", nama: "Jasa Bikin Web", desc: "Jasa pembuatan website sesuai kebutuhan kamu.", harga: 10000, unit: "layanan", hargaTetap: true, baseOrder: 0 }
+];
+
+const produkTopUp = [
+  { icon: "🔥", nama: "Free Fire", desc: "Top up Diamond Free Fire murah & cepat", unit: "diamond", status: "maintenance", paket: [
+    { nominal: "5 Diamond", harga: 900 }, { nominal: "12 Diamond", harga: 1950 }, { nominal: "20 Diamond", harga: 3400 },
+    { nominal: "30 Diamond", harga: 5100 }, { nominal: "50 Diamond", harga: 8500 }, { nominal: "70 Diamond", harga: 11900 },
+    { nominal: "100 Diamond", harga: 17000 }, { nominal: "140 Diamond", harga: 23800 }, { nominal: "200 Diamond", harga: 34000 },
+    { nominal: "355 Diamond", harga: 60300 }
+  ]},
+  { icon: "⚔️", nama: "Mobile Legends", desc: "Top up Diamond Mobile Legends murah & cepat", unit: "diamond", status: "maintenance", paket: [
+    { nominal: "11 Diamond", harga: 3800 }, { nominal: "22 Diamond", harga: 7500 }, { nominal: "44 Diamond", harga: 15000 },
+    { nominal: "86 Diamond", harga: 28500 }, { nominal: "172 Diamond", harga: 57000 }, { nominal: "355 Diamond", harga: 116000 },
+    { nominal: "720 Diamond", harga: 237000 }, { nominal: "1000 Diamond", harga: 322000 }, { nominal: "1440 Diamond", harga: 462000 },
+    { nominal: "2000 Diamond", harga: 644000 }
+  ]},
+  { icon: "🔫", nama: "PUBG Mobile", desc: "Top up UC PUBG Mobile murah & cepat", unit: "UC", status: "maintenance", paket: [
+    { nominal: "60 UC", harga: 17500 }, { nominal: "120 UC", harga: 35000 }, { nominal: "180 UC", harga: 52500 },
+    { nominal: "325 UC", harga: 86000 }, { nominal: "660 UC", harga: 165000 }, { nominal: "1800 UC", harga: 445000 },
+    { nominal: "3850 UC", harga: 930000 }, { nominal: "8100 UC", harga: 1920000 }, { nominal: "16200 UC", harga: 3840000 },
+    { nominal: "24300 UC", harga: 5760000 }
+  ]},
+  { icon: "🎮", nama: "Genshin Impact", desc: "Top up Crystal Genshin Impact murah & cepat", unit: "crystal", status: "maintenance", paket: [
+    { nominal: "60 Crystal", harga: 17000 }, { nominal: "300 Crystal", harga: 82000 }, { nominal: "980 Crystal", harga: 258000 },
+    { nominal: "1980 Crystal", harga: 518000 }, { nominal: "3280 Crystal", harga: 854000 }, { nominal: "6480 Crystal", harga: 1672000 },
+    { nominal: "10000 Crystal", harga: 2556000 }, { nominal: "15000 Crystal", harga: 3800000 }
+  ]},
+  { icon: "🏆", nama: "Call of Duty Mobile", desc: "Top up CP COD Mobile murah & cepat", unit: "CP", status: "maintenance", paket: [
+    { nominal: "80 CP", harga: 17500 }, { nominal: "160 CP", harga: 35000 }, { nominal: "240 CP", harga: 52500 },
+    { nominal: "420 CP", harga: 81000 }, { nominal: "800 CP", harga: 152000 }, { nominal: "1600 CP", harga: 303000 },
+    { nominal: "2400 CP", harga: 453000 }, { nominal: "4000 CP", harga: 725000 }, { nominal: "8000 CP", harga: 1450000 },
+    { nominal: "12000 CP", harga: 2175000 }
+  ]}
+];
+
+let gameAktif = null;
+let paketAktif = null;
+let produkAktif = null;
+let dataPemesan = { link: "", hp: "", jumlah: 0, total: 0, bonus: 0, totalAmount: 0, orderId: "" };
+
+// ============================================
+// AUTOMATIC PRODUCT BANNERS
+// ============================================
+function getBannerMeta(products, target) {
+  if (!products.length) return [];
+  const items = products.map((p, i) => {
+    const realIndex = (typeof p._originalIndex !== 'undefined') ? p._originalIndex : i;
+    const realOrder = getProdukOrderCount(target, realIndex);
+    const totalOrder = (p.baseOrder || 0) + realOrder;
+    const price = Number(p.harga || p.hargaPerUnit || 0);
+    return { ...p, _index: realIndex, _totalOrder: totalOrder, _price: price };
+  });
+
+  const bestSellerIndex = items.reduce((best, p, i) =>
+    p._totalOrder > items[best]._totalOrder ? i : best, 0);
+  const expensiveIndex = items.reduce((best, p, i) =>
+    p._price > items[best]._price ? i : best, 0);
+  const cheapIndex = items.reduce((best, p, i) =>
+    p._price < items[best]._price ? i : best, 0);
+
+  return items.map((p, i) => {
+    const banners = [];
+    if (i === bestSellerIndex && p._totalOrder > 0) banners.push({ text:'🔥 TERLARIS', cls:'hot' });
+    if (i === expensiveIndex && p._price > 0) banners.push({ text:'💎 TERMAHAL', cls:'expensive' });
+    if (i === cheapIndex && p._price > 0) banners.push({ text:'💰 TERMURAH', cls:'cheap' });
+    return { ...p, _banners: banners };
+  });
+}
+
+function initData() {
+  renderProduk('sosmed', produkSosmed, 'SUNTIK ALL');
+  renderProduk('jpm', produkJpm, 'LAYANAN LAINNYA');
+  renderProduk('apkList', produkApk, 'JUAL APK');
+}
+
+function renderProduk(target, data, kategori) {
+  const el = document.getElementById(target);
+  if (!el) return;
+
+  const withCounts = getBannerMeta(data, target);
+
+  el.innerHTML = withCounts.map((p) => {
+    const wished = isWishlisted(p.nama);
+    const banners = p._banners || [];
+    return `
+    <div class="produk-card">
+      ${banners.length ? `<div class="banner-stack"><span class="product-banner ${banners.length > 1 ? 'combo' : banners[0].cls}">${banners.map(b => b.text).join(' + ')}</span></div>` : ''}
+      <button class="btn-wishlist ${wished ? 'active' : ''}" onclick="event.stopPropagation(); toggleWishlist('${p.nama.replace(/'/g, "\\'")}')">${wished ? '⭐' : '☆'}</button>
+      <div class="produk-header">
+        <div class="produk-icon">${p.icon}</div>
+        <div class="produk-title-block"><div class="produk-label">${kategori}</div><div class="produk-nama">${p.nama}</div></div>
+      </div>
+      <div class="produk-desc">${p.desc}</div>
+      ${p.warnText ? `<div class="produk-warn">${p.warnText}</div>` : ''}
+      <div class="produk-sold">🛒 ${p._totalOrder.toLocaleString('id-ID')} sudah dibeli</div>
+      <div class="produk-bottom">
+        <div class="produk-harga-info">
+          <div class="produk-harga-label">Harga ${p.unit ? 'per ' + p.unit : ''}</div>
+          <div class="produk-harga">Rp ${p._price.toLocaleString('id-ID')} ${p.unit ? '<span>/ ' + p.unit + '</span>' : ''}</div>
+        </div>
+        <button class="btn-order" onclick="bukaOrder('${target}', ${p._index})">Order</button>
+      </div>
+    </div>
+  `;
+  }).join('');
+}
+function renderGameList() {
+  const el = document.getElementById('gameList');
+  if (!el) return;
+  el.className = 'produk-list grid-2col';
+  el.innerHTML = produkTopUp.map((g, i) => {
+    if (g.status === 'maintenance' && !isAdmin) return '';
+    const isMaintenance = g.status === 'maintenance';
+    const badge = isMaintenance && isAdmin ? '<div class="badge-admin-preview">👑 ADMIN PREVIEW</div>' : '';
+    const cardClass = isMaintenance && isAdmin ? 'produk-card admin-preview' : (isMaintenance ? 'produk-card disabled' : 'produk-card');
+    const btnText = isMaintenance ? (isAdmin ? '👑 Test Order' : 'Maintenance') : 'Pilih →';
+    const clickHandler = (isMaintenance && !isAdmin) ? `onclick="showToast('Fitur Top Up Game sedang MAINTENANCE','warning')"` : `onclick="bukaGameDetail(${i})"`;
+    return `
+      <div class="${cardClass}" ${clickHandler}>
+        ${badge}
+        <div class="produk-header">
+          <div class="produk-icon">${g.icon}</div>
+          <div class="produk-title-block"><div class="produk-label">TOP UP</div><div class="produk-nama">${g.nama}</div></div>
+        </div>
+        <div class="produk-bottom">
+          <div class="produk-harga-info">
+            <div class="produk-harga-label">Mulai dari</div>
+            <div class="produk-harga">Rp ${g.paket[0].harga.toLocaleString('id-ID')}</div>
+          </div>
+          <button class="btn-order" ${isMaintenance && !isAdmin ? 'disabled' : ''}>${btnText}</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+function bukaGameDetail(index) {
+  if (produkTopUp[index].status === 'maintenance' && !isAdmin) { showToast('Fitur Top Up Game sedang MAINTENANCE', 'warning'); return; }
+  gameAktif = produkTopUp[index];
+  const paketList = gameAktif.paket.map((p, i) => {
+    const populer = i === 0 || i === 4;
+    return `
+    <div class="produk-card" style="cursor:pointer; position:relative;" onclick="pilihPaket(${i})">
+      ${populer ? '<div class="badge-hot" style="top:6px; right:6px; font-size:8px; padding:2px 6px;">🔥 POPULER</div>' : ''}
+      <div class="produk-header" style="flex-direction:column; align-items:center; text-align:center; gap:4px;">
+        <div class="produk-icon" style="font-size:28px;">💎</div>
+        <div class="produk-title-block" style="text-align:center; width:100%;">
+          <div class="produk-label" style="font-size:8px;">${gameAktif.nama}</div>
+          <div class="produk-nama" style="font-size:14px; line-height:1.2;">${p.nominal}</div>
+        </div>
+      </div>
+      <div class="produk-bottom" style="flex-direction:column; gap:6px; align-items:stretch;">
+        <div class="produk-harga-info" style="text-align:center;"><div class="produk-harga" style="font-size:14px;">Rp ${p.harga.toLocaleString('id-ID')}</div></div>
+        <button class="btn-order" style="width:100%; padding:8px;">Order</button>
+      </div>
+    </div>
+  `;
+  }).join('');
+  document.getElementById('page-topup').innerHTML = `
+    <section class="kategori">
+      <div class="back-sticky"><button class="btn-back" onclick="backToGameList()">←</button></div>
+      <h2>${gameAktif.icon} ${gameAktif.nama}</h2>
+      <p class="sub">Pilih nominal ${gameAktif.unit} yang mau kamu top up</p>
+      <div class="produk-list grid-2col">${paketList}</div>
+    </section>
+    <footer><p>© 2025 Jimzz Store — All Rights Reserved 😈</p></footer>
+  `;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function backToGameList() {
+  const maintenanceInfo = isAdmin 
+    ? `<div class="pengumuman admin-preview-info" id="topupMaintenanceInfo"><div class="pengumuman-header" style="justify-content:center;"><span style="font-size:20px;">👑</span><span class="pengumuman-title">MODE ADMIN — TEST ORDER</span></div><p class="pengumuman-text" style="text-align:center;">Kamu bisa <b>test order</b> produk yang masih maintenance.</p></div>` 
+    : `<div class="pengumuman maintenance" id="topupMaintenanceInfo"><div class="pengumuman-header" style="justify-content:center;"><span style="font-size:20px;">🔧</span><span class="pengumuman-title">SEDANG MAINTENANCE</span></div><p class="pengumuman-text" style="text-align:center;">Fitur <b>Top Up Game</b> sedang dalam perbaikan.</p></div>`;
+  document.getElementById('page-topup').innerHTML = `
+    <section class="kategori">
+      <div class="back-sticky"><button class="btn-back" onclick="switchTab('home')">←</button></div>
+      ${maintenanceInfo}
+      <h2>🎮 Top Up <span class="accent">Game</span></h2>
+      <p class="sub">Pilih game yang mau kamu top up</p>
+      <div class="produk-list grid-2col" id="gameList"></div>
+    </section>
+    <footer><p>© 2025 Jimzz Store — All Rights Reserved 😈</p></footer>
+  `;
+  renderGameList();
+}
+function pilihPaket(index) {
+  paketAktif = gameAktif.paket[index];
+  produkAktif = {
+    icon: gameAktif.icon,
+    nama: gameAktif.nama + ' - ' + paketAktif.nominal,
+    desc: 'Top up ' + paketAktif.nominal + ' ke ID ' + gameAktif.nama,
+    harga: paketAktif.harga, unit: gameAktif.unit, kategori: 'TOP UP GAME', isApk: true, isTopUp: true,
+    inputLabel: '🎮 User ID ' + gameAktif.nama, inputPlaceholder: 'Contoh: 123456789 (cek di profil game)', inputValidasi: '', inputError: ''
+  };
+  document.getElementById('modalLabel').innerText = 'TOP UP GAME';
+  document.getElementById('modalTitle').innerText = produkAktif.nama;
+  document.getElementById('modalSubtitle').innerText = produkAktif.desc;
+  document.getElementById('modalWarn').style.display = 'none';
+  const jumlahInput = document.getElementById('jumlahInput');
+  jumlahInput.value = 1; jumlahInput.min = 1; jumlahInput.max = 1; jumlahInput.disabled = true;
+  document.getElementById('minmaxText').innerText = '(otomatis 1)';
+  document.getElementById('hargaSatuan').innerText = 'Rp ' + paketAktif.harga.toLocaleString('id-ID');
+  document.getElementById('inputLabel').innerText = produkAktif.inputLabel;
+  document.getElementById('linkSaluran').placeholder = produkAktif.inputPlaceholder;
+  document.getElementById('linkSaluran').value = '';
+  document.getElementById('hpPemesan').value = '';
+  document.getElementById('waitingBox').style.display = 'none';
+  document.getElementById('qrisBox').style.display = 'none';
+  document.getElementById('qrisLoading').style.display = 'none';
+  document.getElementById('successBox').style.display = 'none';
+  document.getElementById('failedBox').style.display = 'none';
+  clearError();
+  hitungTotal();
+  setStep(1);
+  document.getElementById('orderModal').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+function bukaOrder(kategoriId, index) {
+  let data, kategori, isApk;
+  if (kategoriId === 'sosmed') { data = produkSosmed; kategori = 'SUNTIK ALL'; isApk = false; }
+  else if (kategoriId === 'jpm') { data = produkJpm; kategori = 'LAYANAN LAINNYA'; isApk = false; }
+  else { data = produkApk; kategori = 'JUAL APK'; isApk = true; }
+  produkAktif = { ...data[index], kategori, isApk };
+  produkAktif._kategoriId = kategoriId;
+  produkAktif._index = index;
+  document.getElementById('modalLabel').innerText = kategori;
+  document.getElementById('modalTitle').innerText = produkAktif.nama;
+  document.getElementById('modalSubtitle').innerText = produkAktif.desc;
+  const modalWarn = document.getElementById('modalWarn');
+  if (produkAktif.warnText) {
+    modalWarn.style.display = 'block';
+    modalWarn.innerHTML = produkAktif.warnText;
+  } else {
+    modalWarn.style.display = 'none';
+  }
+  const jumlahInput = document.getElementById('jumlahInput');
+  const minmaxText = document.getElementById('minmaxText');
+  if (isApk) {
+    jumlahInput.value = 1; jumlahInput.min = 1; jumlahInput.max = 1; jumlahInput.disabled = true;
+    minmaxText.innerText = '(otomatis 1)';
+    document.getElementById('hargaSatuan').innerText = `Rp ${produkAktif.harga.toLocaleString('id-ID')}`;
+  } else {
+    jumlahInput.disabled = false;
+    minmaxText.innerText = `Min: ${produkAktif.min.toLocaleString('id-ID')} - Max: ${produkAktif.max.toLocaleString('id-ID')}`;
+    document.getElementById('hargaSatuan').innerText = `Rp ${produkAktif.hargaPerUnit.toLocaleString('id-ID')}`;
+    jumlahInput.value = produkAktif.min;
+    jumlahInput.min = produkAktif.min;
+    jumlahInput.max = produkAktif.max;
+  }
+  const linkForm = document.getElementById('linkSaluran').closest('.form-box');
+  if (isApk) {
+    // Produk APK tidak lagi meminta nama. Pembeli cukup mengisi nomor WhatsApp.
+    if (linkForm) linkForm.style.display = 'none';
+  } else {
+    if (linkForm) linkForm.style.display = '';
+    document.getElementById('inputLabel').innerText = produkAktif.inputLabel || '🔗 Link';
+    document.getElementById('linkSaluran').placeholder = produkAktif.inputPlaceholder || 'Contoh: link';
+  }
+  document.getElementById('linkSaluran').value = '';
+  document.getElementById('hpPemesan').value = '';
+  document.getElementById('waitingBox').style.display = 'none';
+  document.getElementById('qrisBox').style.display = 'none';
+  document.getElementById('qrisLoading').style.display = 'none';
+  document.getElementById('successBox').style.display = 'none';
+  document.getElementById('failedBox').style.display = 'none';
+  clearError();
+  hitungTotal();
+  setStep(1);
+  document.getElementById('orderModal').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+function tutupOrder() {
+  document.getElementById('orderModal').classList.remove('show');
+  document.body.style.overflow = 'auto';
+  if (orderPollingInterval) { clearInterval(orderPollingInterval); orderPollingInterval = null; }
+  produkAktif = null;
+}
+function setStep(num) {
+  document.querySelectorAll('.step-content').forEach(s => s.classList.remove('active'));
+  document.getElementById('step' + num).classList.add('active');
+  document.querySelectorAll('.step-dot').forEach(d => d.classList.remove('active','done'));
+  for (let i = 1; i <= 3; i++) {
+    const dot = document.getElementById('dot' + i);
+    if (i < num) dot.classList.add('done');
+    else if (i === num) dot.classList.add('active');
+  }
+}
+function clearError() {
+  document.getElementById('linkSaluran').classList.remove('error');
+  document.getElementById('inputError').classList.remove('show');
+  document.getElementById('hpPemesan').classList.remove('error');
+  document.getElementById('hpError').classList.remove('show');
+}
+function validasiJumlah() {
+  if (!produkAktif || produkAktif.isApk) return;
+  const input = document.getElementById('jumlahInput');
+  let val = parseInt(input.value) || 0;
+  const min = parseInt(input.min) || 1;
+  const max = parseInt(input.max) || MAX_SUNTIK;
+  if (val > max) {
+    input.value = max;
+    showToast(`⚠️ Maksimal ${max.toLocaleString('id-ID')}! Udah auto diset ke max.`, 'warning');
+    hitungTotal();
+  } else if (val < min && val > 0) {
+    input.value = min;
+    showToast(`⚠️ Minimal ${min.toLocaleString('id-ID')}! Udah auto diset ke min.`, 'warning');
+    hitungTotal();
+  }
+}
+function hitungTotal() {
+  if (!produkAktif) return;
+  let jumlah = parseInt(document.getElementById('jumlahInput').value) || 0;
+  const hargaPerUnit = produkAktif.isApk ? produkAktif.harga : produkAktif.hargaPerUnit;
+  
+  if (!produkAktif.isApk) {
+    const max = parseInt(document.getElementById('jumlahInput').max) || MAX_SUNTIK;
+    if (jumlah > max) {
+      jumlah = max;
+      document.getElementById('jumlahInput').value = max;
+    }
+  }
+  
+  const subtotal = Math.round(jumlah * hargaPerUnit);
+  let bonus = 0;
+  if (!produkAktif.isApk && produkAktif.bonusMinTotal && subtotal >= produkAktif.bonusMinTotal) bonus = produkAktif.bonusUnit || 0;
+  document.getElementById('jumlahDisplay').innerText = jumlah.toLocaleString('id-ID') + ' ' + (produkAktif.unit || 'pcs');
+  
+  const saldoKoin = getPoints();
+  const coinDiscountRow = document.getElementById('coinDiscountRow');
+  const coinDiscount = document.getElementById('coinDiscount');
+  const maxPotongKoin = subtotal - MIN_BAYAR_QRIS;
+  
+  let potonganKoin = 0;
+  if (useCoinMode && !produkAktif.hargaTetap && saldoKoin > 0n && maxPotongKoin > 0) {
+    const saldoUntukPotongan = saldoKoin > BigInt(maxPotongKoin) ? maxPotongKoin : Number(saldoKoin);
+    potonganKoin = Math.min(saldoUntukPotongan, maxPotongKoin);
+    coinDiscountRow.style.display = 'flex';
+    coinDiscount.innerText = '-Rp ' + potonganKoin.toLocaleString('id-ID');
+  } else {
+    coinDiscountRow.style.display = 'none';
+  }
+  
+  const totalAkhir = subtotal - potonganKoin;
+  document.getElementById('totalHarga').innerText = "Rp " + totalAkhir.toLocaleString('id-ID');
+  
+  const bonusRow = document.getElementById('bonusRow');
+  const totalDapatRow = document.getElementById('totalDapatRow');
+  if (bonus > 0) {
+    bonusRow.style.display = 'flex'; totalDapatRow.style.display = 'flex';
+    document.getElementById('bonusValue').innerText = '+' + bonus + ' ' + produkAktif.unit;
+    document.getElementById('totalDapat').innerText = (jumlah + bonus).toLocaleString('id-ID') + ' ' + produkAktif.unit;
+  } else { bonusRow.style.display = 'none'; totalDapatRow.style.display = 'none'; }
+  
+  const validJumlah = jumlah >= parseInt(document.getElementById('jumlahInput').min) && jumlah <= parseInt(document.getElementById('jumlahInput').max);
+  const validTotal = totalAkhir >= MIN_BAYAR_QRIS && subtotal >= MIN_PEMBELIAN;
+  document.getElementById('btnPesan').disabled = !(validJumlah && validTotal);
+  const hintEl = document.getElementById('jumlahHint');
+  if (!validJumlah) { hintEl.innerHTML = `⚠️ Jumlah tidak valid. Min: ${parseInt(document.getElementById('jumlahInput').min).toLocaleString('id-ID')} - Max: ${parseInt(document.getElementById('jumlahInput').max).toLocaleString('id-ID')}`; hintEl.style.color = '#ff6b6b'; }
+  else if (subtotal < MIN_PEMBELIAN) { hintEl.innerHTML = `⚠️ Minimal pembelian <b style="color:#ff6b6b">Rp ${MIN_PEMBELIAN.toLocaleString('id-ID')}</b>.`; hintEl.style.color = '#ff6b6b'; }
+  else if (!validTotal) { hintEl.innerHTML = `⚠️ Bayar minimal <b style="color:#ff6b6b">Rp ${MIN_BAYAR_QRIS.toLocaleString('id-ID')}</b>.`; hintEl.style.color = '#ff6b6b'; }
+  else if (potonganKoin > 0) { hintEl.innerHTML = `⭐ <b style="color:#ffd700">Potong ${potonganKoin.toLocaleString('id-ID')} koin = Rp ${potonganKoin.toLocaleString('id-ID')}</b>`; hintEl.style.color = '#ffd700'; }
+  else if (bonus > 0) { hintEl.innerHTML = `🎁 <b style="color:#00ff88">BONUS +${bonus} ${produkAktif.unit}</b> aktif!`; hintEl.style.color = '#00ff88'; }
+  else { hintEl.innerText = '✅ Jumlah valid, klik "Lanjut ke Pembayaran".'; hintEl.style.color = '#00ff88'; }
+}
+function keStep2() {
+  const jumlah = parseInt(document.getElementById('jumlahInput').value) || 0;
+  const hargaPerUnit = produkAktif.isApk ? produkAktif.harga : produkAktif.hargaPerUnit;
+  const total = Math.round(jumlah * hargaPerUnit);
+  let bonus = 0;
+  if (!produkAktif.isApk && produkAktif.bonusMinTotal && total >= produkAktif.bonusMinTotal) bonus = produkAktif.bonusUnit || 0;
+  dataPemesan.jumlah = jumlah; dataPemesan.total = total; dataPemesan.bonus = bonus;
+  setStep(2);
+}
+let jimzzQrCodeLibraryPromise = null;
+function prepareQrisDownloadBlob(sourceUrl) {
+  if (!sourceUrl) return Promise.reject(new Error('Gambar QR belum tersedia.'));
+  const task = fetch(sourceUrl, { cache: 'force-cache' }).then(response => {
+    if (!response.ok) throw new Error('Server gambar QR gagal merespons (' + response.status + ').');
+    return response.blob();
+  }).then(blob => {
+    if (!blob || !blob.size) throw new Error('File QR kosong.');
+    return blob;
+  });
+  dataPemesan.qrisDownloadBlobPromise = task;
+  return task;
+}
+function loadJimzzQrCodeLibrary() {
+  if (window.QRCode && typeof window.QRCode.toDataURL === 'function') return Promise.resolve(window.QRCode);
+  if (!jimzzQrCodeLibraryPromise) {
+    jimzzQrCodeLibraryPromise = new Promise((resolve, reject) => {
+      const sources = [
+        'https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js',
+        'https://unpkg.com/qrcode@1.5.4/build/qrcode.min.js'
+      ];
+      let index = 0;
+      const tryNextSource = () => {
+        if (index >= sources.length) {
+          reject(new Error('Generator QR tidak tersedia; memakai gambar QR cadangan.'));
+          return;
+        }
+        const script = document.createElement('script');
+        script.src = sources[index++];
+        script.async = true;
+        script.onload = () => window.QRCode && typeof window.QRCode.toDataURL === 'function'
+          ? resolve(window.QRCode)
+          : (script.remove(), tryNextSource());
+        script.onerror = () => { script.remove(); tryNextSource(); };
+        document.head.appendChild(script);
+      };
+      tryNextSource();
+    }).catch(err => { jimzzQrCodeLibraryPromise = null; throw err; });
+  }
+  return jimzzQrCodeLibraryPromise;
+}
+
+async function keStep3() {
+  loadJimzzQrCodeLibrary().catch(() => {});
+  const link = document.getElementById('linkSaluran').value.trim();
+  const hp = document.getElementById('hpPemesan').value.trim();
+  const inputEl = document.getElementById('linkSaluran');
+  const hpEl = document.getElementById('hpPemesan');
+  const errorEl = document.getElementById('inputError');
+  const hpErrorEl = document.getElementById('hpError');
+  clearError();
+  if (!produkAktif.isApk && !link) {
+    inputEl.classList.add('error');
+    errorEl.innerText = '❌ Isi ' + (produkAktif.inputLabel || 'link') + ' dulu ya!';
+    errorEl.classList.add('show');
+    return;
+  }
+  if (!produkAktif.isApk && produkAktif.inputValidasi) {
+    const expected = String(produkAktif.inputValidasi).toLowerCase();
+    let parsedUrl = null;
+    try { parsedUrl = new URL(link); } catch {}
+    const host = parsedUrl?.hostname?.toLowerCase() || '';
+    const type = expected === 'whatsapp.com/channel' ? 'whatsapp-channel' : (expected === 'tiktok.com' ? 'tiktok' : null);
+
+    if (!parsedUrl || parsedUrl.protocol !== 'https:' ||
+        (type === 'whatsapp-channel' && !/^(www\.)?whatsapp\.com$/i.test(host)) ||
+        (type === 'whatsapp-channel' && !/^\/channel\/[A-Za-z0-9_-]+\/?$/i.test(parsedUrl.pathname))) {
+      inputEl.classList.add('error');
+      errorEl.innerText = '❌ ' + (produkAktif.inputError || 'Link tidak valid!');
+      errorEl.classList.add('show');
+      return;
+    }
+
+    if (type) {
+      inputEl.classList.add('checking');
+      errorEl.innerText = '⏳ Sedang mengecek link langsung...';
+      errorEl.classList.add('show');
+      try {
+        const verifyRes = await fetch(BACKEND_URL + '/api/validate-link', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: link, type })
+        });
+        const verify = await verifyRes.json();
+        if (!verify.valid) {
+          inputEl.classList.add('error');
+          errorEl.innerText = '❌ ' + (verify.error || 'Link tidak bisa diverifikasi.');
+          errorEl.classList.add('show');
+          inputEl.classList.remove('checking');
+          return;
+        }
+        if (verify.normalizedUrl) document.getElementById('linkSaluran').value = verify.normalizedUrl;
+      } catch (verifyError) {
+        inputEl.classList.add('error');
+        errorEl.innerText = '❌ Gagal mengecek link. Coba lagi.';
+        errorEl.classList.add('show');
+        inputEl.classList.remove('checking');
+        return;
+      }
+      inputEl.classList.remove('checking');
+      clearError();
+    }
+  }
+  if (!hp) { hpEl.classList.add('error'); hpErrorEl.innerText = '❌ Isi no WhatsApp dulu ya!'; hpErrorEl.classList.add('show'); return; }
+  const hpClean = hp.replace(/[\s\-\+]/g, '');
+  const hpValid = /^(62|0)8[0-9]{8,13}$/.test(hpClean);
+  if (!hpValid) { hpEl.classList.add('error'); hpErrorEl.innerText = '❌ No WA tidak valid!'; hpErrorEl.classList.add('show'); return; }
+  dataPemesan.link = produkAktif.isApk ? '' : link;
+  dataPemesan.hp = hp;
+  setStep(3);
+  document.getElementById('qrisLoading').style.display = 'block';
+  document.getElementById('qrisBox').style.display = 'none';
+  document.getElementById('waitingBox').style.display = 'none';
+  document.getElementById('successBox').style.display = 'none';
+  document.getElementById('failedBox').style.display = 'none';
+  
+  let potonganKoinActual = 0;
+  if (useCoinMode && !produkAktif.hargaTetap) {
+    const maxPotong = dataPemesan.total - MIN_BAYAR_QRIS;
+    if (maxPotong > 0) {
+      const saldoKoin = getPoints();
+      potonganKoinActual = saldoKoin > 0n
+        ? Math.min(saldoKoin > BigInt(maxPotong) ? maxPotong : Number(saldoKoin), maxPotong)
+        : 0;
+    }
+  }
+  const totalBayar = dataPemesan.total - potonganKoinActual;
+  
+  try {
+    const res = await fetch(BACKEND_URL + '/api/create-order-v2', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', ...(getAccountToken() ? { Authorization: 'Bearer ' + getAccountToken() } : {}) },
+      body: JSON.stringify({ 
+        amount: totalBayar, 
+        customerPhone: dataPemesan.hp, 
+        productName: produkAktif.nama, 
+        productDetail: dataPemesan.jumlah + ' ' + (produkAktif.unit || 'pcs'), 
+        link: dataPemesan.link,
+        kategoriId: produkAktif._kategoriId,
+        index: produkAktif._index
+      })
+    });
+    const result = await res.json();
+    if (!result.success) throw new Error([result.error, result.code && '[' + result.code + ']', result.detail, result.hint].filter(Boolean).join(' — ') || 'Gagal generate QRIS');
+    dataPemesan.totalAmount = result.totalAmount;
+    dataPemesan.orderId = result.orderId;
+    dataPemesan.qrisString = result.qrisString;
+    const qrImage = document.getElementById('qrisImage');
+    const qrImageUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' + encodeURIComponent(result.qrisString);
+    qrImage.src = qrImageUrl;
+    // Ambil gambar QR di latar belakang. Tombol download bisa langsung memakai Blob ini.
+    prepareQrisDownloadBlob(qrImageUrl).catch(err =>
+      console.warn('[Jimzz] Prefetch QR gagal; akan dicoba ulang saat download:', err)
+    );
+    // Generator lokal hanya mempercepat tampilan; download tetap berfungsi tanpanya.
+    loadJimzzQrCodeLibrary()
+      .then(QRCode => QRCode.toDataURL(result.qrisString, {
+        width: 420, margin: 2, errorCorrectionLevel: 'M'
+      }))
+      .then(dataUrl => {
+        qrImage.src = dataUrl;
+        prepareQrisDownloadBlob(dataUrl).catch(err =>
+          console.warn('[Jimzz] Prefetch PNG lokal gagal:', err)
+        );
+      })
+      .catch(err => console.warn('[Jimzz] Generator QR lokal tidak tersedia; memakai QR cadangan:', err));
+    if (result.telegramSent === false) {
+      console.warn('[Jimzz] Telegram order notification failed:', result.telegramReason || 'unknown', result.telegramDetail || '');
+    } else if (result.telegramSent === true) {
+      console.info('[Jimzz] Telegram API accepted the order message for the configured chat.');
+    } else {
+      console.warn('[Jimzz] Backend tidak mengirim status Telegram. Periksa endpoint/deployment backend.');
+    }
+    document.getElementById('qrisLoading').style.display = 'none';
+    document.getElementById('qrisBox').style.display = 'block';
+    document.getElementById('waitingBox').style.display = 'block';
+
+    startOrderPolling(result.orderId, totalBayar, produkAktif.nama);
+    simpanOrderAktif(result.orderId, totalBayar, produkAktif.nama);
+    startBackgroundPolling();
+
+    if (potonganKoinActual > 0) {
+      setTimeout(() => {
+        showToast(`⭐ ${potonganKoinActual.toLocaleString('id-ID')} koin akan dipakai kalau pembayaran sukses.`, 'info');
+      }, 2000);
+    }
+
+    backupOrder({ order_id: result.orderId, produk: produkAktif.nama, jumlah: dataPemesan.jumlah, total: result.totalAmount, hp: dataPemesan.hp, status: 'pending' });
+  } catch (err) {
+    console.error('QRIS error:', err);
+    const safeMessage = String(err?.message || 'Terjadi kesalahan saat membuat QRIS.')
+      .replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+    document.getElementById('qrisLoading').innerHTML =
+      '<div style="color:#ff6b6b;font-size:13px;font-weight:800;">❌ Gagal membuat QRIS</div>' +
+      '<div style="color:#999;font-size:11px;margin-top:7px;line-height:1.6;">' + safeMessage + '</div>' +
+      '<button onclick="keStep3()" style="margin-top:14px;padding:10px 16px;border:1px solid #00ff88;border-radius:10px;background:transparent;color:#00ff88;font-weight:800;">🔄 Coba Lagi</button>';
+  }
+}
+async function downloadQris() {
+  const btn = document.getElementById('qrisDownload');
+  const originalText = btn.innerText;
+  let blobUrl = null;
+  btn.innerText = '⏳ Menyiapkan PNG...';
+  btn.disabled = true;
+
+  try {
+    const image = document.getElementById('qrisImage');
+    const sourceUrl = image?.src;
+    if (!sourceUrl || !/^https?:|^data:image\//i.test(sourceUrl)) {
+      throw new Error('Gambar QRIS belum siap. Tunggu sampai QR muncul lalu coba lagi.');
+    }
+
+    // Gunakan hasil prefetch bila sudah siap; bila belum, tunggu request yang sama.
+    let blob;
+    try {
+      blob = dataPemesan.qrisDownloadBlobPromise
+        ? await dataPemesan.qrisDownloadBlobPromise
+        : await fetch(sourceUrl, { cache: 'force-cache' }).then(response => {
+            if (!response.ok) throw new Error('Gagal mengambil gambar QR (' + response.status + ').');
+            return response.blob();
+          });
+    } catch (firstError) {
+      // Retry dari gambar yang benar-benar sedang ditampilkan.
+      blob = await fetch(sourceUrl).then(response => {
+        if (!response.ok) throw new Error('Gagal mengambil gambar QR (' + response.status + ').');
+        return response.blob();
+      });
+    }
+
+    if (!blob || !blob.size) throw new Error('File QR kosong. Coba buat QRIS ulang.');
+    blobUrl = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = blobUrl;
+    link.download = 'QRIS-JimzzStore-' + (dataPemesan.orderId || Date.now()) + '.png';
+    link.style.display = 'none';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+    btn.innerText = '✅ Download dimulai';
+    showToast('File QRIS dikirim ke folder Unduhan/Download HP kamu.', 'success');
+  } catch (err) {
+    console.error('[Jimzz] Download QR gagal:', err);
+    showToast('Download QRIS gagal: ' + (err?.message || 'Coba lagi.'), 'error');
+    btn.innerText = '❌ Gagal — Coba Lagi';
+  } finally {
+    setTimeout(() => {
+      btn.innerText = originalText;
+      btn.disabled = false;
+      if (blobUrl) setTimeout(() => URL.revokeObjectURL(blobUrl), 60000);
+    }, 3000);
+  }
+}
+
+// ============================================
+// ============================================
+// SWITCH TAB
+// ============================================
+function switchTab(tab) {
+  const settings=document.getElementById('accountSettingsModal');
+  if(settings?.classList.contains('show'))closeAccountSettings();
+  const page=document.getElementById('page-'+tab);
+  if(!page)return;
+  document.querySelectorAll('.tab-page').forEach(p=>p.classList.remove('active'));
+  page.classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active',n.dataset.tab===tab));
+  const titles={home:'Jimzz Store',suntik:'Suntik All Sosmed',topup:'Top Up Game',apk:'Web/APK',jpm:'Layanan lainnya',orders:'Riwayat Order',music:'Musik',tools:'Tools'};
+  const title=document.getElementById('jimzzTopbarTitle');
+  if(title)title.textContent=titles[tab]||page.querySelector('h2')?.innerText?.replace(/\\s+/g,' ').trim()||'Jimzz Store';
+  toggleJimzzMenu(false);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+
+/* Drawer navigation and order history */
+function toggleJimzzMenu(open){
+ const drawer=document.getElementById('jimzzSideMenu'),scrim=document.getElementById('jimzzMenuScrim'),trigger=document.getElementById('jimzzMenuTrigger'),show=Boolean(open);
+ drawer?.classList.toggle('show',show);scrim?.classList.toggle('show',show);drawer?.setAttribute('aria-hidden',String(!show));trigger?.setAttribute('aria-expanded',String(show));document.body.style.overflow=show?'hidden':'';
+}
+function jimzzMenuGo(tab){toggleJimzzMenu(false);switchTab(tab);}
+function jimzzMenuTopup(){toggleJimzzMenu(false);handleTopupClick();}
+function openOrderHistory(){
+ toggleJimzzMenu(false);switchTab('orders');
+ const notice=document.getElementById('orderHistoryNotice'),list=document.getElementById('orderHistoryList');
+ if(!getLoggedAccount()){
+  if(notice){notice.style.display='block';notice.textContent='Login dulu agar pesanan terhubung ke akun dan bisa dilihat di sini.';}
+  if(list)list.innerHTML='<div class="order-history-empty">Belum login.<br><button type="button" style="margin-top:12px;padding:10px 14px;border:0;border-radius:9px;background:#00ff88;color:#00140b;font-weight:800;" onclick="openAccountModal()">Login / Register</button></div>';return;
+ }
+ if(notice){notice.style.display='block';notice.textContent='Order pending hanya bisa dibatalkan setelah berusia lebih dari 6 jam. Order sukses tidak dapat dibatalkan.';}
+ loadMyOrderHistory();
+}
+function orderStatusLabel(status){const labels={pending:'PENDING',processing:'DIPROSES',success:'SUCCESS',cancel:'DIBATALKAN',cancelled:'DIBATALKAN',failed:'GAGAL',expired:'EXPIRED'};return labels[String(status||'').toLowerCase()]||String(status||'UNKNOWN').toUpperCase();}
+function renderMyOrderHistory(orders){
+ const list=document.getElementById('orderHistoryList');if(!list)return;
+ if(!orders.length){list.innerHTML='<div class="order-history-empty">Belum ada riwayat order untuk akun ini.</div>';return;}
+ const now=Date.now();
+ list.innerHTML=orders.map(o=>{
+  const status=String(o.status||'pending').toLowerCase(),created=Date.parse(o.created_at||''),oldEnough=Number.isFinite(created)&&created>0&&now-created>=6*60*60*1000,canCancel=status==='pending'&&oldEnough;
+  const date=Number.isFinite(created)&&created>0?new Date(created).toLocaleString('id-ID',{dateStyle:'medium',timeStyle:'short'}):'Waktu tidak tersedia',amount=Number(o.total_amount||0).toLocaleString('id-ID');
+  const id=escapeAccountHtml(o.order_id||'-'),product=escapeAccountHtml(o.product_name||'Produk'),detail=escapeAccountHtml(o.product_detail||'-'),safeId=String(o.order_id||'').replace(/[^A-Za-z0-9_-]/g,'');
+  const button=canCancel?'<div class="order-history-actions"><button class="order-history-cancel" type="button" onclick="cancelMyOrder(\''+safeId+'\')">Batalkan order</button></div>':status==='pending'?'<div class="order-history-hint">Order masih pending. Pembatalan tersedia setelah lewat 6 jam jika statusnya tetap pending.</div>':'';
+  const cls=status.replace(/[^a-z-]/g,'');
+  return '<article class="order-history-card status-'+cls+'"><div class="order-history-card-head"><div class="order-history-id">'+id+'</div><span class="order-history-status '+cls+'">'+orderStatusLabel(status)+'</span></div><div class="order-history-detail">📦 <b>'+product+'</b><br>📋 '+detail+'<br>💰 <b>Rp '+amount+'</b><br>🕒 '+escapeAccountHtml(date)+'</div>'+button+'</article>';
+ }).join('');
+}
+async function loadMyOrderHistory(){
+ const list=document.getElementById('orderHistoryList');if(!list)return;
+ if(!getLoggedAccount()){list.innerHTML='<div class="order-history-empty">Login dulu untuk melihat riwayat order.</div>';return;}
+ list.innerHTML='<div class="order-history-empty">Memuat riwayat order...</div>';
+ try{
+  const data=await accountApi('my-orders');
+  renderMyOrderHistory(Array.isArray(data.orders)?data.orders:[]);
+ }catch(error){list.innerHTML='<div class="order-history-empty" style="color:#ff8585;">'+escapeAccountHtml(error.message||'Gagal memuat riwayat order.')+'<br><button type="button" style="margin-top:12px;padding:9px 12px;border:1px solid #34513e;border-radius:9px;background:#101812;color:#00ff88;font-weight:800;" onclick="loadMyOrderHistory()">Coba lagi</button></div>';}
+}
+async function cancelMyOrder(orderId){
+ if(!getLoggedAccount()){showToast('Login diperlukan.','warning');return;}
+ if(!confirm('Batalkan order '+orderId+'? Pembatalan hanya bisa dilakukan jika status masih pending dan sudah lewat 6 jam.'))return;
+ try{
+  const data=await accountApi('cancel-my-order',{orderId});
+  showToast(data.message||'Order berhasil dibatalkan.','success');await loadMyOrderHistory();
+ }catch(error){showToast(error.message||'Gagal membatalkan order.','error');}
+}
+
+// ============================================
+// MUSIC PLAYER
+// ============================================
+const playlist = [
+  { judul: "Lagu 1", artis: "Jimzz Playlist", cover: "🔥", src: "lagu1.mp3" },
+  { judul: "Lagu 2", artis: "Jimzz Playlist", cover: "💀", src: "lagu2.mp3" },
+  { judul: "Lagu 3", artis: "Jimzz Playlist", cover: "🌆", src: "lagu3.mp3" },
+  { judul: "Lagu 4", artis: "Jimzz Playlist", cover: "🌊", src: "lagu4.mp3" }
+];
+let currentSong = 0;
+let audio;
+function renderPlaylist() {
+  audio = document.getElementById('audioPlayer');
+  const musicList = document.getElementById('musicList');
+  if (!musicList) return;
+  musicList.innerHTML = playlist.map((s, i) => `
+    <div class="music-item ${i === currentSong ? 'active' : ''}" onclick="playSong(${i})">
+      <div class="music-item-thumb">${s.cover}</div>
+      <div class="music-item-info">
+        <div class="music-item-title">${s.judul}</div>
+        <div class="music-item-artist">${s.artis}</div>
+      </div>
+    </div>
+  `).join('');
+}
+function initMusicEvents() {
+  audio = document.getElementById('audioPlayer');
+  if (!audio) return;
+  audio.addEventListener('timeupdate', () => {
+    if (audio.duration) {
+      const percent = (audio.currentTime / audio.duration) * 100;
+      const fill = document.getElementById('progressFill');
+      if (fill) fill.style.width = percent + "%";
+    }
+  });
+  audio.addEventListener('play', updateUI);
+  audio.addEventListener('pause', updateUI);
+  audio.addEventListener('ended', () => { audio.currentTime = 0; audio.play().catch(err => console.log('Replay error:', err)); });
+  audio.addEventListener('error', (e) => console.log('Gagal load:', playlist[currentSong].src));
+}
+function playSong(i) {
+  currentSong = i;
+  audio.src = playlist[i].src;
+  audio.loop = true;
+  audio.play().then(() => { updateUI(); renderPlaylist(); }).catch(err => { console.log('Play error:', err); updateUI(); renderPlaylist(); });
+}
+function updateUI() {
+  const s = playlist[currentSong];
+  const miniTitle = document.getElementById('miniTitle');
+  const miniArtist = document.getElementById('miniArtist');
+  const playMainBtn = document.getElementById('playMainBtn');
+  const musicCover = document.getElementById('musicCover');
+  if (miniTitle) miniTitle.innerText = s.judul;
+  if (miniArtist) miniArtist.innerText = s.artis;
+  if (playMainBtn) playMainBtn.innerText = audio && !audio.paused ? '⏸' : '▶';
+  if (musicCover) {
+    if (audio && !audio.paused) musicCover.classList.remove('paused');
+    else musicCover.classList.add('paused');
+  }
+}
+function togglePlay() {
+  if (!audio) audio = document.getElementById('audioPlayer');
+  if (!audio.src || audio.src === '' || audio.src === window.location.href) { playSong(0); return; }
+  if (audio.paused) audio.play().catch(err => console.log('Play error:', err));
+  else audio.pause();
+  setTimeout(updateUI, 100);
+}
+function nextSong() { currentSong = (currentSong + 1) % playlist.length; playSong(currentSong); }
+function prevSong() { currentSong = (currentSong - 1 + playlist.length) % playlist.length; playSong(currentSong); }
+function toggleExpand() { document.getElementById('musicPlayer').classList.toggle('open'); }
+function seekAudio(e) {
+  const bar = document.getElementById('progressBar');
+  const rect = bar.getBoundingClientRect();
+  const percent = (e.clientX - rect.left) / rect.width;
+  if (audio && audio.duration) audio.currentTime = percent * audio.duration;
+}
+
+// ============================================
+// ADMIN PANEL UPDATE
+// ============================================
+setInterval(() => {
+  if (isAdmin) {
+    document.getElementById('adminTotalOrder').innerText = cachedCounters.totalOrder;
+    document.getElementById('adminTotalRevenue').innerText = 'Rp ' + (cachedCounters.totalOrder * 5).toLocaleString('id-ID') + 'k';
+  }
+}, 5000);
+
+// ============================================
+// CACHE / SERVICE WORKER CLEANUP
+// ============================================
+(async function cleanOldAppCache(){
+  try {
+    if ('serviceWorker' in navigator) {
+      const regs = await navigator.serviceWorker.getRegistrations();
+      for (const reg of regs) await reg.unregister();
+    }
+    if (window.caches) {
+      const keys = await caches.keys();
+      await Promise.all(keys.map(k => caches.delete(k)));
+    }
+  } catch(e) {
+    console.warn('Cache cleanup:', e);
+  }
+})();
+
+// ============================================
+// START APP
+// ============================================
+console.log('[Jimzz Store] GUEST MODE build 3.4.4');
+startApp();
+</script>
+
+<script>
+async function runHomeSpeedTest(){
+  const button=document.getElementById('homeSpeedTestButton');
+  const result=document.getElementById('homeSpeedResult');
+  if(!button||!result)return;
+  button.disabled=true;
+  button.textContent='...';
+  result.textContent='Menguji koneksi…';
+  const started=performance.now();
+  try{
+    const connection=navigator.connection||navigator.mozConnection||navigator.webkitConnection;
+    const networkType=connection&&connection.type==='wifi'?'Wi-Fi':connection&&connection.type==='cellular'?'Data seluler':connection&&connection.effectiveType?'Jaringan '+connection.effectiveType.toUpperCase():'Wi-Fi / data';
+    const pingStart=performance.now();
+    await fetch('https://speed.cloudflare.com/__down?bytes=0&cache='+Date.now(),{cache:'no-store',mode:'cors'});
+    const ping=Math.max(1,Math.round(performance.now()-pingStart));
+    const bytes=1000000;
+    const downloadStart=performance.now();
+    const response=await fetch('https://speed.cloudflare.com/__down?bytes='+bytes+'&cache='+Date.now(),{cache:'no-store',mode:'cors'});
+    if(!response.ok)throw new Error('Tes kecepatan gagal');
+    const data=await response.arrayBuffer();
+    const seconds=Math.max((performance.now()-downloadStart)/1000,0.01);
+    const mbps=((data.byteLength*8)/seconds/1000000).toFixed(1);
+    result.textContent=networkType+' · '+mbps+' Mbps · ping '+ping+' ms';
+  }catch(error){
+    result.textContent='Tes gagal. Coba lagi / cek koneksi.';
+  }finally{
+    button.disabled=false;
+    button.textContent='TES';
+  }
+}
+</script>
+
+
+<style id="jimzz-linked-accounts-ui">
+#accountSettingsModal .link-accounts-intro{padding:4px 2px 2px!important;margin:6px 0 18px!important;background:transparent!important;border:0!important}
+#accountSettingsModal .link-section-eyebrow{font-size:10px;font-weight:850;letter-spacing:1.8px;color:#45d483;margin-bottom:8px}
+#accountSettingsModal .link-accounts-intro h3{font-size:23px!important;letter-spacing:-.6px;color:#f5fff8!important;margin-bottom:7px!important}
+#accountSettingsModal .link-accounts-intro p{font-size:13px!important;color:#9caea3!important;margin:0!important}
+#accountSettingsModal .linked-service-card{position:relative;padding:19px!important;margin:14px 0!important;border:1px solid #29372f!important;border-radius:20px!important;background:#101512!important;box-shadow:0 8px 24px rgba(0,0,0,.16)}
+#accountSettingsModal .gmail-service-card{border-top:2px solid #4285f4!important}
+#accountSettingsModal .telegram-service-card{border-top:2px solid #2aabee!important}
+#accountSettingsModal .linked-service-head{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+#accountSettingsModal .linked-service-brand{width:46px;height:46px;flex:0 0 46px;display:grid;place-items:center;border-radius:15px;background:#1b2420;border:1px solid #303c35;font-weight:900;font-size:24px}
+#accountSettingsModal .gmail-brand{background:#fff;border-color:#e4e8ed}
+#accountSettingsModal .gmail-brand span{font-family:Arial,sans-serif;background:conic-gradient(from -45deg,#4285f4 0 25%,#34a853 25% 48%,#fbbc05 48% 70%,#ea4335 70% 86%,#4285f4 86%);color:transparent;background-clip:text;-webkit-background-clip:text}
+#accountSettingsModal .telegram-brand{color:#fff;background:#229ed9;border-color:#229ed9;font-size:23px}
+#accountSettingsModal .linked-service-heading{min-width:0;flex:1}
+#accountSettingsModal .linked-service-heading h3{font-size:16px!important;color:#f3fff7!important;margin:0 0 4px!important}
+#accountSettingsModal .linked-service-heading p{font-size:11px!important;line-height:1.45!important;margin:0!important;color:#9ba9a0!important}
+#accountSettingsModal .linked-service-tag{font-size:9px;font-weight:850;letter-spacing:1px;padding:6px 8px;border-radius:8px;color:#aebdb3;background:#1c2520;border:1px solid #2c3a31}
+#accountSettingsModal .linked-service-card .form-box{margin:14px 0 8px!important}
+#accountSettingsModal .linked-service-card .form-box label{font-size:11px!important;letter-spacing:.25px!important;text-transform:none!important;color:#c5d1c9!important}
+#accountSettingsModal .linked-service-card input{min-height:48px!important;background:#090d0b!important;border:1px solid #354239!important;border-radius:12px!important;padding:13px 14px!important;color:#f5fff8!important;font-size:14px!important}
+#accountSettingsModal .linked-service-card input:focus{border-color:#54d98b!important;box-shadow:0 0 0 3px rgba(84,217,139,.12)!important;outline:none}
+#accountSettingsModal #accountEmailVisibilityBtn{align-self:stretch!important;display:flex!important;align-items:center!important;justify-content:center!important;height:48px!important;min-height:48px!important;max-height:48px!important;box-sizing:border-box!important;margin:0!important;padding:0 12px!important;flex:0 0 66px!important;transform:none!important;line-height:1!important}
+#accountSettingsModal #accountEmailVisibilityBtn svg{display:block;width:22px;height:22px;flex:none}
+#accountSettingsModal #accountEmail{height:48px!important;min-height:48px!important;box-sizing:border-box!important}
+#accountSettingsModal .linked-status{font-size:12px!important;line-height:1.5;padding:10px 12px;border-radius:11px;background:#171e19;border:1px solid #2c3930}
+#accountSettingsModal .linked-primary-btn{min-height:47px!important;padding:13px 15px!important;margin-top:8px!important;border-radius:12px!important;box-shadow:none!important;font-size:13px!important;letter-spacing:0!important}
+#accountSettingsModal .gmail-service-card .linked-primary-btn{background:#e8f0fe!important;color:#174ea6!important}
+#accountSettingsModal .telegram-service-card .linked-primary-btn{background:#229ed9!important;color:#fff!important}
+#accountSettingsModal .linked-secondary-btn{width:100%;min-height:44px;margin-top:9px;padding:11px 14px;border:1px solid #354239;border-radius:12px;background:#151c17;color:#d5e2d9;font-family:inherit;font-size:13px;font-weight:750;cursor:pointer}
+#accountSettingsModal .linked-secondary-btn:active{transform:scale(.99);background:#1b2820}
+#accountSettingsModal .telegram-benefit-list{display:grid;gap:8px;margin:16px 0;padding:13px;border-radius:12px;background:#0b100d;border:1px solid #26352c}
+#accountSettingsModal .telegram-benefit-list span{font-size:12px;color:#c5d3ca;display:flex;align-items:center;gap:9px}
+#accountSettingsModal .telegram-benefit-list i{font-style:normal;font-size:10px;display:grid;place-items:center;width:18px;height:18px;border-radius:50%;background:#163b2a;color:#65e69b;font-weight:900}
+#accountSettingsModal .telegram-accounts-list{display:grid;gap:8px;margin:12px 0}
+#accountSettingsModal .telegram-account-row{display:flex;align-items:center;gap:10px;padding:11px 12px;background:#0b100d;border:1px solid #26352c;border-radius:11px;min-width:0}
+#accountSettingsModal .telegram-account-icon{display:grid;place-items:center;width:30px;height:30px;flex:0 0 30px;border-radius:9px;background:#229ed9;color:#fff}
+#accountSettingsModal .telegram-account-name{flex:1;min-width:0;overflow-wrap:anywhere;color:#e7f4eb;font-size:12px;font-weight:750}
+#accountSettingsModal .telegram-account-check{font-size:10px;color:#65e69b;white-space:nowrap}
+#accountSettingsModal .linked-service-foot{display:flex;align-items:flex-start;gap:8px;margin-top:15px;padding-top:13px;border-top:1px solid #253129;color:#84948a;font-size:10px;line-height:1.5}
+#accountSettingsModal .linked-security-dot{width:6px;height:6px;flex:0 0 6px;margin-top:4px;border-radius:50%;background:#51d88b}
+@media(min-width:760px){#accountSettingsModal .linked-service-card{padding:22px!important}}
+</style>
+
+
+<style id="jimzz-recovery-neutral-password">
+#recoveryModal .account-box{border-color:#343840!important;background:#111318!important;box-shadow:0 24px 70px rgba(0,0,0,.65)!important}
+#recoveryModal .account-box h2{color:#e5e7eb!important}
+#recoveryModal .account-submit,#recoveryModal .recovery-neutral-btn{background:#292d34!important;color:#f3f4f6!important;border:1px solid #414650!important;box-shadow:none!important;font-weight:700!important}
+#recoveryModal #recoveryGmailBtn{background:#fff!important;color:#202124!important;border:1px solid #dadce0!important;box-shadow:0 2px 5px rgba(0,0,0,.16)!important;display:flex!important;align-items:center!important;justify-content:center!important}
+#recoveryModal #recoveryGmailBtn:not(:disabled):active{background:#f1f3f4!important}
+#recoveryModal #recoveryTelegramBtn{background:#229ed9!important;color:#fff!important;border:1px solid #48b8ed!important;box-shadow:0 5px 16px rgba(34,158,217,.18)!important}
+#recoveryModal #recoveryTelegramBtn:not(:disabled):active{background:#197eaf!important}
+#recoveryModal .account-submit:not(:disabled):active{filter:brightness(.92)}
+#recoveryModal .account-close{background:#292d34!important;color:#f3f4f6!important;border:1px solid #414650!important;z-index:2}
+#recoveryModal .account-field input{border-color:#3a3f48!important}
+#recoveryModal .account-field input:focus{border-color:#777f8c!important;box-shadow:0 0 0 2px rgba(180,190,205,.1)!important}
+#recoveryModal .password-reveal-wrap{display:flex;gap:8px;align-items:center}
+#recoveryModal .password-reveal-wrap input{flex:1;min-width:0}
+#recoveryModal .password-reveal-btn{flex:0 0 auto;padding:12px 13px;border:1px solid #414650;border-radius:10px;background:#292d34;color:#f3f4f6;font-size:12px;font-weight:700;cursor:pointer}
+#recoveryModal .password-reveal-btn:active{background:#363b44}
+</style>
+<script>
+function toggleRecoveryPassword(inputId,button){
+ const input=document.getElementById(inputId);
+ if(!input||!button)return;
+ const reveal=input.type==='password';
+ input.type=reveal?'text':'password';
+ button.textContent=reveal?'Sembunyikan':'Lihat';
+ button.setAttribute('aria-label',reveal?'Sembunyikan password':'Lihat password');
+}
+</script>
+
+</body>
+</html
+async function loadStats() {
+  if (!isOwnerAccount()) return;
+  try {
+    const res = await accountFetch('/api/stats', { headers: {} });
+    const data = await res.json();
+    if (!res.ok || !data.success) throw new Error(data.error || data.detail || ('HTTP '+res.status));
+    document.getElementById('statsRevenue').innerText = 'Rp ' + (data.summary.totalRevenue || 0).toLocaleString('id-ID');
+    document.getElementById('statsSuccess').innerText = data.summary.totalSuccess || 0;
+    document.getElementById('statsPending').innerText = data.summary.totalPending || 0;
+    renderSalesChart(data.dailyStats || []);
+    const productsEl = document.getElementById('statsProducts');
+    if (!data.topProducts || data.topProducts.length === 0) {
+      productsEl.innerHTML = '<div class="stats-empty">Belum ada produk terjual</div>';
+    } else {
+      productsEl.innerHTML = data.topProducts.map((p, i) => {
+        let rankClass = '';
+        if (i === 0) rankClass = 'gold';
+        else if (i === 1) rankClass = 'silver';
+        else if (i === 2) rankClass = 'bronze';
+        return `
+          <div class="stats-product-item">
+            <div class="stats-product-rank ${rankClass}">${i + 1}</div>
+            <div class="stats-product-info">
+              <div class="stats-product-name">${p.name}</div>
+              <div class="stats-product-count">${p.count} terjual • Rp ${p.revenue.toLocaleString('id-ID')}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+  } catch (err) { console.log('Load stats error:', err); }
+}
+function renderSalesChart(dailyStats) {
+  const canvas = document.getElementById('salesChart');
+  if (!canvas) return;
+  const labels = dailyStats.map(d => {
+    const date = new Date(d.date);
+    return date.toLocaleDateString('id-ID', { day: '2-digit', month: 'short' });
+  });
+  const counts = dailyStats.map(d => d.count);
+  const revenues = dailyStats.map(d => d.revenue);
+  if (salesChartInstance) salesChartInstance.destroy();
+  const ctx = canvas.getContext('2d');
+  salesChartInstance = new Chart(ctx, {
+    type: 'line',
+    data: { labels: labels, datasets: [{ label: 'Order Sukses', data: counts, borderColor: '#00ff88', backgroundColor: 'rgba(0,255,136,0.15)', borderWidth: 2, tension: 0.4, fill: true, pointBackgroundColor: '#00ff88', pointBorderColor: '#000', pointBorderWidth: 2, pointRadius: 4 }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#e6e6e6', font: { size: 11, weight: 'bold' } } }, tooltip: { backgroundColor: 'rgba(10,10,15,0.95)', borderColor: '#00ff88', borderWidth: 1, titleColor: '#00ff88', bodyColor: '#fff', callbacks: { afterLabel: function(context) { const idx = context.dataIndex; return 'Pendapatan: Rp ' + revenues[idx].toLocaleString('id-ID'); } } } }, scales: { x: { ticks: { color: '#888', font: { size: 10 } }, grid: { color: 'rgba(255,255,255,0.05)' } }, y: { beginAtZero: true, ticks: { color: '#888', font: { size: 10 }, stepSize: 1 }, grid: { color: 'rgba(255,255,255,0.05)' } } } }
+  });
+}
+
+// ============================================
+// VISITOR TRACKING
+// ============================================
+const VISITOR_SESSION_KEY = 'jimzz_session_id';
+function getSessionId() {
+  let id = localStorage.getItem(VISITOR_SESSION_KEY);
+  if (!id) { id = 'sess_' + Date.now() + '_' + Math.random().toString(36).substring(2, 10); localStorage.setItem(VISITOR_SESSION_KEY, id); }
+  return id;
+}
+async function pingVisitor() {
+  try {
+    const sessionId = getSessionId();
+    const currentPage = document.querySelector('.tab-page.active')?.id?.replace('page-', '') || 'home';
+    await fetch(BACKEND_URL + '/api/visitor-ping', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ sessionId, page: currentPage }) });
+  } catch (err) { console.log('Ping error:', err); }
+}
+let visitorCache = [];
+function visitorEscape(value) { return String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch])); }
+function renderVisitorList() {
+  const listEl=document.getElementById('visitorList'); if(!listEl)return;
+  const query=(document.getElementById('visitorSearch')?.value||'').trim().toLowerCase();
+  const filter=document.getElementById('visitorFilter')?.value||'all';
+  const rows=visitorCache.map(v=>{
+    const stamp=new Date(v.lastPing).getTime();
+    const diffSec=Number.isFinite(stamp)?Math.max(0,Math.floor((Date.now()-stamp)/1000)):999999;
+    return {...v,_diffSec:diffSec,_online:diffSec<60};
+  }).filter(v=>{
+    const hay=[v.ip,v.device,v.browser,v.page].join(' ').toLowerCase();
+    return (!query||hay.includes(query))&&(filter==='all'||(filter==='online'?v._online:!v._online));
+  });
+  const count=document.getElementById('visitorShownCount');
+  if(count)count.textContent=rows.length+' dari '+visitorCache.length+' visitor';
+  if(!rows.length){listEl.innerHTML='<div class="visitor-empty">'+(visitorCache.length?'Tidak ada visitor yang cocok dengan filter.':'Belum ada data visitor')+'</div>';return;}
+  listEl.innerHTML=rows.map(v=>{
+    const timeAgo=v._diffSec<5?'baru saja':v._diffSec<60?v._diffSec+' detik lalu':v._diffSec<3600?Math.floor(v._diffSec/60)+' menit lalu':Math.floor(v._diffSec/3600)+' jam lalu';
+    let deviceIcon='💻';if(v.device==='Android'||v.device==='iOS')deviceIcon='📱';else if(v.device==='Mac')deviceIcon='🍎';else if(v.device==='Windows')deviceIcon='🪟';else if(v.device==='Linux')deviceIcon='🐧';
+    const page=visitorEscape(v.page||'halaman tidak diketahui'),device=visitorEscape(v.device||'Perangkat tidak diketahui'),browser=visitorEscape(v.browser||'Browser tidak diketahui'),ip=visitorEscape(v.ip||'IP tidak tersedia');
+    return '<div class="visitor-item '+(v._online?'online':'')+'"><div class="visitor-avatar">'+deviceIcon+'</div><div class="visitor-info"><div class="visitor-name">'+ip+'</div><div class="visitor-detail">'+device+' • '+browser+' • '+page+'</div><div class="visitor-time">Aktivitas: '+timeAgo+'</div></div><div class="visitor-status '+(v._online?'online':'offline')+'" title="'+(v._online?'Online':'Offline')+'"></div></div>';
+  }).join('');
+}
+async function loadVisitors(manual=false) {
+  if (!isPrivilegedAccount()) return;
+  const refreshBtn=document.getElementById('visitorRefreshBtn');
+  if(manual&&refreshBtn){refreshBtn.disabled=true;refreshBtn.textContent='Memuat…';}
+  try {
+    const res = await accountFetch('/api/visitors', { headers: {} });
+    const data = await res.json();
+    if (!res.ok || !data.success) throw new Error(data.error || data.detail || ('HTTP '+res.status));
+    visitorCache=Array.isArray(data.visitors)?data.visitors:[];
+    document.getElementById('visitorOnline').innerText = data.onlineCount || 0;
+    document.getElementById('visitorToday').innerText = data.todayCount || 0;
+    document.getElementById('visitorTotal').innerText = data.totalCount || 0;
+    const updated=document.getElementById('visitorUpdatedAt');
+    if(updated)updated.textContent='Diperbarui '+new Date().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    const pages={};visitorCache.forEach(v=>{const p=String(v.page||'Lainnya');pages[p]=(pages[p]||0)+1;});
+    const summary=document.getElementById('visitorPageSummary');
+    if(summary){const items=Object.entries(pages).sort((a,b)=>b[1]-a[1]).slice(0,5);summary.innerHTML=items.length?'<span class="visitor-summary-label">Halaman dikunjungi</span>'+items.map(([p,n])=>'<span class="visitor-page-chip">'+visitorEscape(p)+' <b>'+n+'</b></span>').join(''):'<span class="visitor-summary-label">Belum ada aktivitas halaman</span>';}
+    renderVisitorList();
+  } catch (err) {
+    console.log('Load visitors error:', err);
+    const updated=document.getElementById('visitorUpdatedAt');if(updated)updated.textContent='Gagal memuat • coba refresh';
+  } finally {
+    if(manual&&refreshBtn){refreshBtn.disabled=false;refreshBtn.textContent='↻ Refresh';}
+  }
+}
+setInterval(pingVisitor, 30000);
+setInterval(loadVisitors, 10000);
+
+// ============================================
+// ORDER POLLING (MODAL + BACKGROUND) — FIXED
+// ============================================
+let orderPollingInterval = null;
+let backgroundPollingInterval = null;
+const ACTIVE_ORDER_KEY = 'jimzz_active_order';
+
+function simpanOrderAktif(orderId, totalBayar, produkNama) {
+  localStorage.setItem(ACTIVE_ORDER_KEY, JSON.stringify({
+    orderId, totalBayar, produkNama, startedAt: Date.now(), expiresAt: expiresAt || null
+  }));
+}
+function hapusOrderAktif() { localStorage.removeItem(ACTIVE_ORDER_KEY); }
+function getOrderAktif() {
+  try {
+    const raw = localStorage.getItem(ACTIVE_ORDER_KEY);
+    if (!raw) return null;
+    const data = JSON.parse(raw);
+    if (Date.now() - data.startedAt > 24 * 60 * 60 * 1000) { hapusOrderAktif(); return null; }
+    return data;
+  } catch { return null; }
+}
+
+async function handleOrderSuccess(orderId, totalBayar, produkNama) {
+  const processedKey = 'jimzz_processed_' + orderId;
+  if (localStorage.getItem(processedKey) === 'done') return;
+  localStorage.setItem(processedKey, 'done');
+  hapusOrderAktif();
+
+  const modal = document.getElementById('orderModal');
+  if (modal && modal.classList.contains('show')) {
+    document.getElementById('qrisBox').style.display = 'none';
+    document.getElementById('waitingBox').style.display = 'none';
+    document.getElementById('failedBox').style.display = 'none';
+    document.getElementById('successBox').style.display = 'block';
+  }
+  showConfetti();
+  showToast('✅ Pesanan Anda selesai! Owner sudah mengonfirmasi.', 'success');
+
+  if (totalBayar && totalBayar > 0) {
+    const account = getLoggedAccount();
+    if (account && getAccountToken()) {
+      await syncAccountMe();
+      const fresh = getLoggedAccount();
+      if (fresh) {
+        saveAccountSession(null, fresh);
+        renderCoinBalance();
+        showToast(`🎁 Koin akun diperbarui: ${formatCoinValue(fresh.coins)} koin`, 'success');
+      }
+    } else {
+      renderCoinBalance();
+      setTimeout(() => showToast('🔒 Koin terkunci untuk Guest. Login/Register untuk mendapatkan dan menggunakan koin.', 'info'), 1200);
+    }
+  }
+
+}
+
+function handleOrderExpired(orderId, produkNama) {
+  const processedKey = 'jimzz_processed_' + orderId;
+  if (localStorage.getItem(processedKey) === 'done') return;
+  localStorage.setItem(processedKey, 'done');
+  hapusOrderAktif();
+  const modal = document.getElementById('orderModal');
+  if (modal && modal.classList.contains('show')) {
+    document.getElementById('qrisBox').style.display = 'none';
+    document.getElementById('waitingBox').style.display = 'none';
+    document.getElementById('successBox').style.display = 'none';
+    document.getElementById('failedBox').style.display = 'block';
+    const title = document.querySelector('#failedBox .failed-title');
+    const text = document.querySelector('#failedBox .failed-text');
+    if (title) title.innerText = 'QRIS KEDALUWARSA!';
+    if (text) text.innerText = 'Waktu pembayaran 10 menit sudah habis. Silakan buat order baru.';
+  }
+  showToast('⏰ QRIS '+orderId+' sudah expired.', 'warning');
+}
+
+function handleOrderFailed(orderId, produkNama) {
+  const processedKey = 'jimzz_processed_' + orderId;
+  if (localStorage.getItem(processedKey) === 'done') return;
+  localStorage.setItem(processedKey, 'done');
+  hapusOrderAktif();
+
+  const modal = document.getElementById('orderModal');
+  if (modal && modal.classList.contains('show')) {
+    document.getElementById('qrisBox').style.display = 'none';
+    document.getElementById('waitingBox').style.display = 'none';
+    document.getElementById('successBox').style.display = 'none';
+    document.getElementById('failedBox').style.display = 'block';
+  }
+  showToast(`❌ Pesanan ${orderId} GAGAL/BATAL. Hubungi admin untuk refund.`, 'error');
+}
+
+async function cekStatusOrder(orderId) {
+  try {
+    const res = await fetch(BACKEND_URL + '/api/check-order?orderId=' + encodeURIComponent(orderId));
+    const data = await res.json();
+    if (!data.success) return null;
+    return data.status;
+  } catch (err) { console.log('Cek status error:', err); return null; }
+}
+
+function startOrderPolling(orderId, totalBayar, produkNama) {
+  if (orderPollingInterval) clearInterval(orderPollingInterval);
+  orderPollingInterval = setInterval(async () => {
+    const status = await cekStatusOrder(orderId);
+    if (status === 'success') {
+      clearInterval(orderPollingInterval); orderPollingInterval = null;
+      handleOrderSuccess(orderId, totalBayar, produkNama);
+    } else if (status === 'expired') {
+      clearInterval(orderPollingInterval); orderPollingInterval = null;
+      handleOrderExpired(orderId, produkNama);
+    } else if (status === 'failed' || status === 'cancel') {
+      clearInterval(orderPollingInterval); orderPollingInterval = null;
+      handleOrderFailed(orderId, produkNama);
+    }
+  }, 5000);
+}
+
+function startBackgroundPolling() {
+  if (backgroundPollingInterval) clearInterval(backgroundPollingInterval);
+  backgroundPollingInterval = setInterval(async () => {
+    const order = getOrderAktif();
+    if (!order) {
+      clearInterval(backgroundPollingInterval); backgroundPollingInterval = null;
+      return;
+    }
+    const status = await cekStatusOrder(order.orderId);
+    if (status === 'success') {
+      clearInterval(backgroundPollingInterval); backgroundPollingInterval = null;
+      handleOrderSuccess(order.orderId, order.totalBayar, order.produkNama);
+    } else if (status === 'expired') {
+      clearInterval(backgroundPollingInterval); backgroundPollingInterval = null;
+      handleOrderExpired(order.orderId, order.produkNama);
+    } else if (status === 'failed' || status === 'cancel') {
+      clearInterval(backgroundPollingInterval); backgroundPollingInterval = null;
+      handleOrderFailed(order.orderId, order.produkNama);
+    }
+  }, 7000);
+}
+
+// ============================================
+// ADMIN ORDER QUEUE
+// ============================================
+async function loadOrders() {
+  if (!isOwnerAccount()) return;
+  try {
+    const res = await accountFetch('/api/orders-list', { headers: {} });
+    const data = await res.json();
+    if (!res.ok || !data.success) {
+      throw new Error(data.error || data.detail || ('HTTP '+res.status));
+    }
+    const listEl = document.getElementById('orderQueueList');
+    const pending = (data.orders || []).filter(o => o.status === 'pending');
+    if (pending.length === 0) { listEl.innerHTML = '<div class="order-queue-empty">Belum ada order pending</div>'; return; }
+    listEl.innerHTML = pending.map(o => `
+      <div class="order-item">
+        <div class="order-item-header">
+          <span class="order-item-id">${o.order_id}</span>
+          <span class="order-item-status pending">PENDING</span>
+        </div>
+        <div class="order-item-detail">
+          📦 <b>${o.product_name}</b><br>
+          📋 ${o.product_detail}<br>
+          🔗 <a href="${o.product_link}" target="_blank">${o.product_link}</a><br>
+          📱 WA: <b>${o.customer_phone}</b><br>
+          💰 Rp ${o.total_amount.toLocaleString('id-ID')}
+        </div>
+        ${o.telegram_sent === true
+          ? '<div style="margin-top:10px;padding:8px 10px;border-radius:8px;background:rgba(0,255,136,.08);border:1px solid rgba(0,255,136,.25);font-size:11px;color:#00ff88;">📨 Telegram: <b>Pesan berhasil dikirim</b></div>'
+          : o.telegram_sent === false
+            ? '<div style="margin-top:10px;padding:8px 10px;border-radius:8px;background:rgba(255,70,70,.08);border:1px solid rgba(255,70,70,.25);font-size:11px;color:#ff7777;">📨 Telegram: <b>Gagal dikirim</b> <span style="color:#aaa;">(' + escapeAccountHtml(o.telegram_reason || 'unknown') + ')</span></div>'
+            : '<div style="margin-top:10px;padding:8px 10px;border-radius:8px;background:rgba(255,200,0,.07);border:1px solid rgba(255,200,0,.2);font-size:11px;color:#ffc800;">📨 Telegram: <b>Status belum tercatat</b></div>'}
+        <div class="order-item-buttons">
+          <button class="btn-complete-order" onclick="completeOrder('${o.order_id}')">✅ Selesaikan</button>
+          <button class="btn-fail-order" onclick="failOrder('${o.order_id}')">❌ Gagal</button>
+        </div>
+      </div>
+    `).join('');
+  } catch (err) {
+    console.error('Load orders error:', err);
+    const listEl = document.getElementById('orderQueueList');
+    const message=String(err?.message || 'Network error');
+    const detail=message==='OWNER only'
+      ? 'Server belum mengenali role owner akun Jimzz. Coba keluar lalu login kembali. Jika masih muncul, pastikan akun jimzz memiliki role owner di Supabase dan SUPABASE_KEY backend memakai service-role key.'
+      : message;
+    if (listEl) listEl.innerHTML = '<div class="order-queue-empty" style="color:#ff6b6b;">Gagal memuat order: '+escapeAccountHtml(detail)+'</div>';
+  }
+}
+async function completeOrder(orderId) {
+  if (!isOwnerAccount()) return showToast('OWNER only', 'error');
+  if (!confirm('Yakin mau SELESAIKAN order ' + orderId + '?')) return;
+
+  try {
+    showToast('⏳ Memproses order + koin...', 'info');
+
+    const res = await accountFetch('/api/complete-order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ orderId: orderId })
+    });
+
+    let data={};
+    try { data=await res.json(); } catch {}
+    if (!res.ok || !data.success) {
+      const detail=[data.error,data.detail,data.telegramReason].filter(Boolean).join(' — ');
+      throw new Error(detail || ('HTTP '+res.status));
+    }
+
+    const earned=Number(data.earnedCoins||0);
+    if(data.coinsCredited && earned>0){
+      showToast('🎁 Pesanan berhasil! +'+earned.toLocaleString('id-ID')+' koin masuk.', 'success');
+    }else if(earned>0){
+      showToast('✅ Pesanan berhasil! Koin order sudah tercatat.', 'success');
+    }else{
+      showToast('✅ Pesanan '+orderId+' berhasil dikonfirmasi.', 'success');
+    }
+
+    // Refresh akun pembeli di device pembeli bila session tersebut aktif.
+    // Ini juga memicu popup +koin melalui lastCoinGift.
+    try { await syncAccountMe(); } catch(e) { console.warn('Account coin refresh:',e); }
+
+    if(data.telegramSent===false){
+      console.warn('[Jimzz] Confirm Telegram gagal:',data.telegramReason,data.telegramDetail);
+      showToast('⚠️ Order berhasil, tapi Telegram gagal: '+(data.telegramReason||'unknown'), 'warning');
+    }
+
+    await loadOrders();
+    await loadCounters();
+    await loadStats();
+  } catch (err) {
+    console.error('completeOrder:',err);
+    showToast('❌ Confirm gagal: '+err.message, 'error');
+  }
+}
+async function failOrder(orderId) {
+  if (!isOwnerAccount()) return showToast('OWNER only', 'error');
+  if (!confirm('Yakin mau tandai GAGAL order ' + orderId + '?')) return;
+  try {
+    const res = await accountFetch('/api/fail-order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ orderId: orderId })
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast('❌ Order ' + orderId + ' ditandai gagal!', 'warning');
+      if (data.telegramSent === false) {
+        showToast('⚠️ Cancel berhasil, tapi Telegram gagal: ' + (data.telegramReason || 'unknown'), 'warning');
+        console.warn('[Jimzz] Cancel Telegram gagal:', data.telegramReason, data.telegramDetail);
+      }
+      await loadOrders();
+      await loadStats();
+    } else {
+      showToast('Gagal: ' + (data.error || 'Unknown error'), 'error');
+    }
+  } catch (err) { showToast('Error: ' + err.message, 'error'); }
+}
+setInterval(() => { if (isOwnerAccount() && document.getElementById('orderQueueSection')?.style.display !== 'none') loadOrders(); }, 10000);
+setInterval(() => { if (isOwnerAccount() && document.getElementById('statsPanelSection')?.style.display !== 'none') loadStats(); }, 30000);
+
+// ============================================
+// BACKGROUND SIMPLE
+// ============================================
+let simpleAnimationId = null;
+let simpleCanvas, simpleCtx, simpleParticles = [], simpleMeteors = [], simpleTime = 0;
+let simpleIsPaused = false;
+let simpleW, simpleH, simpleIsMobile;
+function initCanvasSimple() {
+  simpleCanvas = document.getElementById("jimzz-neon-bg");
+  if (!simpleCanvas) return;
+  if (simpleAnimationId) cancelAnimationFrame(simpleAnimationId);
+  simpleParticles = []; simpleMeteors = []; simpleTime = 0; simpleIsPaused = false;
+  simpleCtx = simpleCanvas.getContext("2d");
+  simpleIsMobile = window.innerWidth < 600;
+  function resizeJimzz() { simpleW = simpleCanvas.width = window.innerWidth; simpleH = simpleCanvas.height = window.innerHeight; simpleIsMobile = window.innerWidth < 600; }
+  resizeJimzz();
+  window.addEventListener('resize', resizeJimzz);
+  const particleCount = simpleIsMobile ? 40 : 80;
+  for (let i = 0; i < particleCount; i++) simpleParticles.push({ x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight, size: Math.random() * 2 + 0.5, speedX: (Math.random() - 0.5) * 0.3, speedY: (Math.random() - 0.5) * 0.3, alpha: Math.random() * 0.25 + 0.08, pulse: Math.random() * Math.PI * 2 });
+  animateSimple();
+}
+function animateSimple() {
+  if (simpleIsPaused) return;
+  simpleCtx.clearRect(0, 0, simpleW, simpleH);
+  simpleTime += 0.005;
+  const connectionDistance = simpleIsMobile ? 90 : 130;
+  const maxMeteors = simpleIsMobile ? 1 : 3;
+  const gridSize = 60;
+  simpleCtx.strokeStyle = 'rgba(0, 255, 100, 0.012)';
+  simpleCtx.lineWidth = 1;
+  for (let x = 0; x < simpleW; x += gridSize) { simpleCtx.beginPath(); simpleCtx.moveTo(x, 0); simpleCtx.lineTo(x, simpleH); simpleCtx.stroke(); }
+  for (let y = 0; y < simpleH; y += gridSize) { simpleCtx.beginPath(); simpleCtx.moveTo(0, y); simpleCtx.lineTo(simpleW, y); simpleCtx.stroke(); }
+  for (let i = 0; i < 2; i++) {
+    const gradient = simpleCtx.createLinearGradient(0, 0, simpleW, simpleH);
+    const offset = simpleTime + i * 2;
+    const hue1 = 150 + Math.sin(offset) * 15;
+    const hue2 = 160 + Math.cos(offset * 1.3) * 15;
+    gradient.addColorStop(0, `hsla(${hue1}, 100%, 50%, 0.015)`);
+    gradient.addColorStop(0.5, `hsla(${hue2}, 100%, 50%, 0.025)`);
+    gradient.addColorStop(1, `hsla(${hue1}, 100%, 50%, 0.015)`);
+    simpleCtx.fillStyle = gradient; simpleCtx.fillRect(0, 0, simpleW, simpleH);
+  }
+  for (let i = 0; i < simpleParticles.length; i++) {
+    for (let j = i + 1; j < simpleParticles.length; j++) {
+      const dx = simpleParticles[i].x - simpleParticles[j].x;
+      const dy = simpleParticles[i].y - simpleParticles[j].y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < connectionDistance) {
+        const opacity = (1 - dist / connectionDistance) * 0.06;
+        simpleCtx.beginPath();
+        simpleCtx.moveTo(simpleParticles[i].x, simpleParticles[i].y);
+        simpleCtx.lineTo(simpleParticles[j].x, simpleParticles[j].y);
+        simpleCtx.strokeStyle = `rgba(0, 255, 100, ${opacity})`;
+        simpleCtx.lineWidth = 0.5; simpleCtx.stroke();
+      }
+    }
+  }
+  if (simpleMeteors.length < maxMeteors && Math.random() < 0.003) simpleMeteors.push({ x: Math.random() * simpleW, y: -50, size: Math.random() * 2 + 1, speed: Math.random() * 2 + 1.5, speedX: (Math.random() - 0.5) * 2, alpha: 0.6 });
+  simpleMeteors = simpleMeteors.filter(m => {
+    m.x += m.speedX; m.y += m.speed; m.alpha -= 0.003;
+    simpleCtx.beginPath(); simpleCtx.moveTo(m.x, m.y); simpleCtx.lineTo(m.x - m.speedX * 10, m.y - m.speed * 10);
+    simpleCtx.strokeStyle = `rgba(0, 255, 136, ${m.alpha})`;
+    simpleCtx.lineWidth = m.size; simpleCtx.shadowBlur = 15; simpleCtx.shadowColor = "#00ff88"; simpleCtx.stroke();
+    return m.y < simpleH + 100 && m.alpha > 0;
+  });
+  simpleParticles.forEach(p => {
+    p.x += p.speedX; p.y += p.speedY; p.pulse += 0.02;
+    if (p.x < -10) p.x = simpleW + 10;
+    if (p.x > simpleW + 10) p.x = -10;
+    if (p.y < -10) p.y = simpleH + 10;
+    if (p.y > simpleH + 10) p.y = -10;
+    const size = p.size * (1 + Math.sin(p.pulse) * 0.3);
+    simpleCtx.beginPath();
+    simpleCtx.arc(p.x, p.y, size, 0, Math.PI * 2);
+    simpleCtx.fillStyle = `rgba(0, 255, 100, ${p.alpha})`;
+    simpleCtx.shadowBlur = 10; simpleCtx.shadowColor = "#00ff66"; simpleCtx.fill();
+  });
+  simpleCtx.shadowBlur = 0;
+  for (let i = 0; i < 2; i++) {
+    simpleCtx.beginPath();
+    for (let x = 0; x <= simpleW; x += 10) {
+      const y = simpleH * (0.4 + i * 0.2) + Math.sin(x * 0.005 + simpleTime * 2 + i) * 25;
+      if (x === 0) simpleCtx.moveTo(x, y); else simpleCtx.lineTo(x, y);
+    }
+    simpleCtx.strokeStyle = `rgba(0, 255, 90, ${0.015 + i * 0.008})`;
+    simpleCtx.lineWidth = 1.5; simpleCtx.stroke();
+  }
+  simpleAnimationId = requestAnimationFrame(animateSimple);
+}
+
+// ============================================
+// BACKGROUND NEON
+// ============================================
+let neonAnimationId = null;
+let neonCanvas, neonCtx;
+let neonParticles = [];
+let neonMouse = { x: -1000, y: -1000 };
+let neonW = 0, neonH = 0;
+let neonReducedMotion = false;
+function initCanvasNeon() {
+  neonCanvas = document.getElementById("neonCanvas");
+  if (!neonCanvas) return;
+  neonCtx = neonCanvas.getContext("2d");
+  if (!neonCtx) return;
+  if (neonAnimationId) cancelAnimationFrame(neonAnimationId);
+  neonReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function resizeNeon() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    neonW = window.innerWidth; neonH = window.innerHeight;
+    neonCanvas.width = neonW * dpr; neonCanvas.height = neonH * dpr;
+    neonCanvas.style.width = neonW + "px"; neonCanvas.style.height = neonH + "px";
+    neonCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    createNeonParticles();
+  }
+  function createNeonParticles() {
+    neonParticles = [];
+    const count = Math.min(110, Math.max(40, Math.floor(neonW * neonH / 11000)));
+    for (let i = 0; i < count; i++) neonParticles.push({ x: Math.random() * neonW, y: Math.random() * neonH, size: Math.random() * 2.2 + .5, speed: Math.random() * .45 + .1, opacity: Math.random() * .7 + .2, phase: Math.random() * Math.PI * 2, twinkle: Math.random() * .035 + .01 });
+  }
+  function drawNeon() {
+    neonCtx.clearRect(0, 0, neonW, neonH);
+    neonParticles.forEach(p => {
+      if (!neonReducedMotion) { p.y -= p.speed; p.phase += p.twinkle; }
+      if (p.y < -10) { p.y = neonH + 10; p.x = Math.random() * neonW; }
+      const glow = p.opacity * (.65 + Math.sin(p.phase) * .35);
+      const dx = neonMouse.x - p.x; const dy = neonMouse.y - p.y;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      let px = p.x, py = p.y;
+      if (!neonReducedMotion && distance < 180) { const force = (180 - distance) / 180; px -= dx * force * .025; py -= dy * force * .025; }
+      neonCtx.beginPath();
+      neonCtx.arc(px, py, p.size, 0, Math.PI * 2);
+      neonCtx.fillStyle = "rgba(0,255,157," + glow + ")";
+      neonCtx.shadowColor = "#00ff9d"; neonCtx.shadowBlur = 12; neonCtx.fill();
+    });
+    neonCtx.shadowBlur = 0;
+    if (!neonReducedMotion) neonAnimationId = requestAnimationFrame(drawNeon);
+  }
+  window.addEventListener("pointermove", function (event) { if (event.pointerType === "mouse") { neonMouse.x = event.clientX; neonMouse.y = event.clientY; } }, { passive: true });
+  window.addEventListener("resize", resizeNeon);
+  resizeNeon();
+  drawNeon();
+}
+function initCursorGlow() {
+  document.addEventListener('mousemove', (e) => {
+    document.body.style.setProperty('--mouse-x', e.clientX + 'px');
+    document.body.style.setProperty('--mouse-y', e.clientY + 'px');
+  });
+}
+
+// ============================================
+// ============================================
+// ACCOUNT ROLE AUTH — SERVER ACCOUNT V2
+// ============================================
+let isAdmin=false;
+const JIMZZ_USERS_KEY='jimzz_accounts_v1';
+const JIMZZ_SESSION_KEY='jimzz_session_v1';
+const JIMZZ_TOKEN_KEY='jimzz_access_token_v2';
+const JIMZZ_REFRESH_KEY='jimzz_refresh_token_v2';
+const JIMZZ_CACHE_KEY='jimzz_account_cache_v2';
+let accountCache=null;
+
+function getAccountToken(){return localStorage.getItem(JIMZZ_TOKEN_KEY)||'';}
+function getAccountRefreshToken(){return localStorage.getItem(JIMZZ_REFRESH_KEY)||'';}
+function getLoggedAccount(){try{return accountCache||JSON.parse(localStorage.getItem(JIMZZ_CACHE_KEY)||'null');}catch{return null;}}
+function getCurrentAccountRecord(){const user=getLoggedAccount();return user?{key:String(user.username||'').toLowerCase(),user}:null;}
+function getCurrentRole(){return getLoggedAccount()?.role||null;}
+function isOwnerAccount(){return getCurrentRole()==='owner';}
+function isPrivilegedAccount(){const role=getCurrentRole();return role==='owner'||role==='admin';}
+function hasBuyerFeatures(){return !!getLoggedAccount();}
+function saveAccountSession(session,user){
+  if(session?.access_token)localStorage.setItem(JIMZZ_TOKEN_KEY,session.access_token);
+  if(session?.refresh_token)localStorage.setItem(JIMZZ_REFRESH_KEY,session.refresh_token);
+  if(user){
+    accountCache=user;
+    localStorage.setItem(JIMZZ_CACHE_KEY,JSON.stringify(user));
+    localStorage.setItem(JIMZZ_SESSION_KEY,user.username||'');
+  }
+}
+function clearAccountSession(){
+  accountCache=null;
+  localStorage.removeItem(JIMZZ_TOKEN_KEY);
+  localStorage.removeItem(JIMZZ_REFRESH_KEY);
+  localStorage.removeItem(JIMZZ_CACHE_KEY);
+  localStorage.removeItem(JIMZZ_SESSION_KEY);
+}
+async function refreshAccountSession(){
+  const refreshToken=getAccountRefreshToken();
+  if(!refreshToken)return false;
+  try{
+    const res=await fetch(BACKEND_URL+'/api/account',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({action:'refresh',refreshToken})
+    });
+    let data={};try{data=await res.json();}catch{}
+    if(!res.ok||!data.success||!data.session)return false;
+    saveAccountSession(data.session,data.user);
+    return true;
+  }catch{return false;}
+}
+async function accountApi(action,body={},auth=true){
+  let token=auth?getAccountToken():'';
+  if(auth&&!token&&getAccountRefreshToken()){
+    await refreshAccountSession();
+    token=getAccountToken();
+  }
+  const headers={'Content-Type':'application/json'};
+  if(auth&&token)headers.Authorization='Bearer '+token;
+  let res=await fetch(BACKEND_URL+'/api/account',{
+    method:'POST',headers,body:JSON.stringify({action,...body})
+  });
+  let data={};try{data=await res.json();}catch{}
+  if(auth&&(res.status===401||res.status===403)&&getAccountRefreshToken()){
+    if(await refreshAccountSession()){
+      headers.Authorization='Bearer '+getAccountToken();
+      res=await fetch(BACKEND_URL+'/api/account',{
+        method:'POST',headers,body:JSON.stringify({action,...body})
+      });
+      data={};try{data=await res.json();}catch{}
+    }
+  }
+  if(!res.ok||!data.success)throw new Error(data.error||'Server error');
+  return data;
+}
+async function accountFetch(path,options={},auth=true){
+  const opts={...options,headers:{...(options.headers||{})}};
+  if(auth){
+    let token=getAccountToken();
+    if(!token&&getAccountRefreshToken()){
+      await refreshAccountSession();
+      token=getAccountToken();
+    }
+    if(token)opts.headers.Authorization='Bearer '+token;
+  }
+  let res=await fetch(BACKEND_URL+path,opts);
+  if(auth&&(res.status===401||res.status===403)&&getAccountRefreshToken()){
+    if(await refreshAccountSession()){
+      opts.headers.Authorization='Bearer '+getAccountToken();
+      res=await fetch(BACKEND_URL+path,opts);
+    }
+  }
+  return res;
+}
+function showCoinGiftNotification(amount,sender,direction=1){
+  const amountBig=coinBigInt(amount);
+  if(amountBig<=0n)return;
+  const isDecrease=direction<0;
+  const color=isDecrease?'#ff6b6b':'#00ff88';
+  const sign=isDecrease?'−':'+';
+  const title=isDecrease?'SALDO KOIN BERKURANG':'KOIN MASUK!';
+  const text='🪙 '+sign+formatCoinValue(amountBig)+' koin'+(sender?' ('+sender+')':'');
+  showToast(text,isDecrease?'info':'success');
+  if(navigator.vibrate)try{navigator.vibrate(isDecrease?[70,50,70]:[120,60,120]);}catch{}
+  const existing=document.getElementById('coinGiftPopup');existing?.remove();
+  const popup=document.createElement('div');
+  popup.id='coinGiftPopup';
+  popup.innerHTML='<div style="font-size:28px">'+(isDecrease?'🪙':'🎁')+'</div><div><div style="font-size:15px;font-weight:900;color:'+color+'">'+title+'</div><div style="font-size:13px;color:#fff;margin-top:3px">'+escapeAccountHtml(text)+'</div></div>';
+  popup.style.cssText='position:fixed;top:18px;left:50%;transform:translateX(-50%);z-index:99999;width:calc(100% - 28px);max-width:380px;padding:14px 16px;border:2px solid '+color+';border-radius:16px;background:linear-gradient(145deg,#07150f,#101018);box-shadow:0 12px 45px '+(isDecrease?'rgba(255,107,107,.3)':'rgba(0,255,136,.35)')+';display:flex;align-items:center;gap:12px;animation:coinGiftIn .35s ease-out;font-family:Arial,sans-serif';
+  document.body.appendChild(popup);
+  setTimeout(()=>popup.remove(),5000);
+}
+async function syncAccountMe(){
+  if(!getAccountRefreshToken()){renderCoinBalance();return false;}
+  const previous=getLoggedAccount();
+  const checkGift=(next)=>{
+    const oldId=previous?.lastCoinGift?.id||'';
+    const newId=next?.lastCoinGift?.id||'';
+    if(newId && newId!==oldId){
+      const amount=coinBigInt(next.lastCoinGift?.amount);
+      if(amount>0n)showCoinGiftNotification(amount,next.lastCoinGift?.from||'Owner');
+      return;
+    }
+    const oldCoins=coinBigInt(previous?.coins);
+    const newCoins=coinBigInt(next?.coins);
+    const diff=newCoins-oldCoins;
+    if(diff>0n)showCoinGiftNotification(diff,next?.lastCoinGift?.from||'Owner',1);
+    else if(diff<0n)showCoinGiftNotification(-diff,'Penyesuaian saldo',-1);
+  };
+  try{
+    const data=await accountApi('me');
+    const next=data.user;if(next?.banned){saveAccountSession(null,next);showBanLockScreen();return false;}checkGift(next);
+    saveAccountSession(null,next);hideBanLockScreen();renderCoinBalance();updateAccountUI();applyAdminUI();return true;
+  }catch{
+    try{
+      const data=await accountApi('refresh',{refreshToken:getAccountRefreshToken()},false);
+      const next=data.user;if(next?.banned){saveAccountSession(null,next);showBanLockScreen();return false;}checkGift(next);
+      saveAccountSession(data.session,next);hideBanLockScreen();renderCoinBalance();updateAccountUI();applyAdminUI();return true;
+    }catch{
+      // Jangan menghapus sesi lokal hanya karena jaringan/API gagal sementara.
+      // Token refresh yang masih valid akan dicoba lagi pada sinkronisasi berikutnya.
+      renderCoinBalance();updateAccountUI();applyAdminUI();return false;
+    }
+  }
+}
+let accountSyncBusy=false;
+async function runAccountSync(){
+  if(accountSyncBusy || !getAccountRefreshToken()) return;
+  accountSyncBusy=true;
+  try{await syncAccountMe();}finally{accountSyncBusy=false;}
+}
+// Jalankan satu sinkronisasi awal, lalu cek berkala tanpa refresh-token race.
+setTimeout(runAccountSync,800);
+setInterval(runAccountSync,2000);
+// Sinkronkan segera saat pembeli kembali ke tab/aplikasi.
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)runAccountSync();});
+window.addEventListener('focus',()=>runAccountSync());
+
+async function loadCounters(){try{const res=await fetch(BACKEND_URL+'/api/counters');const data=await res.json();if(data.success){const oldTotal=cachedCounters.totalOrder;cachedCounters.totalOrder=data.totalOrder;cachedCounters.produkOrder=data.produkOrder||{};updateOrderCounter();if(oldTotal!==data.totalOrder){renderProduk('sosmed',produkSosmed,'SUNTIK ALL');renderProduk('jpm',produkJpm,'LAYANAN LAINNYA');renderProduk('apkList',produkApk,'JUAL APK');}}}catch(err){console.log('Gagal load counters:',err);}}
+let cachedCounters={totalOrder:1375,produkOrder:{}};
+function updateOrderCounter(){const el=document.getElementById('viewCount');if(el)el.innerText=cachedCounters.totalOrder.toLocaleString('id-ID');}
+function getProdukOrderCount(kategoriId,index){return cachedCounters.produkOrder[kategoriId+'_'+index]||0;}
+setInterval(loadCounters,3000);
+function escapeAccountHtml(value){return String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));}
+async function renderAccountManager(){
+  if(!isOwnerAccount())return;
+  const summary=document.getElementById('ownerAccountSummary'),list=document.getElementById('ownerAccountList'),select=document.getElementById('giftTargetUser');
+  try{
+    const data=await accountApi('list');
+    const users=data.users||[];
+    if(summary)summary.textContent=users.length+' akun terdaftar di server';
+    if(select){
+      const old=select.value;
+      select.innerHTML='<option value="">Pilih akun penerima...</option>'+users.filter(u=>String(u.role||'user')!=='owner').map(u=>'<option value="'+escapeAccountHtml(u.id)+'">'+escapeAccountHtml(u.username)+' — '+formatCoinValue(u.coins)+' koin</option>').join('');
+      if(users.some(u=>u.id===old))select.value=old;
+    }
+    if(!list)return;
+    if(!users.length){list.innerHTML='<div class="owner-account-empty">Belum ada akun.</div>';return;}
+    list.innerHTML=users.map(u=>{
+      const role=String(u.role||'user').toLowerCase(),label=role==='owner'?'OWNER':role==='admin'?'ADMIN':'USER';
+      let action='';
+      if(role==='owner')action='<span class="owner-account-role owner">OWNER</span>';
+      else action='<button class="owner-account-action '+(role==='admin'?'demote':'')+'" onclick="setAccountRole(\''+escapeAccountHtml(u.id)+'\',\''+(role==='admin'?'user':'admin')+'\')">'+(role==='admin'?'Jadikan User':'Jadikan Admin')+'</button>';
+      const ban='<button class="owner-account-action '+(u.banned?'unban':'ban')+'" onclick="setAccountBan(\''+escapeAccountHtml(u.id)+'\','+(!u.banned)+')">'+(u.banned?'Unban':'Ban')+'</button>';
+      const del='<button class="owner-account-action delete-account" onclick="deleteAccountOwner(\''+escapeAccountHtml(u.id)+'\')">Hapus</button><button class="owner-account-action reset-password" onclick="ownerResetPassword(\''+escapeAccountHtml(u.id)+'\',\''+escapeAccountHtml(u.username)+'\')">Reset Password</button>';
+      return '<div class="owner-account-item"><div class="owner-account-info"><button type="button" class="owner-account-name" style="background:none;border:0;padding:0;color:inherit;text-align:left;font:inherit;font-weight:800;cursor:pointer;text-decoration:underline;text-decoration-color:#27d17f;text-underline-offset:3px;" onclick="showAccountDetails(\\''+escapeAccountHtml(u.id)+'\\',\\''+escapeAccountHtml(u.username)+'\\')">'+escapeAccountHtml(u.username)+'</button><div class="owner-account-meta">'+escapeAccountHtml(u.createdAt?new Date(u.createdAt).toLocaleString('id-ID'):'Tanggal tidak tersedia')+'</div></div><span class="owner-account-role '+role+'">'+label+'</span>'+action+(role!=='owner'?ban+del:'')+'</div>';
+    }).join('');
+  }catch(e){if(list)list.innerHTML='<div class="owner-account-empty">Gagal memuat akun: '+escapeAccountHtml(e.message)+'</div>';}
+}
+async function showAccountDetails(userId,username){
+  if(!isOwnerAccount())return;
+  const pin=prompt('Masukkan PIN untuk melihat detail akun '+username+':');
+  if(pin===null)return;
+  if(!pin.trim()){showToast('PIN wajib diisi.','error');return;}
+  try{
+    let data;
+    try{
+      data=await accountApi('owner-account-details',{userId,pin});
+    }catch(firstError){
+      if(!String(firstError.message||'').includes('PIN detail belum dibuat'))throw firstError;
+      const newPin=prompt('PIN belum dibuat. Buat PIN baru 4–12 digit angka:');
+      if(newPin===null)return;
+      if(!/^\\d{4,12}$/.test(newPin)){showToast('PIN harus 4–12 digit angka.','error');return;}
+      const confirmPin=prompt('Ulangi PIN baru untuk konfirmasi:');
+      if(confirmPin!==newPin){showToast('Konfirmasi PIN tidak cocok.','error');return;}
+      await accountApi('owner-set-details-pin',{pin:newPin});
+      data=await accountApi('owner-account-details',{userId,pin:newPin});
+    }
+    const d=data.details||{};
+    const esc=escapeAccountHtml;
+    const fmt=value=>value?new Date(value).toLocaleString('id-ID',{dateStyle:'medium',timeStyle:'short'}):'Belum tersedia';
+    const devices=Array.isArray(d.devices)&&d.devices.length?d.devices.map(x=>'<div style="padding:10px 12px;border:1px solid #263a2d;border-radius:10px;margin-top:8px;background:#0b130e"><b>'+esc(x.device||'Perangkat tidak diketahui')+' · '+esc(x.browser||'Browser tidak diketahui')+'</b><div style="font-size:11px;color:#a9b9ae;margin-top:4px">Login: '+esc(fmt(x.at))+'</div><div style="font-size:10px;color:#77867c;margin-top:4px;word-break:break-word">'+esc(x.userAgent||'')+'</div></div>').join(''):'<div style="color:#9aa79e;font-size:12px;padding:10px 0">Belum ada riwayat login perangkat. Riwayat mulai dicatat setelah fitur ini aktif.</div>';
+    let modal=document.getElementById('ownerAccountDetailsModal');
+    if(!modal){modal=document.createElement('div');modal.id='ownerAccountDetailsModal';modal.style.cssText='position:fixed;inset:0;z-index:999999;background:rgba(0,0,0,.78);display:flex;align-items:center;justify-content:center;padding:16px';document.body.appendChild(modal);}
     modal.innerHTML='<div style="width:100%;max-width:520px;max-height:85vh;overflow:auto;background:#0a100c;border:1px solid #245237;border-radius:18px;padding:18px;color:#edf7ef"><div style="display:flex;align-items:center;justify-content:space-between;gap:12px"><h3 style="margin:0;color:#4de38e">DETAIL AKUN</h3><button type="button" onclick="document.getElementById(\\'ownerAccountDetailsModal\\')?.remove()" style="background:#19251d;border:1px solid #345640;color:#fff;border-radius:9px;padding:8px 12px">Tutup ✕</button></div><div style="font-size:12px;color:#9db3a3;margin:6px 0 14px">Data server akun · password asli tidak dapat dibaca</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'+[
       ['Username',d.username],['ID Akun',d.id],['Email',d.email||'Tidak tersedia'],['Nomor HP',d.phone||'Tidak tersedia'],['Role',d.role],['Status',d.banned?'DIBANNED':'Aktif'],['Koin',d.coins],['Dibuat',fmt(d.createdAt)],['Update terakhir',fmt(d.updatedAt)],['Login terakhir',fmt(d.lastSignInAt)],['Email dikonfirmasi',fmt(d.emailConfirmedAt)],['Email verifikasi Jimzz',d.emailVerified?'Ya':'Belum']
     ].map(([k,v])=>'<div style="padding:10px;border-radius:10px;background:#101a13;border:1px solid #203729;min-width:0"><div style="font-size:10px;color:#8da697;margin-bottom:5px">'+esc(k)+'</div><div style="font-size:12px;font-weight:700;overflow-wrap:anywhere">'+esc(v??'Tidak tersedia')+'</div></div>').join('')+'</div><h4 style="margin:18px 0 6px">📱 Perangkat yang pernah login</h4>'+devices+'<div style="font-size:11px;color:#9aa79e;margin-top:14px;padding-top:12px;border-top:1px solid #203729">Password tidak disimpan dalam bentuk yang bisa ditampilkan. Jika perlu, gunakan tombol “Reset Password” di daftar akun.</div></div>';
