@@ -1029,6 +1029,23 @@ body::before,body::after{background:none!important;animation:none!important;filt
     </div>
   </section>
 
+  <section class="kategori" id="accountVisitorPanelSection" style="display:none;">
+    <div class="visitor-panel">
+      <div class="visitor-panel-header"><span style="font-size:24px;">👤</span><span class="visitor-panel-title">LIVE VISITOR AKUN</span></div>
+      <p style="font-size:12px;color:#9aa79e;margin:0 0 14px;">Khusus akun yang login. Nama akun diverifikasi dari sesi login, bukan dari input browser.</p>
+      <div class="visitor-stats">
+        <div class="visitor-stat"><div class="visitor-stat-value" id="accountVisitorOnline">0</div><div class="visitor-stat-label">Akun Online</div></div>
+        <div class="visitor-stat"><div class="visitor-stat-value" id="accountVisitorTotal">0</div><div class="visitor-stat-label">Sesi Akun</div></div>
+      </div>
+      <div class="visitor-tools">
+        <input id="accountVisitorSearch" type="search" placeholder="Cari nama akun, perangkat, halaman..." oninput="renderAccountVisitorList()" aria-label="Cari aktivitas akun">
+        <button type="button" id="accountVisitorRefreshBtn" onclick="loadAccountVisitors(true)">↻ Refresh</button>
+      </div>
+      <div class="visitor-meta"><span id="accountVisitorUpdatedAt">Menunggu data…</span><span id="accountVisitorShownCount">0 akun</span></div>
+      <div class="visitor-list" id="accountVisitorList"><div class="visitor-empty">Belum ada aktivitas akun</div></div>
+    </div>
+  </section>
+
   <section class="kategori" id="orderQueueSection" style="display:none;">
     <div class="order-queue-panel">
       <div class="order-queue-header">
@@ -1546,7 +1563,10 @@ async function pingVisitor() {
   try {
     const sessionId = getSessionId();
     const currentPage = document.querySelector('.tab-page.active')?.id?.replace('page-', '') || 'home';
-    await fetch(BACKEND_URL + '/api/visitor-ping', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ sessionId, page: currentPage }) });
+    const headers = { 'Content-Type': 'application/json' };
+    const accountToken = getAccountToken();
+    if (accountToken) headers.Authorization = 'Bearer ' + accountToken;
+    await fetch(BACKEND_URL + '/api/visitor-ping', { method: 'POST', headers, body: JSON.stringify({ sessionId, page: currentPage }) });
   } catch (err) { console.log('Ping error:', err); }
 }
 let visitorCache = [];
@@ -1598,8 +1618,44 @@ async function loadVisitors(manual=false) {
     if(manual&&refreshBtn){refreshBtn.disabled=false;refreshBtn.textContent='↻ Refresh';}
   }
 }
+let accountVisitorCache = [];
+function renderAccountVisitorList() {
+  const list = document.getElementById('accountVisitorList');
+  if (!list) return;
+  const query = (document.getElementById('accountVisitorSearch')?.value || '').trim().toLowerCase();
+  const rows = accountVisitorCache.filter(v => [v.username,v.device,v.browser,v.page].join(' ').toLowerCase().includes(query));
+  const shown = document.getElementById('accountVisitorShownCount');
+  if (shown) shown.textContent = rows.length + ' dari ' + accountVisitorCache.length + ' sesi';
+  if (!rows.length) { list.innerHTML = '<div class="visitor-empty">Belum ada aktivitas akun yang cocok.</div>'; return; }
+  list.innerHTML = rows.map(v => {
+    const ago = Math.max(0, Math.floor((Date.now() - new Date(v.lastPing).getTime()) / 1000));
+    const when = ago < 60 ? ago + ' detik lalu' : ago < 3600 ? Math.floor(ago/60) + ' menit lalu' : Math.floor(ago/3600) + ' jam lalu';
+    return '<div class="visitor-item '+(v.online?'online':'')+'"><div class="visitor-avatar">👤</div><div class="visitor-info"><div class="visitor-name">'+visitorEscape(v.username)+'</div><div class="visitor-detail">'+visitorEscape(v.device)+' • '+visitorEscape(v.browser)+' • '+visitorEscape(v.page)+'</div><div class="visitor-time">Aktivitas: '+when+'</div></div><div class="visitor-status '+(v.online?'online':'offline')+'" title="'+(v.online?'Online':'Offline')+'"></div></div>';
+  }).join('');
+}
+async function loadAccountVisitors(manual=false) {
+  if (!isPrivilegedAccount()) return;
+  const btn=document.getElementById('accountVisitorRefreshBtn');
+  if(manual&&btn){btn.disabled=true;btn.textContent='Memuat…';}
+  try {
+    const res=await accountFetch('/api/account-visitors',{headers:{}});
+    const data=await res.json();
+    if(!res.ok||!data.success)throw new Error(data.error||'Gagal memuat aktivitas akun');
+    accountVisitorCache=Array.isArray(data.accounts)?data.accounts:[];
+    const online=document.getElementById('accountVisitorOnline'),total=document.getElementById('accountVisitorTotal'),updated=document.getElementById('accountVisitorUpdatedAt');
+    if(online)online.textContent=data.onlineCount||0;
+    if(total)total.textContent=data.totalCount||0;
+    if(updated)updated.textContent='Diperbarui '+new Date().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    renderAccountVisitorList();
+  } catch(err) {
+    console.log('Load account visitors error:',err);
+    const updated=document.getElementById('accountVisitorUpdatedAt');
+    if(updated)updated.textContent='Gagal memuat • periksa migrasi database';
+  } finally { if(manual&&btn){btn.disabled=false;btn.textContent='↻ Refresh';} }
+}
 setInterval(pingVisitor, 30000);
 setInterval(loadVisitors, 10000);
+setInterval(loadAccountVisitors, 10000);
 
 // ============================================
 // ORDER POLLING (MODAL + BACKGROUND) — FIXED
@@ -2266,6 +2322,7 @@ function applyAdminUI(){
   const adminPanel=document.getElementById('adminPanelSection');
   const ownerSection=document.getElementById('ownerAccountsSection');
   const visitorPanel=document.getElementById('visitorPanelSection');
+  const accountVisitorPanel=document.getElementById('accountVisitorPanelSection');
   const orderQueue=document.getElementById('orderQueueSection');
   const statsPanel=document.getElementById('statsPanelSection');
   const menuTopup=document.getElementById('menuTopup');
@@ -2276,6 +2333,7 @@ function applyAdminUI(){
   if(isAdmin){
     if(adminPanel)adminPanel.style.display='block';
     if(visitorPanel)visitorPanel.style.display='block';
+    if(accountVisitorPanel)accountVisitorPanel.style.display='block';
     if(orderQueue)orderQueue.style.display=owner?'block':'none';
     if(statsPanel)statsPanel.style.display=owner?'block':'none';
     if(menuTopup){menuTopup.classList.remove('disabled');menuTopup.classList.add('admin-view');}
@@ -2284,10 +2342,12 @@ function applyAdminUI(){
       info.innerHTML='<div class="pengumuman-header" style="justify-content:center;"><span style="font-size:20px;">👑</span><span class="pengumuman-title">MODE ADMIN — TEST ORDER</span></div><p class="pengumuman-text" style="text-align:center;">Kamu bisa <b>test order</b> produk yang masih maintenance.</p>';
     }
     loadVisitors();
+    loadAccountVisitors();
     if(owner){loadOrders();loadStats();}
   }else{
     if(adminPanel)adminPanel.style.display='none';
     if(visitorPanel)visitorPanel.style.display='none';
+    if(accountVisitorPanel)accountVisitorPanel.style.display='none';
     if(orderQueue)orderQueue.style.display='none';
     if(statsPanel)statsPanel.style.display='none';
     if(menuTopup){menuTopup.classList.add('disabled');menuTopup.classList.remove('admin-view');}
@@ -2489,6 +2549,30 @@ function closeAccountSettings(){
   document.body.style.overflow='';
   window.scrollTo({top:0,behavior:'auto'});
 }
+
+// Allow a deliberate pull-down gesture to refresh while account settings is open.
+// It only fires when the settings page is already at the top and the swipe is long.
+(function enableSettingsPullToRefresh(){
+  const settings=document.getElementById('accountSettingsModal');
+  if(!settings)return;
+  let startY=0, tracking=false;
+  settings.addEventListener('touchstart',event=>{
+    if(!settings.classList.contains('show')||event.touches.length!==1)return;
+    startY=event.touches[0].clientY;
+    tracking=settings.scrollTop<=0;
+  },{passive:true});
+  settings.addEventListener('touchend',event=>{
+    if(!tracking||!settings.classList.contains('show')||!event.changedTouches.length)return;
+    const delta=event.changedTouches[0].clientY-startY;
+    tracking=false;
+    if(settings.scrollTop<=0&&delta>=120){
+      const status=document.getElementById('settingsProfileRole');
+      if(status)status.textContent='Memuat ulang Jimzz Store…';
+      window.location.reload();
+    }
+  },{passive:true});
+})();
+
 async function toggleAccountEmailVisibility(){
   const input=document.getElementById('accountEmail'),btn=document.getElementById('accountEmailVisibilityBtn');
   if(!input||!getLoggedAccount()?.emailVerified||!input.readOnly)return;
