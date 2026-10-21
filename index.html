@@ -1150,10 +1150,21 @@ body::before,body::after{background:none!important;animation:none!important;filt
 
 <div class="tab-page" id="page-jpm">
   <section class="kategori">
-    <h2>🚀 Layanan <span class="accent">Lainnya</span></h2>
-    <p class="sub">Pilih layanan yang kamu butuhkan</p>
-    
-    <div class="produk-list" id="jpm"></div>
+    <h2>📲 Nomor <span class="accent">Virtual</span></h2>
+    <p class="sub">Layanan nomor virtual dengan informasi harga dan status pesanan.</p>
+    <div class="pengumuman">
+      <div class="pengumuman-header"><span class="pengumuman-icon">🔐</span><span class="pengumuman-title">LAYANAN NOMOR VIRTUAL</span></div>
+      <p class="pengumuman-text">Halaman nomor virtual sedang disiapkan. Katalog, harga, stok, dan pemesanan akan ditampilkan setelah koneksi API pemasok serta pembayaran selesai dikonfigurasi dan diuji.</p>
+      <p class="pengumuman-text">Jangan melakukan pembayaran untuk layanan ini sebelum status layanan dinyatakan tersedia.</p>
+    </div>
+    <div class="produk-list">
+      <div class="produk-card" style="padding:22px;text-align:center">
+        <div style="font-size:38px;margin-bottom:10px">🌐</div>
+        <div class="produk-nama">Katalog nomor virtual</div>
+        <p class="sub" style="margin-top:8px">Katalog dan harga belum tersedia.</p>
+        <span class="product-banner" style="display:inline-flex;margin-top:14px">SEGERA HADIR</span>
+      </div>
+    </div>
   </section>
   <footer><p>© 2025 Jimzz Store — All Rights Reserved 😈</p></footer>
 </div>
@@ -1206,7 +1217,7 @@ body::before,body::after{background:none!important;animation:none!important;filt
   <button class="nav-item" data-tab="topup" onclick="switchTab('topup')"><span class="nav-icon">🎮</span><span class="nav-label">Top Up</span></button>
   <button class="nav-item active" data-tab="home" onclick="switchTab('home')"><span class="nav-icon">🏠</span><span class="nav-label">Home</span></button>
   <button class="nav-item" data-tab="apk" onclick="switchTab('apk')"><span class="nav-icon">🌐</span><span class="nav-label">Web/APK</span></button>
-  <button class="nav-item" data-tab="jpm" onclick="switchTab('jpm')"><span class="nav-icon">🚀</span><span class="nav-label">Lainnya</span></button>
+  <button class="nav-item" data-tab="jpm" onclick="switchTab('jpm')"><span class="nav-icon">📲</span><span class="nav-label">Nomor Virtual</span></button>
 </div>
 
 <div class="modal-overlay" id="orderModal" onclick="if(event.target===this)tutupOrder()">
@@ -2167,7 +2178,7 @@ setInterval(runAccountSync,2000);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)runAccountSync();});
 window.addEventListener('focus',()=>runAccountSync());
 
-async function loadCounters(){try{const res=await fetch(BACKEND_URL+'/api/counters');const data=await res.json();if(data.success){const oldTotal=cachedCounters.totalOrder;cachedCounters.totalOrder=data.totalOrder;cachedCounters.produkOrder=data.produkOrder||{};updateOrderCounter();if(oldTotal!==data.totalOrder){renderProduk('sosmed',produkSosmed,'SUNTIK ALL');renderProduk('jpm',produkJpm,'LAYANAN LAINNYA');renderProduk('apkList',produkApk,'JUAL APK');}}}catch(err){console.log('Gagal load counters:',err);}}
+async function loadCounters(){try{const res=await fetch(BACKEND_URL+'/api/counters');const data=await res.json();if(data.success){const oldTotal=cachedCounters.totalOrder;cachedCounters.totalOrder=data.totalOrder;cachedCounters.produkOrder=data.produkOrder||{};updateOrderCounter();if(oldTotal!==data.totalOrder){renderProduk('sosmed',produkSosmed,'SUNTIK ALL');renderProduk('apkList',produkApk,'JUAL APK');}}}catch(err){console.log('Gagal load counters:',err);}}
 let cachedCounters={totalOrder:1375,produkOrder:{}};
 function updateOrderCounter(){const el=document.getElementById('viewCount');if(el)el.innerText=cachedCounters.totalOrder.toLocaleString('id-ID');}
 function getProdukOrderCount(kategoriId,index){return cachedCounters.produkOrder[kategoriId+'_'+index]||0;}
@@ -2481,7 +2492,7 @@ function closeAccountSettings(){
   document.querySelectorAll('.tab-page').forEach(p=>p.classList.remove('active'));
   target?.classList.add('active');
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active',n.dataset.tab===jimzzSettingsReturnPage));
-  const titles={home:'Jimzz Store',suntik:'Suntik All Sosmed',topup:'Top Up Game',apk:'Web/APK',jpm:'Layanan lainnya',orders:'Riwayat Order',music:'Musik',tools:'Tools'};
+  const titles={home:'Jimzz Store',suntik:'Suntik All Sosmed',topup:'Top Up Game',apk:'Web/APK',jpm:'Nomor Virtual',orders:'Riwayat Order',music:'Musik',tools:'Tools'};
   const title=document.getElementById('jimzzTopbarTitle');
   if(title)title.textContent=titles[jimzzSettingsReturnPage]||target?.querySelector('h2')?.innerText?.replace(/\\s+/g,' ').trim()||'Jimzz Store';
   document.body.style.overflow='';
@@ -2871,7 +2882,6 @@ function getBannerMeta(products, target) {
 
 function initData() {
   renderProduk('sosmed', produkSosmed, 'SUNTIK ALL');
-  renderProduk('jpm', produkJpm, 'LAYANAN LAINNYA');
   renderProduk('apkList', produkApk, 'JUAL APK');
 }
 
