@@ -771,6 +771,10 @@ body::before,body::after{background:none!important;animation:none!important;filt
 @media(max-width:680px){.vn-service-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.vn-filter-row{grid-template-columns:1fr}.vn-service-card{padding:12px}.vn-service-card h3{font-size:14px}.vn-service-meta strong{font-size:15px}}
 @media(max-width:390px){.vn-service-grid{grid-template-columns:1fr}.vn-service-card>p{min-height:0}.vn-section-title small{font-size:9px}}
 
+
+/* Jimzz coin deposit */
+.coin-deposit-card{width:min(440px,calc(100vw - 28px));max-height:88vh;overflow:auto;background:#101410;border:1px solid #245c3c;border-radius:18px;padding:22px;color:#f3fff7;box-shadow:0 18px 60px #000b}
+.coin-deposit-card h3{margin:0 0 8px;font-size:20px}.coin-deposit-card p{color:#b7c8bd;font-size:13px;margin:0 0 14px}.coin-deposit-card label{display:block;font-size:12px;color:#c9d8ce;margin:12px 0 5px}.coin-deposit-card input{width:100%;padding:12px;border:1px solid #315540;border-radius:10px;background:#070a08;color:#fff;font-size:16px;outline:none}.coin-deposit-actions{display:flex;gap:8px;margin-top:14px}.coin-deposit-actions button{flex:1;border:0;border-radius:10px;padding:11px;font-weight:700;cursor:pointer}.coin-deposit-primary{background:#00d977;color:#001b0e}.coin-deposit-secondary{background:#252d28;color:#e6f3ea}.coin-deposit-result{margin-top:14px;padding:12px;background:#080d09;border:1px solid #294634;border-radius:12px;overflow-wrap:anywhere}.coin-deposit-result img{display:block;width:220px;max-width:100%;margin:10px auto;border-radius:10px;background:#fff}.coin-deposit-status{font-size:13px;color:#c5f8d6;margin-top:8px}.coin-deposit-history{font-size:12px;color:#a8c5b2;margin-top:12px;white-space:pre-wrap}
 </style>
 <!-- ACCOUNT_DISABLED_2026_09_27 -->
 <style id="jimzz-settings-real-page">/* Account settings behaves as its own page; it never overlays another page */
@@ -799,10 +803,16 @@ body::before,body::after{background:none!important;animation:none!important;filt
 <div class="confetti-container" id="confettiContainer"></div>
 <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
+<div class="coin-info-modal" id="coinDepositModal" onclick="if(event.target===this)closeCoinDeposit()"><div class="coin-deposit-card">
+<h3>💚 Deposit Koin Jimzz</h3><p>1 koin = Rp1. Koin masuk setelah pembayaran QRIS diverifikasi dan pesanan dikonfirmasi admin.</p>
+<label for="coinDepositAmount">Nominal deposit (minimal Rp1.000)</label><input id="coinDepositAmount" type="number" min="1000" max="9999999" step="1000" inputmode="numeric" placeholder="Contoh: 10000">
+<div class="coin-deposit-actions"><button class="coin-deposit-primary" id="coinDepositCreateBtn" type="button" onclick="createCoinDeposit()">Buat QRIS</button><button class="coin-deposit-secondary" type="button" onclick="closeCoinDeposit()">Tutup</button></div>
+<div id="coinDepositResult" class="coin-deposit-result" style="display:none"></div><div id="coinDepositHistory" class="coin-deposit-history"></div>
+</div></div>
 <div class="coin-info-modal" id="coinInfoModal" onclick="if(event.target===this)closeCoinInfo()"><div class="coin-info-card">
 <h3>⭐ Tentang Koin Jimzz</h3><p>Koin adalah saldo bonus akun yang bisa digunakan untuk mendapatkan potongan pada pesanan.</p>
 <ul class="coin-info-list"><li>Guest tidak bisa mendapatkan atau menggunakan koin.</li><li>Koin pesanan masuk ke akun setelah pesanan berhasil dikonfirmasi.</li><li>Saldo koin tersimpan pada akun.</li><li>Login atau Register untuk membuka fitur koin.</li></ul>
-<div class="coin-info-actions"><button class="coin-info-close" type="button" onclick="closeCoinInfo()">Tutup</button><button class="coin-info-login" type="button" onclick="coinInfoLogin()">🔐 Login / Register</button></div>
+<div class="coin-info-actions"><button class="coin-info-close" type="button" onclick="closeCoinInfo()">Tutup</button><button class="coin-info-login" type="button" onclick="coinInfoLogin()">🔐 Login / Register</button><button class="coin-info-login" type="button" onclick="openCoinDeposit()">💚 Deposit Koin</button></div>
 </div></div>
 
 <!-- JIMZZ_ACCOUNT_SYSTEM_V1 -->
@@ -1480,6 +1490,57 @@ function renderCoinBalance(){const el=document.getElementById('coinBalance');if(
 function openCoinInfo(){document.getElementById('coinInfoModal')?.classList.add('show');}
 function closeCoinInfo(){document.getElementById('coinInfoModal')?.classList.remove('show');}
 function coinInfoLogin(){closeCoinInfo();openAccountModal();}
+function openCoinDeposit(){
+  closeCoinInfo();
+  const user=getLoggedAccount();
+  if(!user||!getAccountToken()){showToast('Login dulu untuk deposit koin.','warning');openAccountModal();return;}
+  const modal=document.getElementById('coinDepositModal');
+  if(modal)modal.classList.add('show');
+  renderCoinDepositHistory();
+}
+function closeCoinDeposit(){document.getElementById('coinDepositModal')?.classList.remove('show');}
+function renderCoinDepositHistory(){
+  const el=document.getElementById('coinDepositHistory');if(!el)return;
+  let rows=[];try{rows=JSON.parse(localStorage.getItem('jimzz_coin_deposit_history')||'[]');}catch{}
+  el.textContent=rows.length?'Riwayat deposit di perangkat ini:\n'+rows.slice(0,5).map(x=>x.orderId+' — Rp '+Number(x.amount).toLocaleString('id-ID')+' — '+x.status).join('\n'):'Riwayat deposit akan tampil di sini setelah kamu membuat pesanan.';
+}
+async function createCoinDeposit(){
+  const input=document.getElementById('coinDepositAmount'),btn=document.getElementById('coinDepositCreateBtn'),resultBox=document.getElementById('coinDepositResult');
+  const amount=Number(input?.value);
+  if(!Number.isInteger(amount)||amount<1000||amount>9999999){showToast('Nominal deposit harus Rp1.000–Rp9.999.999.','error');return;}
+  if(!getAccountToken()){showToast('Sesi login tidak ditemukan. Login ulang dulu.','warning');return;}
+  btn.disabled=true;btn.textContent='Membuat QRIS…';
+  try{
+    const response=await fetch(BACKEND_URL+'/api/create-order-v2',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+getAccountToken()},body:JSON.stringify({amount,customerPhone:'DEPOSIT',productName:'Deposit Koin Jimzz',productDetail:'JIMZZ_COIN_DEPOSIT_V1',link:'-',kategoriId:'coin-deposit'})});
+    const data=await response.json();
+    if(!response.ok||!data.success)throw new Error(data.error||'Gagal membuat QRIS.');
+    resultBox.style.display='block';
+    resultBox.innerHTML='<strong>Order '+String(data.orderId).replace(/[<>&"]/g,'')+'</strong><p>Bayar tepat Rp '+Number(data.totalAmount).toLocaleString('id-ID')+'. Saldo akan bertambah setelah admin mengonfirmasi pembayaran.</p><img alt="QRIS deposit koin" src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data='+encodeURIComponent(data.qrisString)+'"><div class="coin-deposit-status" id="coinDepositStatus">Status: menunggu pembayaran dan konfirmasi admin.</div>';
+    let rows=[];try{rows=JSON.parse(localStorage.getItem('jimzz_coin_deposit_history')||'[]');}catch{}
+    rows.unshift({orderId:data.orderId,amount,status:'Menunggu konfirmasi'});localStorage.setItem('jimzz_coin_deposit_history',JSON.stringify(rows.slice(0,10)));renderCoinDepositHistory();
+    showToast('QRIS deposit berhasil dibuat.','success');
+    watchCoinDepositStatus(data.orderId,amount);
+  }catch(error){showToast(error.message||'Deposit gagal dibuat.','error');}
+  finally{btn.disabled=false;btn.textContent='Buat QRIS';}
+}
+async function watchCoinDepositStatus(orderId,amount){
+  for(let attempt=0;attempt<60;attempt++){
+    await new Promise(resolve=>setTimeout(resolve,10000));
+    try{
+      const response=await fetch(BACKEND_URL+'/api/check-order?orderId='+encodeURIComponent(orderId),{cache:'no-store'});
+      const data=await response.json();
+      if(!response.ok||!data.success)continue;
+      if(data.status==='success'||data.status==='failed'||data.status==='cancelled'){
+        const status=data.status==='success'?'Berhasil dikonfirmasi':data.status==='failed'?'Gagal':'Dibatalkan';
+        const el=document.getElementById('coinDepositStatus');if(el)el.textContent='Status: '+status+(data.status==='success'?'. Muat ulang akun untuk melihat saldo terbaru.':'.');
+        let rows=[];try{rows=JSON.parse(localStorage.getItem('jimzz_coin_deposit_history')||'[]');}catch{}
+        rows=rows.map(x=>x.orderId===orderId?{...x,status}:x);localStorage.setItem('jimzz_coin_deposit_history',JSON.stringify(rows.slice(0,10)));renderCoinDepositHistory();
+        return;
+      }
+    }catch{}
+  }
+}
+
 let useCoinMode=!!getLoggedAccount()&&localStorage.getItem('jimzz_use_coin')==='true';
 function toggleCoinHeader(){if(!getLoggedAccount()){useCoinMode=false;localStorage.setItem('jimzz_use_coin','false');renderCoinHeaderToggle();openCoinInfo();return;}useCoinMode=!useCoinMode;localStorage.setItem('jimzz_use_coin',useCoinMode.toString());renderCoinHeaderToggle();if(produkAktif)hitungTotal();showToast(useCoinMode?'⭐ Koin AKTIF — otomatis dipakai di order':'❌ Koin NONAKTIF — tidak dipakai di order',useCoinMode?'success':'info');}
 function renderCoinHeaderToggle(){const sw=document.getElementById('coinHeaderSwitch'),label=document.getElementById('coinHeaderLabel'),toggle=document.getElementById('coinHeaderToggle'),hint=document.getElementById('coinGuestLock'),logged=!!getLoggedAccount();if(sw&&label){if(logged&&useCoinMode){sw.classList.add('active');label.classList.add('active');label.innerText='on';}else{sw.classList.remove('active');label.classList.remove('active');label.innerText='off';}}if(toggle)toggle.classList.toggle('locked',!logged);if(hint)hint.style.display=logged?'none':'inline';}
