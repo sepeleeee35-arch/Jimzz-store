@@ -839,7 +839,7 @@ body::before,body::after{background:none!important;animation:none!important;filt
   <div class="account-box">
     <button class="account-close" onclick="closeRecoveryModal()" aria-label="Tutup">×</button><div class="account-icon">🔐</div>
     <h2 style="color:#e5e7eb!important">Ganti Password</h2><div class="account-sub">Password lama tidak bisa ditampilkan karena tersimpan secara aman. Verifikasi OTP untuk membuat password baru; password baru bisa dilihat saat diketik.</div>
-    <input id="recoveryUsername" type="hidden">
+    <div class="account-field" style="margin-top:14px;"><label>USERNAME AKUN JIMZZ STORE</label><input id="recoveryUsername" type="text" maxlength="24" autocomplete="username" placeholder="Masukkan username akun" style="width:100%;"></div><button class="account-submit" type="button" onclick="checkRecoveryMethods()">Periksa akun tertaut</button>
     <div id="recoveryMethods" style="display:none;margin-top:14px;">
       <div style="font-size:12px;font-weight:800;margin-bottom:9px;color:#ddd;">PILIH METODE PENGIRIMAN KODE</div>
       <button id="recoveryGmailBtn" class="account-submit" type="button" onclick="requestEmailReset()" disabled><img src="https://www.gstatic.com/images/branding/product/1x/gmail_48dp.png" alt="Gmail" width="22" height="22" style="object-fit:contain;vertical-align:middle;margin-right:9px">Kirim kode OTP ke Gmail</button><div id="recoveryGmailStatus" style="font-size:11px;color:#ffbb55;margin:5px 0 12px;">Akun Gmail Anda belum tertaut di akun ini.</div>
@@ -2443,14 +2443,14 @@ async function openRecoveryModal(){
   const emailPanel=document.getElementById('emailResetOtpPanel');
   const telegramPanel=document.getElementById('telegramResetOtpPanel');
   const account=typeof getLoggedAccount==='function'?getLoggedAccount():null;
-  const username=account?.username||'';
-  if(input)input.value=username;
+  const username=String(account?.username||'').trim();
+  if(input){input.value=username;input.readOnly=false;}
   if(methodsPanel)methodsPanel.style.display='none';
   if(emailPanel)emailPanel.style.display='none';
   if(telegramPanel)telegramPanel.style.display='none';
   recoveryAvailableMethods={gmail:false,telegram:false};
-  if(!username){if(msg){msg.textContent='Sesi akun tidak ditemukan. Silakan login kembali.';msg.style.color='#ff6b6b';}return;}
-  try{await checkRecoveryMethods();}catch(e){if(msg){msg.textContent='Metode pemulihan belum bisa dimuat. Coba lagi sebentar.';msg.style.color='#ff6b6b';}}
+  if(username){try{await checkRecoveryMethods();}catch(e){if(msg){msg.textContent=e.message||'Metode pemulihan belum bisa dimuat. Coba lagi sebentar.';msg.style.color='#ff6b6b';}}}
+  else if(msg){msg.textContent='Masukkan username akun, lalu tekan Periksa akun tertaut.';msg.style.color='#ffbb55';}
 }
 function closeRecoveryModal(){const modal=document.getElementById('recoveryModal');if(!modal)return;modal.classList.remove('show');modal.style.display='none';modal.style.visibility='hidden';modal.style.pointerEvents='none';}
 async function checkRecoveryMethods(){
