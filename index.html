@@ -2142,7 +2142,7 @@ function getAccountToken(){return localStorage.getItem(JIMZZ_TOKEN_KEY)||'';}
 function getAccountRefreshToken(){return localStorage.getItem(JIMZZ_REFRESH_KEY)||'';}
 function getLoggedAccount(){try{return accountCache||JSON.parse(localStorage.getItem(JIMZZ_CACHE_KEY)||'null');}catch{return null;}}
 function getCurrentAccountRecord(){const user=getLoggedAccount();return user?{key:String(user.username||'').toLowerCase(),user}:null;}
-function getCurrentRole(){return getLoggedAccount()?.role||null;}
+function getCurrentRole(){const role=getLoggedAccount()?.role;return role==null?'':String(role).trim().toLowerCase();}
 function isOwnerAccount(){return getCurrentRole()==='owner';}
 function isPrivilegedAccount(){const role=getCurrentRole();return role==='owner'||role==='admin';}
 function hasBuyerFeatures(){return !!getLoggedAccount();}
